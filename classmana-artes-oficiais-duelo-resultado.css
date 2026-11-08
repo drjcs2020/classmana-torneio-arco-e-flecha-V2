@@ -1,0 +1,193 @@
+/* ClassMana V2 — usa diretamente os escudos, as molduras e o VS
+   fornecidos pelo professor. Nenhum elemento é uma imagem de tela inteira.
+   Mantém textos, pontos, vencedores e botões como HTML dinâmico. */
+.cm-vs-overlay .cm-combat-heading,
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-combat-heading{
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  gap:clamp(5px,1.3vw,19px)!important;width:100%!important;
+  max-width:1150px!important;margin:0 auto!important;min-height:0!important;
+}
+.cm-vs-overlay .cm-combat-heading-crest,
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-combat-heading-crest{
+  display:block!important;flex:0 0 auto!important;
+  width:clamp(42px,6.5vw,82px)!important;height:clamp(42px,6.5vw,82px)!important;
+  object-fit:contain!important;background:transparent!important;
+  filter:drop-shadow(0 4px 6px #0008)!important;
+}
+.cm-vs-overlay .cm-combat-heading .cm-vs-title,
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-finish-heading #finish-title{
+  flex:1 1 auto!important;max-width:100%!important;width:auto!important;min-width:0!important;
+}
+/* Molduras verticais originais: a arte fica POR CIMA do recorte,
+   para preservar a borda metálica, o brasão e as duas plaquetas. */
+.cm-vs-overlay .cm-vs-fighter,
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-player{
+  position:relative!important;isolation:isolate!important;
+  display:block!important;padding:0!important;overflow:visible!important;
+  flex:none!important;align-self:center!important;justify-self:center!important;
+  background:transparent!important;background-image:none!important;
+  box-shadow:none!important;border:0!important;border-radius:0!important;
+  aspect-ratio: .722!important;
+}
+.cm-vs-overlay .cm-vs-fighter{
+  box-sizing:border-box!important;height:min(52dvh,410px)!important;
+  width:auto!important;max-height:none!important;max-width:100%!important;
+}
+.cm-vs-overlay .cm-vs-fighter::after,
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-player::after{
+  content:"";position:absolute;inset:0!important;z-index:3!important;
+  display:block!important;pointer-events:none!important;
+  background-position:center center!important;background-size:100% 100%!important;
+  background-repeat:no-repeat!important;opacity:1!important;
+  filter:drop-shadow(0 5px 7px #000a)!important;
+}
+/* As seis artes: 3 molduras, 3 brasões, presentes em assets/v2. */
+.cm-vs-overlay .cm-vs-fighter[data-house="A"]::after,
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-player[data-house="A"]::after{
+  background-image:url("assets/v2/frames/aguia.webp")!important;
+}
+.cm-vs-overlay .cm-vs-fighter[data-house="B"]::after,
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-player[data-house="B"]::after{
+  background-image:url("assets/v2/frames/leao.webp")!important;
+}
+.cm-vs-overlay .cm-vs-fighter[data-house="C"]::after,
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-player[data-house="C"]::after{
+  background-image:url("assets/v2/frames/dragao.webp")!important;
+}
+/* Janela central recortada dentro da moldura oficial. */
+.cm-vs-overlay .cm-vs-fighter .cm-combat-portrait,
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-player .cm-combat-portrait{
+  position:absolute!important;display:block!important;z-index:1!important;
+  top:12.5%!important;left:14%!important;
+  width:72%!important;height:58%!important;
+  max-height:none!important;max-width:none!important;
+  flex:none!important;margin:0!important;padding:0!important;
+  overflow:hidden!important;border:0!important;border-radius:5px!important;
+  box-shadow:none!important;
+  background:linear-gradient(160deg,#05142b,#123d64 55%,#071427)!important;
+}
+.cm-vs-overlay .cm-vs-fighter[data-house="B"] .cm-combat-portrait,
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-player[data-house="B"] .cm-combat-portrait{
+  background:linear-gradient(160deg,#3c0817,#682018 62%,#210811)!important;
+}
+.cm-vs-overlay .cm-vs-fighter[data-house="C"] .cm-combat-portrait,
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-player[data-house="C"] .cm-combat-portrait{
+  background:linear-gradient(160deg,#052a21,#145949 62%,#06231d)!important;
+}
+.cm-vs-overlay .cm-vs-fighter .cm-combat-portrait img,
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-player .cm-combat-portrait img{
+  position:absolute!important;inset:0!important;
+  display:block!important;width:100%!important;height:100%!important;
+  max-width:none!important;max-height:none!important;
+  object-fit:cover!important;object-position:50% 18%!important;
+  transform:scale(1.72)!important;transform-origin:50% 23%!important;
+  filter:none!important;opacity:1!important;
+  background:transparent!important;pointer-events:none!important;
+}
+/* Os títulos entram na plaqueta larga, sem apagar a arte oficial. */
+.cm-vs-overlay .cm-vs-fighter .cm-vs-fighter-info{
+  position:absolute!important;z-index:5!important;
+  top:71.2%!important;left:12.5%!important;width:75%!important;height:13.8%!important;
+  margin:0!important;padding:0 2px!important;
+  display:flex!important;flex-direction:column!important;
+  justify-content:center!important;align-items:center!important;gap:2px!important;
+  background:transparent!important;background-image:none!important;
+  border:0!important;border-radius:0!important;box-shadow:none!important;
+  overflow:hidden!important;
+}
+.cm-vs-overlay .cm-vs-fighter .cm-vs-fighter-info strong{
+  font:900 clamp(13px,1.7vw,21px)/1.05 'Cinzel',Georgia,serif!important;
+  color:#fff3d6!important;text-align:center!important;text-shadow:0 2px 3px #000d!important;
+  margin:0!important;max-width:100%!important;
+}
+.cm-vs-overlay .cm-vs-fighter .cm-vs-fighter-info small{
+  font:900 clamp(9px,1vw,12px)/1.05 'Nunito',sans-serif!important;
+  color:#ffe6a6!important;text-align:center!important;text-shadow:0 1px 3px #000!important;
+  margin:0!important;
+}
+.cm-vs-overlay .cm-vs-fighters{
+  width:min(100%,1000px)!important;
+  grid-template-columns:minmax(0,1fr) clamp(76px,10vw,125px) minmax(0,1fr)!important;
+  justify-items:center!important;
+}
+.cm-vs-overlay .cm-vs-fighters>.cm-vs-mark,
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-vs{
+  background:url("assets/v2/frames/versus.webp") center/contain no-repeat!important;
+  font-size:0!important;color:transparent!important;
+  filter:drop-shadow(0 4px 7px #000a) drop-shadow(0 0 7px #ffa83450)!important;
+}
+/* Resultado: mesmas molduras, com os cinco tiros e nomes dinâmicos. */
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-duel{
+  width:min(98%,880px)!important;max-width:880px!important;
+  grid-template-columns:minmax(0,1fr) clamp(64px,9vw,112px) minmax(0,1fr)!important;
+  justify-items:center!important;align-items:center!important;gap:clamp(6px,1.6vw,20px)!important;
+  margin:0 auto!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-player{
+  height:min(42dvh,322px)!important;min-height:0!important;
+  width:auto!important;max-width:100%!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-player b,
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-player>small{
+  position:absolute!important;z-index:5!important;
+  left:12.5%!important;width:75%!important;max-width:75%!important;
+  text-align:center!important;margin:0!important;padding:0!important;
+  background:transparent!important;text-shadow:0 2px 3px #000f!important;
+  white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-player b{
+  top:71.5%!important;
+  font:900 clamp(13px,1.65vw,21px)/1.04 'Cinzel',Georgia,serif!important;
+  color:#fff0cc!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-player>small{
+  top:78%!important;font:900 clamp(8px,.9vw,12px)/1.05 'Nunito',sans-serif!important;
+  color:#ffe5a4!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-player .cm-final-shots{
+  position:absolute!important;z-index:5!important;
+  left:16%!important;top:86.4%!important;width:68%!important;
+  height:8%!important;margin:0!important;padding:0!important;
+  display:flex!important;justify-content:center!important;align-items:center!important;
+  gap:clamp(1px,.25vw,4px)!important;flex-wrap:nowrap!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-shots span{
+  flex:1 1 0!important;min-width:0!important;max-width:31px!important;
+  height:100%!important;padding:0!important;
+  font:900 clamp(11px,1.1vw,16px)/1 Georgia,serif!important;
+  background:#071833aa!important;color:#ffe6a1!important;
+  border:1px solid #d8a53a!important;border-radius:3px!important;
+}
+/* Vencedor acima do escudo, sem interferir nos retratos. */
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-result-winner-tag{
+  position:absolute!important;top:-7px!important;left:50%!important;
+  transform:translate(-50%,-60%)!important;
+  z-index:8!important;white-space:nowrap!important;
+}
+/* O cartão de resultado não pode ser coberto por camadas do CSS antigo. */
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .finish-card{
+  overflow:visible!important;
+}
+@media(max-height:690px) and (min-width:681px){
+ .cm-vs-overlay .cm-vs-fighter{height:49dvh!important}
+ body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-player{height:37dvh!important}
+ body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-combat-heading-crest{width:46px!important;height:46px!important}
+}
+@media(max-width:680px){
+ .cm-vs-overlay .cm-combat-heading-crest,
+ body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-combat-heading-crest{
+  width:clamp(26px,8vw,43px)!important;height:clamp(26px,8vw,43px)!important;
+ }
+ .cm-vs-overlay .cm-vs-fighter{height:min(39dvh,300px)!important}
+ .cm-vs-overlay .cm-vs-fighters{grid-template-columns:minmax(0,1fr) 44px minmax(0,1fr)!important}
+ .cm-vs-overlay .cm-vs-fighters>.cm-vs-mark{width:43px!important;height:55px!important}
+ .cm-vs-overlay .cm-vs-fighter .cm-vs-fighter-info strong{font-size:clamp(9px,2.55vw,13px)!important}
+ .cm-vs-overlay .cm-vs-fighter .cm-vs-fighter-info small{font-size:clamp(6px,1.55vw,9px)!important}
+ body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-duel{
+  grid-template-columns:minmax(0,1fr) 40px minmax(0,1fr)!important;gap:2px!important;
+ }
+ body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-player{height:min(34dvh,260px)!important}
+ body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-player b{font-size:clamp(10px,2.6vw,15px)!important}
+ body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-player>small{font-size:clamp(6px,1.7vw,9px)!important}
+ body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-player .cm-final-shots span{font-size:10px!important}
+}
