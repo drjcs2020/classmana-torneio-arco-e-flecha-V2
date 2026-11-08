@@ -12,7 +12,7 @@ const portrait=(house,gender='m')=>{
  const h=getHouse(house),female=gender==='f'||gender==='female';
  // O masculino do Leão usa o recurso RGBA original comprovado:
  // não reutilizar a URL do HUD, que pode estar desatualizada após navegação.
- if(h==='B'&&!female)return 'assets/archers/leao-masculino.webp';
+ if(h==='B'&&!female)return 'assets/v2/heroes/leao-m.webp';
  return 'assets/v2/heroes/'+({A:'aguia',B:'leao',C:'dragao'}[h])+'-'+(female?'f':'m')+'.webp';
 };
 function portraitFallback(img,house,gender){
