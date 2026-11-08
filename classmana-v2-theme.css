@@ -62,7 +62,7 @@ body[data-page="lobby"] .houses .house .house-name{font-family:'Cinzel',serif!im
 body[data-page="lobby"] .houses .house-a{--v2-house-color:#1e6ce3}body[data-page="lobby"] .houses .house-b{--v2-house-color:#a51b22}body[data-page="lobby"] .houses .house-c{--v2-house-color:#0d8858}
 body[data-page="lobby"] .houses .house.selected{outline:3px solid var(--v2-house-color)!important;outline-offset:4px!important}
 body[data-page="lobby"] #hero-preview .studio-portrait{background:radial-gradient(ellipse at 50% 70%,#1c7bfc37,#051b45 65%)!important;border:3px ridge #ebbd6b!important;border-radius:20px!important}
-body[data-page="lobby"] #hero-preview[data-house="B"] .studio-portrait{background:radial-gradient(ellipse at 50% 70%,#f33b4a33,#301027 67%)!important}
+body[data-page="lobby"] #hero-preview[data-house="B"] .studio-portrait{background:transparent!important}
 body[data-page="lobby"] #hero-preview[data-house="C"] .studio-portrait{background:radial-gradient(ellipse at 50% 70%,#18df8044,#0b302e 67%)!important}
 body[data-page="lobby"] #hero-preview-img{object-fit:contain!important;object-position:center bottom!important;filter:drop-shadow(0 9px 17px #0008)}
 body[data-page="lobby"] #view-inicio[data-step="partida"] .setup{background:transparent!important}
