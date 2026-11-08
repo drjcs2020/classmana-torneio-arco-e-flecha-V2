@@ -48,24 +48,8 @@ body.cm-art-on #view-arena .stage{height:100%!important;max-height:none!importan
 .stage.cm-art-ready .range-progress{top:83px!important;left:50%!important;transform:translateX(-50%)!important;background:#082d5aba!important;border:2px solid #ddbd69!important}
 .stage.cm-art-ready .range-step{color:#fff7d7!important;font-weight:900!important}
 .stage.cm-art-ready .range-step.current{background:#efd283!important;color:#212436!important}
-.stage.cm-art-ready .game-top-left{top:145px!important;left:12px!important;z-index:20!important;gap:4px!important}
-.stage.cm-art-ready .game-top-right{top:365px!important;left:12px!important;right:auto!important;z-index:20!important}
-.stage.cm-art-ready #wind,.stage.cm-art-ready #distance,.stage.cm-art-ready #shots{
- position:relative!important;display:flex!important;align-items:center!important;justify-content:center!important;
- box-sizing:border-box!important;width:clamp(190px,18vw,260px)!important;height:clamp(91px,8.75vw,121px)!important;min-width:0!important;min-height:0!important;
- margin:0!important;padding:0 8px!important;border:0!important;box-shadow:none!important;border-radius:0!important;background-color:transparent!important;
- background-size:100% 100%!important;background-repeat:no-repeat!important;background-position:center!important;color:#fff4cd!important
-}
-.stage.cm-art-ready #wind{background-image:url('assets/ui/hud/painel-vento-dinamico.png')!important;transform:none!important}
-.stage.cm-art-ready #distance{background-image:url('assets/ui/hud/painel-distancia-dinamico.png')!important;font:900 clamp(20px,2.3vw,29px) Georgia,serif!important;padding:38px 0 8px 42px!important;text-shadow:0 2px 4px #000!important}
-.stage.cm-art-ready #shots{background-image:url('assets/ui/hud/painel-flechas-dinamico.png')!important;font:900 clamp(22px,2.3vw,30px) Georgia,serif!important;padding:39px 0 8px 42px!important;text-shadow:0 2px 4px #000!important}
-.stage.cm-art-ready #power{display:none!important}
-.stage.cm-art-ready #wind .wind-caption{position:absolute!important;top:39%!important;left:36%!important;right:7%!important;display:flex!important;justify-content:center!important}
-.stage.cm-art-ready #wind .wind-caption span{display:none!important}
-.stage.cm-art-ready #wind .wind-speed{font:900 clamp(20px,2.1vw,26px) Georgia,serif!important;color:#fff8e6!important;white-space:nowrap;text-shadow:0 3px 4px #000!important}
-.stage.cm-art-ready #wind .wind-main{position:absolute!important;top:75%!important;left:20%!important;right:8%!important;display:flex!important;gap:4px!important;justify-content:center!important}
-.stage.cm-art-ready #wind .wind-arrow{width:27px!important;height:16px!important}
-.stage.cm-art-ready #wind .wind-direction-text{font:900 clamp(8px,.8vw,11px) Nunito,sans-serif!important;color:#ffe4a0!important}
+/* Os indicadores atuais usam .cm-arena-readouts; regras antigas removidas.
+   Mantemos aqui só sprites, logo, pausa e medidor físico de força. */
 .stage.cm-art-ready .range-intro{display:none!important}
 @media(max-width:760px){
 .stage.cm-art-ready .cm-visual-logo{top:3px;left:5px;width:112px;max-height:65px}
