@@ -587,7 +587,7 @@ async function finishMatch(){
   bot=match.mode==='bot'?Array.from({length:5},()=>chooseRobotScore(match.difficulty,total/5)):[],
   rivalScore=match.mode==='bot'?bot.reduce((a,b)=>a+b,0):undefined;
  const title=match.mode==='practice'?(total>=37?'MIRA LENDÁRIA!':'TREINAMENTO CONCLUÍDO'):
-  total>rivalScore?'🏆 VOCÊ VENCEU O ROBÔ!':total===rivalScore?'🤝 EMPATE COM O ROBÔ!':'🏆 ROBÔ ARQUEIRO VENCEU!';
+  total>rivalScore?'🏆 VITÓRIA! VOCÊ VENCEU O ROBÔ!':total===rivalScore?'🤝 EMPATE COM O ROBÔ!':'🏹 DERROTA! ROBÔ ARQUEIRO VENCEU!';
  $('finish-title').textContent=title;
  $('finish-desc').textContent=match.mode==='bot'
   ?'Você: '+total+' pontos  •  Robô Arqueiro: '+rivalScore+' pontos  •  '+(total>rivalScore?'Vitória do jogador':total<rivalScore?'Vitória do robô':'Empate')
@@ -1085,7 +1085,13 @@ spriteHud=mountSpriteHUD({
   $('stage').classList.remove('aiming');scene?.setPower(p);fire(p);uiHud();},
  onPause:toggleArenaPause
 });
-selectHouse('A');updateMode();drawCourse();setLobbyStep('reino');
+// No retorno de JOGAR NOVAMENTE, a etapa é aberta diretamente.
+ // O backend ainda valida a sessão do mesmo aluno, sem reiniciar a jornada visual.
+ const cmDirectChallengeReturn=cmIsLobby&&cmResumeSameStudent&&
+  new URLSearchParams(location.search).get('continuar')==='1'&&
+  /^[ABC][0-9]{2}$/.test(cmSessionId());
+ selectHouse(cmDirectChallengeReturn?cmSessionId()[0]:'A');
+ updateMode();drawCourse();setLobbyStep(cmDirectChallengeReturn?'desafio':'reino');
 const hostedParams=new URLSearchParams(location.search);
 if(hostedParams.get('hosted')==='1'&&document.body.dataset.page!=='arena'){
  const hostHouse=hostedParams.get('house'),hostMode=hostedParams.get('mode'),hostPlayer=hostedParams.get('player');
@@ -1138,7 +1144,11 @@ function restoreArena(){
 if(document.body.dataset.page==='arena')restoreArena();
 else processLink();
 renderRanking();
-startOnlineClient();
+// O indicador de transição só desaparece após o restabelecimento da sessão.
+ // Nenhuma etapa intermediária é exibida durante esse processo.
+ startOnlineClient().finally(()=>{
+  document.documentElement.classList.remove('cm-v2-resume-pending');
+ });
 setInterval(async()=>{
  if(!online.user||online.state!=='ready'||document.visibilityState==='hidden')return;
  try{
