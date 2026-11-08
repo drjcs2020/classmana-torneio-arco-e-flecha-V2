@@ -49,7 +49,10 @@ export function initScene(canvas, getSettings) {
       if(Number.isFinite(a.x)&&Number.isFinite(a.y)&&r>0)return {x:a.x*kx,y:a.y*ky,r};
     }
     const r=Math.min(h*.105,w*.082)*targetScale(distance);
-    return {x:w*(.50+shift),y:h*(.45+(s.verticalShift||0)),r};
+    // O alvo fixo do modo compatível também fica com o cavalete apoiado
+    // sobre a grama pintada, independentemente da distância.
+    const grounded=(s.level||'iniciante')==='iniciante';
+    return {x:w*(.50+shift),y:grounded?h*.78-r*1.86:h*(.45+(s.verticalShift||0)),r};
   }
   function fallbackSightGeometry(){
     const {w,h}=canvasSize(),size=h*.89;
@@ -259,9 +262,12 @@ export function initScene(canvas, getSettings) {
     // Real mesh scale changes with the displayed distance (not just an HUD label).
     const scale=targetScale(setting.distance);
     targetRoot.setLocalScale(scale,scale,scale);
-    // A base do cavalete acompanha a escala da distância e continua no chão.
+    // A grama visível é uma pintura de cenário; o plano geométrico interno
+    // ficava cerca de 10% da tela acima dela, fazendo o alvo parecer flutuar.
+    // O cavalete é ancorado ao chão visual em TODAS as distâncias do alvo fixo.
     const moving=setting.level==='avancado'||setting.level==='lendario';
-    const fixedY=-.28+2.02*scale;
+    const scenicGroundY=-1.46;
+    const fixedY=scenicGroundY+2.02*scale;
     const suspendedY=2.05-(setting.verticalShift||0)*h/units;
     targetRoot.setLocalPosition(x,moving?suspendedY:fixedY,-9);
     if(targetStand)targetStand.enabled=!moving;
@@ -387,6 +393,15 @@ export function initScene(canvas, getSettings) {
       model.setLocalScale(1.22,1.22,1.22);
       model.setLocalPosition(0,0,.06);
       holder.addChild(model);
+      // A face original do GLB ficava cinzenta sob o material/iluminação.
+      // Reutilizar a própria textura colorida do alvo 3D, à frente do GLB,
+      // preservando seu relevo, contorno e a pontuação do motor.
+      const vividFace=targetVisual.findByName('competition target textile');
+      if(vividFace){
+        targetVisual.removeChild(vividFace);
+        holder.addChild(vividFace);
+        vividFace.setLocalPosition(0,0,.385);
+      }
       // The GLB has no stand. Keep the physical wooden tripod as a sibling of
       // the target mesh, so fixed targets never float after model loading.
       if(targetStand&&targetStand.parent===targetVisual){
