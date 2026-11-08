@@ -14,3 +14,7 @@ As imagens de redesign V2 serão integradas em mudanças futuras, após revisão
 ## Tecnologia
 
 HTML, CSS, JavaScript, PlayCanvas Engine no navegador e Node.js com SQLite no backend `duel-api/`.
+
+## Automações GitHub
+
+Os seis workflows originais estão preservados sem alterações em `docs/workflows-v1/` com extensão `.txt`, para impedir publicações e checagens automáticas da V1 a partir da V2. Reativar ou adaptar essas automações somente depois de configurar a infraestrutura independente da V2.
