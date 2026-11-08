@@ -121,3 +121,84 @@ body[data-page="arena"] #view-arena #stage .cm-arena-aim-art{
  body[data-page="arena"] #view-arena #stage .cm-arena-bow-art{width:clamp(195px,40vw,295px);right:-4%;bottom:-2%}
  body[data-page="arena"] #view-arena #stage .cm-arena-aim-art{width:40px}
 }
+
+/* Remover apenas os pixels defeituosos, sem parar o motor.
+   O PlayCanvas permanece ativo para cálculo da mira e da trajetória. */
+body[data-page="arena"] #view-arena #stage.cm-arena-art-active canvas.world3d,
+body[data-page="arena"] #view-arena #stage.cm-arena-art-active #world{
+  visibility:hidden!important;
+  opacity:0!important;
+}
+/* A face circular da imagem é centralizada sobre o hitbox calculado
+   pelo PlayCanvas; o cavalete termina na linha perspectiva do gramado. */
+body[data-page="arena"] #view-arena #stage .cm-arena-target-art{
+  display:block;
+  transform:translate(-50%,-42%);
+  transform-origin:center center;
+  object-fit:contain;
+  filter:brightness(1.09) saturate(1.22) drop-shadow(0 5px 4px #0008);
+  image-rendering:auto;
+  z-index:3;
+}
+body[data-page="arena"] #view-arena #stage .cm-arena-target-art.cm-target-suspended{
+  transform:translate(-50%,-50%);
+}
+body[data-page="arena"] #view-arena #stage .cm-arena-target-art[hidden]{
+  display:none!important;
+}
+body[data-page="arena"] #view-arena #stage .cm-arena-bow-art{
+  right:-3.2%;
+  bottom:-8%;
+  width:clamp(315px,35vw,530px);
+  height:auto;
+  max-width:none;
+  transform:translate3d(var(--cm-bow-x,0px),var(--cm-bow-y,0px),0) rotate(-22deg);
+  transform-origin:70% 66%;
+  filter:brightness(1.04) saturate(1.2) drop-shadow(0 9px 9px #030e19c0);
+  z-index:7;
+  will-change:transform;
+}
+body[data-page="arena"] #view-arena #stage.firing .cm-arena-bow-art{
+  transform:translate3d(var(--cm-bow-x,0px),var(--cm-bow-y,0px),0) rotate(-20deg) scale(.985);
+}
+body[data-page="arena"] #view-arena #stage .cm-arena-aim-art{
+  position:absolute;
+  top:45%;left:50%;
+  width:clamp(35px,3.4vw,52px);
+  height:auto;
+  transform:translate(-50%,-50%);
+  filter:brightness(1.06) drop-shadow(0 2px 3px #00142c);
+  z-index:9;
+}
+/* Indicadores com a arte original ClassMana, valores dinâmicos à direita. */
+body[data-page="arena"] #view-arena #stage .cm-arena-readouts > :is(#distance,#shots,#wind){
+  background-size:100% 100%!important;
+  background-repeat:no-repeat!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+body[data-page="arena"] #view-arena #stage .cm-arena-readouts > :is(#distance,#shots,#wind) .cm-stat-content,
+body[data-page="arena"] #view-arena #stage .cm-arena-readouts #wind .wind-caption{
+  left:43%!important;top:47%!important;width:49%!important;
+  height:39%!important;
+}
+body[data-page="arena"] #view-arena #stage .cm-arena-readouts > :is(#distance,#shots,#wind) .cm-stat-value,
+body[data-page="arena"] #view-arena #stage .cm-arena-readouts #wind .wind-speed.cm-stat-value{
+  font-size:clamp(16px,1.55vw,21px)!important;
+  text-shadow:0 2px 3px #001028,0 1px 7px #001028!important;
+}
+body[data-page="arena"] #view-arena #stage .cm-arena-readouts #wind-direction{
+  border:3px solid #f8c355!important;
+  box-shadow:0 0 0 2px #6e420f,inset 0 0 0 2px #ffe69a66,
+   0 4px 6px #0008,0 0 10px #fff4ab24!important;
+  background:linear-gradient(125deg,#174176,#041a46 77%)!important;
+}
+@media(max-width:760px){
+ body[data-page="arena"] #view-arena #stage .cm-arena-bow-art{
+  right:-9%;bottom:-6%;width:clamp(175px,46vw,320px);
+ }
+ body[data-page="arena"] #view-arena #stage .cm-arena-readouts > :is(#distance,#shots,#wind) .cm-stat-value,
+ body[data-page="arena"] #view-arena #stage .cm-arena-readouts #wind .wind-speed.cm-stat-value{
+  font-size:12px!important;
+ }
+}
