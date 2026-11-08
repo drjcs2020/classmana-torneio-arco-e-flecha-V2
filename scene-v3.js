@@ -473,7 +473,17 @@ export function initScene(canvas, getSettings) {
     const scale=bowRoot.getLocalScale().x;
     const offset=bowRoot.getLocalRotation().transformVector(new pc.Vec3(-1.15*scale,.25*scale,-.08*scale));
     bowRoot.setLocalPosition(sightLocal.sub(offset));
-    if(arrowLoaded)arrowLoaded.setLocalPosition(.02,-.03,-.40+.36*power);
+    if(arrowLoaded){
+      // Flecha GLB: encaixar a pena (nock) na corda GLB real, sem
+      // separar o modelo do arco ao mirar ou tensionar.
+      // A corda da malha do arco fica em x=-.63,y=.19,z~.45.
+      const modeled=Boolean(bowRoot.__mesh3d&&arrowLoaded.__mesh3d);
+      arrowLoaded.setLocalPosition(
+        modeled?-.63:.02,
+        modeled?.19:-.03,
+        modeled?-.14+.19*power:-.40+.36*power
+      );
+    }
     if(bowString)bowString.setLocalPosition(0,0,.19*power);
   }
   function update3D(dt){if(!ready)return;animT+=dt;
