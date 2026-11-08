@@ -1,0 +1,62 @@
+name: Importacao inicial segura ClassMana V2
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/bootstrap-v2.yml']
+permissions:
+  contents: write
+jobs:
+  copiar-v1:
+    if: github.repository == 'drjcs2020/classmana-torneio-arco-e-flecha-V2'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Copiar integralmente os arquivos versionados da V1 para a V2 isolada
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git branch --show-current)" = "main"
+          test "$(git ls-files | wc -l)" -le 2 || { echo "::error::Destino deixou de estar vazio. Importacao abortada."; exit 20; }
+          SRC="$RUNNER_TEMP/classmana-v1"
+          git clone --depth 1 --branch main https://github.com/drjcs2020/classmana-torneio-arco-e-flecha.git "$SRC"
+          test "$(git -C "$SRC" rev-parse HEAD)" = "442ec414d197d9daa39d78b2649c1b7c38150cb7" || { echo "::error::A V1 mudou desde a auditoria. Importacao abortada."; exit 21; }
+          rsync -a --exclude='.git/' "$SRC/" "$GITHUB_WORKSPACE/"
+          cat > online-config.js <<'CONFIG'
+          /* ClassMana V2 — API ONLINE DESATIVADA ate criar Railway e SQLite exclusivos.
+             Nunca ligar esta copia ao ranking da V1. */
+          export const ONLINE_API_URL = '';
+          CONFIG
+          cat > README.md <<'README_V2'
+          # ClassMana — Torneio das Três Casas V2 (desenvolvimento)
+          
+          Cópia dos arquivos versionados da V1 do ClassMana Torneio de Arco e Flecha.
+          Origem: https://github.com/drjcs2020/classmana-torneio-arco-e-flecha
+          Referência da cópia: commit 442ec414d197d9daa39d78b2649c1b7c38150cb7.
+          
+          ## Proteção da V1
+          
+          Este repositório é independente. O jogo V1 e seu ranking no Railway não devem ser alterados.
+          A API online da V2 está intencionalmente DESATIVADA em `online-config.js`.
+          Antes de testar duelos online, implantar um serviço Railway V2 com banco SQLite e volume próprios.
+          As imagens de redesign V2 serão integradas em mudanças futuras, após revisão.
+          
+          ## Tecnologia
+          
+          HTML, CSS, JavaScript, PlayCanvas Engine no navegador e Node.js com SQLite no backend `duel-api/`.
+          README_V2
+          test -s ClassMana_Assets_Parte_1_Personagens_Interface.zip
+          test -s ClassMana_Assets_Parte_2_Cenarios_Botoes_HUD.zip
+          test -s ClassMana_Integracao_Visual_01.zip
+          test -s index.html && test -s game-v3.js && test -s scene-v3.js && test -s duel-api/server.mjs
+          grep -q "ONLINE_API_URL = ''" online-config.js
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          FILES="$(git diff --cached --name-only | wc -l)"
+          echo "Arquivos incluídos no commit: $FILES"
+          test "$FILES" -ge 130 || { echo "::error::Copiou poucos arquivos"; exit 22; }
+          git commit -m "ClassMana V2: copiar arquivos da V1 com API de producao isolada"
+          git push origin HEAD:main
