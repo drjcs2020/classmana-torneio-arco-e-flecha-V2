@@ -9,10 +9,18 @@ const getHouse=id=>houses[id]?id:'A';
 // Artes oficiais fornecidas para a V2: escudo e moldura de cada Casa.
 const crest=house=>'assets/v2/crests/'+({A:'aguia',B:'leao',C:'dragao'}[getHouse(house)])+'.webp';
 const portrait=(house,gender='m')=>{
- const family={A:'aguia-dourada',B:'leao-de-fogo',C:'dragao-de-esmeralda'}[getHouse(house)];
- const actor=(gender==='f'||gender==='female')?'arqueira':'arqueiro';
- return 'assets/v2/heroes/'+({A:'aguia',B:'leao',C:'dragao'}[getHouse(house)])+'-'+((gender==='f'||gender==='female')?'f':'m')+'.webp';
+ const h=getHouse(house),female=gender==='f'||gender==='female';
+ // O masculino do Leão usa o recurso RGBA original comprovado:
+ // não reutilizar a URL do HUD, que pode estar desatualizada após navegação.
+ if(h==='B'&&!female)return 'assets/archers/leao-masculino.webp';
+ return 'assets/v2/heroes/'+({A:'aguia',B:'leao',C:'dragao'}[h])+'-'+(female?'f':'m')+'.webp';
 };
+function portraitFallback(img,house,gender){
+ const h=getHouse(house),female=gender==='f'||gender==='female';
+ const backup=h==='B'&&!female?'assets/ui/characters/arqueiro-leao-de-fogo.png':
+  'assets/archers/'+({A:'aguia',B:'leao',C:'dragao'}[h])+'-'+(female?'feminino':'masculino')+'.webp';
+ img.addEventListener('error',()=>{if(!img.dataset.portraitFallback){img.dataset.portraitFallback='true';img.src=backup}}, {once:true});
+}
 const node=(tag,className,text)=>{
  const el=document.createElement(tag);
  if(className)el.className=className;
@@ -68,6 +76,7 @@ function fighter(person){
  const img=node('img');
  img.alt='Retrato do rosto do arqueiro da Casa '+houses[house].name;
  img.src=portrait(house,person.gender);
+ portraitFallback(img,house,person.gender);
  img.decoding='async';
  const crop=node('div','cm-combat-portrait');crop.append(img);
  const info=node('div','cm-vs-fighter-info');
@@ -191,9 +200,8 @@ function resultView({player,house,rival,rivalHouse,gender='m',rivalGender='m',ow
  card.querySelector('.cm-embers')?.remove();
  emberLayer(card,house,17);
  const wrap=node('div','cm-final-duel');
- const playerPortrait=document.getElementById('hud-archer-image')?.getAttribute('src');
- const left=resultPerson(player,house,ownShots,undefined,playerPortrait||portrait(house,gender));
- const right=resultPerson(rival||'Adversário',rivalHouse,rivalShots,opponent,portrait(rivalHouse,rivalGender));
+ const left=resultPerson(player,house,gender,ownShots,undefined);
+ const right=resultPerson(rival||'Adversário',rivalHouse,rivalGender,rivalShots,opponent);
  if(scored){
   if(outcome==='win'||outcome==='draw'){
    left.classList.add(outcome==='win'?'cm-result-winner':'cm-result-tie');
@@ -208,10 +216,11 @@ function resultView({player,house,rival,rivalHouse,gender='m',rivalGender='m',ow
  const anchor=card.querySelector('#finish-results');
  if(anchor)anchor.before(wrap);else card.append(wrap);
 }
-function resultPerson(name,house,shots,score,selectedPortrait){
+function resultPerson(name,house,gender,shots,score){
  const article=node('div','cm-final-player'),img=node('img');
  article.dataset.house=getHouse(house);
- img.src=selectedPortrait||portrait(house);
+ img.src=portrait(house,gender);
+ portraitFallback(img,house,gender);
  img.alt='Retrato do rosto do arqueiro da Casa '+houses[getHouse(house)].name;
  img.decoding='async';
  const crop=node('div','cm-combat-portrait');crop.append(img);
@@ -221,7 +230,9 @@ function resultPerson(name,house,shots,score,selectedPortrait){
   for(const item of shots.slice(0,5))strip.append(node('span','',Number(item?.score??item)||0));
   article.append(strip);
  }
- if(score!==undefined&&score!=='—')article.append(node('small','',String(score)+' pontos'));
+ // O total já aparece na caixa de pontuação, fora da moldura:
+ // não repetir um segundo <small> sobre a etiqueta da Casa.
+ if(score!==undefined&&score!=='—')article.setAttribute('aria-label',name+' — '+String(score)+' pontos');
  return article;
 }
 function impactSparkle(stage,x,y,score,house){
