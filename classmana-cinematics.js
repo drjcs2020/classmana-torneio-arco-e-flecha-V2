@@ -127,10 +127,15 @@ function versus(config){
   cancel.addEventListener('click',()=>complete(false),{once:true});
  });
 }
-function resultView({player,house,rival,rivalHouse,ownShots=[],rivalShots=[],opponent='—'}){
+function resultView({player,house,rival,rivalHouse,ownShots=[],rivalShots=[],opponent='—',mode='duel',ownTotal=null,rivalTotal=null}){
  const finish=document.getElementById('finish');
  if(!finish)return;
  finish.classList.add('cm-cinematic-result');
+ // Apenas a conclusão contra o robô usa o layout amplo sem moldura.
+ finish.dataset.cmResultMode=mode;
+ const scored=Number.isFinite(ownTotal)&&Number.isFinite(rivalTotal);
+ const outcome=scored?(ownTotal>rivalTotal?'win':ownTotal<rivalTotal?'loss':'draw'):'pending';
+ finish.dataset.cmResultOutcome=outcome;
  const card=finish.querySelector('.finish-card');if(!card)return;
  card.querySelector('.cm-final-duel')?.remove();
  card.querySelector('.cm-embers')?.remove();
@@ -139,6 +144,16 @@ function resultView({player,house,rival,rivalHouse,ownShots=[],rivalShots=[],opp
  const playerPortrait=document.getElementById('hud-archer-image')?.getAttribute('src');
  const left=resultPerson(player,house,ownShots,undefined,playerPortrait);
  const right=resultPerson(rival||'Adversário',rivalHouse,rivalShots,opponent);
+ if(mode==='bot'&&scored){
+  if(outcome==='win'||outcome==='draw'){
+   left.classList.add(outcome==='win'?'cm-result-winner':'cm-result-tie');
+   left.prepend(node('span','cm-result-winner-tag',outcome==='win'?'🏆 VENCEDOR':'🤝 EMPATE'));
+  }
+  if(outcome==='loss'||outcome==='draw'){
+   right.classList.add(outcome==='loss'?'cm-result-winner':'cm-result-tie');
+   right.prepend(node('span','cm-result-winner-tag',outcome==='loss'?'🏆 VENCEDOR':'🤝 EMPATE'));
+  }
+ }
  wrap.append(left,node('div','cm-final-vs','VS'),right);
  const anchor=card.querySelector('#finish-results');
  if(anchor)anchor.before(wrap);else card.append(wrap);
