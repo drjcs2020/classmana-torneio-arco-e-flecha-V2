@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 205" role="img" aria-label="Moldura ornamental para Encerrar Sessão">
+<defs><linearGradient id="gold" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#fff7b0"/><stop offset=".17" stop-color="#ffdb50"/><stop offset=".43" stop-color="#9a4a03"/><stop offset=".68" stop-color="#ffc83a"/><stop offset=".84" stop-color="#fff3a4"/><stop offset="1" stop-color="#b15d06"/></linearGradient><linearGradient id="navy" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#2d6cb0"/><stop offset=".09" stop-color="#163a79"/><stop offset=".49" stop-color="#051c45"/><stop offset=".9" stop-color="#061833"/><stop offset="1" stop-color="#153762"/></linearGradient><linearGradient id="rim" x1="0" x2="1"><stop stop-color="#93480c"/><stop offset=".25" stop-color="#fff1ab"/><stop offset=".48" stop-color="#b46a17"/><stop offset=".7" stop-color="#ffe980"/><stop offset="1" stop-color="#8c4906"/></linearGradient><filter id="glow" x="-15%" y="-30%" width="130%" height="160%"><feGaussianBlur stdDeviation="7"/></filter></defs>
+<path d="M59 13H700L746 60V145L700 191H59L13 145V60Z" fill="#000" opacity=".5" transform="translate(0 6)" filter="url(#glow)"/>
+<path d="M59 12H700L746 58V146L700 192H59L13 146V58Z" fill="url(#gold)" stroke="#a96815" stroke-width="4"/>
+<path d="M65 25H694L733 65V139L694 179H65L26 139V65Z" fill="url(#rim)" stroke="#fff1a4" stroke-width="2"/>
+<path d="M75 37H683L721 74V130L683 166H75L38 130V74Z" fill="url(#navy)" stroke="#2e74cc" stroke-width="4"/>
+<path d="M82 44H676L713 78V126L676 159H82L46 126V78Z" fill="none" stroke="#90c9fc" stroke-width="2" opacity=".68"/>
+<path d="M76 53H681" stroke="#d5f0ff" stroke-width="3" opacity=".5"/>
+<path d="M119 12h521M119 192h521" stroke="#fff1a0" stroke-width="5" opacity=".8"/>
+<path d="m58 27 15-15 15 15-15 15zm643 0 15-15 15 15-15 15z" fill="#ffdd5b" opacity=".75"/>
+<g fill="#ffe089" stroke="#bd7317" stroke-width="2"><path d="m73 102-16-12-16 12 16 12z"/><path d="m687 102 16-12 16 12-16 12z"/></g>
+<path d="M115 166H645" stroke="#ffc75c" stroke-width="2" opacity=".5"/>
+</svg>
