@@ -1,106 +1,156 @@
-/* ClassMana V2 — um HUD compartilhado por treino, robô e duelos.
-   A moldura é comum aos quatro indicadores; o motor não é modificado. */
-body[data-page="arena"] #view-arena .stage .cm-arena-readouts{
- position:absolute!important;z-index:55!important;
- top:clamp(91px,18vh,138px)!important;
- left:clamp(7px,1vw,15px)!important;right:auto!important;bottom:auto!important;
- display:grid!important;grid-template-columns:minmax(0,1fr)!important;
- grid-template-rows:repeat(4,minmax(0,1fr))!important;gap:7px!important;
- width:clamp(156px,16vw,208px)!important;height:clamp(247px,50vh,325px)!important;
- margin:0!important;padding:0!important;box-sizing:border-box!important;
- pointer-events:none!important;
+/* ClassMana V2 — arena: HUD ÚNICO das quatro informações.
+   Esta folha substitui a composição legada com cartões de dimensões diferentes.
+   Compartilhada por robô, treino livre e todos os desafios. */
+body[data-page="arena"] #view-arena #stage .cm-arena-readouts {
+  position:absolute!important;
+  top:clamp(132px,20vh,162px)!important;
+  left:clamp(8px,1vw,16px)!important;
+  right:auto!important;bottom:auto!important;
+  width:clamp(172px,15.3vw,216px)!important;
+  height:clamp(250px,49vh,335px)!important;
+  box-sizing:border-box!important;margin:0!important;padding:0!important;
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  grid-template-rows:repeat(4,minmax(0,1fr))!important;
+  gap:7px!important;
+  z-index:44!important;pointer-events:none!important;
 }
-/* Precedência sobre sprite-hud.css, classmana-v2-theme.css e antigo ajuste de 135px. */
-body[data-page="arena"] #view-arena .stage.cm-art-ready .cm-arena-readouts > :is(#distance,#shots,#wind,#wind-direction),
-body[data-page="arena"] #view-arena .stage .cm-arena-readouts > :is(#distance,#shots,#wind,#wind-direction){
- position:relative!important;
- top:auto!important;left:auto!important;right:auto!important;bottom:auto!important;
- inset:auto!important;transform:none!important;
- box-sizing:border-box!important;
- width:100%!important;min-width:0!important;max-width:none!important;
- height:100%!important;min-height:0!important;max-height:none!important;
- display:grid!important;
- grid-template-columns:clamp(33px,3.3vw,43px) minmax(0,1fr)!important;
- grid-template-rows:minmax(0,1fr)!important;
- align-items:center!important;justify-items:stretch!important;
- gap:7px!important;margin:0!important;padding:5px 7px!important;
- background:linear-gradient(115deg,#031744f5,#0f3572f1)!important;
- background-image:linear-gradient(115deg,#031744f5,#0f3572f1)!important;
- border:2px solid #e8b55c!important;border-radius:12px!important;
- outline:0!important;
- box-shadow:0 4px 15px #07153299,inset 0 0 0 1px #ffe29c44!important;
- filter:none!important;backdrop-filter:none!important;
- color:#fff5d6!important;font:900 14px/1.1 Nunito,sans-serif!important;
- letter-spacing:0!important;text-align:left!important;white-space:normal!important;
- overflow:hidden!important;pointer-events:none!important;
+body[data-page="arena"] #view-arena #stage .cm-arena-readouts > :is(#distance,#shots,#wind,#wind-direction) {
+  position:relative!important;
+  inset:auto!important;
+  top:auto!important;left:auto!important;right:auto!important;bottom:auto!important;
+  transform:none!important;
+  display:grid!important;
+  grid-template-columns:clamp(34px,3.25vw,44px) minmax(0,1fr)!important;
+  grid-template-rows:1fr!important;
+  align-items:center!important;justify-items:stretch!important;
+  gap:6px!important;
+  box-sizing:border-box!important;
+  margin:0!important;padding:6px 8px!important;
+  width:100%!important;max-width:100%!important;min-width:0!important;
+  height:100%!important;max-height:100%!important;min-height:0!important;
+  background:#071c44!important;
+  background-image:linear-gradient(125deg,#092b60f7,#061737f5)!important;
+  background-size:100% 100%!important;
+  border:2px solid #e7b969!important;
+  border-radius:11px!important;
+  box-shadow:0 3px 10px #0009,inset 0 0 0 1px #fff3b133!important;
+  outline:0!important;
+  filter:none!important;backdrop-filter:none!important;
+  color:#fff3d3!important;
+  text-align:left!important;text-shadow:0 2px 4px #0009!important;
+  white-space:normal!important;
+  overflow:hidden!important;pointer-events:none!important;
 }
-body[data-page="arena"] #view-arena .stage .cm-arena-readouts .cm-stat-icon{
- position:static!important;display:flex!important;
- align-items:center!important;justify-content:center!important;
- width:100%!important;height:100%!important;min-width:0!important;
- padding:0!important;margin:0!important;
- font:900 clamp(22px,2.2vw,30px)/1 Arial,sans-serif!important;
- text-shadow:0 2px 5px #0008!important;
+body[data-page="arena"] #view-arena #stage .cm-arena-readouts .cm-stat-icon{
+  position:static!important;display:flex!important;
+  align-items:center!important;justify-content:center!important;
+  width:100%!important;height:100%!important;
+  margin:0!important;padding:0!important;
+  font:900 clamp(22px,2.2vw,31px)/1 Arial,sans-serif!important;
+  filter:drop-shadow(0 2px 3px #0006)!important;
 }
-body[data-page="arena"] #view-arena .stage .cm-arena-readouts .cm-stat-content{
- position:static!important;
- display:flex!important;flex-direction:column!important;
- justify-content:center!important;align-items:flex-start!important;
- min-width:0!important;width:100%!important;max-width:100%!important;
- height:auto!important;top:auto!important;right:auto!important;left:auto!important;
- padding:0!important;margin:0!important;gap:4px!important;
- overflow:hidden!important;
+body[data-page="arena"] #view-arena #stage .cm-arena-readouts .cm-stat-content,
+body[data-page="arena"] #view-arena #stage .cm-arena-readouts #wind .wind-caption,
+body[data-page="arena"] #view-arena #stage .cm-arena-readouts #wind-direction .wind-main {
+  position:static!important;inset:auto!important;
+  display:flex!important;flex-direction:column!important;
+  align-items:flex-start!important;justify-content:center!important;
+  width:100%!important;max-width:100%!important;min-width:0!important;
+  min-height:0!important;height:auto!important;
+  margin:0!important;padding:0!important;gap:4px!important;
+  overflow:visible!important;white-space:normal!important;
 }
-body[data-page="arena"] #view-arena .stage .cm-arena-readouts .cm-stat-title{
- position:static!important;display:block!important;
- color:#ffe0a0!important;
- font:900 clamp(9px,1vw,12px)/1.1 Nunito,sans-serif!important;
- letter-spacing:.055em!important;text-transform:uppercase!important;
- white-space:nowrap!important;text-shadow:0 2px 3px #000b!important;
+body[data-page="arena"] #view-arena #stage .cm-arena-readouts .cm-stat-title,
+body[data-page="arena"] #view-arena #stage .cm-arena-readouts #wind .wind-caption .cm-stat-title {
+  position:static!important;display:block!important;
+  font:900 clamp(10px,.95vw,12px)/1.1 Nunito,sans-serif!important;
+  letter-spacing:.07em!important;text-transform:uppercase!important;
+  color:#ffda8b!important;text-align:left!important;
+  text-shadow:0 2px 3px #000b!important;
+  margin:0!important;padding:0!important;white-space:nowrap!important;
 }
-body[data-page="arena"] #view-arena .stage .cm-arena-readouts .cm-stat-value,
-body[data-page="arena"] #view-arena .stage #wind .wind-speed.cm-stat-value{
- position:static!important;display:block!important;
- font:900 clamp(15px,1.65vw,21px)/1.08 Georgia,serif!important;
- text-align:left!important;letter-spacing:0!important;
- padding:0!important;margin:0!important;
- color:#fff8dc!important;text-shadow:0 2px 4px #000b!important;
- white-space:nowrap!important;max-width:100%!important;
+body[data-page="arena"] #view-arena #stage .cm-arena-readouts .cm-stat-value,
+body[data-page="arena"] #view-arena #stage .cm-arena-readouts #wind .wind-speed.cm-stat-value {
+  position:static!important;display:block!important;
+  font:900 clamp(16px,1.52vw,21px)/1.1 Georgia,serif!important;
+  letter-spacing:0!important;
+  color:#fff8df!important;text-shadow:0 2px 4px #000d!important;
+  margin:0!important;padding:0!important;
+  text-align:left!important;white-space:nowrap!important;
+  width:auto!important;max-width:100%!important;
 }
-body[data-page="arena"] #view-arena .stage .cm-arena-readouts #wind-direction .wind-arrow{
- display:block!important;width:100%!important;height:28px!important;
- color:#ffe39b!important;transform:none!important;
- filter:drop-shadow(0 2px 3px #0009);
+body[data-page="arena"] #view-arena #stage .cm-arena-readouts #wind-direction .wind-arrow{
+  display:block!important;position:static!important;
+  width:100%!important;max-width:44px!important;height:27px!important;
+  color:#ffe3a2!important;
+  transform:none!important;
+  filter:drop-shadow(0 2px 3px #0008)!important;
 }
-body[data-page="arena"] #view-arena .stage .cm-arena-readouts #wind-direction.wind-left .wind-arrow{transform:rotate(180deg)!important}
-body[data-page="arena"] #view-arena .stage .cm-arena-readouts #wind-direction.wind-calm .wind-arrow{opacity:.45!important}
-body[data-page="arena"] #view-arena .stage .cm-arena-readouts #wind-direction .wind-direction-text{
- font:900 clamp(10px,.98vw,12px)/1.1 Nunito,sans-serif!important;
- white-space:normal!important;overflow-wrap:normal!important;max-width:100%!important;
+body[data-page="arena"] #view-arena #stage .cm-arena-readouts #wind-direction.wind-left .wind-arrow{
+  transform:rotate(180deg)!important;
 }
-/* O indicador de potência continua à direita, dentro do medidor de força. */
-body[data-page="arena"] #view-arena .stage.cm-art-ready .game-top-right #power{display:none!important}
+body[data-page="arena"] #view-arena #stage .cm-arena-readouts #wind-direction.wind-calm .wind-arrow{
+  opacity:.47!important;
+}
+body[data-page="arena"] #view-arena #stage .cm-arena-readouts #wind-direction .wind-direction-text{
+  display:block!important;
+  font:900 clamp(10px,.95vw,12px)/1.1 Nunito,sans-serif!important;
+  white-space:normal!important;word-break:normal!important;
+}
+/* Retirar o mostrador "9 ✦ ?" no treino e contra o robô: a pontuação
+   individual permanece no resultado e nas regras do motor. */
+body[data-page="arena"] #stage[data-match-mode="bot"] .battle-hud,
+body[data-page="arena"] #stage[data-match-mode="practice"] .battle-hud{
+  display:none!important;
+}
+/* Um único medidor de força, afastado dos quatro indicadores. */
+body[data-page="arena"] #view-arena #stage.cm-art-ready .cm-sprite-ui .cm-force-meter {
+  position:absolute!important;
+  top:clamp(126px,21vh,178px)!important;
+  right:clamp(5px,1.15vw,20px)!important;
+  bottom:auto!important;left:auto!important;
+  width:clamp(80px,7.6vw,107px)!important;
+  height:clamp(250px,49vh,345px)!important;
+  display:block!important;z-index:38!important;
+  transform:none!important;
+}
+body[data-page="arena"] #view-arena #stage.cm-art-ready .cm-sprite-ui .cm-force-channel{
+  top:22%!important;height:65%!important;
+}
+body[data-page="arena"] #view-arena #stage.cm-art-ready .game-top-right #power{
+  display:none!important;
+}
 @media(max-width:760px){
- body[data-page="arena"] #view-arena .stage .cm-arena-readouts{
-  top:clamp(68px,17vh,100px)!important;left:4px!important;
-  width:clamp(115px,24vw,145px)!important;
-  height:clamp(194px,53vh,259px)!important;gap:4px!important;
- }
- body[data-page="arena"] #view-arena .stage .cm-arena-readouts > :is(#distance,#shots,#wind,#wind-direction){
-  grid-template-columns:25px minmax(0,1fr)!important;gap:4px!important;
-  padding:3px 4px!important;border-width:1.5px!important;border-radius:9px!important;
- }
- body[data-page="arena"] #view-arena .stage .cm-arena-readouts .cm-stat-icon{font-size:19px!important}
- body[data-page="arena"] #view-arena .stage .cm-arena-readouts .cm-stat-title{font-size:8px!important}
- body[data-page="arena"] #view-arena .stage .cm-arena-readouts .cm-stat-value,
- body[data-page="arena"] #view-arena .stage #wind .wind-speed.cm-stat-value{font-size:13px!important}
- body[data-page="arena"] #view-arena .stage .cm-arena-readouts #wind-direction .wind-direction-text{font-size:8px!important}
- body[data-page="arena"] #view-arena .stage .cm-arena-readouts .cm-stat-content{gap:2px!important}
- body[data-page="arena"] #view-arena .stage .cm-arena-readouts #wind-direction .wind-arrow{height:19px!important}
+  body[data-page="arena"] #view-arena #stage .cm-arena-readouts {
+    top:clamp(75px,16vh,113px)!important;left:4px!important;
+    width:clamp(114px,27vw,153px)!important;
+    height:clamp(193px,54vh,275px)!important;
+    gap:4px!important;
+  }
+  body[data-page="arena"] #view-arena #stage .cm-arena-readouts > :is(#distance,#shots,#wind,#wind-direction){
+    grid-template-columns:25px minmax(0,1fr)!important;
+    gap:4px!important;border-width:1.5px!important;border-radius:8px!important;
+    padding:4px 5px!important;
+  }
+  body[data-page="arena"] #view-arena #stage .cm-arena-readouts .cm-stat-icon{font-size:19px!important}
+  body[data-page="arena"] #view-arena #stage .cm-arena-readouts .cm-stat-title,
+  body[data-page="arena"] #view-arena #stage .cm-arena-readouts #wind .wind-caption .cm-stat-title{font-size:9px!important}
+  body[data-page="arena"] #view-arena #stage .cm-arena-readouts .cm-stat-value,
+  body[data-page="arena"] #view-arena #stage .cm-arena-readouts #wind .wind-speed.cm-stat-value{font-size:13px!important}
+  body[data-page="arena"] #view-arena #stage .cm-arena-readouts #wind-direction .wind-direction-text{font-size:9px!important}
+  body[data-page="arena"] #view-arena #stage .cm-arena-readouts .cm-stat-content{gap:2px!important}
+  body[data-page="arena"] #view-arena #stage.cm-art-ready .cm-sprite-ui .cm-force-meter{
+    right:2px!important;top:28%!important;
+    width:70px!important;height:235px!important;
+  }
+  body[data-page="arena"] #view-arena #stage .cm-arena-readouts #wind-direction .wind-arrow{height:18px!important}
 }
 @media(max-height:500px) and (min-width:761px){
- body[data-page="arena"] #view-arena .stage .cm-arena-readouts{
-  top:77px!important;height:clamp(184px,55vh,253px)!important;gap:3px!important
- }
- body[data-page="arena"] #view-arena .stage .cm-arena-readouts .cm-stat-content{gap:1px!important}
+  body[data-page="arena"] #view-arena #stage .cm-arena-readouts{
+    top:83px!important;height:clamp(182px,53vh,238px)!important;gap:3px!important;
+  }
+  body[data-page="arena"] #view-arena #stage.cm-art-ready .cm-sprite-ui .cm-force-meter{
+    top:16%!important;height:clamp(182px,54vh,239px)!important;
+  }
 }
