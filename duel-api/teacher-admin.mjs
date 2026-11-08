@@ -2,7 +2,7 @@
  * A senha NÃO fica no GitHub: configure TEACHER_PASSWORD_SHA256 no Railway V2.
  * Nenhum aluno possui permissões de administração.
  */
-import { randomBytes, createHash, timingSafeEqual } from 'node:crypto';
+import { randomBytes, createHash, timingSafeEqual, scryptSync } from 'node:crypto';
 
 export function createTeacherAdmin({ db, players, known, teamMembership, fail }) {
   db.exec(`CREATE TABLE IF NOT EXISTS extra_students (
@@ -10,17 +10,32 @@ export function createTeacherAdmin({ db, players, known, teamMembership, fail })
     created_at TEXT NOT NULL);
     CREATE TABLE IF NOT EXISTS teacher_resets (
     id TEXT PRIMARY KEY, at TEXT NOT NULL, duels_snapshot TEXT NOT NULL,
-    operations_snapshot TEXT NOT NULL, duels_count INTEGER NOT NULL, operations_count INTEGER NOT NULL);`);
+    operations_snapshot TEXT NOT NULL, duels_count INTEGER NOT NULL, operations_count INTEGER NOT NULL);
+    CREATE TABLE IF NOT EXISTS teacher_settings (setting TEXT PRIMARY KEY, value TEXT NOT NULL);`);
   const extras = db.prepare('SELECT id,name,house,team FROM extra_students ORDER BY house,id').all();
   for (const player of extras) {
     if (!known.has(player.id)) { players.push(player); known.set(player.id, player); }
   }
-  const actions = new Set(['teacherLogin','teacherStatus','teacherStudents','teacherAddStudent','teacherResetScores']);
+  const actions = new Set(['teacherLogin','teacherStatus','teacherStudents','teacherAddStudent','teacherResetScores','teacherChangePassword']);
   const adminSessions = new Map();
   const failures = new Map();
   const digest = value => createHash('sha256').update(String(value)).digest('hex');
   const configuredHash = String(process.env.TEACHER_PASSWORD_SHA256 || '').trim().toLowerCase();
-  const configured = /^[a-f0-9]{64}$/.test(configuredHash);
+  const passwordOverride=db.prepare("SELECT value FROM teacher_settings WHERE setting='password'");
+  const savePasswordOverride=db.prepare("INSERT INTO teacher_settings(setting,value) VALUES('password',?) ON CONFLICT(setting) DO UPDATE SET value=excluded.value");
+  function checkPassword(raw){
+    const value=String(raw||'');
+    if(value.length>256)return false;
+    const override=passwordOverride.get()?.value;
+    if(override){
+      const [algo,salt,expected]=override.split(':');
+      if(algo!=='scrypt'||!/^[a-f0-9]{32}$/.test(salt)||!/^[a-f0-9]{128}$/.test(expected))return false;
+      const result=scryptSync(value,Buffer.from(salt,'hex'),64);
+      return timingSafeEqual(result,Buffer.from(expected,'hex'));
+    }
+    return /^[a-f0-9]{64}$/.test(configuredHash) && compareDigest(digest(value),configuredHash);
+  }
+  const configured = /^[a-f0-9]{64}$/.test(configuredHash) || !!passwordOverride.get()?.value;
   const compareDigest = (a,b) => {
     if (!/^[a-f0-9]{64}$/.test(a) || !/^[a-f0-9]{64}$/.test(b)) return false;
     return timingSafeEqual(Buffer.from(a, 'hex'), Buffer.from(b, 'hex'));
@@ -44,7 +59,7 @@ export function createTeacherAdmin({ db, players, known, teamMembership, fail })
       const entry=failures.get(ip)||{n:0,blockedUntil:0};
       if(entry.blockedUntil>Date.now()) fail('Aguarde alguns minutos antes de tentar novamente.',429);
       const password=String(data.password||'');
-      if(password.length>256 || !compareDigest(digest(password),configuredHash)) {
+      if(!checkPassword(password)) {
         entry.n++;
         if(entry.n>=5){entry.blockedUntil=Date.now()+15*60*1000;entry.n=0;}
         failures.set(ip,entry);
@@ -56,6 +71,20 @@ export function createTeacherAdmin({ db, players, known, teamMembership, fail })
       return {token,expiresInSeconds:sessionsExpireAt/1000};
     }
     requireTeacher(request);
+    if(action==='teacherChangePassword'){
+      if(request.method!=='POST') fail('Método inválido',405);
+      const current=String(data.currentPassword||''),next=String(data.newPassword||'');
+      if(!checkPassword(current))fail('Senha atual incorreta.',401);
+      if(next.length<12||next.length>128||!/[A-Za-z\p{L}]/u.test(next)||!/[0-9]/.test(next))
+        fail('A nova senha deve conter de 12 a 128 caracteres, incluindo letra e número.',400);
+      if(next===current)fail('Escolha uma senha diferente da atual.',400);
+      const salt=randomBytes(16).toString('hex');
+      const passwordHash=scryptSync(next,Buffer.from(salt,'hex'),64).toString('hex');
+      savePasswordOverride.run('scrypt:'+salt+':'+passwordHash);
+      adminSessions.clear();
+      failures.clear();
+      return {passwordChanged:true,requiresLogin:true};
+    }
     if (action==='teacherStatus'||action==='teacherStudents') {
       if(request.method!=='GET') fail('Método inválido',405);
       const counts=Object.fromEntries(['A','B','C'].map(h=>[h,players.filter(p=>p.house===h).length]));
