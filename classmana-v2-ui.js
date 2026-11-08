@@ -157,7 +157,11 @@ function mount(){
  });
  if(root)observer.observe(root,{attributes:true,attributeFilter:['data-step']});
  const restore=window.location.search.includes('continuar=1');
- if(restore)enter();
+ if(restore){
+   // JOGAR NOVAMENTE não passa pelas etapas anteriores.
+   document.body.classList.remove('cm-v2-home-mode');
+   document.body.classList.add('cm-v2-onboarding');
+  }
  // If there is a returned active student, the original module handles the session.
  // This menu still requires an explicit click to proceed; no fake match is started.
  requestAnimationFrame(renderCards);
