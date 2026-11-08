@@ -129,3 +129,37 @@ body[data-page="lobby"] #view-inicio[data-step="perfil"] #cm-identity-screen .cm
   max-height:118px!important;
  }
 }
+
+/* V2 hero-only: revelar o castelo e manter apenas um VOLTAR oficial. */
+/* O escurecimento da página inteira era aplicado pelo tema V2 a todas as
+   etapas além de "reino". Aqui ele é removido APENAS na escolha do arqueiro. */
+body[data-page="lobby"]:not(.cm-v2-home-mode) #view-inicio[data-step="heroi"]{
+ background:#071a38 url('assets/v2/backgrounds/castle.webp') center center / cover no-repeat!important;
+}
+body[data-page="lobby"]:not(.cm-v2-home-mode) #view-inicio[data-step="heroi"]::before{
+ background:none!important;opacity:0!important;
+}
+/* O botão antigo permanece no DOM para seu evento JS continuar funcionando,
+   mas somente o botão global com a imagem oficial fica visível ao aluno. */
+body[data-page="lobby"] #view-inicio[data-step="heroi"] > #cm-lobby-back{
+ display:none!important;
+}
+body[data-page="lobby"]:not(.cm-v2-home-mode) #view-inicio[data-step="heroi"] > #cm-v2-navigate-back{
+ display:grid!important;place-items:center!important;
+ position:fixed!important;z-index:250!important;
+ top:clamp(9px,2vh,18px)!important;left:clamp(9px,1.4vw,20px)!important;
+ width:clamp(112px,12vw,152px)!important;height:clamp(40px,5.3vw,56px)!important;
+ min-width:0!important;min-height:0!important;
+ border:0!important;border-radius:0!important;padding:0!important;
+ box-shadow:none!important;background:transparent!important;
+ filter:drop-shadow(0 4px 9px #0008)!important;cursor:pointer!important;
+}
+body[data-page="lobby"]:not(.cm-v2-home-mode) #view-inicio[data-step="heroi"] #cm-v2-navigate-back .cm-v2-back-art{
+ display:block!important;width:100%;height:100%;object-fit:fill;pointer-events:none;
+}
+body[data-page="lobby"]:not(.cm-v2-home-mode) #view-inicio[data-step="heroi"] #cm-v2-navigate-back .cm-v2-back-label{
+ display:none!important;
+}
+body[data-page="lobby"]:not(.cm-v2-home-mode) #view-inicio[data-step="heroi"] #cm-v2-navigate-back:hover{
+ filter:brightness(1.14) drop-shadow(0 3px 12px #ffdc8094)!important;
+}
