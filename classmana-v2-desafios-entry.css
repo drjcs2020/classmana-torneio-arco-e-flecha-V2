@@ -99,3 +99,33 @@ body[data-page="lobby"]:not(.cm-v2-home-mode) #view-inicio[data-step="perfil"] #
   padding:15px!important;padding-top:52px!important;
  }
 }
+
+/* Ajuste apenas de QUEM VAI JOGAR: remover VOLTAR interno e destacar logo oficial. */
+/* Mantemos o elemento oculto para o botão VOLTAR superior continuar acionando
+   o fluxo original (sem alterar a lógica de voltar à Casa). */
+body[data-page="lobby"] #view-inicio[data-step="perfil"] #cm-identity-screen #cm-identity-back{
+ display:none!important;
+}
+/* Recupera o espaço antes reservado ao botão interno, sem ampliar o quadro. */
+body[data-page="lobby"] #view-inicio[data-step="perfil"] #cm-identity-screen .cm-identity-panel{
+ padding-top:clamp(16px,2.2vw,24px)!important;
+}
+/* Logo oficial + ~25% no desktop; responsivo no celular. */
+body[data-page="lobby"] #view-inicio[data-step="perfil"] #cm-identity-screen .cm-identity-panel .cm-identity-logo{
+ width:min(88%,345px)!important;
+ max-width:345px!important;
+ height:auto!important;
+ max-height:135px!important;
+ object-fit:contain!important;
+ margin:0 auto!important;
+}
+@media(max-width:620px){
+ body[data-page="lobby"] #view-inicio[data-step="perfil"] #cm-identity-screen .cm-identity-panel{
+  padding-top:15px!important;
+ }
+ body[data-page="lobby"] #view-inicio[data-step="perfil"] #cm-identity-screen .cm-identity-panel .cm-identity-logo{
+  width:min(88%,310px)!important;
+  max-width:310px!important;
+  max-height:118px!important;
+ }
+}
