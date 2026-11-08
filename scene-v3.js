@@ -165,11 +165,21 @@ export function initScene(canvas, getSettings) {
     ctx.beginPath();ctx.arc(sightX,sightY,sightR,0,Math.PI*2);ctx.strokeStyle='#26292d';ctx.lineWidth=4.2;ctx.stroke();
     ctx.strokeStyle=p.trim;ctx.lineWidth=1.3;ctx.beginPath();ctx.arc(sightX,sightY,sightR-3,0,Math.PI*2);ctx.stroke();
     ctx.strokeStyle='rgba(230,239,240,.7)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(sightX-sightR+7,sightY);ctx.lineTo(sightX+sightR-7,sightY);ctx.moveTo(sightX,sightY-sightR+7);ctx.lineTo(sightX,sightY+sightR-7);ctx.stroke();
-    // Shared black arrow, white/red feathers. Drawn from nocking point toward the target.
-    ctx.strokeStyle='#11151d';ctx.lineWidth=7;ctx.beginPath();ctx.moveTo(bx+pull+140,by+110);ctx.lineTo(bx-48,by-38);ctx.stroke();
-    ctx.strokeStyle='#9baab4';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(bx+pull+135,by+109);ctx.lineTo(bx-48,by-38);ctx.stroke();
-    ctx.fillStyle=arrowPalette().feather;ctx.beginPath();ctx.moveTo(bx+pull+140,by+110);ctx.lineTo(bx+pull+118,by+66);ctx.lineTo(bx+pull+100,by+82);ctx.closePath();ctx.fill();
-    ctx.fillStyle=arrowPalette().secondary;ctx.beginPath();ctx.moveTo(bx+pull+140,by+110);ctx.lineTo(bx+pull+96,by+91);ctx.lineTo(bx+pull+100,by+112);ctx.closePath();ctx.fill();
+    // Fallback 2D: haste encaixada na corda, na mesma altura do arco.
+    const nockX=bx+pull+5,nockY=by;
+    const tipX=bx-size*.39,tipY=by-size*.01;
+    ctx.strokeStyle='#11151d';ctx.lineWidth=6;ctx.beginPath();
+    ctx.moveTo(nockX,nockY);ctx.lineTo(tipX,tipY);ctx.stroke();
+    ctx.strokeStyle='#dce5ec';ctx.lineWidth=2;ctx.stroke();
+    ctx.fillStyle=arrowPalette().feather;ctx.beginPath();
+    ctx.moveTo(nockX-4,nockY);ctx.lineTo(nockX-21,nockY-10);
+    ctx.lineTo(nockX-29,nockY);ctx.closePath();ctx.fill();
+    ctx.fillStyle=arrowPalette().secondary;ctx.beginPath();
+    ctx.moveTo(nockX-4,nockY);ctx.lineTo(nockX-21,nockY+10);
+    ctx.lineTo(nockX-29,nockY);ctx.closePath();ctx.fill();
+    ctx.fillStyle='#f2f1e6';ctx.beginPath();
+    ctx.moveTo(tipX-9,tipY);ctx.lineTo(tipX+5,tipY-5);
+    ctx.lineTo(tipX+5,tipY+5);ctx.closePath();ctx.fill();
     ctx.restore();
     requestAnimationFrame(renderFallback);
   }
