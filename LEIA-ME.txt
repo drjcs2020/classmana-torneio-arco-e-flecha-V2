@@ -1,0 +1,8 @@
+ClassMana — primeira integração de sprites
+
+Este ZIP preserva o PNG transparente de cada elemento e inclui as quatro paisagens separadas.
+As paisagens vieram de uma montagem 2x2 de resolução 1671x941, então NÃO têm detalhe nativo 1920x1080, mesmo que tenham sido ampliadas para essas dimensões. São prévias para prototipagem, não a entrega definitiva de cenários em Full HD.
+
+Para a publicação no GitHub Pages: subir o arquivo ZIP no repositório com o nome ClassMana_Integracao_Visual_01.zip. O workflow pages.yml estará preparado para descompactá-lo na raiz do site no deploy.
+
+O motor e a pontuação permanecem no JavaScript, não dentro dos PNGs.

@@ -35,7 +35,7 @@ assert(game.includes('cmMarkInternalReturn()'),'Arena return handoff missing');
 assert(game.includes('cmShowActiveSession()'),'Session display missing');
 assert(game.includes("$('cm-ranking-choice')?.addEventListener"),'Ranking shortcut not interactive');
 assert(game.includes("window.location.assign('./arena.html')"),'Arena navigation missing');
-assert(game.includes('cm_active_archery_match_v1'),'Match handoff missing');
+assert(game.includes('cm_active_archery_match_v2'),'V2-isolated match handoff missing');
 assert(game.includes('mountSpriteHUD'),'Visual HUD hookup missing');
 assert(read('scene-v3.js').includes('projectile.lookAt'),'Arrow pitch update missing');
 assert(read('sprite-hud.js').includes('onPowerRelease'),'Shot release HUD missing');

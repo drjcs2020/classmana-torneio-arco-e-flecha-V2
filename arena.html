@@ -57,6 +57,7 @@ body[data-page="arena"] #stage.stage::before {
 <link rel="stylesheet" href="classmana-cinematics.css?v=gold48">
 <link rel="stylesheet" href="classmana-art-pass-v51.css?v=51">
 <link rel="stylesheet" href="classmana-final-visual.css?v=20261108a">
+<link rel="stylesheet" href="classmana-v2-theme.css?v=20261108v2">
 </head>
 <body data-page="arena">
 <!-- A arena é a view inicial. A seleção antiga nunca é exibida durante o carregamento. -->
@@ -98,7 +99,7 @@ body[data-page="arena"] #stage.stage::before {
   <div class="studio-heading"><small>PERSONAGEM DA SUA CASA</small><h2 id="hero-preview-name">Águia Dourada · 4º A</h2></div>
   <div class="studio-carousel" role="group" aria-label="Carrossel dos personagens">
    <button id="archer-prev" type="button" class="studio-arrow" aria-label="Personagem anterior">‹</button>
-   <div class="studio-portrait"><img src="assets/archers/aguia-masculino.webp" id="hero-preview-img" alt="Arqueiro da Águia Dourada, de corpo inteiro" draggable="false"></div>
+   <div class="studio-portrait"><img src="assets/v2/heroes/aguia-m.webp" id="hero-preview-img" alt="Arqueiro da Águia Dourada, de corpo inteiro" draggable="false"></div>
    <button id="archer-next" type="button" class="studio-arrow" aria-label="Próximo personagem">›</button>
   </div>
   <div class="studio-selected" aria-live="polite"><strong id="archer-carousel-indicator">Arqueiro · 1 de 2</strong><span id="hero-preview-desc">Armadura azul e dourada.</span></div>
@@ -164,7 +165,7 @@ body[data-page="arena"] #stage.stage::before {
  <div class="arena-top"><button class="back" id="leave-arena">← REINOS</button><div class="arena-header"><b id="match-title">ARENA DO ARCO E FLECHA</b></div><button type="button" id="arena-sound" class="arena-sound-toggle" aria-pressed="true" aria-label="Desativar som da arena">🔊 SOM</button></div>
  <div class="stage" id="stage">
  <div class="battle-hud">
-  <div class="hud-archer"><img id="hud-archer-image" src="assets/archers/aguia-masculino.webp" alt="Seu personagem"><div><small>DEFENSOR</small><strong id="hud-player">Águia Dourada</strong></div></div>
+  <div class="hud-archer"><img id="hud-archer-image" src="assets/v2/heroes/aguia-m.webp" alt="Seu personagem"><div><small>DEFENSOR</small><strong id="hud-player">Águia Dourada</strong></div></div>
   <div class="score-display"><span id="hud-score">0</span><span>✦</span><span id="hud-rival">0</span></div>
   <div class="right"><small>ADVERSÁRIO</small><strong id="hud-bot">Robô · Médio</strong></div>
  </div>
@@ -172,7 +173,7 @@ body[data-page="arena"] #stage.stage::before {
   <div class="range-intro"><div><strong id="range-trail-title">🌱 Trilha do Aprendiz</strong><span id="range-mode">A distância aumenta a cada etapa.</span></div><span class="mode-badge" id="arena-mode-badge">🎯 ALVO FIXO</span></div>
  <div class="range-progress" id="range-progress" aria-label="Progressão das distâncias"></div>
   <canvas id="world" aria-label="Arena interativa de arco e flecha, com mira, cenário e alvo tridimensional"></canvas>
-  <div class="scene-badge" id="stage-house-badge" data-house="A"><img src="assets/images/brasao-4a-transparente.png" alt=""><div><small>ARENA DA CASA</small><strong>Águia Dourada</strong></div></div>
+  <div class="scene-badge" id="stage-house-badge" data-house="A"><img src="assets/v2/crests/aguia.webp" alt=""><div><small>ARENA DA CASA</small><strong>Águia Dourada</strong></div></div>
   <div class="playcross" id="playcross" aria-hidden="true"><span></span></div>
   <div class="game-top-left">
     <div class="hud-pill wind-widget wind-calm" id="wind" role="status" aria-label="Vento: 0 quilômetros por hora, sem desvio">
@@ -190,7 +191,7 @@ body[data-page="arena"] #stage.stage::before {
   <div class="instruction" id="instruction">MOVA OU ARRASTE PARA MIRAR • SEGURE PARA PUXAR • SOLTE PARA ATIRAR</div>
   <div class="hit" id="hit"></div>
   <div class="finish hidden" id="finish">
-    <div class="finish-card"><div class="cm-finish-heroes" aria-hidden="true"><img id="finish-hero-own" alt="" src="assets/ui/characters/arqueiro-aguia-dourada.png"><img id="finish-hero-rival" alt="" src="assets/ui/characters/arqueiro-leao-de-fogo.png"></div><small>🏆 RESULTADO DO TORNEIO</small><h2 id="finish-title">FIM DE PARTIDA</h2><p id="finish-desc"></p><div class="finish-results" id="finish-results"></div><div class="finish-actions"><button class="primary" id="play-again">🏹 JOGAR NOVAMENTE</button><button class="secondary" id="share-result">🔗 COMPARTILHAR DESAFIO</button></div><div class="share-help" id="share-help"></div></div>
+    <div class="finish-card"><div class="cm-finish-heroes" aria-hidden="true"><img id="finish-hero-own" alt="" src="assets/v2/heroes/aguia-m.webp"><img id="finish-hero-rival" alt="" src="assets/v2/heroes/leao-m.webp"></div><small>🏆 RESULTADO DO TORNEIO</small><h2 id="finish-title">FIM DE PARTIDA</h2><p id="finish-desc"></p><div class="finish-results" id="finish-results"></div><div class="finish-actions"><button class="primary" id="play-again">🏹 JOGAR NOVAMENTE</button><button class="secondary" id="share-result">🔗 COMPARTILHAR DESAFIO</button><button class="secondary cm-v2-result-home" id="cm-v2-result-home" type="button">⌂ VOLTAR AO MENU</button></div><div class="share-help" id="share-help"></div></div>
   </div>
  </div>
  
@@ -198,7 +199,7 @@ body[data-page="arena"] #stage.stage::before {
 
 <section id="view-ranking" class="view information-view" role="dialog" aria-modal="true" aria-labelledby="ranking-title">
   <div class="page-heading"><small>🏆 SALÃO DOS CAMPEÕES</small><h1 id="ranking-title">Ranking do Torneio</h1><p>As três Casas disputam o trono dos arqueiros.</p></div>
-  <div class="notice" id="ranking-status">🏆 Resultados oficiais de desafios concluídos, armazenados no Google Sheets. A consulta exige que o serviço online esteja publicado.</div>
+  <div class="notice" id="ranking-status">🏆 Resultados oficiais de desafios concluídos, armazenados no banco exclusivo da V2. A consulta exige acesso ao Railway V2.</div>
   <div class="cm-score-mode-tabs" id="ranking-tabs">
    <button type="button" class="active" data-rank="players">🎯 Arqueiros</button>
    <button type="button" data-rank="teams">🛡️ Equipes</button>
@@ -226,5 +227,6 @@ body[data-page="arena"] #stage.stage::before {
 <div id="toast" role="status" aria-live="polite"></div>
 <script src="roster.js?v=2"></script><script src="teams.js?v=1"></script><script type="module" src="game-v3.js?v=gold48"></script>
 <script type="module" src="wind-panel-restored.js?v=wind20"></script>
+<script src="classmana-v2-ui.js?v=20261108v2" defer></script>
 </body>
 </html>

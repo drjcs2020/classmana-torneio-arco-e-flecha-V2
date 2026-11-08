@@ -21,7 +21,7 @@ const BOW_RULES={
  vento:{wind:.5,ring:1,bonus:0,description:'reduz o desvio causado pelo vento em 50%'}
 };
 function readEquipment(){
- try{const x=JSON.parse(localStorage.getItem('classmana-archery-equipment-v1')||'{}');
+ try{const x=JSON.parse(localStorage.getItem('classmana-archery-equipment-v2')||'{}');
   return {bow:EQUIPMENT.bows[x.bow]?x.bow:'classico',arrow:'rubi'};}
  catch{return {bow:'classico',arrow:'rubi'}}
 }
@@ -40,13 +40,13 @@ function chooseEquipment(key,value){
  if(match?.running&&view==='arena'){toast('Personalize o equipamento antes de iniciar a próxima rodada.');return}
  if(key!=='bow'||!EQUIPMENT.bows[value])return;
  equipment={bow:value,arrow:'rubi'};
- try{localStorage.setItem('classmana-archery-equipment-v1',JSON.stringify(equipment))}catch{}
+ try{localStorage.setItem('classmana-archery-equipment-v2',JSON.stringify(equipment))}catch{}
  applyEquipment();
 }
 let incoming=null,scoreTab='players',onlineInbox=[],onlineLoading=false,startMatchPending=false;
 let identifiedPlayerId='';
-const CM_ACTIVE_STUDENT='cm_active_student_v1';
-const CM_INTERNAL_RETURN='cm_internal_duel_return_v1';
+const CM_ACTIVE_STUDENT='cm_active_student_v2';
+const CM_INTERNAL_RETURN='cm_internal_duel_return_v2';
 function cmMarkInternalReturn(){try{sessionStorage.setItem(CM_INTERNAL_RETURN,'1')}catch{}}
 function cmCanContinue(){
  try{
@@ -58,7 +58,7 @@ function cmCanContinue(){
 }
 function cmSessionId(){try{return sessionStorage.getItem(CM_ACTIVE_STUDENT)||''}catch{return ''}}
 function cmSaveStudent(id){try{sessionStorage.setItem(CM_ACTIVE_STUDENT,id)}catch{}}
-function cmForgetStudent(){try{sessionStorage.removeItem(CM_ACTIVE_STUDENT);sessionStorage.removeItem('cm_active_archery_match_v1')}catch{}}
+function cmForgetStudent(){try{sessionStorage.removeItem(CM_ACTIVE_STUDENT);sessionStorage.removeItem('cm_active_archery_match_v2')}catch{}}
 const TEAMS=window.CLASSMANA_TEAMS||{};
 const cmNavigationType=performance.getEntriesByType('navigation')[0]?.type;
 const cmIsLobby=document.body.dataset.page==='lobby';
@@ -69,13 +69,13 @@ if(document.body.dataset.page==='arena'&&cmNavigationType==='reload'){
 }
 
 const rand=(a,b)=>a+Math.random()*(b-a);
-function safeRead(){try{const a=JSON.parse(localStorage.getItem('classmana-archery-v2'));return Array.isArray(a)?a.filter(x=>x&&typeof x==='object').slice(-150):[]}catch{return []}}
+function safeRead(){try{const a=JSON.parse(localStorage.getItem('classmana-archery-v2-isolated'));return Array.isArray(a)?a.filter(x=>x&&typeof x==='object').slice(-150):[]}catch{return []}}
 storage=safeRead();
-function persist(row){storage.push({...row,at:new Date().toISOString()});storage=storage.slice(-150);try{localStorage.setItem('classmana-archery-v2',JSON.stringify(storage))}catch{}renderRanking()}
+function persist(row){storage.push({...row,at:new Date().toISOString()});storage=storage.slice(-150);try{localStorage.setItem('classmana-archery-v2-isolated',JSON.stringify(storage))}catch{}renderRanking()}
 function toast(s){const t=$('toast');t.textContent=s;t.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.classList.remove('show'),3100)}
 function openView(name){
  if(name==='inicio'&&document.body.dataset.page==='arena'){
-  try{sessionStorage.removeItem('cm_active_archery_match_v1')}catch{}
+  try{sessionStorage.removeItem('cm_active_archery_match_v2')}catch{}
   cmMarkInternalReturn();window.location.assign('./');return;
  }
  // Two separate HTML pages: lobby and arena. Ranking and rules are overlays.
@@ -155,14 +155,14 @@ function fillRivals(){
 }
 
 const ARCHER_SKINS={
- A:{m:"arqueiro-aguia-dourada.png",f:"arqueira-aguia-dourada.png",desc:"Armadura azul e dourada, precisão do vento.",mascot:"Águia Dourada"},
- B:{m:"arqueiro-leao-de-fogo.png",f:"arqueira-leao-de-fogo.png",desc:"Armadura vermelha e dourada, coragem do fogo.",mascot:"Leão de Fogo"},
- C:{m:"arqueiro-dragao-de-esmeralda.png",f:"arqueira-dragao-de-esmeralda.png",desc:"Armadura verde-esmeralda e arco dracônico.",mascot:"Dragão de Esmeralda"}
+ A:{m:"aguia-m.webp",f:"aguia-f.webp",desc:"Armadura azul e dourada, precisão do vento.",mascot:"Águia Dourada"},
+ B:{m:"leao-m.webp",f:"leao-f.webp",desc:"Armadura vermelha e dourada, coragem do fogo.",mascot:"Leão de Fogo"},
+ C:{m:"dragao-m.webp",f:"dragao-f.webp",desc:"Armadura verde-esmeralda e arco dracônico.",mascot:"Dragão de Esmeralda"}
 };
 let selectedSkins={};
-try{selectedSkins=JSON.parse(localStorage.getItem("classmana-archer-skins-v1")||"{}")||{}}catch{}
+try{selectedSkins=JSON.parse(localStorage.getItem("classmana-archer-skins-v2")||"{}")||{}}catch{}
 function archerGender(){return selectedSkins[house]==="f"?"f":"m"}
-function archerImage(){return "assets/ui/characters/"+ARCHER_SKINS[house][archerGender()]}
+function archerImage(){return "assets/v2/heroes/"+ARCHER_SKINS[house][archerGender()]}
 function refreshArcher(){
  const female=archerGender()==='f',title=(female?'Arqueira':'Arqueiro')+' da '+H[house].name;
  const titleEl=$('hero-preview-name'),desc=$('hero-preview-desc'),img=$('hero-preview-img');
@@ -180,7 +180,7 @@ function refreshArcher(){
 
 function chooseArcher(g){
  if(g!=="m"&&g!=="f")return;
- selectedSkins[house]=g;try{localStorage.setItem("classmana-archer-skins-v1",JSON.stringify(selectedSkins))}catch{}
+ selectedSkins[house]=g;try{localStorage.setItem("classmana-archer-skins-v2",JSON.stringify(selectedSkins))}catch{}
  refreshArcher();
  const p=$('hero-preview');if(p){p.classList.remove('archer-switch-animation');void p.offsetWidth;p.classList.add('archer-switch-animation');}
 }
@@ -311,7 +311,7 @@ async function startMatch(accepted=null){
     return;
   }
   /* API direta: o duelo acontece no GitHub Pages, sem portal Apps Script. */
-  if(!online.enabled||online.state!=='ready'){toast('⚠️ '+(online.lastError||'A Arena Online não conseguiu conectar ao Apps Script.'));return}
+  if(!online.enabled||online.state!=='ready'){toast('⚠️ '+(online.lastError||'A Arena Online não conseguiu conectar ao Railway V2.'));return}
   if(!online.user||online.user.id!==userId){
     const selected=await loginStudent();
     if(!selected)return;
@@ -338,7 +338,7 @@ async function startMatch(accepted=null){
    $('start-game').disabled=true;
    $('start-game').setAttribute('aria-busy','true');
    $('start-game').setAttribute('aria-label','Registrando desafio online...');
-   $('online-status').textContent='⏳ Registrando convite na planilha online...';
+   $('online-status').textContent='⏳ Registrando convite no servidor V2...';
    challenge=fromInbox||await online.create(kind,rivalId,level);
   }catch(error){
    // Se o servidor gravou mas a confirmação se perdeu, recuperar o convite
@@ -381,7 +381,7 @@ async function startMatch(accepted=null){
  $('instruction').textContent='MOVA A MIRA DO ARCO • SEGURE PARA PUXAR • SOLTE PARA ATIRAR';
  if(document.body.dataset.page==='lobby'){
   try{
-   sessionStorage.setItem('cm_active_archery_match_v1',JSON.stringify(match));
+   sessionStorage.setItem('cm_active_archery_match_v2',JSON.stringify(match));
    window.location.assign('./arena.html');
    return;
   }catch(error){console.warn('Navegação entre páginas indisponível:',error)}
@@ -453,7 +453,7 @@ async function fire(power){
  if(match!==currentMatch||!currentMatch.running)return;
  scene?.impact?.({x:ix/w,y:iy/h,score,blocked});
  match.scores.push(score);$('hud-score').textContent=match.scores.reduce((a,b)=>a+b,0);
- try{if(document.body.dataset.page==='arena')sessionStorage.setItem('cm_active_archery_match_v1',JSON.stringify(match))}catch{}
+ try{if(document.body.dataset.page==='arena')sessionStorage.setItem('cm_active_archery_match_v2',JSON.stringify(match))}catch{}
  showHit(score,ix/w,iy/h,blocked);
  cinematics.impactSparkle($('stage'),ix/w,iy/h,score,match.house);
  if(blocked){arenaAudio.play('block');toast('🛡️ O ESCUDO DEFENDEU O ALVO!');}
@@ -520,8 +520,8 @@ async function finishMatch(){
  $('share-result').classList.add('hidden');
  $('share-result').classList.remove('cm-retry');
  if(match.online){
-  $('finish-title').textContent='⏳ GRAVANDO RESULTADO NA PLANILHA...';
-  $('finish-desc').textContent='Seus disparos estão sendo validados e registrados no placar online.';
+  $('finish-title').textContent='⏳ SALVANDO RESULTADO NO TORNEIO V2...';
+  $('finish-desc').textContent='Seus disparos estão sendo validados e registrados no placar exclusivo da V2.';
   $('finish-results').classList.remove('cm-score-grid');$('finish-results').textContent='🏹 5 / 5 FLECHAS';
   try{
    let response;
@@ -767,7 +767,7 @@ function renderInbox(){
  }
  list.appendChild(history);
 }
-const CM_NOTICES_PREFIX='cm-duel-notices-v2-';
+const CM_NOTICES_PREFIX='cm-duel-notices-v2-isolated-';
 let cmNoticePlayer='',cmNoticeSnapshot={};
 function cmNoticeKey(id){return CM_NOTICES_PREFIX+id}
 function cmAlertable(ch,id){
@@ -872,7 +872,7 @@ async function startOnlineClient(){
    online.logout();cmForgetStudent();identifiedPlayerId='';
   }
   if(document.body.dataset.page!=='lobby'&&!online.user){
-   const remembered=localStorage.getItem('cm_arco_nome');
+   const remembered=localStorage.getItem('cm_arco_nome_v2');
    if(/^[ABC][0-9]{2}$/.test(remembered||'')){selectHouse(remembered[0]);$('player').value=remembered;await loginStudent();}
   }
   try{
@@ -941,6 +941,7 @@ document.querySelector('.studio-carousel')?.addEventListener('keydown',event=>{
  }
 });
 cinematics.mountAmbient($('view-inicio'),house,72);
+cinematics.mountAmbient($('cm-v2-home'),house,44);
 cinematics.mountAmbient($('stage'),house,52);
 cinematics.bindMenuSound(effect=>arenaAudio.play(effect));
 const soundButton=$('arena-sound');
@@ -985,7 +986,7 @@ $('my-team').addEventListener('change',()=>{
  fillRivals();
 });$('start-game').addEventListener('click',startMatch);$('rank-play').addEventListener('click',()=>openView('inicio'));$('rules-play').addEventListener('click',()=>openView('inicio'));$('leave-arena').addEventListener('click',()=>{if(match?.running&&!confirm('Abandonar a rodada atual e começar uma nova depois?'))return;openView('inicio')});$('play-again').addEventListener('click',()=>{
  if(document.body.dataset.page==='arena'){
-  try{sessionStorage.removeItem('cm_active_archery_match_v1')}catch{}
+  try{sessionStorage.removeItem('cm_active_archery_match_v2')}catch{}
   cmMarkInternalReturn();window.location.assign('./?continuar=1');return;
  }
  if(match)match.running=false;
@@ -1070,7 +1071,7 @@ document.querySelectorAll('[data-play-mode]').forEach(button=>{
 function restoreArena(){
  if(document.body.dataset.page!=='arena')return;
  let saved=null;
- try{saved=JSON.parse(sessionStorage.getItem('cm_active_archery_match_v1')||'null')}catch{}
+ try{saved=JSON.parse(sessionStorage.getItem('cm_active_archery_match_v2')||'null')}catch{}
  if(!saved||!['A','B','C'].includes(saved.house)||!Array.isArray(saved.scores)||saved.scores.length>5){
   window.location.replace('./');return;
  }

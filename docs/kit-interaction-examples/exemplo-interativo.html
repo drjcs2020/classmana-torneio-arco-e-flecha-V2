@@ -1,0 +1,21 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ClassMana · Teste dos Sprites Independentes</title><link rel="stylesheet" href="controles.css"><style>
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#091e36;color:#fff9df;font-family:Georgia,serif}
+main{min-height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:18px;padding:15px;background:radial-gradient(ellipse at center,#1c4565,#041122)}
+header img{width:min(490px,95vw)}section{display:flex;align-items:center;justify-content:center;gap:35px;flex-wrap:wrap}
+nav{display:flex;align-items:center;flex-direction:column;gap:7px}nav button{width:min(420px,83vw);height:112px}
+#saida{max-width:90vw;min-height:30px;font-size:22px;color:#ffe18c}
+small{font-family:system-ui;color:#bed2da;font-size:14px;text-align:center}
+</style></head><body><main>
+<header><img src="../titulos/logo-classmana-torneio.png" alt="ClassMana, Torneio das Três Casas"></header>
+<section><nav><button id="jogar" type="button"></button><button id="desafios" type="button"></button><button id="ranking" type="button"></button><button id="regras" type="button"></button></nav><div id="barra"></div></section>
+<output id="saida">Toque nos botões. Arraste a força e toque em ATIRAR.</output>
+<small>Este arquivo demonstra controles reais, não representa o jogo completo nem altera pontuação oficial.</small>
+</main><script type="module">
+import {botaoSprite,barraForca} from './controles.js';
+const out=document.querySelector('#saida');
+for(const [id,name,file] of [['jogar','Jogar','botao-jogar-3d.png'],['desafios','Desafios','classmana-desafios.png'],['ranking','Ranking','classmana-ranking.png'],['regras','Regras','classmana-regras.png']]){
+ botaoSprite(document.querySelector('#'+id),'../botoes/'+file,()=>out.textContent='Botão clicado: '+name,name);
+}
+barraForca(document.querySelector('#barra'),{onChange:potencia=>{},onShot:f=>out.textContent='Disparo de teste: força '+Math.round(f*100)+'% — conecte à física no PlayCanvas.'});
+</script></body></html>

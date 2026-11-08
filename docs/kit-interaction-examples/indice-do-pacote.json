@@ -1,0 +1,843 @@
+[
+  {
+    "part": 1,
+    "source": "manifest.json",
+    "destination": "docs/kit-interaction-examples/manifest.json",
+    "sha256": "c67b8d1975998038299366498bcbf335a1680d5a4495b5dcdd722c4705a3f5ff",
+    "bytes": 18651
+  },
+  {
+    "part": 1,
+    "source": "LEIA-ME.txt",
+    "destination": "docs/kit-interaction-examples/LEIA-ME.txt",
+    "sha256": "3769512f15892d810284f829d19fc454dd5e77eb8004c040afb4e0b237e2ac06",
+    "bytes": 508
+  },
+  {
+    "part": 1,
+    "source": "titulos/titulo-prepare-partida.png",
+    "destination": "assets/ui/titles/titulo-prepare-partida.png",
+    "sha256": "339219e90446735a06d512241288df6c5ab96f399f97229c6b00afa992895cf6",
+    "bytes": 23581
+  },
+  {
+    "part": 1,
+    "source": "titulos/titulo-duelo-entre-casas.png",
+    "destination": "assets/ui/titles/titulo-duelo-entre-casas.png",
+    "sha256": "1a8c99c22d0966df833de1ff1bbc9fbd200144b2653cc7ea845103c634df0c65",
+    "bytes": 84260
+  },
+  {
+    "part": 1,
+    "source": "titulos/titulo-escolha-desafio.png",
+    "destination": "assets/ui/titles/titulo-escolha-desafio.png",
+    "sha256": "038ff824f8b1d2a442e62f159c5af42a388b1933d93095ff1ab00abf5dfddab5",
+    "bytes": 116386
+  },
+  {
+    "part": 1,
+    "source": "titulos/titulo-equipamentos.png",
+    "destination": "assets/ui/titles/titulo-equipamentos.png",
+    "sha256": "95c83b3da90a881e2907db0a2e6f50561c61d1f75d0d1fbf4e9e89013f96e983",
+    "bytes": 31532
+  },
+  {
+    "part": 1,
+    "source": "titulos/logo-torneio.png",
+    "destination": "assets/ui/titles/logo-torneio.png",
+    "sha256": "b1790be965690c43d5f8fe5b50a9c47c17b67386806abc4a502890d71b071da5",
+    "bytes": 207736
+  },
+  {
+    "part": 1,
+    "source": "titulos/titulo-nivel-referencia.png",
+    "destination": "assets/ui/titles/titulo-nivel-referencia.png",
+    "sha256": "26307d18021f234e47117597e92b3df3043dede390d608506b6bdbe033041cc7",
+    "bytes": 64922
+  },
+  {
+    "part": 1,
+    "source": "titulos/titulo-escolha-seu-arqueiro.png",
+    "destination": "assets/ui/titles/titulo-escolha-seu-arqueiro.png",
+    "sha256": "30d043f826b929cb11e3a97e7f9576e7666b541725e78395fe198f7af58c4ddb",
+    "bytes": 32498
+  },
+  {
+    "part": 1,
+    "source": "titulos/titulo-ranking-torneio.png",
+    "destination": "assets/ui/titles/titulo-ranking-torneio.png",
+    "sha256": "1b095d9294fb44eda782fdcf3c574c38b110ef56c1098da86c6f2c43570a884f",
+    "bytes": 30316
+  },
+  {
+    "part": 1,
+    "source": "titulos/logo-classmana-torneio.png",
+    "destination": "assets/ui/titles/logo-classmana-torneio.png",
+    "sha256": "b22e5ec3dde39dcd37f848227e4982de11c77fe5cafa7904abdec52b1109c9d1",
+    "bytes": 1666716
+  },
+  {
+    "part": 1,
+    "source": "titulos/titulo-duelo-entre-casas-novo.png",
+    "destination": "assets/ui/titles/titulo-duelo-entre-casas-novo.png",
+    "sha256": "5acfffb3f3cbe0696a17889022b3e1cf282eb64af42729cecd511a5487c865f7",
+    "bytes": 32956
+  },
+  {
+    "part": 1,
+    "source": "titulos/titulo-escolha-sua-casa.png",
+    "destination": "assets/ui/titles/titulo-escolha-sua-casa.png",
+    "sha256": "8612ebb867b524a092fd0801163f7c5aa3957eb0379f0bc30b391f5e0e4e3b47",
+    "bytes": 28924
+  },
+  {
+    "part": 1,
+    "source": "titulos/titulo-resultado-duelo.png",
+    "destination": "assets/ui/titles/titulo-resultado-duelo.png",
+    "sha256": "26cec04773f3dc69c8c769d545d73075497ccf2f87b2bd75ba2c21ffb6b99f7b",
+    "bytes": 28915
+  },
+  {
+    "part": 1,
+    "source": "titulos/titulo-escolha-desafio-novo.png",
+    "destination": "assets/ui/titles/titulo-escolha-desafio-novo.png",
+    "sha256": "08466c04a88891666ab5c2225384f1c10530ef67d4ee921163407ab98c7c4920",
+    "bytes": 28931
+  },
+  {
+    "part": 2,
+    "source": "hud/moedas-ouro.png",
+    "destination": "assets/ui/hud/moedas-ouro.png",
+    "sha256": "7945a9ad8063cdf7960074017091268e8e073b2c61505b5584596aa04b1ff919",
+    "bytes": 25802
+  },
+  {
+    "part": 2,
+    "source": "hud/painel-distancia-original.png",
+    "destination": "assets/ui/hud/painel-distancia-original.png",
+    "sha256": "da538230a80ece1fcaba07516d7f17332b75842d27f3a7394be5aa8653a3bffd",
+    "bytes": 64377
+  },
+  {
+    "part": 2,
+    "source": "hud/icone-pausar.png",
+    "destination": "assets/ui/hud/icone-pausar.png",
+    "sha256": "ead91186c4e9e480294d9c5803ec9e8476edd592be03ddf3c3d9f05d2efcde8a",
+    "bytes": 20743
+  },
+  {
+    "part": 2,
+    "source": "hud/icone-inicio.png",
+    "destination": "assets/ui/hud/icone-inicio.png",
+    "sha256": "171422d4ae730db5a193583c10c58b6c5bc0bd506cdf1392c40f3dfbebec3ba3",
+    "bytes": 20881
+  },
+  {
+    "part": 2,
+    "source": "hud/forca-03-preenchimento.png",
+    "destination": "assets/ui/hud/forca-03-preenchimento.png",
+    "sha256": "fb8a5ce02f26513b208afe83cfc7c1c52258cf16f9a2cb93a1db2fb331081931",
+    "bytes": 354225
+  },
+  {
+    "part": 2,
+    "source": "hud/placa-50-metros.png",
+    "destination": "assets/ui/hud/placa-50-metros.png",
+    "sha256": "5c01e2e732a73a68b6b304354ee9f6ac38795c3ab78cae2f6550713c98d4db8d",
+    "bytes": 34231
+  },
+  {
+    "part": 2,
+    "source": "hud/icone-play.png",
+    "destination": "assets/ui/hud/icone-play.png",
+    "sha256": "10718270639b995aaf301bbdea6feb087df53ddc1b216b424c68596d297a8fa5",
+    "bytes": 20196
+  },
+  {
+    "part": 2,
+    "source": "hud/forca-04-botao-deslizante.png",
+    "destination": "assets/ui/hud/forca-04-botao-deslizante.png",
+    "sha256": "1bcaf721dff99ca55d75b8911098ae16a28ef338aef7c628e419fe30e0456980",
+    "bytes": 1721863
+  },
+  {
+    "part": 2,
+    "source": "hud/botao-iniciar-duelo.png",
+    "destination": "assets/ui/hud/botao-iniciar-duelo.png",
+    "sha256": "0264340a61b959c911dee032323c43338902faa8cea146794ee6e080d8343d5a",
+    "bytes": 74762
+  },
+  {
+    "part": 2,
+    "source": "hud/placa-70-metros.png",
+    "destination": "assets/ui/hud/placa-70-metros.png",
+    "sha256": "9129308495f295465d5ae4f100d989e230a5ba7c8089ae9447685dbf46dd1299",
+    "bytes": 33549
+  },
+  {
+    "part": 2,
+    "source": "hud/icone-mudo.png",
+    "destination": "assets/ui/hud/icone-mudo.png",
+    "sha256": "8cbce239aff8f53243c40f126c1af172e07e2007b4e8ae957ed0e8921ed7508a",
+    "bytes": 20447
+  },
+  {
+    "part": 2,
+    "source": "hud/icone-som.png",
+    "destination": "assets/ui/hud/icone-som.png",
+    "sha256": "a4375fd9ef394218e9d1f8eec1cab4461e7d4fcaadf7191985a97d8e3868f66d",
+    "bytes": 22488
+  },
+  {
+    "part": 2,
+    "source": "hud/placa-metragem-vazia.png",
+    "destination": "assets/ui/hud/placa-metragem-vazia.png",
+    "sha256": "b9991657279ff48248195851facfe7a4c20405a6600686dc82a68c9a51be9bd5",
+    "bytes": 31095
+  },
+  {
+    "part": 2,
+    "source": "hud/forca-botao-metálico-extra.png",
+    "destination": "assets/ui/hud/forca-botao-metálico-extra.png",
+    "sha256": "ea7456d14684c96931eb9696dcb0fe322e028ca4fbba4d3a5c87a28cd1e27a7a",
+    "bytes": 18580
+  },
+  {
+    "part": 2,
+    "source": "hud/painel-distancia-dinamico.png",
+    "destination": "assets/ui/hud/painel-distancia-dinamico.png",
+    "sha256": "b1f624ab43ccf11ceb1f77dfed8a546b05923a53ab712228418223f7ab484768",
+    "bytes": 53816
+  },
+  {
+    "part": 2,
+    "source": "hud/icone-jogadores.png",
+    "destination": "assets/ui/hud/icone-jogadores.png",
+    "sha256": "206630f53981fc81ff6418378243e63ea9a3090dd742b4492500256cf7193700",
+    "bytes": 23450
+  },
+  {
+    "part": 2,
+    "source": "hud/forca-preenchimento-extra.png",
+    "destination": "assets/ui/hud/forca-preenchimento-extra.png",
+    "sha256": "38e8867e50618dd0ebb12f70175abbce1f349f14f34aea852addbe3df4749739",
+    "bytes": 34992
+  },
+  {
+    "part": 2,
+    "source": "hud/icone-informacoes.png",
+    "destination": "assets/ui/hud/icone-informacoes.png",
+    "sha256": "574a4f5bace6821571aa53ac6c816b109f884c1a75e9062741a03e303ad62136",
+    "bytes": 23295
+  },
+  {
+    "part": 2,
+    "source": "hud/painel-flechas-dinamico.png",
+    "destination": "assets/ui/hud/painel-flechas-dinamico.png",
+    "sha256": "d367abfe43dc3561c6db1606967abf36f915fa12fbc6e814593d529cdbb5bdb3",
+    "bytes": 51006
+  },
+  {
+    "part": 2,
+    "source": "hud/mira-arco.png",
+    "destination": "assets/ui/hud/mira-arco.png",
+    "sha256": "fdd49918f519ed996e10333c2e38282ec47b2d173186006fc78843cb146f68eb",
+    "bytes": 25632
+  },
+  {
+    "part": 2,
+    "source": "hud/placa-aguia-nome-jogador.png",
+    "destination": "assets/ui/hud/placa-aguia-nome-jogador.png",
+    "sha256": "bd4178fed6f1d39a88703b1321466ef9e493a35a2fb698572722ad844c97be10",
+    "bytes": 127673
+  },
+  {
+    "part": 2,
+    "source": "hud/placa-distancia-dinamica-teste.png",
+    "destination": "assets/ui/hud/placa-distancia-dinamica-teste.png",
+    "sha256": "b9991657279ff48248195851facfe7a4c20405a6600686dc82a68c9a51be9bd5",
+    "bytes": 31095
+  },
+  {
+    "part": 2,
+    "source": "hud/mira-dourada.png",
+    "destination": "assets/ui/hud/mira-dourada.png",
+    "sha256": "9982d5ac5518b9ac441a7a6f1f06c8035f46ec9dbfbc4dd17d6fee618f8025a7",
+    "bytes": 54670
+  },
+  {
+    "part": 2,
+    "source": "hud/icone-sair.png",
+    "destination": "assets/ui/hud/icone-sair.png",
+    "sha256": "748c01465ffbed547661ca5f917ea006bb3b343495e0ff4bf610c9980832e222",
+    "bytes": 22250
+  },
+  {
+    "part": 2,
+    "source": "hud/alvo-circular.png",
+    "destination": "assets/ui/hud/alvo-circular.png",
+    "sha256": "85d69e40843faf2ba1e1b9fe0abb5af79050b490707c7670e91e4201cba9f426",
+    "bytes": 72566
+  },
+  {
+    "part": 2,
+    "source": "hud/forca-01-moldura.png",
+    "destination": "assets/ui/hud/forca-01-moldura.png",
+    "sha256": "b7fd407f602ef869b61bc44005ce98ffcf4daa3b9b37c0c86761ce7c383388b0",
+    "bytes": 821678
+  },
+  {
+    "part": 2,
+    "source": "hud/frasco-mana.png",
+    "destination": "assets/ui/hud/frasco-mana.png",
+    "sha256": "24474053f978f5c5f6747a37f606ca6d3443829c804edc87cd8e25bfdd2bfc58",
+    "bytes": 29932
+  },
+  {
+    "part": 2,
+    "source": "hud/barra-xp-referencia.png",
+    "destination": "assets/ui/hud/barra-xp-referencia.png",
+    "sha256": "d50f9919830dd1d01b1cc7397b5be5ad3e1f6425204bc4978ff0bb71bc4a1539",
+    "bytes": 89068
+  },
+  {
+    "part": 2,
+    "source": "hud/barra-xp-estatica.png",
+    "destination": "assets/ui/hud/barra-xp-estatica.png",
+    "sha256": "5c86b3ed33fcf53b485f11dcae7d612292b8d4aea8ea90e8c38f59862b479596",
+    "bytes": 64565
+  },
+  {
+    "part": 2,
+    "source": "hud/alvo-com-suporte.png",
+    "destination": "assets/ui/hud/alvo-com-suporte.png",
+    "sha256": "95d9dd98549ff33d500c4e1481706aa48a71360fa22f9d827f722b75b200bc80",
+    "bytes": 123004
+  },
+  {
+    "part": 2,
+    "source": "hud/barra-mana-estatica.png",
+    "destination": "assets/ui/hud/barra-mana-estatica.png",
+    "sha256": "93212f257fa6d039c187bbfa6fc11fc5a52af99463e659b138c87e8c22a1f52a",
+    "bytes": 64940
+  },
+  {
+    "part": 2,
+    "source": "hud/diamante-xp.png",
+    "destination": "assets/ui/hud/diamante-xp.png",
+    "sha256": "5c7bf08502e07e86b2aecf448dd6f4f361cd00c5033f9270e6a16b8844d4e01d",
+    "bytes": 17466
+  },
+  {
+    "part": 2,
+    "source": "hud/barra-hp-estatica.png",
+    "destination": "assets/ui/hud/barra-hp-estatica.png",
+    "sha256": "be6d6e0ee396df62bb07f49bd6cfd8e9f1939a72230e53817fea5620479697d3",
+    "bytes": 67491
+  },
+  {
+    "part": 2,
+    "source": "hud/painel-vento-dinamico.png",
+    "destination": "assets/ui/hud/painel-vento-dinamico.png",
+    "sha256": "a42e184ffd423270494739e08ba0482b838dc87251d0783e2e6aa7b21315cb75",
+    "bytes": 47747
+  },
+  {
+    "part": 2,
+    "source": "hud/placa-30-metros.png",
+    "destination": "assets/ui/hud/placa-30-metros.png",
+    "sha256": "2c8f10c4557054251172a65aa5c7a95647587807f0df4de0c29a461be615f898",
+    "bytes": 35562
+  },
+  {
+    "part": 2,
+    "source": "hud/forca-02-canal.png",
+    "destination": "assets/ui/hud/forca-02-canal.png",
+    "sha256": "c322d81d2af2800db1af730054feb92d3be4b10534da09771f627da2dec4f9a3",
+    "bytes": 519561
+  },
+  {
+    "part": 2,
+    "source": "hud/escudo-xp.png",
+    "destination": "assets/ui/hud/escudo-xp.png",
+    "sha256": "d653fa97c923cf4f47f3d3313418865dde1bfac13ae669cb586c97a49124c172",
+    "bytes": 25102
+  },
+  {
+    "part": 2,
+    "source": "hud/painel-flechas-original.png",
+    "destination": "assets/ui/hud/painel-flechas-original.png",
+    "sha256": "304af68cf2de69089bf8eee4b2320f1fec7f6164d1fc4f853985af93d3360cc9",
+    "bytes": 59297
+  },
+  {
+    "part": 2,
+    "source": "hud/painel-vento-original.png",
+    "destination": "assets/ui/hud/painel-vento-original.png",
+    "sha256": "7a71c5a9b2ebaae4e10a55f8b496daff5b8923c39b4ca84a8db2b70eff4f033e",
+    "bytes": 58120
+  },
+  {
+    "part": 2,
+    "source": "hud/coracao-hp.png",
+    "destination": "assets/ui/hud/coracao-hp.png",
+    "sha256": "150f63151e5c5304ce3d2fcec231c73843f01169391efe24990e0fe510d3c338",
+    "bytes": 21704
+  },
+  {
+    "part": 1,
+    "source": "molduras/placa-nome-azul-vazia.png",
+    "destination": "assets/ui/frames/placa-nome-azul-vazia.png",
+    "sha256": "bbe1288988d68b400c2285dd64e35eae76513687944c15c37105aefd9f0337b9",
+    "bytes": 81514
+  },
+  {
+    "part": 1,
+    "source": "molduras/moldura-roxa-vazia.png",
+    "destination": "assets/ui/frames/moldura-roxa-vazia.png",
+    "sha256": "0e618cc636293710679633ffc7c5e490218378858bf3029c82fdde903ac67409",
+    "bytes": 7747
+  },
+  {
+    "part": 1,
+    "source": "molduras/moldura-azul-vazia.png",
+    "destination": "assets/ui/frames/moldura-azul-vazia.png",
+    "sha256": "04c2bf7ee90bd5911eadcd0cb2ff998002da3efc226cde59923b32b6bc835d58",
+    "bytes": 7752
+  },
+  {
+    "part": 1,
+    "source": "molduras/moldura-verde-vazia.png",
+    "destination": "assets/ui/frames/moldura-verde-vazia.png",
+    "sha256": "369cfbe6c1f3b64605d54537c3d6e01c46c9e7a92b6ce8dbbb225a1f90ad1c3d",
+    "bytes": 7617
+  },
+  {
+    "part": 1,
+    "source": "molduras/escudo-medalha-vazio.png",
+    "destination": "assets/ui/frames/escudo-medalha-vazio.png",
+    "sha256": "c0cd8f19297a7b642e05ad1fac4ccb3bc3bb5c52d51211dee6e287f694f1b696",
+    "bytes": 103286
+  },
+  {
+    "part": 1,
+    "source": "molduras/moldura-vermelha-vazia.png",
+    "destination": "assets/ui/frames/moldura-vermelha-vazia.png",
+    "sha256": "e709af947dd633b96184ea59e32629c54d9eb3ecc42e23cb9495fc784159354e",
+    "bytes": 7654
+  },
+  {
+    "part": 2,
+    "source": "integracao/controles.css",
+    "destination": "docs/kit-interaction-examples/controles.css",
+    "sha256": "4f7e7e1c48de9faf1a6994563e85ff7b7dd72f46d758f2cd9d0c78a541d88ded",
+    "bytes": 1965
+  },
+  {
+    "part": 2,
+    "source": "integracao/exemplo-interativo.html",
+    "destination": "docs/kit-interaction-examples/exemplo-interativo.html",
+    "sha256": "522b0a364064f80f6a1d71721905d6219ac186112be5bce9e4ad46139ce39a52",
+    "bytes": 2148
+  },
+  {
+    "part": 2,
+    "source": "integracao/controles.js",
+    "destination": "docs/kit-interaction-examples/controles.js",
+    "sha256": "a49032da6c73c3d9b349c0706196aef6b64f28dd8ba8de6f0c565778728439b4",
+    "bytes": 3575
+  },
+  {
+    "part": 1,
+    "source": "personagens/arqueira-leao-de-fogo.png",
+    "destination": "assets/ui/characters/arqueira-leao-de-fogo.png",
+    "sha256": "9817b2a4bd44cf22d08d9b93215117ec4de30eebc5cb2a01b2aab72efc2e6951",
+    "bytes": 1668110
+  },
+  {
+    "part": 1,
+    "source": "personagens/arqueira-aguia-dourada.png",
+    "destination": "assets/ui/characters/arqueira-aguia-dourada.png",
+    "sha256": "d53b42d3ba6f4265f509e087cd494330c30af6163b5f618450486bc888613c21",
+    "bytes": 1655135
+  },
+  {
+    "part": 1,
+    "source": "personagens/arqueiro-dragao-de-esmeralda.png",
+    "destination": "assets/ui/characters/arqueiro-dragao-de-esmeralda.png",
+    "sha256": "cc367b5cd3b9b17cc3e320a7d13bb0a253e565b4f877f76f45c472a3c00c75b8",
+    "bytes": 1614254
+  },
+  {
+    "part": 1,
+    "source": "personagens/arqueiro-aguia-dourada.png",
+    "destination": "assets/ui/characters/arqueiro-aguia-dourada.png",
+    "sha256": "9879016edf34393e933c78c23005160917c5852dcf4fa5ae5d924b8da7c44b9a",
+    "bytes": 1585095
+  },
+  {
+    "part": 1,
+    "source": "personagens/arqueiro-leao-de-fogo.png",
+    "destination": "assets/ui/characters/arqueiro-leao-de-fogo.png",
+    "sha256": "fcb840b38d6bbec6983188a2ef5fe7100da882b5342e7b2e5cb4442350befca2",
+    "bytes": 1633241
+  },
+  {
+    "part": 1,
+    "source": "personagens/arqueira-dragao-de-esmeralda.png",
+    "destination": "assets/ui/characters/arqueira-dragao-de-esmeralda.png",
+    "sha256": "8c39bd0dc840082f244ca4e4a54e76d00882f94060410e6014c8f181d198f853",
+    "bytes": 1658682
+  },
+  {
+    "part": 1,
+    "source": "brasoes/brasao-leao-de-fogo.png",
+    "destination": "assets/ui/crests/brasao-leao-de-fogo.png",
+    "sha256": "ff60d3ac576715039d1f32e9bc1d47341851517d35e8571d614e1b22e3985f09",
+    "bytes": 49366
+  },
+  {
+    "part": 1,
+    "source": "brasoes/brasao-dragao-esmeralda.png",
+    "destination": "assets/ui/crests/brasao-dragao-esmeralda.png",
+    "sha256": "60f199aace8ba551ea39dfeaed78f91196e1ee600b722c79a69c01529060568c",
+    "bytes": 51271
+  },
+  {
+    "part": 1,
+    "source": "brasoes/brasao-aguia-dourada.png",
+    "destination": "assets/ui/crests/brasao-aguia-dourada.png",
+    "sha256": "632ffdb953ceefbe1c1953c31469778555b9ee8c7585b95b42cd7402d96d1e76",
+    "bytes": 50005
+  },
+  {
+    "part": 1,
+    "source": "bandeiras/bandeira-dragao-esmeralda.png",
+    "destination": "assets/ui/banners/bandeira-dragao-esmeralda.png",
+    "sha256": "1cd5936742253b8627afd72824b374e9fc38e0bfda1f22614705a88a6f888e52",
+    "bytes": 51979
+  },
+  {
+    "part": 1,
+    "source": "bandeiras/bandeira-aguia-dourada.png",
+    "destination": "assets/ui/banners/bandeira-aguia-dourada.png",
+    "sha256": "abf15bff0b169a49de1c3f2fa87e12545987288321dd3a9d102801642ccd1242",
+    "bytes": 52450
+  },
+  {
+    "part": 1,
+    "source": "bandeiras/bandeira-leao-de-fogo.png",
+    "destination": "assets/ui/banners/bandeira-leao-de-fogo.png",
+    "sha256": "e4e8aa6766256d12e968562985cad088b6be305993a629baa689864c055637f9",
+    "bytes": 48736
+  },
+  {
+    "part": 2,
+    "source": "cenarios/leao.webp",
+    "destination": "assets/scenes/leao.webp",
+    "sha256": "fe7409d4a77b71e67d453e3fdf0b76ecdba631e74f0d040c92250c199e5b50da",
+    "bytes": 515030
+  },
+  {
+    "part": 2,
+    "source": "cenarios/aguia.webp",
+    "destination": "assets/scenes/aguia.webp",
+    "sha256": "c0455360487f9c0f4bd563be4220c9a9eb6c3fb3ebcb388f0f4e7ed26983ad27",
+    "bytes": 540174
+  },
+  {
+    "part": 2,
+    "source": "cenarios/dragao.webp",
+    "destination": "assets/scenes/dragao.webp",
+    "sha256": "5b438767eb84c1745dc7958c85351bb7b197af31d2168beb4bcdde82ef0e3f97",
+    "bytes": 553800
+  },
+  {
+    "part": 2,
+    "source": "botoes/classmana-ranking.png",
+    "destination": "assets/ui/buttons/classmana-ranking.png",
+    "sha256": "b0568567c394fd0471135ad3b1b84ef0b1311111460b8db68ef3041f2bb6b87f",
+    "bytes": 266642
+  },
+  {
+    "part": 2,
+    "source": "botoes/classmana-play.png",
+    "destination": "assets/ui/buttons/classmana-play.png",
+    "sha256": "7d3d8dc3d747be5d86856ec41c5732a6508a903849922f4d33d31b960cc1a6fa",
+    "bytes": 83186
+  },
+  {
+    "part": 2,
+    "source": "botoes/classmana-pausar.png",
+    "destination": "assets/ui/buttons/classmana-pausar.png",
+    "sha256": "82d4fa46c54b9dc2b3bd6f2cef7829b8f58c05f0ab8278db8f6330814a76677a",
+    "bytes": 78271
+  },
+  {
+    "part": 2,
+    "source": "botoes/botao-selecionado.png",
+    "destination": "assets/ui/buttons/botao-selecionado.png",
+    "sha256": "120f18a676528e883ec8eedaf0dc465b9185a28d9d1790b649f0a69334fa0a38",
+    "bytes": 32860
+  },
+  {
+    "part": 2,
+    "source": "botoes/botao-derrota.png",
+    "destination": "assets/ui/buttons/botao-derrota.png",
+    "sha256": "2bf6c6b61f876c8577c00ec4f8860b01c5e4593032d4c421ab83e261a2225abd",
+    "bytes": 28157
+  },
+  {
+    "part": 2,
+    "source": "botoes/botao-treino-livre.png",
+    "destination": "assets/ui/buttons/botao-treino-livre.png",
+    "sha256": "1bb7fac60aab449aced86765fe80c4097c4b1ffafa394cfbf1f1713bba48c991",
+    "bytes": 33243
+  },
+  {
+    "part": 2,
+    "source": "botoes/botao-dificuldade-facil.png",
+    "destination": "assets/ui/buttons/botao-dificuldade-facil.png",
+    "sha256": "24f4c864e3f00d581ba872e6fa933786856136661c70a19387e6459a43175efd",
+    "bytes": 24915
+  },
+  {
+    "part": 2,
+    "source": "botoes/botao-reinos-3d.png",
+    "destination": "assets/ui/buttons/botao-reinos-3d.png",
+    "sha256": "f8978b48fb8e134f680bed4b06d0bd217cb6a499dc3b120c1ba11b2be6cc68a5",
+    "bytes": 28029
+  },
+  {
+    "part": 2,
+    "source": "botoes/botao-recusar-desafio.png",
+    "destination": "assets/ui/buttons/botao-recusar-desafio.png",
+    "sha256": "16053d2954294e3a851769e3afa60af213eb4a599e5a4b2675a81fc9e4b7b3ca",
+    "bytes": 34316
+  },
+  {
+    "part": 2,
+    "source": "botoes/classmana-regras.png",
+    "destination": "assets/ui/buttons/classmana-regras.png",
+    "sha256": "2c6d2a9f782e858b996397516231a725c4cbec2322ba389b27d5d92d954a5fc7",
+    "bytes": 260067
+  },
+  {
+    "part": 2,
+    "source": "botoes/botao-dificuldade-dificil.png",
+    "destination": "assets/ui/buttons/botao-dificuldade-dificil.png",
+    "sha256": "5f7653abee4140a3662ad9b46fbb79e0e29d6735ace22d1ae8facab309689f5c",
+    "bytes": 25131
+  },
+  {
+    "part": 2,
+    "source": "botoes/classmana-sair.png",
+    "destination": "assets/ui/buttons/classmana-sair.png",
+    "sha256": "f84a72b51b3b67d54d3a883ce63da70747f872c977f0b5bed5314b76060d4c3b",
+    "bytes": 82456
+  },
+  {
+    "part": 2,
+    "source": "botoes/botao-contra-robo.png",
+    "destination": "assets/ui/buttons/botao-contra-robo.png",
+    "sha256": "032062a44d37a170cf6d6a9e98bf37cdcf595b57ede61caa4d54e40b97e54c1c",
+    "bytes": 36003
+  },
+  {
+    "part": 2,
+    "source": "botoes/classmana-voltar.png",
+    "destination": "assets/ui/buttons/classmana-voltar.png",
+    "sha256": "f7bedeab56922f0d9037147a2788f621e264a3e25937bc17b9ebd1df592a5c54",
+    "bytes": 246984
+  },
+  {
+    "part": 2,
+    "source": "botoes/classmana-configuracoes.png",
+    "destination": "assets/ui/buttons/classmana-configuracoes.png",
+    "sha256": "9632191453bf18fe037166bbaedf009c4d94c9253e5479302ece2acc54fdc102",
+    "bytes": 260009
+  },
+  {
+    "part": 2,
+    "source": "botoes/botao-dificuldade-medio.png",
+    "destination": "assets/ui/buttons/botao-dificuldade-medio.png",
+    "sha256": "5766ba95baf1ff2a25dac3c4e1562ce268e39a96751ecaa110b554a3c4906e37",
+    "bytes": 26917
+  },
+  {
+    "part": 2,
+    "source": "botoes/botao-personagem-feminino.png",
+    "destination": "assets/ui/buttons/botao-personagem-feminino.png",
+    "sha256": "939fe717279223f8afd200d1d9a5223ab94b5ba05e46777b3334d0e20329a6a3",
+    "bytes": 28996
+  },
+  {
+    "part": 2,
+    "source": "botoes/botao-empate.png",
+    "destination": "assets/ui/buttons/botao-empate.png",
+    "sha256": "e5db7a04904fc55d1e915787e1297ffe9f5a1fc2af8a83b4e57a2966935419e7",
+    "bytes": 25514
+  },
+  {
+    "part": 2,
+    "source": "botoes/classmana-desafios.png",
+    "destination": "assets/ui/buttons/classmana-desafios.png",
+    "sha256": "e3ed48e439f8622d721bd66d824382b8b46099751eef7cfb7ec2c10ff1f41c48",
+    "bytes": 263420
+  },
+  {
+    "part": 2,
+    "source": "botoes/botao-ver-placar.png",
+    "destination": "assets/ui/buttons/botao-ver-placar.png",
+    "sha256": "aea2681ead77ee55a66765be7704a8a7e4d248d123b78d94b8334b3d8b5b4de3",
+    "bytes": 30024
+  },
+  {
+    "part": 2,
+    "source": "botoes/botao-escolher-casa.png",
+    "destination": "assets/ui/buttons/botao-escolher-casa.png",
+    "sha256": "6d942e99af7062187afec737cba8900dbdd4fde9ee0da2130ad395748d0ec7e8",
+    "bytes": 32422
+  },
+  {
+    "part": 2,
+    "source": "botoes/botao-vitoria.png",
+    "destination": "assets/ui/buttons/botao-vitoria.png",
+    "sha256": "f7537fd14b002e5cae20352314264cbd761df7bbdac76ef29057cbd6b5532fb3",
+    "bytes": 28559
+  },
+  {
+    "part": 2,
+    "source": "botoes/botao-continuar.png",
+    "destination": "assets/ui/buttons/botao-continuar.png",
+    "sha256": "5fd0e5da67a8482b5c8c74a531ba42ad8ad2e516349bcc06b268a133372a8c9f",
+    "bytes": 31201
+  },
+  {
+    "part": 2,
+    "source": "botoes/classmana-inicio.png",
+    "destination": "assets/ui/buttons/classmana-inicio.png",
+    "sha256": "9887773681bec96986ec320d8808b0bc74284755c2d9984a689fe0dd01b4286e",
+    "bytes": 83306
+  },
+  {
+    "part": 2,
+    "source": "botoes/botao-jogar-novamente.png",
+    "destination": "assets/ui/buttons/botao-jogar-novamente.png",
+    "sha256": "d46882ed68ed0f491203c8ebfcb0105f55012d66e3c532a216710e4d9c7bf70e",
+    "bytes": 39653
+  },
+  {
+    "part": 2,
+    "source": "botoes/classmana-jogadores.png",
+    "destination": "assets/ui/buttons/classmana-jogadores.png",
+    "sha256": "7027516e43822d22d666f12c4d68990836fdb4ff5d8af615c538a9088c81ad93",
+    "bytes": 85913
+  },
+  {
+    "part": 2,
+    "source": "botoes/classmana-trofeu.png",
+    "destination": "assets/ui/buttons/classmana-trofeu.png",
+    "sha256": "db6254b33433cf4fd74780c1f8b618bd0ef5c5f63a981c32da888f946b52f075",
+    "bytes": 84850
+  },
+  {
+    "part": 2,
+    "source": "botoes/botao-iniciar-partida.png",
+    "destination": "assets/ui/buttons/botao-iniciar-partida.png",
+    "sha256": "bb9e3c800e9a193bfb7089cee704844d8d20cccda2f848658c02641719276656",
+    "bytes": 33504
+  },
+  {
+    "part": 2,
+    "source": "botoes/botao-aceitar-desafio.png",
+    "destination": "assets/ui/buttons/botao-aceitar-desafio.png",
+    "sha256": "2400bc3c6e1700af154d4fe656bda743da3a794419412d48aa5d3c8550897a89",
+    "bytes": 33975
+  },
+  {
+    "part": 2,
+    "source": "botoes/classmana-mudo.png",
+    "destination": "assets/ui/buttons/classmana-mudo.png",
+    "sha256": "fb4f862a2c1899823e3da9ea6af89c1faf0d6a19faae8633ab9ede16fddf476e",
+    "bytes": 84362
+  },
+  {
+    "part": 2,
+    "source": "botoes/classmana-informacoes.png",
+    "destination": "assets/ui/buttons/classmana-informacoes.png",
+    "sha256": "f2ce7721c510aaa82b9b26f5b67334fc34fc61555a3715abcb1cd5f7fecfd2bc",
+    "bytes": 89724
+  },
+  {
+    "part": 2,
+    "source": "botoes/classmana-confirmar.png",
+    "destination": "assets/ui/buttons/classmana-confirmar.png",
+    "sha256": "c7afb1e50721ab66002d7198c4f6fc36ff3e2caec3d2fde63ab836bd590f7e5d",
+    "bytes": 316872
+  },
+  {
+    "part": 2,
+    "source": "botoes/botao-proximo-desafio.png",
+    "destination": "assets/ui/buttons/botao-proximo-desafio.png",
+    "sha256": "fb93989879a5185d2fd282fd779abeea6ae00b430c12d60ad9b6f70d980e3e50",
+    "bytes": 34693
+  },
+  {
+    "part": 2,
+    "source": "botoes/botao-selecionar.png",
+    "destination": "assets/ui/buttons/botao-selecionar.png",
+    "sha256": "cee81ec36eba2ce79684eacd06b2ada6f167e0b5d8cd1e1c7d2d7c3094e10c2a",
+    "bytes": 33188
+  },
+  {
+    "part": 2,
+    "source": "botoes/botao-personagem-masculino.png",
+    "destination": "assets/ui/buttons/botao-personagem-masculino.png",
+    "sha256": "c468c554a03994798fe408d929faaebd74553f0ca0a818c7671f0ab9756e39c1",
+    "bytes": 29588
+  },
+  {
+    "part": 2,
+    "source": "botoes/classmana-som.png",
+    "destination": "assets/ui/buttons/classmana-som.png",
+    "sha256": "a9e627cdfc0330a68496c1043b8e6e43ecee2bb1fc2b809ff5233d7db09aa56a",
+    "bytes": 85502
+  },
+  {
+    "part": 2,
+    "source": "botoes/botao-jogar-3d.png",
+    "destination": "assets/ui/buttons/botao-jogar-3d.png",
+    "sha256": "722824536a3793db46502017adaacc9356356e9ab8aec12387b6d66d56a7f188",
+    "bytes": 1182337
+  },
+  {
+    "part": 2,
+    "source": "botoes/botao-desafiar-aluno.png",
+    "destination": "assets/ui/buttons/botao-desafiar-aluno.png",
+    "sha256": "4f25a29a7d065a586eee1b4d1e6e4bbaf72b2f24a76964b3ba56cc8c15fba0f3",
+    "bytes": 35713
+  },
+  {
+    "part": 2,
+    "source": "botoes/botao-desafiar-equipe.png",
+    "destination": "assets/ui/buttons/botao-desafiar-equipe.png",
+    "sha256": "e40e35f89d2d08f4f8faf238feb43dc94530382798eed6bcb543223feb2febea",
+    "bytes": 36511
+  },
+  {
+    "part": 2,
+    "source": "botoes/botao-cancelar.png",
+    "destination": "assets/ui/buttons/botao-cancelar.png",
+    "sha256": "6f037c01fa7fed901c9f33ab40fd4031da9aaaa61bc6eb816e364a7c5e4cad3c",
+    "bytes": 26866
+  },
+  {
+    "part": 1,
+    "source": "titulos/logo-torneio.png",
+    "destination": "assets/ui/hud/logo-torneio.png",
+    "sha256": "b1790be965690c43d5f8fe5b50a9c47c17b67386806abc4a502890d71b071da5",
+    "bytes": 207736,
+    "note": "duplicata de compatibilidade do HUD"
+  }
+]

@@ -1,0 +1,13 @@
+CLASSMANA — ARQUIVOS INDEPENDENTES PARA O GITHUB
+
+Envie OS DOIS arquivos ZIP para a RAIZ da branch main do repositório:
+https://github.com/drjcs2020/classmana-torneio-arco-e-flecha
+
+O GitHub Actions / Pages está configurado para descompactar os dois
+pacotes automaticamente durante a publicação do site.
+
+Estas imagens são assets 2D de interface e fundo. A interatividade
+e os objetos tridimensionais continuam sob responsabilidade do código.
+
+Não abra, não renomeie e não reorganize as pastas internas do ZIP
+antes de enviar. Depois de ambos carregados, verifique o workflow Pages.

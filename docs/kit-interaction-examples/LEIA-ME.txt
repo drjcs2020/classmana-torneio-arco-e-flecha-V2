@@ -1,0 +1,10 @@
+ClassMana — SPRITES INDIVIDUAIS
+
+Todos os arquivos PNG têm canal alfa real.
+Arquivos PNG separados por função: botoes, titulos, personagens, hud, molduras, bandeiras e brasoes.
+
+Importante: cada PNG e uma arte renderizada. Use <button> para torná-lo clicavel e controle de DOM/PlayCanvas para animacao e forca. A separacao da barra de forca ja existe no kit.
+
+Cenarios sao imagens de fundo opacas; nao devem conter alvo nem HUD, que sao elementos independentes.
+
+Nao inclui nenhuma prancha de sprites.

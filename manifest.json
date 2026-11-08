@@ -1,0 +1,17 @@
+{
+  "build": "sprites-visual-01",
+  "background_source": "a_crisp_high_detail_fantasy_game_background_set.png",
+  "background_natural_grid_px": [
+    1671,
+    941
+  ],
+  "backgrounds_are_upscaled": true,
+  "sprites_hud": 52,
+  "buttons": 15,
+  "houses": [
+    "aguia",
+    "leao",
+    "dragao",
+    "noturna"
+  ]
+}

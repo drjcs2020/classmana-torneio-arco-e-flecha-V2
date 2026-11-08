@@ -1,6 +1,6 @@
 /** ClassMana - API do duelo via HTTP, sem portal Apps Script. */
 import { ONLINE_API_URL } from './online-config.js?v=api10';
-const KEY='classmana_duelo_api_token_v1';
+const KEY='classmana_duelo_api_token_v2';
 const rid=()=>crypto.randomUUID();
 class Online {
  constructor(){
@@ -34,8 +34,8 @@ class Online {
   }catch(e){this.state='error';this.lastError=e.message;throw e}
  }
  async login(id){if(!/^[ABC]\d{2}$/.test(id||''))throw Error('Escolha seu perfil.');const r=await this.post('login',{id});
-  this.token=r.token;this.user=r.user;sessionStorage.setItem(KEY,this.token);localStorage.setItem('cm_arco_nome',id);return this.user}
- logout(){this.token='';this.user=null;sessionStorage.removeItem(KEY);localStorage.removeItem('cm_arco_nome')}
+  this.token=r.token;this.user=r.user;sessionStorage.setItem(KEY,this.token);localStorage.setItem('cm_arco_nome_v2',id);return this.user}
+ logout(){this.token='';this.user=null;sessionStorage.removeItem(KEY);localStorage.removeItem('cm_arco_nome_v2')}
  async list(){const d=await this.get('roster');this.roster=d.players||[];return this.roster}
  async inbox(){if(!this.user)throw Error('Escolha seu perfil.');return(await this.get('inbox')).challenges||[]}
  async create(kind,to,level='iniciante'){return(await this.post('challenge',{kind,to,level})).challenge}

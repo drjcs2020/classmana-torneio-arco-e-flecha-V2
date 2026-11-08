@@ -9,7 +9,7 @@ const getHouse=id=>houses[id]?id:'A';
 const portrait=(house,gender='m')=>{
  const family={A:'aguia-dourada',B:'leao-de-fogo',C:'dragao-de-esmeralda'}[getHouse(house)];
  const actor=(gender==='f'||gender==='female')?'arqueira':'arqueiro';
- return 'assets/ui/characters/'+actor+'-'+family+'.png';
+ return 'assets/v2/heroes/'+({A:'aguia',B:'leao',C:'dragao'}[getHouse(house)])+'-'+((gender==='f'||gender==='female')?'f':'m')+'.webp';
 };
 const node=(tag,className,text)=>{
  const el=document.createElement(tag);

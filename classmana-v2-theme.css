@@ -1,0 +1,182 @@
+/* CLASSMANA 2.0 — camada artística independente, 08/11/2026.
+ * As seis telas entregues são referência visual; nomes, pontuação e duelo são dados reais.
+ * Este arquivo NÃO reescreve física, motor PlayCanvas, servidor ou regras de pontuação.
+ */
+:root{--v2-navy:#071735;--v2-indigo:#102e5d;--v2-gold:#f1bb5f;--v2-light-gold:#ffedb5;--v2-cream:#fff5df;--v2-red:#8c1526;--v2-green:#087237;--v2-border:2px solid #efbd68;--v2-shadow:0 10px 34px #020c24ac,inset 0 0 0 2px #a76d244d}
+body{background:#06142e;color:var(--v2-cream);font-family:'Nunito',system-ui,sans-serif}
+body .cm-embers,body .cm-ambient-embers{pointer-events:none!important}
+body :is(button,a,select,input):focus-visible{outline:3px solid #6be5ff!important;outline-offset:4px!important}
+body .page{background:transparent!important}
+body[data-page="lobby"]{background:#071a38 url('assets/v2/backgrounds/castle.webp') center/cover fixed no-repeat}
+body[data-page="lobby"]::before{content:"";position:fixed;inset:0;background:linear-gradient(180deg,#01112c52,#0415319c);pointer-events:none;z-index:-1}
+body[data-page="lobby"] .nav-bar{background:linear-gradient(90deg,#081b3cf0,#0b3165ed)!important;border-bottom:2px solid #f0b959!important;box-shadow:0 5px 18px #0008!important}
+body[data-page="lobby"] .nav-bar .nav-link{font-family:'Cinzel',Georgia,serif!important;color:#ffedc0!important}
+body[data-page="lobby"] .ready{color:#dfffe8!important}
+body[data-page="lobby"] :is(.section-title h1,.page-heading h1,.studio-heading h2,.setup-head h2){font-family:'Cinzel',Georgia,serif!important;color:#ffdf96!important;text-shadow:0 3px 0 #4b240a,0 5px 16px #000!important}
+body[data-page="lobby"] :is(.studio-equipment,.cm-identity-panel,.setup-fields,.course-preview,.ranking-panel,.rules-grid article,.cm-inbox-panel){background:linear-gradient(150deg,#133f73f4,#061b43f7 54%,#05132ff8)!important;border:3px solid #d6a553!important;box-shadow:var(--v2-shadow)!important;border-radius:16px!important;color:#fff1cc!important}
+body[data-page="lobby"] :is(.studio-equipment,.cm-identity-panel,.setup-fields,.course-preview,.ranking-panel,.rules-grid article,.cm-inbox-panel) :is(p,small,label){color:#e6f2ff!important}
+body[data-page="lobby"] :is(.house,.cm-duel-mode,.gear-choice,.primary,.secondary,.studio-continue,.cm-gold-action){transition:transform .2s ease,filter .2s ease,box-shadow .2s ease!important}
+body[data-page="lobby"] :is(.house,.cm-duel-mode,.gear-choice,.primary,.secondary,.studio-continue,.cm-gold-action):hover{transform:translateY(-3px);filter:brightness(1.14);box-shadow:0 12px 32px #0008,0 0 14px #f5ce5370!important}
+/* Menu principal em camada própria: preserva a tela original atrás dele, sem alterar a máquina de estados. */
+body.cm-v2-home-mode[data-page="lobby"]{overflow:hidden!important}
+body.cm-v2-home-mode[data-page="lobby"] .page{width:100%!important;max-width:none!important;height:100dvh!important;min-height:100dvh!important;padding:0!important;margin:0!important;overflow:hidden!important}
+body.cm-v2-home-mode[data-page="lobby"] main{height:100dvh!important;overflow:hidden!important;margin:0!important;padding:0!important}
+body.cm-v2-home-mode[data-page="lobby"] #view-inicio.active{position:relative!important;height:100dvh!important;min-height:100dvh!important;max-height:100dvh!important;width:100vw!important;max-width:none!important;inset:auto!important;padding:0!important;margin:0!important;background:transparent!important;overflow:hidden!important}
+body.cm-v2-home-mode[data-page="lobby"] #view-inicio.active > :not(#cm-v2-home):not(.cm-ambient-embers):not(.cm-embers){display:none!important}
+body.cm-v2-home-mode[data-page="lobby"] :is(.nav-bar,footer,.cm-quick-panel,.cm-bottom-nav){display:none!important}
+body:not(.cm-v2-home-mode) #cm-v2-home{display:none!important}
+#cm-v2-home{position:absolute;inset:0;z-index:90;display:block;background:linear-gradient(0deg,#031027ad 0%,#07183616 33%,#06112f4f 100%),url('assets/v2/backgrounds/lobby.webp') center 47%/cover no-repeat;isolation:isolate;overflow:hidden;color:#fff8df}
+#cm-v2-home::before{content:"";position:absolute;inset:0;z-index:0;opacity:.75;pointer-events:none;background:radial-gradient(ellipse 45% 40% at 50% 61%,transparent,#05122838 94%)}
+#cm-v2-home::after{content:"";position:absolute;inset:auto 0 0;height:35%;z-index:3;pointer-events:none;background:linear-gradient(0deg,#01122be0,transparent)}
+.cm-v2-home-veil{position:absolute;inset:0;background:linear-gradient(180deg,#03163742,transparent 30%,#0011291c 75%,#030e28aa);pointer-events:none}
+.cm-v2-home-heading{position:absolute;left:50%;transform:translateX(-50%);top:clamp(10px,2vh,25px);width:min(92vw,800px);z-index:7;text-align:center;pointer-events:none}
+.cm-v2-home-heading h1{display:block;margin:0;font-family:'Cinzel',Georgia,serif!important;font-size:clamp(45px,6.3vw,94px)!important;line-height:1.05;letter-spacing:-.045em;color:#ffedb5!important;text-shadow:0 2px 1px #fff5c9,0 4px 2px #a65d10,0 7px 1px #41220e,0 11px 20px #000c,0 0 24px #ffd75e!important;font-variant:small-caps}
+.cm-v2-home-heading h1 span{color:#ffdb7a!important}
+.cm-v2-top-diamond{position:absolute;top:-22px;left:49.5%;font-size:27px;color:#74edff;text-shadow:0 0 10px #0de7ff,0 0 22px #fff}
+.cm-v2-ribbon{margin:-1px auto 0;min-height:clamp(38px,5.5vw,66px);width:min(87vw,685px);display:flex;justify-content:center;align-items:center;background:linear-gradient(180deg,#8e2534 0%,#541124 50%,#8d1829 90%);clip-path:polygon(0 12%,8% 12%,8% 0,92% 0,92% 12%,100% 12%,94% 50%,100% 88%,92% 88%,92% 100%,8% 100%,8% 88%,0 88%,6% 50%);border-bottom:2px solid #efad50;color:#fff1c4;font:800 clamp(16px,2.45vw,31px) 'Cinzel',Georgia,serif;letter-spacing:.065em;text-shadow:0 3px 5px #160810;filter:drop-shadow(0 6px 7px #0009)}
+.cm-v2-tagline{margin:6px auto 0;font:800 clamp(11px,1.45vw,18px) 'Cinzel',Georgia,serif;letter-spacing:.25em;color:#f7dfa8;text-shadow:0 2px 6px #000}
+.cm-v2-hero-splash{position:absolute;inset:clamp(146px,18vh,204px) 0 clamp(105px,12.5vh,140px);z-index:4;pointer-events:none}
+.cm-v2-splash-hero{position:absolute;bottom:-12%;object-fit:contain;object-position:bottom center;filter:drop-shadow(0 15px 18px #020c29b9) drop-shadow(0 0 9px #ffe8a55e);height:115%;max-width:none;will-change:transform;animation:cm-v2-hero-enter .9s ease-out both}
+.cm-v2-splash-blue{left:8%;width:38%;transform:rotate(-2deg);animation-delay:.08s;z-index:3}
+.cm-v2-splash-red{left:36%;width:34%;height:123%;bottom:-10%;z-index:5;animation-delay:.18s}
+.cm-v2-splash-green{right:6%;width:36%;transform:rotate(1deg);z-index:4;animation-delay:.26s}
+@keyframes cm-v2-hero-enter{from{opacity:0;translate:0 36px}to{opacity:1;translate:0 0}}
+.cm-v2-home-actions{position:absolute;z-index:10;left:50%;transform:translateX(-50%);bottom:clamp(27px,3.5vh,48px);width:min(96vw,1300px);display:grid;grid-template-columns:1fr 1.1fr 1.45fr 1fr;align-items:center;gap:clamp(2px,.9vw,18px)}
+.cm-v2-home-actions button{display:flex;justify-content:center;align-items:center;min-height:clamp(56px,7.8vw,105px);padding:0!important;margin:0!important;border:0!important;background:none!important;box-shadow:none!important;cursor:pointer;filter:drop-shadow(0 5px 10px #000b);transition:transform .2s ease,filter .2s ease}
+.cm-v2-home-actions button img{display:block;width:100%;height:auto;max-height:140px;object-fit:contain;pointer-events:none}
+.cm-v2-home-actions button:hover,.cm-v2-home-actions button:focus-visible{transform:translateY(-6px) scale(1.045);filter:brightness(1.19) drop-shadow(0 0 18px #ffcb5faa)}
+.cm-v2-home-actions .cm-v2-home-play{transform:scale(1.13);z-index:2}
+.cm-v2-home-actions .cm-v2-home-play:hover{transform:translateY(-7px) scale(1.18)}
+.cm-v2-home-bottom{position:absolute;z-index:9;bottom:5px;left:0;right:0;text-align:center;font:800 clamp(9px,.95vw,13px) 'Cinzel',Georgia,serif;letter-spacing:.14em;color:#ffdf9d;text-shadow:0 2px 4px #000}
+.cm-v2-home-bottom span{color:#87ddff;padding:0 .7em}
+body.cm-v2-home-mode #cm-lobby-sound{z-index:240!important;position:fixed!important;top:18px!important;right:20px!important;left:auto!important;bottom:auto!important;min-height:44px!important;max-width:170px!important;font-size:12px!important;color:#fff1c8!important;background:linear-gradient(#193969,#061b41)!important;border:2px solid #f5c76b!important;border-radius:9px!important}
+/* Caminho das casas / identificação / personagem / modalidade / partida. */
+#cm-v2-navigate-back{position:fixed;z-index:250;top:12px;left:14px;min-width:128px;min-height:44px;padding:9px 18px;color:#fff1d6;background:linear-gradient(#1c467e,#061b42);border:2px solid #e9b455;border-radius:9px;font:800 14px 'Cinzel',Georgia,serif;box-shadow:0 4px 18px #0007;cursor:pointer}
+body.cm-v2-home-mode #cm-v2-navigate-back{display:none!important}
+body[data-page="lobby"] #cm-lobby-back{display:none!important}
+body[data-page="lobby"] #view-inicio:not([data-step="reino"]){background:linear-gradient(#00143565,#011028ac),url('assets/v2/backgrounds/castle.webp') center/cover no-repeat!important}
+body[data-page="lobby"] #view-inicio[data-step="reino"]{background:linear-gradient(#081b3c7a,#091329cd),url('assets/v2/backgrounds/castle.webp') center/cover no-repeat!important}
+body[data-page="lobby"] .houses .house{border:3px solid #e6b65b!important;box-shadow:var(--v2-shadow)!important;background-color:#0b2554!important;overflow:hidden;border-radius:15px!important}
+body[data-page="lobby"] .houses .house .cm-house-pair img{object-fit:contain!important;filter:drop-shadow(0 8px 14px #0009)}
+body[data-page="lobby"] .houses .house .house-name{font-family:'Cinzel',serif!important;color:#ffe5a3!important;text-shadow:0 2px 5px #050c20!important}
+body[data-page="lobby"] .houses .house-a{--v2-house-color:#1e6ce3}body[data-page="lobby"] .houses .house-b{--v2-house-color:#a51b22}body[data-page="lobby"] .houses .house-c{--v2-house-color:#0d8858}
+body[data-page="lobby"] .houses .house.selected{outline:3px solid var(--v2-house-color)!important;outline-offset:4px!important}
+body[data-page="lobby"] #hero-preview .studio-portrait{background:radial-gradient(ellipse at 50% 70%,#1c7bfc37,#051b45 65%)!important;border:3px ridge #ebbd6b!important;border-radius:20px!important}
+body[data-page="lobby"] #hero-preview[data-house="B"] .studio-portrait{background:radial-gradient(ellipse at 50% 70%,#f33b4a33,#301027 67%)!important}
+body[data-page="lobby"] #hero-preview[data-house="C"] .studio-portrait{background:radial-gradient(ellipse at 50% 70%,#18df8044,#0b302e 67%)!important}
+body[data-page="lobby"] #hero-preview-img{object-fit:contain!important;object-position:center bottom!important;filter:drop-shadow(0 9px 17px #0008)}
+body[data-page="lobby"] #view-inicio[data-step="partida"] .setup{background:transparent!important}
+body[data-page="lobby"] #view-inicio[data-step="partida"] .setup-fields{border-radius:12px!important;background:linear-gradient(160deg,#08264ff0,#071631f0)!important;border:3px solid #e1b563!important}
+body[data-page="lobby"] :is(.cm-duel-mode,.cm-online-btn,.cm-session-button,.lobby-step){color:#fff0c6!important;text-shadow:0 2px 3px #000!important}
+body[data-page="lobby"] :is(.cm-duel-mode,.studio-continue,.cm-online-btn,.cm-session-button){border-color:#e7b758!important}
+body[data-page="lobby"] #view-inicio[data-step="desafio"] .cm-duel-modes{gap:clamp(8px,1.3vw,22px)!important}
+/* Seleção visual de adversários conectada ao select original. */
+#cm-v2-challenge-picker{display:none!important}
+body[data-page="lobby"] #view-inicio[data-step="partida"] .setup:has(#mode:is([data-v2-duel="yes"])) #cm-v2-challenge-picker{display:flex!important}
+.cm-v2-challenge-picker{width:min(100%,1100px);box-sizing:border-box;min-height:260px;max-height:min(44vh,470px);flex-direction:column;gap:9px;padding:15px 18px;background:linear-gradient(145deg,#123b6ce8,#06193df3)!important;border:3px solid #e8bc68!important;border-radius:18px!important;box-shadow:var(--v2-shadow)!important;overflow:hidden;color:#fdf0ce!important}
+.cm-v2-picker-head{display:flex;align-items:baseline;justify-content:space-between;gap:14px;flex-wrap:wrap}.cm-v2-picker-head h2{margin:0;font:900 clamp(19px,2vw,29px) 'Cinzel',Georgia,serif;color:#ffe1a2;text-shadow:0 2px 4px #000}.cm-v2-picker-head span{font:700 12px Nunito,sans-serif;color:#d6edff}
+.cm-v2-house-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.cm-v2-house-tabs button{min-height:37px;border:2px solid #bd9455;border-radius:8px;color:#fff4d2;background:linear-gradient(#1d4679,#071c41);font:800 clamp(10px,1vw,15px) 'Cinzel',serif;cursor:pointer}.cm-v2-house-tabs button[aria-pressed="true"]{background:linear-gradient(#189b58,#064a35);border-color:#ffe092;box-shadow:0 0 10px #00aaff45}
+.cm-v2-search-label{display:flex;align-items:center;gap:9px;width:100%;box-sizing:border-box;padding:0 13px;border-radius:8px!important;border:2px solid #6297d3!important;background:#061a3e!important;color:#9be1ff!important;font-size:28px}.cm-v2-search-label input{width:100%;min-width:0;height:39px;outline:none;border:0!important;background:transparent!important;color:#fff!important;font:700 15px 'Nunito',sans-serif}.cm-v2-search-label input::placeholder{color:#b5c9e2}
+.cm-v2-student-list{flex:1;min-height:100px;overflow:auto;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;align-content:start;scrollbar-width:thin;scrollbar-color:#deb456 #071a38}
+.cm-v2-student-option{min-width:0;display:flex;align-items:center;gap:10px;text-align:left;border:2px solid #bd904d;border-radius:9px;background:linear-gradient(95deg,#124072,#081a3d);color:#fff6df;padding:6px 9px;cursor:pointer;font:800 clamp(12px,1.05vw,16px) 'Nunito',sans-serif}
+.cm-v2-student-option[aria-pressed="true"]{background:linear-gradient(95deg,#07734a,#084333);border-color:#ffdc91;box-shadow:inset 0 0 8px #eacd893d}.cm-v2-student-option img{width:44px;height:46px;object-fit:contain;background:#10345e;border:1px solid #be9959;border-radius:50%;flex-shrink:0}.cm-v2-student-option span{overflow-wrap:anywhere}.cm-v2-student-option small{display:block;color:#a9daff;font-size:.79em;margin-top:2px}
+.cm-v2-picked-name{margin:0;color:#fce5a9;font:750 13px Nunito,sans-serif;min-height:16px}
+body[data-page="lobby"] #view-inicio[data-step="partida"] .setup:has(#cm-v2-challenge-picker:not([hidden])) #rival-label{display:none!important}
+/* Painel de resultados, salão do ranking e regras — com conteúdo do servidor. */
+body[data-page="lobby"] #view-ranking.active,body[data-page="lobby"] #view-regras.active{background:linear-gradient(180deg,#03112aaa,#03112ad2),url('assets/v2/backgrounds/ranking.webp') center/cover fixed no-repeat!important;min-height:100dvh;overflow:auto!important}
+body[data-page="lobby"] #view-ranking .page-heading,body[data-page="lobby"] #view-regras .page-heading{width:min(91vw,1130px);margin:24px auto 15px!important;padding:10px 25px!important;background:linear-gradient(180deg,#153c6df0,#071c41f5)!important;border:3px solid #e3b05e!important;box-shadow:var(--v2-shadow)!important;border-radius:14px!important;text-align:center}
+body[data-page="lobby"] #view-ranking .page-heading h1{font:900 clamp(26px,4vw,51px) 'Cinzel',Georgia,serif!important;color:#ffe0a2!important}
+body[data-page="lobby"] #view-ranking .page-heading small{font:800 16px 'Cinzel',serif!important;color:#e8bd63!important}
+body[data-page="lobby"] #view-ranking .ranking-layout{width:min(96vw,1400px);gap:18px!important;margin:auto}
+body[data-page="lobby"] #view-ranking .ranking-panel{background:linear-gradient(#10336bf5,#061d43f7)!important;border:3px solid #e1b663!important;border-radius:13px!important;box-shadow:var(--v2-shadow)!important}
+body[data-page="lobby"] #view-ranking .ranking-panel h2{font:900 clamp(16px,1.7vw,24px) 'Cinzel',Georgia,serif!important;color:#ffe1a0!important}
+body[data-page="lobby"] #view-ranking .rankline{border:1px solid #c5955f!important;border-radius:9px!important;margin:6px 1px!important;background:#0b2c5ef0!important}
+body[data-page="lobby"] #view-ranking #rank-play{margin:14px auto!important;display:block!important;min-height:49px!important;max-width:400px!important;background:linear-gradient(#0baf53,#056e37)!important;border:3px solid #ffda77!important;border-radius:11px!important;font:800 17px 'Cinzel',Georgia,serif!important}
+body[data-page="lobby"] #view-regras .rules-grid article{background:linear-gradient(#0c305ffa,#061a3efc)!important;border:2px solid #e5b766!important;border-radius:12px!important}
+body[data-page="lobby"] #view-regras .rules-grid article b{color:#ffe0a3!important}
+/* Preparação VS já usa JS existente — enquadramento próximo do modelo. */
+.cm-vs-overlay{background:linear-gradient(#031029d8,#030d25c7),url('assets/v2/backgrounds/duel.webp') center/cover!important}
+.cm-vs-overlay .cm-vs-shell{background:transparent!important;border:0!important;box-shadow:none!important;min-height:0!important}
+.cm-vs-overlay .cm-vs-title{font-family:'Cinzel',Georgia,serif!important;font-size:clamp(28px,4.7vw,60px)!important;color:#ffde93!important;text-shadow:0 3px 7px #000,0 0 20px #f2a64a55!important}
+.cm-vs-overlay .cm-vs-fighters{gap:clamp(10px,1.5vw,30px)!important}
+.cm-vs-overlay .cm-vs-fighter{background:linear-gradient(#154781b0,#061432ea)!important;border:3px solid #e6b661!important;border-radius:13px!important;box-shadow:0 7px 28px #000b!important}
+.cm-vs-overlay .cm-vs-fighter[data-house="B"]{background:linear-gradient(#811e34bb,#2b0c1cee)!important}
+.cm-vs-overlay .cm-vs-fighter[data-house="C"]{background:linear-gradient(#086a4bbb,#092c29ec)!important}
+.cm-vs-overlay .cm-vs-fighter img{object-fit:contain!important;object-position:center bottom!important;max-height:100%!important}
+.cm-vs-overlay .cm-vs-fighter-info{color:#fff1d0!important;background:#0a254ce6!important;border:2px solid #e1b25e!important;border-radius:9px!important}
+.cm-vs-overlay .cm-vs-fighter-info strong{font-family:'Cinzel',Georgia,serif!important;color:#ffebc6!important}
+.cm-vs-overlay .cm-vs-mark{background:url('assets/v2/frames/versus.webp') center/contain no-repeat!important;font-size:0!important;filter:drop-shadow(0 0 15px #f8c85c66)}
+.cm-vs-overlay .cm-vs-start{background:linear-gradient(#17b567,#05773b)!important;color:#fff4d8!important;border:3px solid #ffde85!important;border-radius:12px!important;font:900 clamp(16px,2vw,29px) 'Cinzel',Georgia,serif!important}
+.cm-vs-overlay .cm-vs-cancel{color:#ffe6b8!important;background:#0c2b58!important;border:2px solid #d0a258!important}
+/* Arena PlayCanvas: fundo cênico e HUD. Preserva o canvas e o controle de força. */
+body[data-page="arena"],body.cm-art-on{background:#061630!important}
+body[data-page="arena"] .stage.cm-art-ready:before{background-image:linear-gradient(180deg,#10295918 0%,transparent 38%,#07122d24),url('assets/v2/backgrounds/arena.webp')!important;background-position:center center!important;background-size:cover!important;opacity:1!important}
+body[data-page="arena"] .stage{background:#0a2d58!important}
+body[data-page="arena"] .stage.cm-art-ready .cm-visual-logo{width:clamp(150px,19vw,290px)!important;top:8px!important;left:15px!important;max-height:85px!important;filter:drop-shadow(0 3px 8px #07122e)!important}
+body[data-page="arena"] .stage.cm-art-ready .game-top-left{top:clamp(185px,24vh,245px)!important;left:13px!important;gap:8px!important}
+body[data-page="arena"] .stage.cm-art-ready .game-top-right{top:clamp(402px,58vh,485px)!important;left:14px!important;right:auto!important}
+body[data-page="arena"] .stage.cm-art-ready .cm-force-meter{right:clamp(12px,3vw,52px)!important;top:clamp(100px,19vh,185px)!important}
+body[data-page="arena"] .stage.cm-art-ready .cm-house-sign{bottom:17px!important;left:15px!important;max-width:260px!important}
+body[data-page="arena"] .stage.cm-art-ready .battle-hud{top:14px!important;left:52%!important;max-width:32%!important;width:clamp(130px,20vw,310px)!important;height:clamp(45px,6vw,65px)!important}
+body[data-page="arena"] .stage.cm-art-ready .range-progress{top:clamp(92px,12vh,115px)!important;max-width:66%!important}
+body[data-page="arena"] .stage.cm-art-ready .cm-pause-btn{top:12px!important;right:94px!important}
+body[data-page="arena"] #arena-sound{top:12px!important;right:17px!important}
+body[data-page="arena"] #leave-arena{top:12px!important;left:auto!important;right:clamp(175px,17vw,275px)!important;width:clamp(95px,12vw,150px)!important;height:clamp(45px,5.5vw,62px)!important}
+body[data-page="arena"] .cm-house-sign{border:2px solid #e8b55c!important;box-shadow:0 5px 21px #000a!important}
+/* Resultado real: um painel completo como na sexta tela; dados são os calculados pelo motor. */
+#finish{background:linear-gradient(#071836c0,#020f29d9),url('assets/v2/backgrounds/duel.webp') center/cover!important}
+#finish .finish-card{width:min(94vw,1250px)!important;max-width:1250px!important;max-height:95dvh!important;overflow-y:auto!important;box-sizing:border-box!important;background:linear-gradient(165deg,#103b78ee,#061d44fa 58%,#041534fa)!important;border:4px solid #edc26b!important;box-shadow:0 18px 65px #000e,inset 0 0 0 2px #edc26b70!important;border-radius:20px!important;padding:clamp(14px,2.3vw,30px)!important}
+#finish .finish-card h2{font:900 clamp(23px,3.7vw,52px) 'Cinzel',Georgia,serif!important;color:#ffdf9a!important;text-shadow:0 2px 2px #5c290c,0 5px 12px #000!important}
+#finish .finish-card:has(h2) .cm-final-duel{gap:clamp(8px,2vw,28px)!important}
+#finish .cm-final-player{background:linear-gradient(#0c3671b8,#081c42d9)!important;border:2px solid #c89c57!important;border-radius:14px!important;box-shadow:inset 0 0 12px #3b7aff24!important}
+#finish .cm-final-player img{object-fit:contain!important;object-position:center bottom!important}
+#finish .cm-final-player b{font-family:'Cinzel',Georgia,serif!important;color:#fff2d5!important}
+#finish .cm-final-vs{color:#ffcb62!important;font-family:'Cinzel',Georgia,serif!important}
+#finish .cm-score-cell{border:2px solid #e7b866!important;border-radius:12px!important;background:linear-gradient(#13386d,#061a3e)!important}
+#finish .cm-score-value{color:#fee39d!important}
+#finish .finish-actions{display:flex!important;justify-content:center!important;flex-wrap:wrap!important;gap:12px!important}
+#finish #play-again{background:linear-gradient(#23c86d,#056a38)!important;border:3px solid #f9d77c!important;border-radius:12px!important;color:#fff3d1!important;font:900 clamp(14px,1.7vw,20px) 'Cinzel',Georgia,serif!important}
+#finish #share-result{background:linear-gradient(#214e86,#061a3d)!important;border:2px solid #e0b565!important;border-radius:12px!important;color:#fdf0d3!important}
+.cm-v2-result-note{text-align:center;padding:6px;color:#fbdca2;font:700 clamp(10px,1.2vw,13px) Nunito,sans-serif}
+/* Exceções de viewport: reduz efeitos e respeita alvos clicáveis no celular. */
+@media(max-width:900px){
+ .cm-v2-home-heading h1{font-size:clamp(37px,8vw,67px)!important}
+ .cm-v2-home-heading{top:9px}.cm-v2-ribbon{min-height:42px;font-size:clamp(12px,2.4vw,22px)!important}.cm-v2-tagline{font-size:11px}
+ .cm-v2-hero-splash{inset:140px 0 105px}.cm-v2-splash-blue{left:-4%;width:47%}.cm-v2-splash-red{left:30%;width:42%}.cm-v2-splash-green{right:-4%;width:43%}
+ .cm-v2-home-actions{bottom:24px;width:99vw;gap:1px}.cm-v2-home-actions button{min-height:54px}.cm-v2-home-bottom{font-size:9px}
+ .cm-v2-challenge-picker{max-height:40vh;padding:9px}.cm-v2-student-list{gap:5px}.cm-v2-student-option img{width:35px;height:37px}.cm-v2-student-option{padding:5px;font-size:12px}
+ body[data-page="arena"] .stage.cm-art-ready .game-top-left{top:110px!important;left:4px!important}
+ body[data-page="arena"] .stage.cm-art-ready .game-top-right{top:260px!important;left:4px!important}
+ body[data-page="arena"] .stage.cm-art-ready .cm-force-meter{right:5px!important;top:28%!important}
+ body[data-page="arena"] .stage.cm-art-ready .cm-pause-btn{right:59px!important;top:5px!important}
+ body[data-page="arena"] #leave-arena{top:auto!important;bottom:5px!important;right:7px!important;left:auto!important;width:53px!important;height:42px!important}
+}
+@media(max-width:580px){
+ #cm-v2-home{background-position:48% center}.cm-v2-home-heading{width:95vw;top:42px}.cm-v2-ribbon{font-size:clamp(12px,3.6vw,19px)!important}.cm-v2-hero-splash{inset:clamp(180px,28vh,270px) 0 103px}
+ .cm-v2-splash-blue{left:-21%;width:70%;height:99%}.cm-v2-splash-red{left:24%;width:57%;height:110%}.cm-v2-splash-green{right:-25%;width:65%;height:99%}
+ .cm-v2-home-actions{grid-template-columns:repeat(4,minmax(0,1fr));bottom:49px;gap:1px}.cm-v2-home-actions button{min-height:41px}.cm-v2-home-bottom{bottom:17px;line-height:1.45;max-width:98%;margin:auto}
+ .cm-v2-house-tabs button{font-size:10px;min-height:31px}.cm-v2-student-list{grid-template-columns:1fr}
+ #cm-v2-navigate-back{min-height:35px;min-width:90px;font-size:11px;padding:6px 9px}
+ body[data-page="arena"] .stage.cm-art-ready .cm-visual-logo{width:140px!important;max-height:50px!important}
+ body[data-page="arena"] .stage.cm-art-ready .range-progress{top:57px!important}
+ body[data-page="arena"] .stage.cm-art-ready .game-top-left{top:76px!important}
+ body[data-page="arena"] .stage.cm-art-ready .game-top-right{top:205px!important}
+ body[data-page="arena"] .stage.cm-art-ready .cm-force-meter{height:210px!important;width:68px!important}
+ #finish .finish-card{padding:10px!important;max-height:96dvh!important}
+}
+@media(prefers-reduced-motion:reduce){.cm-v2-splash-hero{animation:none!important}.cm-v2-home-actions button{transition:none!important}}
+
+/* Correções finais de composição e acessibilidade */
+body[data-page="lobby"] #view-ranking .ranking-layout{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;align-items:stretch!important}
+body[data-page="lobby"] #view-ranking .ranking-panel{min-width:0!important}
+#cm-v2-challenge-picker .cm-v2-picker-head h2{color:#ffe1a2!important;text-shadow:0 2px 5px #000!important}
+#cm-v2-home>.cm-ambient-embers{position:absolute!important;inset:0!important;z-index:8!important;opacity:.6!important;pointer-events:none!important}
+#cm-v2-home .cm-ember{z-index:8!important}
+body.cm-v2-home-mode #cm-lobby-sound{font-size:12px!important}
+@media(max-width:650px){body[data-page="lobby"] #view-ranking .ranking-layout{grid-template-columns:1fr!important}}
+
+#finish .cm-v2-result-home{background:linear-gradient(#1d4e87,#061c43)!important;border:2px solid #e6b659!important;border-radius:12px!important;color:#fff0cb!important;font:900 clamp(13px,1.4vw,18px) 'Cinzel',Georgia,serif!important;min-height:45px!important;padding:9px 20px!important}
+#finish[data-v2-outcome="loss"] .finish-card h2{color:#ffb2af!important}
+#finish[data-v2-outcome="win"] .finish-card h2{color:#ffe38f!important}
+body.cm-v2-home-mode #cm-lobby-sound[aria-pressed="false"]{filter:grayscale(1)}
+@media(max-width:580px){body.cm-v2-home-mode #cm-lobby-sound{min-width:42px!important;width:42px!important;max-width:42px!important;height:38px!important;min-height:38px!important;overflow:hidden!important;font-size:0!important;color:transparent!important;background:#09234e url('assets/ui/hud/icone-som.png') center/70% 70% no-repeat!important}body.cm-v2-home-mode #cm-lobby-sound[aria-pressed="false"]{background-image:url('assets/ui/hud/icone-mudo.png')!important}}

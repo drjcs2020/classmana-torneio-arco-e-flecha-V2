@@ -4,7 +4,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#081a36">
 <meta name="description" content="Torneio de Arco e Flecha das três Casas ClassMana: Águia Dourada, Leão de Fogo e Dragão de Esmeralda.">
-<title>ClassMana — Torneio de Arco e Flecha</title>
+<title>ClassMana V2 — Torneio das Três Casas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Cinzel:wght@600;700;800&family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css?v=2">
@@ -24,8 +24,9 @@
 <link rel="stylesheet" href="classmana-art-pass-v51.css?v=51">
 <link rel="stylesheet" href="classmana-ref-ranking-results.css?v=visual50">
 <link rel="stylesheet" href="classmana-final-visual.css?v=20261108a">
+<link rel="stylesheet" href="classmana-v2-theme.css?v=20261108v2">
 </head>
-<body data-page="lobby">
+<body data-page="lobby" class="cm-v2-home-mode">
 <div class="sky-sparkles" aria-hidden="true"></div>
 <div class="page">
 <button type="button" id="cm-lobby-sound" class="cm-lobby-sound" aria-pressed="true" aria-label="Desativar música e efeitos">🔊 Música e sons</button>
@@ -41,6 +42,30 @@
 
 <main>
 <section id="view-inicio" class="view active" data-step="reino" aria-label="Escolha da Casa, identificação, arqueiro e desafio">
+
+ 
+<section id="cm-v2-home" aria-label="Início do torneio ClassMana versão dois">
+  <div class="cm-v2-home-veil"></div>
+  <header class="cm-v2-home-heading">
+    <span class="cm-v2-top-diamond" aria-hidden="true">✦</span>
+    <h1>Class<span>Mana</span></h1>
+    <div class="cm-v2-ribbon">TORNEIO DAS TRÊS CASAS</div>
+    <div class="cm-v2-tagline">✦ ARENA DE ARCO E FLECHA ✦</div>
+  </header>
+  <div class="cm-v2-hero-splash" aria-hidden="true">
+    <img class="cm-v2-splash-hero cm-v2-splash-blue" src="assets/v2/heroes/aguia-m.webp" alt="">
+    <img class="cm-v2-splash-hero cm-v2-splash-red" src="assets/v2/heroes/leao-m.webp" alt="">
+    <img class="cm-v2-splash-hero cm-v2-splash-green" src="assets/v2/heroes/dragao-f.webp" alt="">
+  </div>
+  <div class="cm-v2-home-actions" role="group" aria-label="Menu do torneio">
+    <button type="button" data-v2-action="ranking" aria-label="Abrir ranking"><img src="assets/v2/buttons/ranking.webp" alt="RANKING"></button>
+    <button type="button" data-v2-action="desafios" aria-label="Desafiar alunos"><img src="assets/v2/buttons/desafios.webp" alt="DESAFIOS"></button>
+    <button type="button" class="cm-v2-home-play" data-v2-action="jogar" aria-label="Jogar ClassMana"><img src="assets/v2/buttons/jogar.webp" alt="JOGAR"></button>
+    <button type="button" data-v2-action="regras" aria-label="Consultar regras"><img src="assets/v2/buttons/regras.webp" alt="REGRAS"></button>
+  </div>
+  <div class="cm-v2-home-bottom">ÁGUIA DOURADA <span>✦</span> LEÃO DE FOGO <span>✦</span> DRAGÃO DE ESMERALDA</div>
+</section>
+<button type="button" id="cm-v2-navigate-back" aria-label="Voltar à etapa anterior ou ao menu">← VOLTAR</button>
 
  <button type="button" id="cm-lobby-back" class="cm-sprite-button cm-lobby-back" aria-label="Voltar à tela anterior"><img src="assets/ui/buttons/classmana-voltar.png" alt=""></button>
  <div class="section-title kingdom-title"><div><h1>ClassMana — Torneio das Três Casas</h1></div></div>
@@ -68,15 +93,15 @@
  </section>
  <div class="houses" id="houses" aria-label="Escolha sua Casa">
   <button class="house house-a selected" data-house="A" aria-pressed="true" style="--house-bg:url('assets/scenes/aguia.webp')">
-   <span class="house-shine" aria-hidden="true"></span><span class="cm-house-sigil"><img src="assets/ui/hud/brasao-aguia-dourada.png" alt="" draggable="false"></span><span class="cm-house-pair" aria-hidden="true"><img src="assets/ui/characters/arqueiro-aguia-dourada.png" alt=""><img src="assets/ui/characters/arqueira-aguia-dourada.png" alt=""></span><span class="house-name">ÁGUIA DOURADA</span>
+   <span class="house-shine" aria-hidden="true"></span><span class="cm-house-sigil"><img src="assets/ui/hud/brasao-aguia-dourada.png" alt="" draggable="false"></span><span class="cm-house-pair" aria-hidden="true"><img src="assets/v2/heroes/aguia-m.webp" alt=""><img src="assets/v2/heroes/aguia-f.webp" alt=""></span><span class="house-name">ÁGUIA DOURADA</span>
    <span class="house-grade">4º ANO A · CASTELO AZUL E DOURADO</span><span class="house-check">✓ SELECIONADA</span>
   </button>
   <button class="house house-b" data-house="B" aria-pressed="false" style="--house-bg:url('assets/scenes/leao.webp')">
-   <span class="house-shine" aria-hidden="true"></span><span class="cm-house-sigil"><img src="assets/ui/hud/brasao-leao-de-fogo.png" alt="" draggable="false"></span><span class="cm-house-pair" aria-hidden="true"><img src="assets/ui/characters/arqueiro-leao-de-fogo.png" alt=""><img src="assets/ui/characters/arqueira-leao-de-fogo.png" alt=""></span><span class="house-name">LEÃO DE FOGO</span>
+   <span class="house-shine" aria-hidden="true"></span><span class="cm-house-sigil"><img src="assets/ui/hud/brasao-leao-de-fogo.png" alt="" draggable="false"></span><span class="cm-house-pair" aria-hidden="true"><img src="assets/v2/heroes/leao-m.webp" alt=""><img src="assets/v2/heroes/leao-f.webp" alt=""></span><span class="house-name">LEÃO DE FOGO</span>
    <span class="house-grade">4º ANO B · CASTELO VERMELHO E DOURADO</span><span class="house-check">ESCOLHER CASA</span>
   </button>
   <button class="house house-c" data-house="C" aria-pressed="false" style="--house-bg:url('assets/scenes/dragao.webp')">
-   <span class="house-shine" aria-hidden="true"></span><span class="cm-house-sigil"><img src="assets/ui/hud/brasao-dragao-esmeralda.png" alt="" draggable="false"></span><span class="cm-house-pair" aria-hidden="true"><img src="assets/ui/characters/arqueiro-dragao-de-esmeralda.png" alt=""><img src="assets/ui/characters/arqueira-dragao-de-esmeralda.png" alt=""></span><span class="house-name">DRAGÃO DE ESMERALDA</span>
+   <span class="house-shine" aria-hidden="true"></span><span class="cm-house-sigil"><img src="assets/ui/hud/brasao-dragao-esmeralda.png" alt="" draggable="false"></span><span class="cm-house-pair" aria-hidden="true"><img src="assets/v2/heroes/dragao-m.webp" alt=""><img src="assets/v2/heroes/dragao-f.webp" alt=""></span><span class="house-name">DRAGÃO DE ESMERALDA</span>
    <span class="house-grade">4º ANO C · CASTELO VERDE E ESMERALDA</span><span class="house-check">ESCOLHER CASA</span>
   </button>
  </div>
@@ -85,7 +110,7 @@
   <div class="studio-heading"><small>PERSONAGEM DA SUA CASA</small><h2 id="hero-preview-name">Águia Dourada · 4º A</h2></div>
   <div class="studio-carousel" role="group" aria-label="Carrossel dos personagens">
    <button id="archer-prev" type="button" class="studio-arrow" aria-label="Personagem anterior">‹</button>
-   <div class="studio-portrait"><img src="assets/ui/characters/arqueiro-aguia-dourada.png" id="hero-preview-img" alt="Arqueiro da Águia Dourada, de corpo inteiro" draggable="false"></div>
+   <div class="studio-portrait"><img src="assets/v2/heroes/aguia-m.webp" id="hero-preview-img" alt="Arqueiro da Águia Dourada, de corpo inteiro" draggable="false"></div>
    <button id="archer-next" type="button" class="studio-arrow" aria-label="Próximo personagem">›</button>
   </div>
   <div class="studio-selected" aria-live="polite"><strong id="archer-carousel-indicator">Auron · Arqueiro</strong><span id="hero-preview-desc">Armadura azul e dourada.</span></div>
@@ -130,6 +155,19 @@
     </div>
   </div>
   <div class="setup-head"><div><small>⚔️ PRONTO PARA COMPETIR?</small><h2>Prepare a partida</h2></div><span class="stamp">🎯 5 FLECHAS</span></div>
+  
+<section id="cm-v2-challenge-picker" class="cm-v2-challenge-picker" aria-label="Selecionar estudante adversário">
+  <div class="cm-v2-picker-head"><h2>⚔ DESAFIAR ALUNO</h2><span id="cm-v2-picker-info">Escolha um colega para o duelo.</span></div>
+  <div class="cm-v2-house-tabs" role="group" aria-label="Turma adversária">
+    <button type="button" data-v2-house="A">🦅 4º A · Águia</button>
+    <button type="button" data-v2-house="B">🦁 4º B · Leão</button>
+    <button type="button" data-v2-house="C">🐉 4º C · Dragão</button>
+  </div>
+  <label class="cm-v2-search-label" for="cm-v2-student-search">⌕ <input id="cm-v2-student-search" type="search" placeholder="Buscar aluno pelo nome..." autocomplete="off" /></label>
+  <div id="cm-v2-student-list" class="cm-v2-student-list" role="group" aria-label="Lista dos adversários disponíveis"></div>
+  <p id="cm-v2-picked-name" class="cm-v2-picked-name" aria-live="polite">Selecione um nome para continuar.</p>
+</section>
+
   <div class="setup-fields cm-easy-setup">
    <label>1 · Seu nome<select id="player"><option value="guest">Escolha seu nome</option></select></label>
    <label>2 · Como você quer jogar?<select id="mode">
@@ -167,7 +205,7 @@
  <div class="arena-top"><button class="back" id="leave-arena">← REINOS</button><div class="arena-header"><b id="match-title">ARENA DO ARCO E FLECHA</b></div><button type="button" id="arena-sound" class="arena-sound-toggle" aria-pressed="true" aria-label="Desativar som da arena">🔊 SOM</button></div>
  <div class="stage" id="stage">
  <div class="battle-hud">
-  <div class="hud-archer"><img id="hud-archer-image" src="assets/ui/characters/arqueiro-aguia-dourada.png" alt="Seu personagem"><div><small>DEFENSOR</small><strong id="hud-player">Águia Dourada</strong></div></div>
+  <div class="hud-archer"><img id="hud-archer-image" src="assets/v2/heroes/aguia-m.webp" alt="Seu personagem"><div><small>DEFENSOR</small><strong id="hud-player">Águia Dourada</strong></div></div>
   <div class="score-display"><span id="hud-score">0</span><span>✦</span><span id="hud-rival">0</span></div>
   <div class="right"><small>ADVERSÁRIO</small><strong id="hud-bot">Robô · Médio</strong></div>
  </div>
@@ -175,7 +213,7 @@
   <div class="range-intro"><div><strong id="range-trail-title">🌱 Trilha do Aprendiz</strong><span id="range-mode">A distância aumenta a cada etapa.</span></div><span class="mode-badge" id="arena-mode-badge">🎯 ALVO FIXO</span></div>
  <div class="range-progress" id="range-progress" aria-label="Progressão das distâncias"></div>
   <canvas id="world" aria-label="Arena interativa de arco e flecha, com mira, cenário e alvo tridimensional"></canvas>
-  <div class="scene-badge" id="stage-house-badge" data-house="A"><img src="assets/images/brasao-4a-transparente.png" alt=""><div><small>ARENA DA CASA</small><strong>Águia Dourada</strong></div></div>
+  <div class="scene-badge" id="stage-house-badge" data-house="A"><img src="assets/v2/crests/aguia.webp" alt=""><div><small>ARENA DA CASA</small><strong>Águia Dourada</strong></div></div>
   <div class="playcross" id="playcross" aria-hidden="true"><span></span></div>
   <div class="game-top-left">
     <div class="hud-pill wind-widget wind-calm" id="wind" role="status" aria-label="Vento: 0 quilômetros por hora, sem desvio">
@@ -193,7 +231,7 @@
   <div class="instruction" id="instruction">MOVA OU ARRASTE PARA MIRAR • SEGURE PARA PUXAR • SOLTE PARA ATIRAR</div>
   <div class="hit" id="hit"></div>
   <div class="finish hidden" id="finish">
-    <div class="finish-card"><div class="cm-finish-heroes" aria-hidden="true"><img id="finish-hero-own" alt="" src="assets/ui/characters/arqueiro-aguia-dourada.png"><img id="finish-hero-rival" alt="" src="assets/ui/characters/arqueiro-leao-de-fogo.png"></div><small>🏆 RESULTADO DO TORNEIO</small><h2 id="finish-title">FIM DE PARTIDA</h2><p id="finish-desc"></p><div class="finish-results" id="finish-results"></div><div class="finish-actions"><button class="primary" id="play-again">🏹 JOGAR NOVAMENTE</button><button class="secondary" id="share-result">🔗 COMPARTILHAR DESAFIO</button></div><div class="share-help" id="share-help"></div></div>
+    <div class="finish-card"><div class="cm-finish-heroes" aria-hidden="true"><img id="finish-hero-own" alt="" src="assets/v2/heroes/aguia-m.webp"><img id="finish-hero-rival" alt="" src="assets/v2/heroes/leao-m.webp"></div><small>🏆 RESULTADO DO TORNEIO</small><h2 id="finish-title">FIM DE PARTIDA</h2><p id="finish-desc"></p><div class="finish-results" id="finish-results"></div><div class="finish-actions"><button class="primary" id="play-again">🏹 JOGAR NOVAMENTE</button><button class="secondary" id="share-result">🔗 COMPARTILHAR DESAFIO</button><button class="secondary cm-v2-result-home" id="cm-v2-result-home" type="button">⌂ VOLTAR AO MENU</button></div><div class="cm-v2-result-note">🏹 5 flechas · Resultado calculado pelas regras originais</div><div class="share-help" id="share-help"></div></div>
   </div>
  </div>
  
@@ -229,5 +267,6 @@
 <div id="toast" role="status" aria-live="polite"></div>
 <script src="roster.js?v=2"></script><script src="teams.js?v=1"></script><script type="module" src="game-v3.js?v=gold48"></script>
 <script type="module" src="wind-panel-restored.js?v=wind20"></script>
+<script src="classmana-v2-ui.js?v=20261108v2" defer></script>
 </body>
 </html>

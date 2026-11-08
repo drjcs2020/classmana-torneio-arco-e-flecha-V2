@@ -1,0 +1,800 @@
+{
+  "title": "ClassMana — Kit de Artes Individuais",
+  "version": "2026-11-05",
+  "notes": [
+    "UM PNG POR ELEMENTO. NENHUMA PRANCHA É ENTREGUE.",
+    "PNG de interface e personagens: fundo alfa transparente. As três imagens na pasta cenarios são fundos opacos.",
+    "Imagens clicáveis devem ser posicionadas em elementos HTML <button>; PNG sozinho não executa ação.",
+    "Barra de força contém moldura, preenchimento e botão independentes. A posição da peça é atualizada no JavaScript.",
+    "Não confundir artes 3D renderizadas com modelos 3D de PlayCanvas. Os arquivos deste kit são sprites 2D.",
+    "Os cenários de fundo são ilustrações 2D e as versões atuais não são 3D nativo."
+  ],
+  "assets": [
+    {
+      "path": "bandeiras/bandeira-aguia-dourada.png",
+      "width": 145,
+      "height": 245,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "bandeiras/bandeira-dragao-esmeralda.png",
+      "width": 142,
+      "height": 245,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "bandeiras/bandeira-leao-de-fogo.png",
+      "width": 139,
+      "height": 245,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "botoes/botao-aceitar-desafio.png",
+      "width": 840,
+      "height": 212,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "botoes/botao-cancelar.png",
+      "width": 840,
+      "height": 212,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "botoes/botao-continuar.png",
+      "width": 840,
+      "height": 212,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "botoes/botao-contra-robo.png",
+      "width": 840,
+      "height": 212,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "botoes/botao-derrota.png",
+      "width": 840,
+      "height": 212,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "botoes/botao-desafiar-aluno.png",
+      "width": 840,
+      "height": 212,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "botoes/botao-desafiar-equipe.png",
+      "width": 840,
+      "height": 212,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "botoes/botao-dificuldade-dificil.png",
+      "width": 840,
+      "height": 212,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "botoes/botao-dificuldade-facil.png",
+      "width": 840,
+      "height": 212,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "botoes/botao-dificuldade-medio.png",
+      "width": 840,
+      "height": 212,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "botoes/botao-empate.png",
+      "width": 840,
+      "height": 212,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "botoes/botao-escolher-casa.png",
+      "width": 840,
+      "height": 212,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "botoes/botao-iniciar-partida.png",
+      "width": 840,
+      "height": 212,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "botoes/botao-jogar-3d.png",
+      "width": 1693,
+      "height": 647,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "botoes/botao-jogar-novamente.png",
+      "width": 840,
+      "height": 212,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "botoes/botao-personagem-feminino.png",
+      "width": 840,
+      "height": 212,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "botoes/botao-personagem-masculino.png",
+      "width": 840,
+      "height": 212,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "botoes/botao-proximo-desafio.png",
+      "width": 840,
+      "height": 212,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "botoes/botao-recusar-desafio.png",
+      "width": 840,
+      "height": 212,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "botoes/botao-reinos-3d.png",
+      "width": 840,
+      "height": 212,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "botoes/botao-selecionado.png",
+      "width": 840,
+      "height": 212,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "botoes/botao-selecionar.png",
+      "width": 840,
+      "height": 212,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "botoes/botao-treino-livre.png",
+      "width": 840,
+      "height": 212,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "botoes/botao-ver-placar.png",
+      "width": 840,
+      "height": 212,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "botoes/botao-vitoria.png",
+      "width": 840,
+      "height": 212,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "botoes/classmana-configuracoes.png",
+      "width": 669,
+      "height": 241,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "botoes/classmana-confirmar.png",
+      "width": 805,
+      "height": 255,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "botoes/classmana-desafios.png",
+      "width": 723,
+      "height": 234,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "botoes/classmana-informacoes.png",
+      "width": 237,
+      "height": 218,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "botoes/classmana-inicio.png",
+      "width": 235,
+      "height": 216,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "botoes/classmana-jogadores.png",
+      "width": 233,
+      "height": 216,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "botoes/classmana-mudo.png",
+      "width": 235,
+      "height": 216,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "botoes/classmana-pausar.png",
+      "width": 232,
+      "height": 216,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "botoes/classmana-play.png",
+      "width": 240,
+      "height": 216,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "botoes/classmana-ranking.png",
+      "width": 724,
+      "height": 235,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "botoes/classmana-regras.png",
+      "width": 719,
+      "height": 234,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "botoes/classmana-sair.png",
+      "width": 236,
+      "height": 217,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "botoes/classmana-som.png",
+      "width": 232,
+      "height": 215,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "botoes/classmana-trofeu.png",
+      "width": 233,
+      "height": 216,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "botoes/classmana-voltar.png",
+      "width": 670,
+      "height": 242,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "brasoes/brasao-aguia-dourada.png",
+      "width": 158,
+      "height": 198,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "brasoes/brasao-dragao-esmeralda.png",
+      "width": 157,
+      "height": 204,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "brasoes/brasao-leao-de-fogo.png",
+      "width": 159,
+      "height": 200,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "hud/alvo-circular.png",
+      "width": 201,
+      "height": 206,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "hud/alvo-com-suporte.png",
+      "width": 263,
+      "height": 267,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "hud/barra-hp-estatica.png",
+      "width": 464,
+      "height": 124,
+      "alpha": true,
+      "usage": "referencia_estatica_nao_usar_como_valor_dinamico"
+    },
+    {
+      "path": "hud/barra-mana-estatica.png",
+      "width": 474,
+      "height": 122,
+      "alpha": true,
+      "usage": "referencia_estatica_nao_usar_como_valor_dinamico"
+    },
+    {
+      "path": "hud/barra-xp-estatica.png",
+      "width": 475,
+      "height": 123,
+      "alpha": true,
+      "usage": "referencia_estatica_nao_usar_como_valor_dinamico"
+    },
+    {
+      "path": "hud/barra-xp-referencia.png",
+      "width": 753,
+      "height": 120,
+      "alpha": true,
+      "usage": "referencia_estatica_nao_usar_como_valor_dinamico"
+    },
+    {
+      "path": "hud/botao-iniciar-duelo.png",
+      "width": 347,
+      "height": 141,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "hud/coracao-hp.png",
+      "width": 116,
+      "height": 127,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "hud/diamante-xp.png",
+      "width": 108,
+      "height": 108,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "hud/escudo-xp.png",
+      "width": 121,
+      "height": 130,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "hud/forca-01-moldura.png",
+      "width": 887,
+      "height": 1774,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "hud/forca-02-canal.png",
+      "width": 887,
+      "height": 1774,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "hud/forca-03-preenchimento.png",
+      "width": 887,
+      "height": 1774,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "hud/forca-04-botao-deslizante.png",
+      "width": 1254,
+      "height": 1254,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "hud/forca-botao-metálico-extra.png",
+      "width": 103,
+      "height": 103,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "hud/forca-preenchimento-extra.png",
+      "width": 97,
+      "height": 366,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "hud/frasco-mana.png",
+      "width": 121,
+      "height": 147,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "hud/icone-informacoes.png",
+      "width": 129,
+      "height": 112,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "hud/icone-inicio.png",
+      "width": 120,
+      "height": 113,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "hud/icone-jogadores.png",
+      "width": 129,
+      "height": 113,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "hud/icone-mudo.png",
+      "width": 118,
+      "height": 111,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "hud/icone-pausar.png",
+      "width": 132,
+      "height": 111,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "hud/icone-play.png",
+      "width": 122,
+      "height": 111,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "hud/icone-sair.png",
+      "width": 134,
+      "height": 112,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "hud/icone-som.png",
+      "width": 129,
+      "height": 111,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "hud/mira-arco.png",
+      "width": 141,
+      "height": 128,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "hud/mira-dourada.png",
+      "width": 213,
+      "height": 206,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "hud/moedas-ouro.png",
+      "width": 150,
+      "height": 108,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "hud/painel-distancia-dinamico.png",
+      "width": 287,
+      "height": 136,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "hud/painel-distancia-original.png",
+      "width": 287,
+      "height": 136,
+      "alpha": true,
+      "usage": "referencia_estatica_nao_usar_como_valor_dinamico"
+    },
+    {
+      "path": "hud/painel-flechas-dinamico.png",
+      "width": 282,
+      "height": 134,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "hud/painel-flechas-original.png",
+      "width": 282,
+      "height": 134,
+      "alpha": true,
+      "usage": "referencia_estatica_nao_usar_como_valor_dinamico"
+    },
+    {
+      "path": "hud/painel-vento-dinamico.png",
+      "width": 273,
+      "height": 138,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "hud/painel-vento-original.png",
+      "width": 273,
+      "height": 138,
+      "alpha": true,
+      "usage": "referencia_estatica_nao_usar_como_valor_dinamico"
+    },
+    {
+      "path": "hud/placa-30-metros.png",
+      "width": 185,
+      "height": 120,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "hud/placa-50-metros.png",
+      "width": 182,
+      "height": 120,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "hud/placa-70-metros.png",
+      "width": 181,
+      "height": 119,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "hud/placa-aguia-nome-jogador.png",
+      "width": 432,
+      "height": 192,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "hud/placa-distancia-dinamica-teste.png",
+      "width": 185,
+      "height": 120,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "hud/placa-metragem-vazia.png",
+      "width": 185,
+      "height": 120,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "molduras/escudo-medalha-vazio.png",
+      "width": 268,
+      "height": 237,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "molduras/moldura-azul-vazia.png",
+      "width": 840,
+      "height": 212,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "molduras/moldura-roxa-vazia.png",
+      "width": 840,
+      "height": 212,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "molduras/moldura-verde-vazia.png",
+      "width": 840,
+      "height": 212,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "molduras/moldura-vermelha-vazia.png",
+      "width": 840,
+      "height": 212,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "molduras/placa-nome-azul-vazia.png",
+      "width": 463,
+      "height": 131,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "personagens/arqueira-aguia-dourada.png",
+      "width": 1086,
+      "height": 1448,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "personagens/arqueira-dragao-de-esmeralda.png",
+      "width": 1086,
+      "height": 1448,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "personagens/arqueira-leao-de-fogo.png",
+      "width": 1086,
+      "height": 1448,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "personagens/arqueiro-aguia-dourada.png",
+      "width": 1086,
+      "height": 1448,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "personagens/arqueiro-dragao-de-esmeralda.png",
+      "width": 1086,
+      "height": 1448,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "personagens/arqueiro-leao-de-fogo.png",
+      "width": 1086,
+      "height": 1448,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "titulos/logo-classmana-torneio.png",
+      "width": 1620,
+      "height": 724,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "titulos/logo-torneio.png",
+      "width": 474,
+      "height": 244,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "titulos/titulo-duelo-entre-casas-novo.png",
+      "width": 840,
+      "height": 212,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "titulos/titulo-duelo-entre-casas.png",
+      "width": 615,
+      "height": 86,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "titulos/titulo-equipamentos.png",
+      "width": 840,
+      "height": 212,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "titulos/titulo-escolha-desafio-novo.png",
+      "width": 840,
+      "height": 212,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "titulos/titulo-escolha-desafio.png",
+      "width": 637,
+      "height": 129,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "titulos/titulo-escolha-seu-arqueiro.png",
+      "width": 840,
+      "height": 212,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "titulos/titulo-escolha-sua-casa.png",
+      "width": 840,
+      "height": 212,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "titulos/titulo-nivel-referencia.png",
+      "width": 418,
+      "height": 103,
+      "alpha": true,
+      "usage": "referencia_estatica_nao_usar_como_valor_dinamico"
+    },
+    {
+      "path": "titulos/titulo-prepare-partida.png",
+      "width": 840,
+      "height": 212,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "titulos/titulo-ranking-torneio.png",
+      "width": 840,
+      "height": 212,
+      "alpha": true,
+      "usage": "sprite_individual"
+    },
+    {
+      "path": "titulos/titulo-resultado-duelo.png",
+      "width": 840,
+      "height": 212,
+      "alpha": true,
+      "usage": "sprite_individual"
+    }
+  ],
+  "counts": {
+    "png_transparent": 111,
+    "backgrounds": 3
+  },
+  "integration": [
+    "integracao/controles.js",
+    "integracao/controles.css",
+    "integracao/exemplo-interativo.html"
+  ]
+}

@@ -7,7 +7,7 @@ let ctx=null,bus=null,active=false,timer=null,house='A';
 let unlocked=false,musicFade=0;
 const MUSIC_FILE='assets/sounds/kulakovka-epic-medieval-614879.mp3';
 const bgm=new Audio(MUSIC_FILE);bgm.loop=true;bgm.preload='auto';bgm.volume=0;
-const AUDIO_TIME_KEY='classmana-music-position-v1';
+const AUDIO_TIME_KEY='classmana-music-position-v2';
 bgm.addEventListener('loadedmetadata',()=>{
  try{const time=Number(sessionStorage.getItem(AUDIO_TIME_KEY));if(Number.isFinite(time)&&time>0&&time<bgm.duration)bgm.currentTime=time;}catch{}
 });
@@ -15,7 +15,7 @@ addEventListener('pagehide',()=>{
  try{if(Number.isFinite(bgm.currentTime))sessionStorage.setItem(AUDIO_TIME_KEY,String(bgm.currentTime));}catch{}
 });
 // Music is ON by default for new visitors. An explicit mute persists.
-let enabled=localStorage.getItem('cm_arena_sound')!=='off';
+let enabled=localStorage.getItem('cm_arena_sound_v2')!=='off';
 // Try autoplay on entry; browsers that forbid sound before interaction are
 // handled by unlockOnGeneralGesture without changing the saved preference.
 bgm.autoplay=enabled;
@@ -119,7 +119,7 @@ export const arenaAudio={
  setHouse(k){house=['A','B','C'].includes(k)?k:'A'},
  setActive(value){active=!!value;ambience();musicLevel()},
  toggle(){
-  enabled=!enabled;localStorage.setItem('cm_arena_sound',enabled?'on':'off');
+  enabled=!enabled;localStorage.setItem('cm_arena_sound_v2',enabled?'on':'off');
   if(!enabled){clearInterval(timer);timer=null;bgm.pause();unlocked=false;for(const clip of Object.values(clips)){clip.pause();clip.currentTime=0;}if(bus&&ctx)bus.gain.setTargetAtTime(0,ctx.currentTime,.03);musicLevel();}
   else{init();if(bus&&ctx)bus.gain.setTargetAtTime(.52,ctx.currentTime,.05);ambience();unlockMusic();musicLevel()}
   return enabled;
