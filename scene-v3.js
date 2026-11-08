@@ -33,8 +33,16 @@ export function initScene(canvas, getSettings) {
   const root=()=>app.root;
   const canvasSize=()=>({w:parent.clientWidth||1050,h:parent.clientHeight||540});
 
+  // A malha mantém a dimensão física e muda de profundidade real no eixo Z.
+  function targetPerspective(distance){
+    const meters=clamp(Number(distance)||10,10,150);
+    const depth=10.5+(meters-10)*.325;
+    const progression=clamp((Math.sqrt(meters)-Math.sqrt(10))/
+      (Math.sqrt(150)-Math.sqrt(10)),0,1);
+    return {depth,scale:1.08,footFraction:.92-.22*progression};
+  }
   function targetScale(distance){
-    return clamp(Math.pow(30/Math.max(10,distance||30),.65),.31,1.75);
+    return 16*1.08/targetPerspective(distance).depth;
   }
   function getTargetMetrics(){
     const {w,h}=canvasSize(),s=getSettings()||{},distance=s.distance||25,shift=s.shift||0;
@@ -48,11 +56,11 @@ export function initScene(canvas, getSettings) {
       const kx=w/(gl.clientWidth||w),ky=h/(gl.clientHeight||h),r=Math.abs(b.x-a.x)*kx;
       if(Number.isFinite(a.x)&&Number.isFinite(a.y)&&r>0)return {x:a.x*kx,y:a.y*ky,r};
     }
-    const r=Math.min(h*.105,w*.082)*targetScale(distance);
-    // O alvo fixo do modo compatível também fica com o cavalete apoiado
-    // sobre a grama pintada, independentemente da distância.
-    const grounded=(s.level||'iniciante')==='iniciante';
-    return {x:w*(.50+shift),y:grounded?h*.78-r*1.86:h*(.45+(s.verticalShift||0)),r};
+    const profile=targetPerspective(distance),focal=h/(2*Math.tan(41*Math.PI/360));
+    const r=Math.min(h*.26,w*.22,1.34*profile.scale*focal/profile.depth);
+    const moving=s.level==='avancado'||s.level==='lendario';
+    const baseY=h*profile.footFraction-2.02*r;
+    return {x:w*(.50+shift),y:moving?baseY+(s.verticalShift||0)*h:baseY,r};
   }
   function fallbackSightGeometry(){
     const {w,h}=canvasSize(),size=h*.89;
@@ -255,24 +263,28 @@ export function initScene(canvas, getSettings) {
     targetRoot.findComponents('render').forEach(e=>{if(e.entity.name.includes('wood')){e.material=m;for(const mesh of e.meshInstances)mesh.material=m;}});
   }
   function moveTarget(){
-    if(!targetRoot)return;
-    const setting=getSettings()||{},camZ=7,targetZ=-9,{w,h}=canvasSize();
-    const units=h/(2*Math.tan(41*Math.PI/360)*(camZ-targetZ));
-    const x=((setting.shift||0)*w)/units;
-    // Real mesh scale changes with the displayed distance (not just an HUD label).
-    const scale=targetScale(setting.distance);
-    targetRoot.setLocalScale(scale,scale,scale);
-    // A grama visível é uma pintura de cenário; o plano geométrico interno
-    // ficava cerca de 10% da tela acima dela, fazendo o alvo parecer flutuar.
-    // O cavalete é ancorado ao chão visual em TODAS as distâncias do alvo fixo.
+    if(!targetRoot||!camera?.camera)return;
+    const setting=getSettings()||{},profile=targetPerspective(setting.distance);
+    const {w,h}=canvasSize();
     const moving=setting.level==='avancado'||setting.level==='lendario';
-    const scenicGroundY=-1.46;
-    const fixedY=scenicGroundY+2.02*scale;
-    const suspendedY=2.05-(setting.verticalShift||0)*h/units;
-    targetRoot.setLocalPosition(x,moving?suspendedY:fixedY,-9);
+    const focal=h/(2*Math.tan(41*Math.PI/360));
+    const projectedRadius=1.34*profile.scale*focal/profile.depth;
+    // Os pés do cavalete acompanham a perspectiva da grama ilustrada:
+    // 10 m no primeiro plano, 150 m próximo ao ponto de fuga.
+    const centerY=profile.footFraction*h-2.02*projectedRadius+
+      (moving?(setting.verticalShift||0)*h:0);
+    const centerX=w*(.5+(setting.shift||0));
+    const position=camera.camera.screenToWorld(centerX,centerY,profile.depth);
+    if(!Number.isFinite(position.x)||!Number.isFinite(position.y))return;
+    targetRoot.setLocalScale(profile.scale,profile.scale,profile.scale);
+    targetRoot.setPosition(position);
     if(targetStand)targetStand.enabled=!moving;
     parent.dataset.targetStand=moving?'suspended':'standing';
-    if(movingRail)movingRail.enabled=moving;
+    if(movingRail){
+      movingRail.enabled=moving;
+      movingRail.setLocalPosition(0,0,position.z+9);
+    }
+    parent.dataset.targetDepth=String(Math.round(profile.depth*10)/10);
   }
   function buildWorld(){
     const metals={wood:material('#634124',{rough:.8}),woodlight:material('#a2703f',{rough:.8}),rope:material('#d5ae64',{rough:.89}),iron:material('#1d2329',{metal:.73,rough:.31}),silver:material('#c8d2d7',{metal:.82,rough:.19}),red:material('#da332d'),white:material('#f4f2e7')};
@@ -359,15 +371,18 @@ export function initScene(canvas, getSettings) {
     tube('sight vertical line',[[0,-.044,.003],[0,0,.003],[0,.044,.003]],[.0009,.0009,.0009],silver,sight,5);
     tube('sight horizontal line',[[-.044,0,.003],[0,0,.003],[.044,0,.003]],[.0009,.0009,.0009],silver,sight,5);
     primitive('sphere','sight central dot',[0,0,.005],[.006,.006,.006],red,sight);
-    // A single arrow asset: its colors DO NOT change when changing House.
-    arrowLoaded=new pc.Entity('Shared red-and-white arrow');bowRoot.addChild(arrowLoaded);arrowLoaded.setLocalPosition(.02,-.03,-.40);
-    tube('black arrow shaft',[[0,0,.53],[0,0,.18],[0,0,-.65]],[.012,.012,.011],dark,arrowLoaded,12);
-    primitive('cone','machined arrow point',[0,0,-.70],[.036,.09,.036],silver,arrowLoaded,[90,0,0]);
-    const fin=[[.0,.0,.47],[.076,.042,.26],[0,0,.16]],vanes=arrowPalette(),primary=material(vanes.feather),secondary=material(vanes.secondary);
-    for(let i=0;i<3;i++){
-      const a=i*Math.PI*2/3;
-      tube('shared arrow vane '+i,fin.map(([x,y,z])=>[x*Math.cos(a)-y*Math.sin(a),x*Math.sin(a)+y*Math.cos(a),z]),[.023,.038,.014],i===1?secondary:primary,arrowLoaded,6);
-    }
+    // Flecha no apoio do arco: haste visível no plano X/Y e nock na corda.
+    // Evita o efeito de flecha flutuando em outra direção.
+    arrowLoaded=new pc.Entity('Shared red-and-white arrow');
+    bowRoot.addChild(arrowLoaded);arrowLoaded.setLocalPosition(-.38,-.03,.06);
+    const vanes=arrowPalette(),primary=material(vanes.feather),secondary=material(vanes.secondary);
+    tube('black arrow shaft',[[.28,0,.07],[-.27,0,.04],[-.76,0,-.02]],
+      [.012,.012,.011],dark,arrowLoaded,12);
+    primitive('cone','machined arrow point',[-.78,0,-.02],[.036,.09,.036],silver,arrowLoaded,[0,0,90]);
+    tube('shared arrow vane 0',[[.23,0,.07],[.13,.09,.08],[.05,0,.06]],
+      [.023,.038,.014],primary,arrowLoaded,6);
+    tube('shared arrow vane 1',[[.23,0,.07],[.13,-.09,.08],[.05,0,.06]],
+      [.023,.038,.014],secondary,arrowLoaded,6);
     // String gets physical tension by shifting central guide while aiming.
     bowString=tube('tensioned carbon cord',[[0,-1.51,.03],[-.11,0,.45],[0,1.51,.03]],[.004,.004,.004],dark,bowRoot,7);
     bowRoot.__fallbacks=[...bowRoot.children];
@@ -427,8 +442,10 @@ export function initScene(canvas, getSettings) {
       if(arrow.__mesh3d)arrow.__mesh3d.destroy();
       const entity=resource.instantiateRenderEntity();
       entity.name='Approved House arrow GLB';
-      entity.setLocalScale(.42,.42,.42);
-      entity.setLocalEulerAngles(0,180,0); // GLB +Z tip becomes in-game -Z tip.
+      // A flecha importada aponta para a esquerda, não para a profundidade
+      // da câmera, para aparecer deitada e encaixada na corda.
+      entity.setLocalScale(.27,.27,.27);
+      entity.setLocalEulerAngles(0,-78,0);
       arrow.addChild(entity);
       for(const child of arrow.children){if(child!==entity)child.enabled=false;}
       arrow.__mesh3d=entity;
@@ -475,7 +492,8 @@ export function initScene(canvas, getSettings) {
     const scale=bowRoot.getLocalScale().x;
     const offset=bowRoot.getLocalRotation().transformVector(new pc.Vec3(-1.15*scale,.25*scale,-.08*scale));
     bowRoot.setLocalPosition(sightLocal.sub(offset));
-    if(arrowLoaded)arrowLoaded.setLocalPosition(.02,-.03,-.40+.36*power);
+    // A tensão desloca a flecha junto com a corda.
+    if(arrowLoaded)arrowLoaded.setLocalPosition(-.38,-.03,.06+.14*power);
     if(bowString)bowString.setLocalPosition(0,0,.19*power);
   }
   function update3D(dt){if(!ready)return;animT+=dt;
