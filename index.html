@@ -25,14 +25,14 @@
 <link rel="stylesheet" href="classmana-ref-ranking-results.css?v=visual50">
 <link rel="stylesheet" href="classmana-final-visual.css?v=20261108a">
 <link rel="stylesheet" href="classmana-v2-theme.css?v=20261108v2">
-<link rel="stylesheet" href="classmana-v2-lobby-exato.css?v=20261108art03">
+<link rel="stylesheet" href="classmana-v2-lobby-exato.css?v=20261108art04">
 <link rel="stylesheet" href="classmana-professor-v2.css?v=20261108teacher01">
 </head>
 <body data-page="lobby" class="cm-v2-home-mode">
 <div class="sky-sparkles" aria-hidden="true"></div>
 <div class="page">
 <button type="button" id="cm-teacher-toggle" aria-label="Configurações do professor" title="Configurações do professor — requer senha">⚙</button>
-<button type="button" id="cm-lobby-sound" class="cm-lobby-sound" aria-pressed="true" aria-label="Desativar música e efeitos">🔊 Música e sons</button>
+<button type="button" id="cm-lobby-sound" class="cm-lobby-sound" aria-pressed="true" aria-label="Desativar música e efeitos">🔊</button>
 <header class="nav-bar">
  <a class="brand" href="./" title="Início do Torneio">
   <img src="assets/images/logo-classmana-oficial.webp" alt="Logo ClassMana">
@@ -69,11 +69,11 @@
   <div class="cm-v2-home-actions" role="group" aria-label="Menu do torneio">
     <button type="button" data-v2-action="ranking" aria-label="Abrir ranking"><img src="assets/v2/buttons/ranking.webp" alt="RANKING"></button>
     <button type="button" data-v2-action="desafios" aria-label="Desafiar alunos"><img src="assets/v2/buttons/desafios.webp" alt="DESAFIOS"></button>
-    <button type="button" class="cm-v2-home-end" id="cm-v2-home-exit" data-v2-action="encerrar" disabled title="Não existe sessão para encerrar" aria-label="Encerrar sessão do jogador anterior"><span class="cm-v2-exit-symbol" aria-hidden="true">⏻</span><span>ENCERRAR<br>SESSÃO</span></button>
+    <button type="button" class="cm-v2-home-end" id="cm-v2-home-exit" data-v2-action="encerrar" aria-disabled="true" title="Não há sessão para encerrar" aria-label="Encerrar sessão do jogador anterior"><span class="cm-v2-exit-symbol" aria-hidden="true">⏻</span><span>ENCERRAR<br>SESSÃO</span></button>
     <button type="button" class="cm-v2-home-play" data-v2-action="jogar" aria-label="Jogar ClassMana" title="Jogar ClassMana"><img src="assets/v2/buttons/jogar.webp" alt="JOGAR"></button>
     <button type="button" data-v2-action="regras" aria-label="Consultar regras"><img src="assets/v2/buttons/regras.webp" alt="REGRAS"></button>
   </div>
-  <p class="cm-v2-session-notice" id="cm-v2-session-notice" role="status" aria-live="polite">Escolha JOGAR para entrar no torneio.</p>
+  <p class="cm-v2-session-notice" id="cm-v2-session-notice" role="tooltip" hidden></p>
   <div class="cm-v2-home-bottom">ÁGUIA DOURADA <span>✦</span> LEÃO DE FOGO <span>✦</span> DRAGÃO DE ESMERALDA</div>
 </section>
 <button type="button" id="cm-v2-navigate-back" aria-label="Voltar à etapa anterior ou ao menu">← VOLTAR</button>
@@ -308,6 +308,22 @@
         <button type="submit" class="cm-teacher-primary">Cadastrar aluno na V2</button>
       </form>
     </section>
+    <section aria-labelledby="cm-teacher-change-title">
+      <h3 id="cm-teacher-change-title">🔑 Alterar senha do professor</h3>
+      <p>Informe a senha atual e defina uma nova senha. A alteração vale imediatamente na V2 e encerra o acesso atual.</p>
+      <form id="cm-teacher-change-form" autocomplete="off">
+        <label for="cm-teacher-old-password">Senha atual
+          <input id="cm-teacher-old-password" type="password" minlength="8" maxlength="256" autocomplete="current-password" required>
+        </label>
+        <label for="cm-teacher-new-password">Nova senha (12 a 128 caracteres)
+          <input id="cm-teacher-new-password" type="password" minlength="12" maxlength="128" autocomplete="new-password" required>
+        </label>
+        <label for="cm-teacher-confirm-password">Confirmar nova senha
+          <input id="cm-teacher-confirm-password" type="password" minlength="12" maxlength="128" autocomplete="new-password" required>
+        </label>
+        <button type="submit" class="cm-teacher-primary">Salvar nova senha</button>
+      </form>
+    </section>
     <section aria-labelledby="cm-teacher-reset-title">
       <h3 id="cm-teacher-reset-title">🏆 Zerar placar de testes da V2</h3>
       <p class="cm-teacher-warning">Zera duelos e resultados online da <strong>versão 2</strong>. Não apaga alunos nem altera a V1. Uma cópia dos registros é guardada antes do reset.</p>
@@ -323,10 +339,10 @@
   <p id="cm-teacher-status" role="status" aria-live="polite">Entre com a senha do professor.</p>
 </dialog>
 <div id="toast" role="status" aria-live="polite"></div>
-<script src="roster.js?v=2"></script><script src="teams.js?v=1"></script><script type="module" src="game-v3.js?v=20261108session03"></script>
+<script src="roster.js?v=2"></script><script src="teams.js?v=1"></script><script type="module" src="game-v3.js?v=20261108session04"></script>
 <script type="module" src="wind-panel-restored.js?v=wind20"></script>
 <script src="classmana-v2-ui.js?v=20261108v2" defer></script>
-<script src="classmana-v2-lobby-exato.js?v=20261108art03" defer></script>
-<script type="module" src="classmana-professor-v2.js?v=20261108teacher01"></script>
+<script src="classmana-v2-lobby-exato.js?v=20261108art04" defer></script>
+<script type="module" src="classmana-professor-v2.js?v=20261108teacher02"></script>
 </body>
 </html>
