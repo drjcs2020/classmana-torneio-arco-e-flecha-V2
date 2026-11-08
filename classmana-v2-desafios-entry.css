@@ -196,3 +196,53 @@ body[data-page="lobby"]:not(.cm-v2-home-mode) #view-inicio[data-step="desafio"] 
 body[data-page="lobby"]:not(.cm-v2-home-mode) #view-inicio[data-step="desafio"] #cm-v2-navigate-back:hover{
  filter:brightness(1.14) drop-shadow(0 3px 12px #ffdc8094)!important;
 }
+
+/* V2 2026-11-08: PREPARE A PARTIDA — paisagem clara, VOLTAR único e painel alinhado. */
+/* A máscara azul vinha do background definido para todas as etapas.
+   Nesta etapa, exibimos a arte original sem gradiente escurecedor. */
+body[data-page="lobby"]:not(.cm-v2-home-mode) #view-inicio[data-step="partida"]{
+ background:#071a38 url('assets/v2/backgrounds/castle.webp') center center / cover no-repeat!important;
+}
+body[data-page="lobby"]:not(.cm-v2-home-mode) #view-inicio[data-step="partida"]::before{
+ background:none!important;opacity:0!important;
+}
+/* Impede que o VOLTAR antigo apareça debaixo do botão CSS do topo.
+   Os handlers originais permanecem conectados ao elemento oculto. */
+body[data-page="lobby"] #view-inicio[data-step="partida"] > #cm-lobby-back{
+ display:none!important;
+}
+/* VOLTAR único: arte original vermelha e dourada, mesma navegação V2. */
+body[data-page="lobby"]:not(.cm-v2-home-mode) #view-inicio[data-step="partida"] > #cm-v2-navigate-back{
+ display:grid!important;place-items:center!important;
+ position:fixed!important;z-index:250!important;
+ top:clamp(9px,2vh,18px)!important;left:clamp(9px,1.4vw,20px)!important;
+ width:clamp(112px,12vw,152px)!important;height:clamp(40px,5.3vw,56px)!important;
+ min-width:0!important;min-height:0!important;
+ border:0!important;border-radius:0!important;padding:0!important;
+ box-shadow:none!important;background:transparent!important;
+ filter:drop-shadow(0 4px 9px #0008)!important;cursor:pointer!important;
+}
+body[data-page="lobby"]:not(.cm-v2-home-mode) #view-inicio[data-step="partida"] #cm-v2-navigate-back .cm-v2-back-art{
+ display:block!important;width:100%;height:100%;object-fit:fill;pointer-events:none;
+}
+body[data-page="lobby"]:not(.cm-v2-home-mode) #view-inicio[data-step="partida"] #cm-v2-navigate-back .cm-v2-back-label{
+ display:none!important;
+}
+body[data-page="lobby"]:not(.cm-v2-home-mode) #view-inicio[data-step="partida"] #cm-v2-navigate-back:hover{
+ filter:brightness(1.14) drop-shadow(0 3px 12px #ffdc8094)!important;
+}
+/* Os quatro campos ficam dentro de UM painel mais largo e centrado.
+   Aumentamos o quadro de 1030 para 1160 px e distribuímos o espaço
+   igualmente, sem alterar os elementos HTML nem os selects do jogo. */
+@media(min-width:781px){
+ body[data-page="lobby"] #view-inicio[data-step="partida"] .setup-fields{
+  width:min(100%,1160px)!important;
+  max-width:1160px!important;
+  box-sizing:border-box!important;
+  padding:clamp(10px,1.6vh,16px) clamp(20px,2.15vw,30px) clamp(12px,1.8vh,18px)!important;
+  column-gap:clamp(14px,2vw,28px)!important;
+  row-gap:clamp(10px,1.5vh,16px)!important;
+  margin:clamp(5px,1vh,10px) auto!important;
+ }
+}
+/* Nos celulares, a disposição responsiva anterior é preservada. */
