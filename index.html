@@ -41,6 +41,7 @@ html.cm-v2-resume-pending body[data-page="lobby"]::after{
 <link rel="stylesheet" href="classmana-v2-lobby-exato.css?v=20261108art05">
 <link rel="stylesheet" href="classmana-v2-desafios-entry.css?v=20261108arena-vs09">
 <link rel="stylesheet" href="classmana-professor-v2.css?v=20261108teacher03">
+<link rel="stylesheet" href="classmana-v2-hud-unificado.css?v=20261108hudfour01">
 </head>
 <body data-page="lobby" class="cm-v2-home-mode">
 <div class="sky-sparkles" aria-hidden="true"></div>
@@ -287,7 +288,7 @@ html.cm-v2-resume-pending body[data-page="lobby"]::after{
   <div class="instruction" id="instruction">MOVA OU ARRASTE PARA MIRAR • SEGURE PARA PUXAR • SOLTE PARA ATIRAR</div>
   <div class="hit" id="hit"></div>
   <div class="finish hidden" id="finish">
-    <div class="finish-card"><div class="cm-finish-heroes" aria-hidden="true"><img id="finish-hero-own" alt="" src="assets/v2/heroes/aguia-m.webp"><img id="finish-hero-rival" alt="" src="assets/v2/heroes/leao-m.webp"></div><small>🏆 RESULTADO DO TORNEIO</small><h2 id="finish-title">FIM DE PARTIDA</h2><p id="finish-desc"></p><div class="finish-results" id="finish-results"></div><div class="finish-actions"><button class="primary" id="play-again">🏹 JOGAR NOVAMENTE</button><button class="secondary" id="share-result">🔗 COMPARTILHAR DESAFIO</button><button class="secondary cm-v2-result-home" id="cm-v2-result-home" type="button">⌂ VOLTAR AO MENU</button></div><div class="cm-v2-result-note">🏹 5 flechas · Resultado calculado pelas regras originais</div><div class="share-help" id="share-help"></div></div>
+    <div class="finish-card"><div class="cm-finish-heroes" aria-hidden="true"><img id="finish-hero-own" alt="" src="assets/v2/heroes/aguia-m.webp"><img id="finish-hero-rival" alt="" src="assets/v2/heroes/leao-m.webp"></div><small>🏆 RESULTADO DO TORNEIO</small><h2 id="finish-title">FIM DE PARTIDA</h2><p id="finish-desc"></p><div class="finish-results" id="finish-results"></div><div class="finish-actions"><button class="primary" id="play-again">🏹 JOGAR NOVAMENTE</button><button class="secondary" id="share-result">🔗 COMPARTILHAR DESAFIO</button><button class="secondary cm-v2-result-home" id="cm-v2-result-home" type="button">⌂ VOLTAR AOS DESAFIOS</button></div><div class="cm-v2-result-note">🏹 5 flechas · Resultado calculado pelas regras originais</div><div class="share-help" id="share-help"></div></div>
   </div>
  </div>
  
@@ -384,9 +385,9 @@ html.cm-v2-resume-pending body[data-page="lobby"]::after{
   <p id="cm-teacher-status" role="status" aria-live="polite">Entre com a senha do professor.</p>
 </dialog>
 <div id="toast" role="status" aria-live="polite"></div>
-<script src="roster.js?v=2"></script><script src="teams.js?v=1"></script><script type="module" src="game-v3.js?v=20261108botfinish11"></script>
-<script type="module" src="wind-panel-restored.js?v=wind20"></script>
-<script src="classmana-v2-ui.js?v=20261108direct11" defer></script>
+<script src="roster.js?v=2"></script><script src="teams.js?v=1"></script><script type="module" src="game-v3.js?v=20261108navhud01"></script>
+<script type="module" src="wind-panel-restored.js?v=20261108hudfour01"></script>
+<script src="classmana-v2-ui.js?v=20261108navhud01" defer></script>
 <script src="classmana-v2-lobby-exato.js?v=20261108art04" defer></script>
 <script type="module" src="classmana-professor-v2.js?v=20261108teacher02"></script>
 </body>
