@@ -45,3 +45,57 @@ body[data-page="lobby"] #view-inicio[data-step="reino"] #cm-v2-navigate-back:foc
  #cm-v2-challenge-select .cm-v2-challenge-guide{font-size:10px}
 }
 @media(prefers-reduced-motion:reduce){#cm-v2-challenge-select .cm-v2-challenge-card,#cm-v2-challenge-select .cm-v2-challenge-card img{transition:none!important}}
+
+/* V2 2026-11-08 — máscara removida nas escolhas e identificação compacta. */
+/* Somente a etapa de Casa (JOGAR) e a de identificação: o cenário mantém a
+   imagem original SEM a máscara escura do background linear-gradient. */
+body[data-page="lobby"]:not(.cm-v2-home-mode) #view-inicio:is([data-step="reino"],[data-step="perfil"]){
+ background:#071a38 url('assets/v2/backgrounds/castle.webp') center center / cover no-repeat!important;
+}
+body[data-page="lobby"]:not(.cm-v2-home-mode) #view-inicio:is([data-step="reino"],[data-step="perfil"])::before{
+ background:none!important;opacity:0!important;
+}
+/* QUEM VAI JOGAR: painel com menos área vazia, mantendo o espaço necessário
+   para nomes de alunos no seletor e para o botão confirmar. */
+body[data-page="lobby"] #view-inicio[data-step="perfil"] #cm-identity-screen .cm-identity-panel{
+ box-sizing:border-box!important;
+ width:min(92vw,640px)!important;
+ max-width:640px!important;
+ padding:clamp(15px,2.2vw,24px)!important;
+ padding-top:clamp(50px,5vw,62px)!important;
+ gap:clamp(6px,1vh,12px)!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="perfil"] #cm-identity-player{
+ min-height:49px!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="perfil"] #cm-confirm-identity{
+ width:min(100%,330px)!important;max-width:330px!important;
+ min-height:48px!important;align-self:center!important;
+}
+/* A identidade usa, no VOLTAR superior, a MESMA arte vermelha e dourada
+   da seleção de Casas. O botão interno existente não é alterado. */
+body[data-page="lobby"]:not(.cm-v2-home-mode) #view-inicio[data-step="perfil"] > #cm-v2-navigate-back{
+ display:grid!important;place-items:center!important;
+ position:fixed!important;z-index:250!important;
+ top:clamp(9px,2vh,18px)!important;left:clamp(9px,1.4vw,20px)!important;
+ width:clamp(112px,12vw,152px)!important;height:clamp(40px,5.3vw,56px)!important;
+ min-width:0!important;min-height:0!important;
+ border:0!important;border-radius:0!important;padding:0!important;
+ box-shadow:none!important;background:transparent!important;
+ filter:drop-shadow(0 4px 9px #0008)!important;cursor:pointer;
+}
+body[data-page="lobby"]:not(.cm-v2-home-mode) #view-inicio[data-step="perfil"] #cm-v2-navigate-back .cm-v2-back-art{
+ display:block!important;width:100%;height:100%;object-fit:fill;pointer-events:none;
+}
+body[data-page="lobby"]:not(.cm-v2-home-mode) #view-inicio[data-step="perfil"] #cm-v2-navigate-back .cm-v2-back-label{
+ display:none!important;
+}
+body[data-page="lobby"]:not(.cm-v2-home-mode) #view-inicio[data-step="perfil"] #cm-v2-navigate-back:hover{
+ filter:brightness(1.14) drop-shadow(0 3px 12px #ffdc8094)!important;
+}
+@media(max-width:620px){
+ body[data-page="lobby"] #view-inicio[data-step="perfil"] #cm-identity-screen .cm-identity-panel{
+  width:min(94vw,640px)!important;
+  padding:15px!important;padding-top:52px!important;
+ }
+}
