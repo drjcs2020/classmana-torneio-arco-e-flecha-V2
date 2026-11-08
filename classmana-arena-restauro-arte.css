@@ -1,0 +1,123 @@
+/* ClassMana V2 — acabamento ilustrado dos quatro indicadores e sprites
+   nítidos da arena. Isolado da tela inicial e dos demais menus. */
+body[data-page="arena"] #view-arena #stage .cm-arena-readouts{
+  top:clamp(123px,19vh,151px)!important;
+  left:clamp(7px,1vw,13px)!important;
+  width:clamp(185px,16vw,222px)!important;
+  height:clamp(300px,52vh,343px)!important;
+  gap:5px!important;
+}
+body[data-page="arena"] #view-arena #stage .cm-arena-readouts > :is(#distance,#shots,#wind){
+  display:block!important;position:relative!important;
+  border:0!important;border-radius:0!important;
+  margin:0!important;padding:0!important;
+  box-shadow:none!important;outline:0!important;
+  background-color:transparent!important;background-repeat:no-repeat!important;
+  background-size:100% 100%!important;
+  background-position:center!important;overflow:visible!important;
+}
+body[data-page="arena"] #view-arena #stage .cm-arena-readouts #distance{
+  background-image:url("assets/ui/hud/painel-distancia-dinamico.png")!important;
+}
+body[data-page="arena"] #view-arena #stage .cm-arena-readouts #shots{
+  background-image:url("assets/ui/hud/painel-flechas-dinamico.png")!important;
+}
+body[data-page="arena"] #view-arena #stage .cm-arena-readouts #wind{
+  background-image:url("assets/ui/hud/painel-vento-dinamico.png")!important;
+}
+body[data-page="arena"] #view-arena #stage .cm-arena-readouts > :is(#distance,#shots,#wind) .cm-stat-icon,
+body[data-page="arena"] #view-arena #stage .cm-arena-readouts > :is(#distance,#shots,#wind) .cm-stat-title{
+  display:none!important;
+}
+body[data-page="arena"] #view-arena #stage .cm-arena-readouts > :is(#distance,#shots,#wind) .cm-stat-content,
+body[data-page="arena"] #view-arena #stage .cm-arena-readouts #wind .wind-caption{
+  position:absolute!important;inset:auto!important;
+  display:flex!important;justify-content:center!important;
+  align-items:center!important;
+  left:39%!important;top:51%!important;
+  width:56%!important;height:34%!important;
+  margin:0!important;padding:0!important;
+  overflow:visible!important;transform:none!important;
+}
+body[data-page="arena"] #view-arena #stage .cm-arena-readouts > :is(#distance,#shots,#wind) .cm-stat-value,
+body[data-page="arena"] #view-arena #stage .cm-arena-readouts #wind .wind-speed.cm-stat-value{
+  font:900 clamp(17px,1.55vw,22px)/1.1 Georgia,serif!important;
+  color:#fff7dc!important;white-space:nowrap!important;
+  text-shadow:0 2px 4px #000f!important;
+  width:auto!important;text-align:center!important;
+}
+/* Quarta moldura: mesma marinha, ouro e brilho — sem texto 'VENTO' duplicado. */
+body[data-page="arena"] #view-arena #stage .cm-arena-readouts #wind-direction{
+  position:relative!important;
+  background:linear-gradient(145deg,#061530,#0c2c63 51%,#04122d)!important;
+  border:3px solid #e5aa39!important;
+  border-radius:10px!important;
+  box-shadow:0 0 0 1px #53310b,inset 0 0 0 2px #e9c6796b,0 3px 7px #0008!important;
+  grid-template-columns:36px minmax(0,1fr)!important;
+  padding:4px 8px!important;gap:4px!important;
+}
+body[data-page="arena"] #view-arena #stage .cm-arena-readouts #wind-direction::before{
+  content:"";position:absolute;top:-5px;left:50%;
+  width:10px;height:10px;transform:translateX(-50%) rotate(45deg);
+  border:1.5px solid #fff0a8;background:#19a6de;
+  box-shadow:0 0 5px #91e8ff;pointer-events:none;
+}
+body[data-page="arena"] #view-arena #stage .cm-arena-readouts #wind-direction .cm-stat-content{
+  position:static!important;display:flex!important;
+  flex-direction:column!important;align-items:flex-start!important;
+  justify-content:center!important;gap:3px!important;
+  width:100%!important;height:auto!important;
+}
+body[data-page="arena"] #view-arena #stage .cm-arena-readouts #wind-direction .cm-stat-title{
+  color:#fbd07b!important;font-size:12px!important;
+}
+body[data-page="arena"] #view-arena #stage .cm-arena-readouts #wind-direction .wind-direction-text{
+  color:#fff2ce!important;font-size:11px!important;
+  text-shadow:0 2px 3px #000d!important;
+}
+body[data-page="arena"] #view-arena #stage .cm-arena-art{
+  position:absolute;inset:0;z-index:6;pointer-events:none!important;
+  overflow:hidden;opacity:0;transition:opacity .18s ease;
+}
+body[data-page="arena"] #view-arena #stage .cm-arena-art.is-ready{
+  opacity:1;
+}
+body[data-page="arena"] #view-arena #stage .cm-arena-target-art{
+  position:absolute;display:block;max-width:none!important;
+  height:auto!important;width:100px;left:50%;top:50%;
+  pointer-events:none;filter:drop-shadow(0 5px 3px #0008);
+}
+body[data-page="arena"] #view-arena #stage .cm-arena-bow-art{
+  position:absolute;display:block;pointer-events:none;
+  bottom:-5%;right:-1%;width:clamp(255px,37vw,520px);
+  max-width:none!important;height:auto!important;
+  transform-origin:82% 76%;filter:drop-shadow(0 7px 10px #0009);
+}
+body[data-page="arena"] #view-arena #stage .cm-arena-aim-art{
+  position:absolute;display:block;width:clamp(42px,4.2vw,62px);
+  height:auto!important;max-width:none!important;
+  left:50%;top:46%;transform:translate(-50%,-50%);
+  pointer-events:none;filter:drop-shadow(0 2px 3px #020d20);
+}
+/* O arco sprite fica sobre o campo, mas nunca sobre menu/painéis. */
+@media(max-width:760px){
+ body[data-page="arena"] #view-arena #stage .cm-arena-readouts{
+  top:clamp(75px,16vh,115px)!important;left:3px!important;
+  width:clamp(113px,27vw,155px)!important;
+  height:clamp(194px,54vh,270px)!important;gap:3px!important;
+ }
+ body[data-page="arena"] #view-arena #stage .cm-arena-readouts > :is(#distance,#shots,#wind) .cm-stat-content,
+ body[data-page="arena"] #view-arena #stage .cm-arena-readouts #wind .wind-caption{
+  left:39%!important;top:52%!important;width:57%!important;height:34%!important;
+ }
+ body[data-page="arena"] #view-arena #stage .cm-arena-readouts > :is(#distance,#shots,#wind) .cm-stat-value,
+ body[data-page="arena"] #view-arena #stage .cm-arena-readouts #wind .wind-speed.cm-stat-value{font-size:13px!important}
+ body[data-page="arena"] #view-arena #stage .cm-arena-readouts #wind-direction{
+  grid-template-columns:23px minmax(0,1fr)!important;gap:2px!important;
+  padding:3px!important;border-width:2px!important;
+ }
+ body[data-page="arena"] #view-arena #stage .cm-arena-readouts #wind-direction .cm-stat-title{font-size:9px!important}
+ body[data-page="arena"] #view-arena #stage .cm-arena-readouts #wind-direction .wind-direction-text{font-size:8px!important}
+ body[data-page="arena"] #view-arena #stage .cm-arena-bow-art{width:clamp(195px,40vw,295px);right:-4%;bottom:-2%}
+ body[data-page="arena"] #view-arena #stage .cm-arena-aim-art{width:40px}
+}
