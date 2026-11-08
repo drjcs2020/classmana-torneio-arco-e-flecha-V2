@@ -73,6 +73,18 @@ function fighter(person){
  return card;
 }
 let activeDialog=null;
+// Manter a prévia VS sobre o lobby durante a troca de documento.
+function dismissVersusTransition(){
+ const overlay=document.getElementById('cm-vs-overlay');
+ if(overlay?.dataset.launching==='true')overlay.remove();
+ if(activeDialog===overlay)activeDialog=null;
+}
+// Navegar para trás usando o cache não deve trazer uma prévia congelada.
+if(typeof window!=='undefined'){
+ window.addEventListener('pageshow',event=>{
+  if(event.persisted)dismissVersusTransition();
+ });
+}
 function versus(config){
  // The actual challenge must already be validated/created by the existing API.
  if(activeDialog)return Promise.resolve(false);
@@ -110,9 +122,17 @@ function versus(config){
   const complete=bool=>{
    if(done)return;done=true;
    outer.removeEventListener('keydown',keys);
-   activeDialog=null;outer.remove();previousFocus?.focus?.();
-   if(bool)try{config.sound?.('versus')}catch{}
-   else try{config.sound?.('back')}catch{}
+   activeDialog=null;
+   if(bool){
+    outer.dataset.launching='true';
+    outer.setAttribute('aria-busy','true');
+    start.disabled=true;cancel.disabled=true;
+    start.textContent='⌛ ABRINDO ARENA...';
+    try{config.sound?.('versus')}catch{}
+   }else{
+    outer.remove();previousFocus?.focus?.();
+    try{config.sound?.('back')}catch{}
+   }
    resolve(bool);
   };
   const keys=event=>{
@@ -192,4 +212,4 @@ function bindMenuSound(sound){
   try{sound('click')}catch{}
  });
 }
-export const cinematics={versus,resultView,impactSparkle,bindMenuSound,mountAmbient,setAmbientHouse};
+export const cinematics={versus,dismissVersusTransition,resultView,impactSparkle,bindMenuSound,mountAmbient,setAmbientHouse};
