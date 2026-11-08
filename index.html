@@ -26,6 +26,7 @@
 <link rel="stylesheet" href="classmana-final-visual.css?v=20261108a">
 <link rel="stylesheet" href="classmana-v2-theme.css?v=20261108v2">
 <link rel="stylesheet" href="classmana-v2-lobby-exato.css?v=20261108art05">
+<link rel="stylesheet" href="classmana-v2-desafios-entry.css?v=20261108challenge02">
 <link rel="stylesheet" href="classmana-professor-v2.css?v=20261108teacher03">
 </head>
 <body data-page="lobby" class="cm-v2-home-mode">
@@ -76,7 +77,28 @@
   <p class="cm-v2-session-notice" id="cm-v2-session-notice" role="tooltip" hidden></p>
   <div class="cm-v2-home-bottom">ÁGUIA DOURADA <span>✦</span> LEÃO DE FOGO <span>✦</span> DRAGÃO DE ESMERALDA</div>
 </section>
-<button type="button" id="cm-v2-navigate-back" aria-label="Voltar à etapa anterior ou ao menu">← VOLTAR</button>
+
+<section id="cm-v2-challenge-select" aria-labelledby="cm-v2-challenge-title" aria-label="Escolha sua turma para desafiar">
+  <div class="cm-v2-challenge-inner">
+    <img id="cm-v2-challenge-title" class="cm-v2-challenge-title" src="assets/ui/titles/titulo-escolha-sua-casa.png" alt="Escolha sua casa">
+    <div class="cm-v2-challenge-cards" role="group" aria-label="Escolha sua turma">
+      <button type="button" class="cm-v2-challenge-card cm-v2-challenge-card-a" data-v2-challenge-house="A" aria-label="Sou do 4º A, Águia Dourada">
+        <img src="assets/v2/challenge/desafio-aguia.webp" alt="Arqueiro da Águia Dourada com a águia elétrica" loading="eager">
+        <span class="cm-v2-challenge-card-label"><b>4º A</b><strong>ÁGUIA DOURADA</strong><small>Escolher turma</small></span>
+      </button>
+      <button type="button" class="cm-v2-challenge-card cm-v2-challenge-card-b" data-v2-challenge-house="B" aria-label="Sou do 4º B, Leão de Fogo">
+        <img src="assets/v2/challenge/desafio-leao.webp" alt="Arqueiro do Leão de Fogo com o leão em chamas" loading="eager">
+        <span class="cm-v2-challenge-card-label"><b>4º B</b><strong>LEÃO DE FOGO</strong><small>Escolher turma</small></span>
+      </button>
+      <button type="button" class="cm-v2-challenge-card cm-v2-challenge-card-c" data-v2-challenge-house="C" aria-label="Sou do 4º C, Dragão de Esmeralda">
+        <img src="assets/v2/challenge/desafio-dragao.webp" alt="Arqueira do Dragão de Esmeralda com o dragão verde" loading="eager">
+        <span class="cm-v2-challenge-card-label"><b>4º C</b><strong>DRAGÃO DE ESMERALDA</strong><small>Escolher turma</small></span>
+      </button>
+    </div>
+    <p class="cm-v2-challenge-guide">Escolha sua turma para continuar em <strong>QUEM VAI JOGAR?</strong></p>
+  </div>
+</section>
+<button type="button" id="cm-v2-navigate-back" aria-label="Voltar à etapa anterior ou ao menu"><span class="cm-v2-back-label">← VOLTAR</span><img class="cm-v2-back-art" src="assets/ui/buttons/classmana-voltar.png" alt="" aria-hidden="true"></button>
 
  <button type="button" id="cm-lobby-back" class="cm-sprite-button cm-lobby-back" aria-label="Voltar à tela anterior"><img src="assets/ui/buttons/classmana-voltar.png" alt=""></button>
  <div class="section-title kingdom-title"><div><h1>ClassMana — Torneio das Três Casas</h1></div></div>
@@ -341,7 +363,7 @@
 <div id="toast" role="status" aria-live="polite"></div>
 <script src="roster.js?v=2"></script><script src="teams.js?v=1"></script><script type="module" src="game-v3.js?v=20261108session05"></script>
 <script type="module" src="wind-panel-restored.js?v=wind20"></script>
-<script src="classmana-v2-ui.js?v=20261108v2" defer></script>
+<script src="classmana-v2-ui.js?v=20261108challenge02" defer></script>
 <script src="classmana-v2-lobby-exato.js?v=20261108art04" defer></script>
 <script type="module" src="classmana-professor-v2.js?v=20261108teacher02"></script>
 </body>
