@@ -978,7 +978,7 @@ document.querySelector('.studio-carousel')?.addEventListener('keydown',event=>{
  }
 });
 cinematics.mountAmbient($('view-inicio'),house,72);
-cinematics.mountAmbient($('cm-v2-home'),house,92);
+cinematics.mountAmbient($('cm-v2-home'),house,155);
 cinematics.mountAmbient($('stage'),house,52);
 cinematics.bindMenuSound(effect=>arenaAudio.play(effect));
 const soundButton=$('arena-sound');
@@ -991,7 +991,7 @@ function updateSoundButton(){
 }
 function updateLobbyAudioButton(){
  const button=$('cm-lobby-sound');if(!button)return;
- button.textContent=!arenaAudio.enabled?'🔇 Som desligado':arenaAudio.playing?'🔊 Música e sons':'🔊 Música ligada · toque para ouvir';
+ button.textContent=arenaAudio.enabled?'🔊':'🔇';
  button.setAttribute('aria-pressed',String(arenaAudio.enabled));
  button.setAttribute('aria-label',!arenaAudio.enabled?'Ativar música e efeitos':arenaAudio.playing?'Desativar música e efeitos':'Música ativada, toque para iniciar reprodução');
 }
