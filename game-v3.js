@@ -996,8 +996,9 @@ function updateLobbyAudioButton(){
  button.setAttribute('aria-label',!arenaAudio.enabled?'Ativar música e efeitos':arenaAudio.playing?'Desativar música e efeitos':'Música ativada, toque para iniciar reprodução');
 }
 function audioControl(){
- if(arenaAudio.enabled&&!arenaAudio.playing)arenaAudio.start();
- else arenaAudio.toggle();
+ // O botão sempre liga/desliga. Antes, o primeiro toque podia apenas iniciar
+ // a reprodução, mantendo o ícone ligado e parecendo não funcionar.
+ arenaAudio.toggle();
  updateSoundButton();updateLobbyAudioButton();
 }
 soundButton?.addEventListener('click',audioControl);
