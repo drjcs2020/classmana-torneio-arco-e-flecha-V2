@@ -1,0 +1,74 @@
+name: QA visual ClassMana
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  qa:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Preparar artes para teste quando o ZIP existir
+        run: |
+          if [ -f ClassMana_Integracao_Visual_01.zip ]; then
+            unzip -q -o ClassMana_Integracao_Visual_01.zip -d .
+            test -f assets/ui/hud/painel-vento-dinamico.png
+            test -f assets/ui/hud/forca-01-moldura.png
+            test -f assets/scenes/leao.webp
+            test -f assets/scenes/dragao.webp
+            echo "Sprites e cenários carregados para QA."
+          fi
+      - name: Carregar as artes aprovadas em dois pacotes para os testes
+        run: |
+          P1=ClassMana_Assets_Parte_1_Personagens_Interface.zip
+          P2=ClassMana_Assets_Parte_2_Cenarios_Botoes_HUD.zip
+          if [ -f "$P1" ] && [ -f "$P2" ]; then
+            unzip -q -o "$P1" -d .
+            unzip -q -o "$P2" -d .
+            test -f assets/ui/titles/logo-classmana-torneio.png
+            test -f assets/ui/characters/arqueiro-aguia-dourada.png
+            test -f assets/ui/buttons/botao-jogar-3d.png
+          fi
+      - name: Check JavaScript syntax and file references
+        run: |
+          node --check game-v3.js
+          node --check scene-v3.js
+          node --check online-client.js
+          node scripts/qa-static.mjs
+          node scripts/qa-media.mjs
+      - name: Testar desafios entre dois alunos em banco temporário (sem dados reais)
+        run: node scripts/qa-duel-endtoend.mjs
+      - name: Validate deployed independent duel API and live ranking (read-only)
+        run: node scripts/qa-duel-api.mjs
+      - name: Install browser test runner
+        run: |
+          npm install --no-save --ignore-scripts playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Check desktop and mobile layout + game navigation
+        run: |
+          python3 -m http.server 8000 --bind 127.0.0.1 >/tmp/classmana-http.log 2>&1 &
+          node scripts/qa-browser.mjs
+      # JSONP e iframe cross-site de Apps Script foram substituídos pelo portal v9.
+      # Teste de rede /exec separado: scripts/qa-online.mjs (não cria desafios).
+      - name: Testar dois navegadores independentes, notificações e ranking (dados isolados)
+        run: node scripts/qa-duel-two-browsers.mjs
+      - name: Testar do zero os 2 competidores, convite, aceite e 10 disparos
+        run: |
+          node --check rebuild/api.js
+          node --check rebuild/arena.js
+          node --check rebuild/app.js
+          python3 -m http.server 8769 --bind 127.0.0.1 >/tmp/classmana-rebuild-http.log 2>&1 &
+          node scripts/qa-rebuild-browser.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: classmana-ui-screenshots
+          path: qa-screenshots/
+          retention-days: 7
+          if-no-files-found: ignore
