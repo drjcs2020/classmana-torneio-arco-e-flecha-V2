@@ -14,8 +14,9 @@ bgm.addEventListener('loadedmetadata',()=>{
 addEventListener('pagehide',()=>{
  try{if(Number.isFinite(bgm.currentTime))sessionStorage.setItem(AUDIO_TIME_KEY,String(bgm.currentTime));}catch{}
 });
-// Music is ON by default for new visitors. An explicit mute persists.
-let enabled=localStorage.getItem('cm_arena_sound_v2')!=='off';
+// O som começa ligado a cada nova abertura do jogo. O botão permite silenciar
+// durante a partida, sem herdar o 'off' deixado por um aluno anterior.
+let enabled=true;
 // Try autoplay on entry; browsers that forbid sound before interaction are
 // handled by unlockOnGeneralGesture without changing the saved preference.
 bgm.autoplay=enabled;
@@ -119,7 +120,7 @@ export const arenaAudio={
  setHouse(k){house=['A','B','C'].includes(k)?k:'A'},
  setActive(value){active=!!value;ambience();musicLevel()},
  toggle(){
-  enabled=!enabled;localStorage.setItem('cm_arena_sound_v2',enabled?'on':'off');
+  enabled=!enabled;
   if(!enabled){clearInterval(timer);timer=null;bgm.pause();unlocked=false;for(const clip of Object.values(clips)){clip.pause();clip.currentTime=0;}if(bus&&ctx)bus.gain.setTargetAtTime(0,ctx.currentTime,.03);musicLevel();}
   else{init();if(bus&&ctx)bus.gain.setTargetAtTime(.52,ctx.currentTime,.05);ambience();unlockMusic();musicLevel()}
   return enabled;
