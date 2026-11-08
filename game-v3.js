@@ -1,7 +1,7 @@
 import {initScene} from './scene-v3.js?v=ground44';
 import {CIRCUITS,LEVELS,targetMotion,obstacleBlocks,distanceDifficulty,flightSeconds} from './arena-difficulty.js?v=3';
 import {arenaAudio} from './arena-audio.js?v=lobbydefault49';
-import {cinematics} from './classmana-cinematics.js?v=gold49';
+import {cinematics} from './classmana-cinematics.js?v=gold50';
 import {initAtmosphere} from './arena-atmosphere.js?v=no-crowd15';
 import {online} from './online-client.js?v=api10';
 import {mountSpriteHUD} from './sprite-hud.js?v=1';
@@ -587,13 +587,15 @@ async function finishMatch(){
   bot=match.mode==='bot'?Array.from({length:5},()=>chooseRobotScore(match.difficulty,total/5)):[],
   rivalScore=match.mode==='bot'?bot.reduce((a,b)=>a+b,0):undefined;
  const title=match.mode==='practice'?(total>=37?'MIRA LENDÁRIA!':'TREINAMENTO CONCLUÍDO'):
-  total>rivalScore?'🏆 VITÓRIA SOBRE O ROBÔ!':total===rivalScore?'🤝 EMPATE!':'🏹 CONTINUE TREINANDO!';
+  total>rivalScore?'🏆 VOCÊ VENCEU O ROBÔ!':total===rivalScore?'🤝 EMPATE COM O ROBÔ!':'🏆 ROBÔ ARQUEIRO VENCEU!';
  $('finish-title').textContent=title;
- $('finish-desc').textContent='Sua pontuação: '+total+' de 50 pontos nesta rodada.';
+ $('finish-desc').textContent=match.mode==='bot'
+  ?'Você: '+total+' pontos  •  Robô Arqueiro: '+rivalScore+' pontos  •  '+(total>rivalScore?'Vitória do jogador':total<rivalScore?'Vitória do robô':'Empate')
+  :'Sua pontuação: '+total+' de 50 pontos nesta rodada.';
  renderFinishScore(total,rivalScore===undefined?'—':rivalScore,rivalScore===undefined?'TREINO LIVRE':'ROBÔ');
  cinematics.resultView({player:match.player,house:match.house,rival:match.mode==='bot'?'ROBÔ ARQUEIRO':'SEU RECORDE',
   rivalHouse:match.mode==='bot'?'C':match.house,ownShots:match.scores,rivalShots:bot,
-  opponent:rivalScore===undefined?'—':rivalScore});
+  opponent:rivalScore===undefined?'—':rivalScore,mode:match.mode,ownTotal:total,rivalTotal:rivalScore??null});
  if(match.mode==='bot')arenaAudio.play(total>rivalScore?'victory':total<rivalScore?'defeat':'banner');
  $('share-help').textContent='Treino e partidas com robô ficam neste navegador; somente desafios validados entram no ranking oficial.';
  if(match.playerId!=='guest')persist({house:match.house,id:match.playerId,score:total,mode:match.mode,win:rivalScore===undefined?null:total>rivalScore});
