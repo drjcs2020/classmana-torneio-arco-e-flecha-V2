@@ -87,10 +87,33 @@ function safeRead(){try{const a=JSON.parse(localStorage.getItem('classmana-arche
 storage=safeRead();
 function persist(row){storage.push({...row,at:new Date().toISOString()});storage=storage.slice(-150);try{localStorage.setItem('classmana-archery-v2-isolated',JSON.stringify(storage))}catch{}renderRanking()}
 function toast(s){const t=$('toast');t.textContent=s;t.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.classList.remove('show'),3100)}
+// Rota compartilhada para sair da arena e jogar novamente sem perder a sessão.
+function cmReturnToChallenge(){
+ const playerId=[identifiedPlayerId,match?.playerId,online.user?.id,cmSessionId()]
+  .find(id=>/^[ABC][0-9]{2}$/.test(id||''));
+ if(playerId&&cmSessionId()!==playerId)cmSaveStudent(playerId);
+ if(match){match.running=false;match.locked=false;match.paused=false}
+ holding=false;
+ try{sessionStorage.removeItem('cm_active_archery_match_v2')}catch{}
+ if(document.body.dataset.page==='arena'){
+  if(playerId)cmMarkInternalReturn();
+  window.location.assign(playerId?'./?continuar=1':'./');
+  return;
+ }
+ if(playerId){
+  selectHouse(playerId[0]);fillPlayer(playerId);
+  $('player').value=playerId;$('player').disabled=true;
+  setLobbyStep('desafio');
+  document.body.classList.remove('cm-v2-home-mode');
+  document.body.classList.add('cm-v2-onboarding');
+ }else{
+  setLobbyStep('reino');
+ }
+}
+window.classmanaReturnToChallenge=cmReturnToChallenge;
 function openView(name){
  if(name==='inicio'&&document.body.dataset.page==='arena'){
-  try{sessionStorage.removeItem('cm_active_archery_match_v2')}catch{}
-  cmMarkInternalReturn();window.location.assign('./');return;
+  cmReturnToChallenge();return;
  }
  // Two separate HTML pages: lobby and arena. Ranking and rules are overlays.
  if(name!=='arena'&&view==='arena'&&match?.running){
@@ -1035,14 +1058,10 @@ $('my-team').addEventListener('change',()=>{
  if(mate&&identifiedPlayerId&&mate.id!==identifiedPlayerId){toast('Sua equipe está vinculada ao jogador da sessão.');$('my-team').value=TEAMS[identifiedPlayerId]||'';return;}
  if(mate){$('player').value=mate.id;if(online.state==='ready')loginStudent().catch(console.warn)}
  fillRivals();
-});$('start-game').addEventListener('click',startMatch);$('rank-play').addEventListener('click',()=>openView('inicio'));$('rules-play').addEventListener('click',()=>openView('inicio'));$('leave-arena').addEventListener('click',()=>{if(match?.running&&!confirm('Abandonar a rodada atual e começar uma nova depois?'))return;openView('inicio')});$('play-again').addEventListener('click',()=>{
- if(document.body.dataset.page==='arena'){
-  try{sessionStorage.removeItem('cm_active_archery_match_v2')}catch{}
-  cmMarkInternalReturn();window.location.assign('./?continuar=1');return;
- }
- if(match)match.running=false;
- setLobbyStep('desafio');
-});$('share-result').addEventListener('click',()=>{if(match?.onlineSaveFailed)finishMatch();else if(!match?.online)share()});
+});$('start-game').addEventListener('click',startMatch);$('rank-play').addEventListener('click',()=>openView('inicio'));$('rules-play').addEventListener('click',()=>openView('inicio'));$('leave-arena').addEventListener('click',()=>{
+ if(match?.running&&!confirm('Abandonar a rodada atual e voltar aos desafios?'))return;
+ cmReturnToChallenge();
+});$('play-again').addEventListener('click',cmReturnToChallenge);$('share-result').addEventListener('click',()=>{if(match?.onlineSaveFailed)finishMatch();else if(!match?.online)share()});
 const world=$('world');world.addEventListener('pointerdown',e=>{if(!match?.running||match.locked||match.paused)return;e.preventDefault();world.setPointerCapture(e.pointerId);holding=true;pointerStart=Date.now();aim(e);scene?.setPower(.28);$('stage').classList.add('aiming');arenaAudio.play('draw');$('instruction').textContent='ARRASTE PARA MOVER O ARCO • SOLTE PARA ATIRAR'});world.addEventListener('pointermove',e=>{if(!match?.running||match.locked||match.paused)return;if(holding||e.pointerType==='mouse')aim(e);if(holding)scene?.setPower(chargePower())});world.addEventListener('pointerup',e=>{if(!holding)return;e.preventDefault();aim(e);holding=false;$('stage').classList.remove('aiming');$('instruction').textContent='MOVA OU ARRASTE PARA MIRAR • SEGURE PARA PUXAR • SOLTE PARA ATIRAR';const p=chargePower();scene?.setPower(p);spriteHud?.setPower(p);fire(p);uiHud()});world.addEventListener('pointercancel',()=>{holding=false;$('stage').classList.remove('aiming');scene?.setPower(0)});
 document.addEventListener('keydown',e=>{if(view!=='arena'||!match?.running||match.locked)return;let action=true;const step=e.shiftKey?.022:.008;switch(e.code){case'ArrowUp':reticle.y=clamp(reticle.y-step,.08,.92);break;case'ArrowDown':reticle.y=clamp(reticle.y+step,.08,.92);break;case'ArrowLeft':reticle.x=clamp(reticle.x-step,.06,.94);break;case'ArrowRight':reticle.x=clamp(reticle.x+step,.06,.94);break;case'Space':fire(1);break;default:action=false}if(action){e.preventDefault();updateReticle()}});
 setInterval(()=>{if(holding&&!match?.paused){scene?.setPower(chargePower());uiHud()}},60);
@@ -1135,7 +1154,10 @@ function restoreArena(){
  let saved=null;
  try{saved=JSON.parse(sessionStorage.getItem('cm_active_archery_match_v2')||'null')}catch{}
  if(!saved||!['A','B','C'].includes(saved.house)||!Array.isArray(saved.scores)||saved.scores.length>5){
-  window.location.replace('./');return;
+  const student=cmSessionId();
+  if(/^[ABC][0-9]{2}$/.test(student)){cmMarkInternalReturn();window.location.replace('./?continuar=1');}
+  else window.location.replace('./');
+  return;
  }
  match=saved;
  identifiedPlayerId=saved.playerId||online.user?.id||cmSessionId();
