@@ -166,7 +166,7 @@ function resultView({player,house,rival,rivalHouse,gender='m',rivalGender='m',ow
  const playerPortrait=document.getElementById('hud-archer-image')?.getAttribute('src');
  const left=resultPerson(player,house,ownShots,undefined,playerPortrait||portrait(house,gender));
  const right=resultPerson(rival||'Adversário',rivalHouse,rivalShots,opponent,portrait(rivalHouse,rivalGender));
- if(mode==='bot'&&scored){
+ if(scored){
   if(outcome==='win'||outcome==='draw'){
    left.classList.add(outcome==='win'?'cm-result-winner':'cm-result-tie');
    left.prepend(node('span','cm-result-winner-tag',outcome==='win'?'🏆 VENCEDOR':'🤝 EMPATE'));
