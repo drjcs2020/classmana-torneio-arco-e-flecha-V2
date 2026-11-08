@@ -17,14 +17,46 @@
   if(house)house.textContent=h?h.grade+' · '+h.name:'Selecione seu aluno em JOGAR';
   if(crest){crest.src='assets/v2/crests/'+(h?.crest||'aguia.webp');crest.alt=h?'Brasão da '+h.name:''}
   if(instruction)instruction.textContent=person?'É você? Clique JOGAR e confirme.':'Sessão livre para novo jogador';
-  if(exit){exit.disabled=!person;exit.title=person?'Encerrar a sessão de '+person:'Nenhuma sessão ativa';}
+  if(exit){exit.disabled=false;exit.setAttribute('aria-disabled',String(!person));exit.title=person?'Encerrar a sessão de '+person:'Nenhuma sessão ativa';}
   for(const el of [play,challenges]){
    if(!el)continue;
    el.dataset.sessionOccupied=person?'true':'false';
    el.title=person?'Sessão de '+person+'. Se não é você, encerre antes de jogar.':'Pronto para jogar. Escolha seu nome.';
   }
-  if(notice)notice.textContent=person?'Sessão atual: '+person+' · Se for outro aluno, encerre antes de jogar.':'Sessão livre · Selecione JOGAR para começar.';
+  if(notice)notice.dataset.visible='false';
  }
+ // Tooltip only when the user hovers, focuses or taps; never a fixed banner.
+ const notice=$('cm-v2-session-notice');
+ let noteTimer;
+ function tooltipFor(button){
+  if(!notice)return;
+  const id=getId(),person=id?byId(id):null;
+  if(button?.dataset.v2Action==='encerrar'){
+   notice.textContent=person?'Encerrar a sessão de '+person+' para trocar de aluno.':'Sessão livre · Nenhum aluno para desconectar.';
+  }else{
+   notice.textContent=person?'Sessão de '+person+'. Se você é outro aluno, encerre a sessão anterior.':'Sessão livre · Selecione JOGAR para começar.';
+  }
+  notice.dataset.visible='true';clearTimeout(noteTimer);
+ }
+ function hideTooltip(delay=0){
+  clearTimeout(noteTimer);
+  noteTimer=setTimeout(()=>{if(notice)notice.dataset.visible='false'},delay);
+ }
+ for(const action of ['encerrar','jogar']){
+  const button=document.querySelector('[data-v2-action="'+action+'"]');
+  button?.addEventListener('pointerenter',()=>tooltipFor(button));
+  button?.addEventListener('pointerleave',()=>hideTooltip());
+  button?.addEventListener('focus',()=>tooltipFor(button));
+  button?.addEventListener('blur',()=>hideTooltip());
+  button?.addEventListener('pointerdown',event=>{
+   if(event.pointerType!=='mouse'){tooltipFor(button);hideTooltip(2800)}
+  });
+ }
+ $('cm-v2-home-exit')?.addEventListener('click',event=>{
+  if(event.currentTarget.getAttribute('aria-disabled')==='true'){
+   event.preventDefault();event.stopImmediatePropagation();tooltipFor(event.currentTarget);hideTooltip(2300);
+  }
+ },true);
  function guard(event){
   const id=getId(),person=id?byId(id):null;
   if(!person)return;
