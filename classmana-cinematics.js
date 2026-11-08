@@ -237,6 +237,7 @@ function resultView({player,house,rival,rivalHouse,gender='m',rivalGender='m',ow
 function resultPerson(name,house,gender,shots,score){
  const article=node('div','cm-final-player'),img=node('img');
  article.dataset.house=getHouse(house);
+ article.dataset.gender=gender==='f'||gender==='female'?'f':'m';
  img.src=portrait(house,gender);
  portraitFallback(img,house,gender);
  img.alt='Retrato do rosto do arqueiro da Casa '+houses[getHouse(house)].name;
