@@ -200,8 +200,18 @@ function resultView({player,house,rival,rivalHouse,gender='m',rivalGender='m',ow
  card.querySelector('.cm-embers')?.remove();
  emberLayer(card,house,17);
  const wrap=node('div','cm-final-duel');
+ const practiceMirror=mode==='practice';
  const left=resultPerson(player,house,gender,ownShots,undefined);
- const right=resultPerson(rival||'Adversário',rivalHouse,rivalGender,rivalShots,opponent);
+ // Treino livre: o segundo cartão representa o MESMO jogador (Casa/skin),
+ // não um adversário nem um recorde fictício.
+ const right=resultPerson(practiceMirror?player:(rival||'Adversário'),
+  practiceMirror?house:rivalHouse,practiceMirror?gender:rivalGender,
+  practiceMirror?[]:rivalShots,practiceMirror?undefined:opponent);
+ if(practiceMirror){
+  wrap.classList.add('cm-practice-mirror-duel');
+  right.classList.add('cm-practice-mirror-player');
+  right.setAttribute('aria-label',player+' — espelho de treino livre');
+ }
  if(scored){
   if(outcome==='win'||outcome==='draw'){
    left.classList.add(outcome==='win'?'cm-result-winner':'cm-result-tie');
