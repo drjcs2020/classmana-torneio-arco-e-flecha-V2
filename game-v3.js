@@ -1,4 +1,4 @@
-import {initScene} from './scene-v3.js?v=ground44';
+import {initScene} from './scene-v3.js?v=depthhud53';
 import {CIRCUITS,LEVELS,targetMotion,obstacleBlocks,distanceDifficulty,flightSeconds} from './arena-difficulty.js?v=3';
 import {arenaAudio} from './arena-audio.js?v=lobbydefault49';
 import {cinematics} from './classmana-cinematics.js?v=gold50';
