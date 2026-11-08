@@ -177,19 +177,29 @@ body[data-page="arena"] #stage.stage::before {
   <canvas id="world" aria-label="Arena interativa de arco e flecha, com mira, cenário e alvo tridimensional"></canvas>
   <div class="scene-badge" id="stage-house-badge" data-house="A"><img src="assets/v2/crests/aguia.webp" alt=""><div><small>ARENA DA CASA</small><strong>Águia Dourada</strong></div></div>
   <div class="playcross" id="playcross" aria-hidden="true"><span></span></div>
-  <div class="game-top-left">
-    <div class="hud-pill wind-widget wind-calm" id="wind" role="status" aria-label="Vento: 0 quilômetros por hora, sem desvio">
-      <div class="wind-caption"><span>🌬 VENTO</span><strong class="wind-speed">0,0 km/h</strong></div>
-      <div class="wind-main">
-        <svg class="wind-arrow" aria-hidden="true" viewBox="0 0 80 32" focusable="false">
+  <div class="cm-arena-readouts" aria-label="Indicadores do disparo">
+    <div class="hud-pill cm-stat-card" id="distance" role="status" aria-label="Distância do alvo: 10 metros">
+      <span class="cm-stat-icon" aria-hidden="true">🎯</span>
+      <div class="cm-stat-content"><span class="cm-stat-title">DISTÂNCIA</span><strong class="cm-stat-value" id="cm-distance-value">10 m</strong></div>
+    </div>
+    <div class="hud-pill cm-stat-card" id="shots" role="status" aria-label="Flecha 1 de 5">
+      <span class="cm-stat-icon" aria-hidden="true">🏹</span>
+      <div class="cm-stat-content"><span class="cm-stat-title">FLECHAS</span><strong class="cm-stat-value" id="cm-shots-value">1 / 5</strong></div>
+    </div>
+    <div class="hud-pill cm-stat-card wind-widget wind-calm" id="wind" role="status" aria-label="Vento: 0 quilômetros por hora, sem desvio">
+      <span class="cm-stat-icon" aria-hidden="true">🌬️</span>
+      <div class="wind-caption cm-stat-content"><span class="cm-stat-title">VENTO</span><strong class="wind-speed cm-stat-value">0,0 km/h</strong></div>
+    </div>
+    <div class="hud-pill cm-stat-card cm-stat-direction wind-calm" id="wind-direction" role="status" aria-label="Direção do vento: sem desvio">
+      <span class="cm-stat-icon" aria-hidden="true">
+        <svg class="wind-arrow" viewBox="0 0 80 32" focusable="false">
           <path d="M3 12h47V3l27 13-27 13v-9H3z" fill="currentColor" stroke="#372a12" stroke-width="2" stroke-linejoin="round"/>
         </svg>
-        <span class="wind-direction-text">SEM VENTO</span>
-      </div>
+      </span>
+      <div class="wind-main cm-stat-content"><span class="cm-stat-title">DIREÇÃO</span><strong class="wind-direction-text cm-stat-value">SEM DESVIO</strong></div>
     </div>
-    <div class="hud-pill" id="distance">🎯 NÍVEL 1 · 10 METROS</div>
   </div>
-  <div class="game-top-right"><div class="hud-pill" id="shots">🏹 FLECHA 1 / 5</div><div class="hud-pill" id="power">⚡ FORÇA 0%</div></div>
+  <div class="game-top-right"><div class="hud-pill" id="power">⚡ FORÇA 0%</div></div>
   <div class="instruction" id="instruction">MOVA OU ARRASTE PARA MIRAR • SEGURE PARA PUXAR • SOLTE PARA ATIRAR</div>
   <div class="hit" id="hit"></div>
   <div class="finish hidden" id="finish">
