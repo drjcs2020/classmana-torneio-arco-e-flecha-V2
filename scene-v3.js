@@ -49,7 +49,11 @@ export function initScene(canvas, getSettings) {
       if(Number.isFinite(a.x)&&Number.isFinite(a.y)&&r>0)return {x:a.x*kx,y:a.y*ky,r};
     }
     const r=Math.min(h*.105,w*.082)*targetScale(distance);
-    return {x:w*(.50+shift),y:h*(.45+(s.verticalShift||0)),r};
+    const moving=s.level==='avancado'||s.level==='lendario';
+    const meters=clamp(Number(distance)||10,10,150);
+    const footY=h*(.65+.28*Math.pow((150-meters)/140,2.1));
+    return {x:w*(.50+shift),
+      y:moving?h*(.45+(s.verticalShift||0)):footY-1.48*r,r};
   }
   function fallbackSightGeometry(){
     const {w,h}=canvasSize(),size=h*.89;
@@ -256,14 +260,23 @@ export function initScene(canvas, getSettings) {
     const setting=getSettings()||{},camZ=7,targetZ=-9,{w,h}=canvasSize();
     const units=h/(2*Math.tan(41*Math.PI/360)*(camZ-targetZ));
     const x=((setting.shift||0)*w)/units;
-    // Real mesh scale changes with the displayed distance (not just an HUD label).
     const scale=targetScale(setting.distance);
     targetRoot.setLocalScale(scale,scale,scale);
-    // A base do cavalete acompanha a escala da distância e continua no chão.
     const moving=setting.level==='avancado'||setting.level==='lendario';
-    const fixedY=-.28+2.02*scale;
+    // O fundo da V2 é uma pintura: a grama pintada não coincide com o
+    // plano do chão 3D da V1. Ajustar a projeção do cavalete à perspectiva
+    // da GRAMA para evitar o alvo flutuando em todas as distâncias.
+    const meters=clamp(Number(setting.distance)||10,10,150);
+    const footY=h*(.65+.28*Math.pow((150-meters)/140,2.1));
+    const projectedRadius=1.34*scale*units;
+    const centerY=footY-1.48*projectedRadius;
+    const projectedX=w*(.5+(setting.shift||0));
+    const grounded=camera?.camera?.screenToWorld(
+      projectedX,centerY,camZ-targetZ);
     const suspendedY=2.05-(setting.verticalShift||0)*h/units;
-    targetRoot.setLocalPosition(x,moving?suspendedY:fixedY,-9);
+    if(moving||!grounded||!Number.isFinite(grounded.y))
+      targetRoot.setLocalPosition(x,moving?suspendedY:(-.28+2.02*scale),targetZ);
+    else targetRoot.setPosition(grounded);
     if(targetStand)targetStand.enabled=!moving;
     parent.dataset.targetStand=moving?'suspended':'standing';
     if(movingRail)movingRail.enabled=moving;
