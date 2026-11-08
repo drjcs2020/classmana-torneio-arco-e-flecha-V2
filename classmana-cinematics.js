@@ -6,6 +6,8 @@ const houses={
  C:{name:'DRAGÃO DE ESMERALDA',short:'4º C',color:'#80e9aa'}
 };
 const getHouse=id=>houses[id]?id:'A';
+// Artes oficiais fornecidas para a V2: escudo e moldura de cada Casa.
+const crest=house=>'assets/v2/crests/'+({A:'aguia',B:'leao',C:'dragao'}[getHouse(house)])+'.webp';
 const portrait=(house,gender='m')=>{
  const family={A:'aguia-dourada',B:'leao-de-fogo',C:'dragao-de-esmeralda'}[getHouse(house)];
  const actor=(gender==='f'||gender==='female')?'arqueira':'arqueiro';
@@ -101,6 +103,11 @@ function versus(config){
  outer.dataset.mode=config.mode||'duel'; // estilização visual específica da prévia contra o robô
  const embers=emberLayer(outer,config.house,52);
  const shell=node('div','cm-vs-shell');
+ const heading=node('div','cm-combat-heading');
+ const leftCrest=node('img','cm-combat-heading-crest'),rightCrest=node('img','cm-combat-heading-crest');
+ leftCrest.src=crest(own.house);rightCrest.src=crest(rival.house);
+ leftCrest.alt='Escudo '+houses[getHouse(own.house)].name;
+ rightCrest.alt='Escudo '+houses[getHouse(rival.house)].name;
  const title=node('h2','cm-vs-title',config.mode==='bot'?'DESAFIO DE TREINO':'DUELO ENTRE ARQUEIROS');
  title.id='cm-vs-title';
  const sub=node('p','cm-vs-sub','🏹 CINCO FLECHAS • MAIOR PONTUAÇÃO VENCE');
@@ -113,7 +120,8 @@ function versus(config){
  const cancel=node('button','cm-vs-cancel','← VOLTAR');
  cancel.id='cm-vs-cancel';cancel.type='button';
  actions.append(start,cancel);
- shell.append(title,sub,fighters,actions,node('p','cm-vs-note','O convite só é enviado uma vez. O placar permanece vinculado ao jogador.'));
+ heading.append(leftCrest,title,rightCrest);
+ shell.append(heading,sub,fighters,actions,node('p','cm-vs-note','O convite só é enviado uma vez. O placar permanece vinculado ao jogador.'));
  outer.append(shell);document.body.append(outer);
  const previousFocus=document.activeElement;
  activeDialog=outer;
@@ -161,6 +169,24 @@ function resultView({player,house,rival,rivalHouse,gender='m',rivalGender='m',ow
  const card=finish.querySelector('.finish-card');if(!card)return;
  const eyebrow=card.querySelector(':scope > small');
  if(eyebrow)eyebrow.textContent=mode==='bot'?'🏆 RESULTADO DO TREINO':mode==='practice'?'🏹 RESULTADO DO TREINO LIVRE':'🏆 RESULTADO DO TORNEIO';
+ // Mesmo conjunto de escudos e ornamentos na introdução e no resultado.
+ const finishTitle=card.querySelector('#finish-title');
+ if(finishTitle){
+  let heading=card.querySelector('.cm-finish-heading');
+  if(!heading){
+   heading=node('div','cm-combat-heading cm-finish-heading');
+   finishTitle.before(heading);
+   const lhs=node('img','cm-combat-heading-crest'),rhs=node('img','cm-combat-heading-crest');
+   heading.append(lhs,finishTitle,rhs);
+  }
+  const shields=heading.querySelectorAll('.cm-combat-heading-crest');
+  if(shields.length===2){
+   shields[0].src=crest(house);
+   shields[1].src=crest(rivalHouse);
+   shields[0].alt='Escudo '+houses[getHouse(house)].name;
+   shields[1].alt='Escudo '+houses[getHouse(rivalHouse)].name;
+  }
+ }
  card.querySelector('.cm-final-duel')?.remove();
  card.querySelector('.cm-embers')?.remove();
  emberLayer(card,house,17);
