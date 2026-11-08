@@ -1,7 +1,7 @@
 import {initScene} from './scene-v3.js?v=restored-3d-models61';
 import {CIRCUITS,LEVELS,targetMotion,obstacleBlocks,distanceDifficulty,flightSeconds} from './arena-difficulty.js?v=3';
 import {arenaAudio} from './arena-audio.js?v=lobbydefault49';
-import {cinematics} from './classmana-cinematics.js?v=vs-no-flash56';
+import {cinematics} from './classmana-cinematics.js?v=duelo-retratos62';
 import {initAtmosphere} from './arena-atmosphere.js?v=no-crowd15';
 import {online} from './online-client.js?v=api10';
 import {mountSpriteHUD} from './sprite-hud.js?v=1';
@@ -615,9 +615,10 @@ async function finishMatch(){
    if(title.includes('VITÓRIA'))arenaAudio.play('victory');
    else if(rival!==null&&total<rival)arenaAudio.play('defeat');
    renderFinishScore(total,rival===null?'AGUARDANDO':rival);
-   cinematics.resultView({player:match.player,house:match.house,
+   cinematics.resultView({player:match.player,house:match.house,gender:archerGender(),
     rival:isCreator?ch.recipient.name:ch.creator.name,rivalHouse:match.rivalId?.[0]||'A',
-    ownShots:response.shots||[],rivalShots:(isCreator?ch.recipientShots:ch.creatorShots)||[],opponent:rival===null?'—':rival});
+    ownShots:response.shots||[],rivalShots:(isCreator?ch.recipientShots:ch.creatorShots)||[],
+    opponent:rival===null?'—':rival,mode:'duel',ownTotal:total,rivalTotal:rival===null?null:Number(rival)});
    $('share-help').textContent='✅ Resultado registrado no servidor do torneio.';
    $('hud-score').textContent=total;$('hud-rival').textContent=rival===null?'—':rival;
    refreshInbox().catch(console.warn);renderRanking().catch(console.warn);
@@ -642,8 +643,10 @@ async function finishMatch(){
   ?'Você: '+total+' pontos  •  Robô Arqueiro: '+rivalScore+' pontos  •  '+(total>rivalScore?'Vitória do jogador':total<rivalScore?'Vitória do robô':'Empate')
   :'Sua pontuação: '+total+' de 50 pontos nesta rodada.';
  renderFinishScore(total,rivalScore===undefined?'—':rivalScore,rivalScore===undefined?'TREINO LIVRE':'ROBÔ');
- cinematics.resultView({player:match.player,house:match.house,rival:match.mode==='bot'?'ROBÔ ARQUEIRO':'SEU RECORDE',
-  rivalHouse:match.mode==='bot'?'C':match.house,ownShots:match.scores,rivalShots:bot,
+ cinematics.resultView({player:match.player,house:match.house,gender:archerGender(),
+  rival:match.mode==='bot'?'ROBÔ ARQUEIRO':'SEU RECORDE',
+  rivalHouse:match.mode==='bot'?'C':match.house,rivalGender:archerGender(),
+  ownShots:match.scores,rivalShots:bot,
   opponent:rivalScore===undefined?'—':rivalScore,mode:match.mode,ownTotal:total,rivalTotal:rivalScore??null});
  if(match.mode==='bot')arenaAudio.play(total>rivalScore?'victory':total<rivalScore?'defeat':'banner');
  $('share-help').textContent='Treino e partidas com robô ficam neste navegador; somente desafios validados entram no ranking oficial.';
