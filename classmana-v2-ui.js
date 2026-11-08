@@ -27,6 +27,7 @@ function mount(){
  const home=()=>{
   document.body.classList.add('cm-v2-home-mode');
   document.body.classList.remove('cm-v2-onboarding');
+  delete document.body.dataset.v2Entry;
   search.value='';
   window.scrollTo?.(0,0);
  };
@@ -42,7 +43,7 @@ function mount(){
  };
  document.querySelectorAll('[data-v2-action]').forEach(button=>button.addEventListener('click',guard(()=>{
   const action=button.dataset.v2Action;
-  if(action==='jogar')enter();
+  if(action==='jogar'){delete document.body.dataset.v2Entry;enter();}
   if(action==='desafios'){
    enter();
    document.body.dataset.v2Entry='challenges';
@@ -50,6 +51,17 @@ function mount(){
   if(action==='ranking')document.querySelector('[data-view="ranking"]')?.click();
   if(action==='regras')document.querySelector('[data-view="regras"]')?.click();
  })));
+ // DESAFIOS reutiliza o botão de Casa original (selectHouse -> QUEM VAI JOGAR).
+ document.querySelectorAll('[data-v2-challenge-house]').forEach(card=>{
+  const chosen=card.dataset.v2ChallengeHouse;
+  const names=window.CLASSMANA_ROSTER?.[chosen];
+  const total=Array.isArray(names)?names.length:0;
+  const counter=card.querySelector('.cm-v2-challenge-card-label small');
+  if(counter)counter.textContent=total?total+' arqueiros':'Escolher turma';
+  card.addEventListener('click',guard(()=>{
+   document.querySelector('.house[data-house="'+chosen+'"]')?.click();
+  }));
+ });
  $('cm-v2-navigate-back')?.addEventListener('click',guard(()=>{
   if(!root||root.dataset.step==='reino')home();
   else if(root.dataset.step==='perfil'){
