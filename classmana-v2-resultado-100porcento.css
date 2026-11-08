@@ -264,3 +264,83 @@ body[data-page="arena"] #view-arena #finish.cm-cinematic-result
   .cm-final-player[data-house="B"] .cm-final-shots{
   z-index:6!important;
 }
+
+/* RESULTADO V68 — recuperar o botão verde e a arte oficial do Leão. */
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .finish-card>small{
+  font-size:clamp(15px,2.8dvh,21px)!important;
+  line-height:1.14!important;
+  font-weight:900!important;
+  letter-spacing:.1em!important;
+  color:#ffe2aa!important;
+  text-shadow:0 2px 3px #000!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-duel{
+  grid-template-columns:minmax(0,1fr) clamp(113px,11vw,143px) minmax(0,1fr)!important;
+  width:min(100%,860px)!important;
+  gap:clamp(5px,1.1vw,16px)!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-vs{
+  display:block!important;
+  width:clamp(108px,10.5vw,140px)!important;
+  max-width:none!important;
+  height:clamp(105px,19dvh,142px)!important;
+  max-height:none!important;
+  background:url("assets/v2/frames/versus.webp") center / contain no-repeat!important;
+  font-size:0!important;color:transparent!important;
+  filter:drop-shadow(0 3px 9px #ffae3675)!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-player[data-house="B"] .cm-combat-portrait{
+  z-index:4!important;
+  background:none!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result
+ .cm-final-player[data-house="B"] .cm-combat-portrait img{
+  opacity:1!important;visibility:visible!important;
+  display:block!important;
+  background:none!important;
+  filter:none!important;
+}
+/* Botão com texto real, mesmo quando o estilo antigo oculta a legenda. */
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result #play-again:not(.hidden){
+  position:relative!important;isolation:isolate!important;
+  display:inline-flex!important;align-items:center!important;justify-content:center!important;
+  min-width:0!important;width:auto!important;
+  flex:1 1 200px!important;max-width:390px!important;
+  height:clamp(47px,7.5dvh,60px)!important;min-height:47px!important;
+  padding:5px 14px!important;margin:0!important;
+  border:3px solid #ffdd86!important;border-radius:12px!important;
+  background:linear-gradient(180deg,#27ca6e 0%,#099d50 48%,#065d33 100%)!important;
+  background-image:linear-gradient(180deg,#27ca6e 0%,#099d50 48%,#065d33 100%)!important;
+  color:#fff7d7!important;-webkit-text-fill-color:#fff7d7!important;
+  text-indent:0!important;font-size:19px!important;
+  box-shadow:0 4px 0 #78531e,0 7px 15px #0008!important;
+  cursor:pointer!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result #play-again::before,
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result #play-again::after{
+  display:none!important;content:none!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result #play-again .cm-result-replay-label{
+  display:inline-block!important;position:relative!important;
+  z-index:20!important;visibility:visible!important;opacity:1!important;
+  width:auto!important;height:auto!important;min-height:0!important;
+  padding:0!important;margin:0!important;
+  background:none!important;border:0!important;
+  font:900 clamp(15px,1.55vw,20px)/1.05 Georgia,serif!important;
+  color:#fff6da!important;-webkit-text-fill-color:#fff6da!important;
+  text-shadow:0 2px 3px #063a1d,0 0 5px #012e18!important;
+  text-indent:0!important;white-space:nowrap!important;
+  pointer-events:none!important;
+}
+@media(max-width:700px){
+ body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-duel{
+  grid-template-columns:minmax(0,1fr) 48px minmax(0,1fr)!important;
+  width:100%!important;gap:3px!important;
+ }
+ body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-vs{
+  width:47px!important;height:65px!important;
+ }
+ body[data-page="arena"] #view-arena #finish.cm-cinematic-result #play-again .cm-result-replay-label{
+  font-size:clamp(12px,2.9vw,16px)!important;
+ }
+}
