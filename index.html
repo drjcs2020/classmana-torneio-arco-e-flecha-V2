@@ -5,6 +5,19 @@
 <meta name="theme-color" content="#081a36">
 <meta name="description" content="Torneio de Arco e Flecha das três Casas ClassMana: Águia Dourada, Leão de Fogo e Dragão de Esmeralda.">
 <title>ClassMana V2 — Torneio das Três Casas</title>
+<!-- A volta da arena carrega diretamente a seleção do desafio, sem piscar outras telas. -->
+<script>if(new URLSearchParams(location.search).get('continuar')==='1')document.documentElement.classList.add('cm-v2-resume-pending');</script>
+<style id="cm-v2-resume-direct">
+html.cm-v2-resume-pending body[data-page="lobby"] #view-inicio{visibility:hidden!important}
+html.cm-v2-resume-pending body[data-page="lobby"]::after{
+ content:"⚔ ABRINDO ESCOLHA DO DESAFIO...";
+ position:fixed;inset:0;z-index:10000;
+ display:grid;place-items:center;box-sizing:border-box;padding:24px;text-align:center;
+ background:linear-gradient(#07182bb5,#08162ecc),url('assets/v2/backgrounds/castle.webp') center/cover no-repeat;
+ color:#ffe3a2;font:800 clamp(17px,3.5vw,30px)/1.3 Georgia,serif;
+ text-shadow:0 3px 6px #000;letter-spacing:.08em
+}
+</style>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Cinzel:wght@600;700;800&family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css?v=2">
@@ -361,9 +374,9 @@
   <p id="cm-teacher-status" role="status" aria-live="polite">Entre com a senha do professor.</p>
 </dialog>
 <div id="toast" role="status" aria-live="polite"></div>
-<script src="roster.js?v=2"></script><script src="teams.js?v=1"></script><script type="module" src="game-v3.js?v=20261108arena-vs09"></script>
+<script src="roster.js?v=2"></script><script src="teams.js?v=1"></script><script type="module" src="game-v3.js?v=20261108botfinish11"></script>
 <script type="module" src="wind-panel-restored.js?v=wind20"></script>
-<script src="classmana-v2-ui.js?v=20261108challenge02" defer></script>
+<script src="classmana-v2-ui.js?v=20261108direct11" defer></script>
 <script src="classmana-v2-lobby-exato.js?v=20261108art04" defer></script>
 <script type="module" src="classmana-professor-v2.js?v=20261108teacher02"></script>
 </body>
