@@ -84,6 +84,7 @@ function versus(config){
  outer.setAttribute('aria-modal','true');
  outer.setAttribute('aria-labelledby','cm-vs-title');
  outer.dataset.house=getHouse(own.house);
+ outer.dataset.mode=config.mode||'duel'; // estilização visual específica da prévia contra o robô
  const embers=emberLayer(outer,config.house,52);
  const shell=node('div','cm-vs-shell');
  const title=node('h2','cm-vs-title',config.mode==='bot'?'DESAFIO DE TREINO':'DUELO ENTRE ARQUEIROS');
