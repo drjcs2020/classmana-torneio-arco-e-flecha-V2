@@ -1,0 +1,236 @@
+/* ClassMana V2 — correção do RESULTADO em 100% de zoom.
+   Apenas #finish, sem alterar motor, mira, dinâmica de tiros, seleção ou lobby.
+   A proporção das cartas é controlada pela altura da janela (dvh), não pela
+   largura de um grid que antes inflava a arte e cortava título/botões. */
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result:not(.hidden){
+  position:fixed!important;inset:0!important;box-sizing:border-box!important;
+  display:flex!important;flex-direction:column!important;
+  justify-content:flex-start!important;align-items:center!important;
+  padding:clamp(6px,1.2dvh,14px)!important;
+  overflow-x:hidden!important;overflow-y:auto!important;overscroll-behavior:contain!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .finish-card{
+  box-sizing:border-box!important;
+  display:flex!important;flex-direction:column!important;
+  flex:0 0 auto!important;align-items:center!important;justify-content:flex-start!important;
+  gap:clamp(3px,.75dvh,9px)!important;
+  width:min(98%,1050px)!important;max-width:1050px!important;
+  height:auto!important;max-height:none!important;min-height:0!important;
+  padding:clamp(3px,.6dvh,10px) 8px!important;
+  margin:auto!important;
+  border:0!important;border-radius:0!important;
+  box-shadow:none!important;background:transparent!important;
+  overflow:visible!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .finish-card>small{
+  flex:none!important;padding:0!important;margin:0!important;
+  font-size:clamp(11px,1.08vw,14px)!important;
+  line-height:1.1!important;letter-spacing:.1em!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-finish-heading{
+  flex:none!important;width:min(100%,950px)!important;
+  gap:clamp(4px,.7vw,13px)!important;margin:0 auto!important;
+  min-height:0!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-finish-heading .cm-combat-heading-crest{
+  width:clamp(29px,5dvh,60px)!important;height:clamp(29px,5dvh,60px)!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result #finish-title{
+  box-sizing:border-box!important;
+  flex:1 1 auto!important;min-width:0!important;
+  padding:clamp(5px,.85dvh,10px) clamp(6px,1vw,14px)!important;
+  margin:0!important;
+  font-size:clamp(21px,2.8vw,37px)!important;
+  line-height:1.03!important;
+  text-wrap:balance!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result #finish-desc{
+  flex:none!important;box-sizing:border-box!important;
+  margin:0!important;padding:clamp(2px,.3dvh,5px) 10px!important;
+  line-height:1.18!important;font-size:clamp(11px,1.24vw,16px)!important;
+  max-width:min(100%,940px)!important;
+}
+/* O grid não deve determinar a altura das imagens nem encolher artificialmente
+   a área do conteúdo. Todos os tamanhos cabem num monitor 1342x641 em 100%. */
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-duel,
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result[data-cm-result-mode="bot"] .cm-final-duel{
+  box-sizing:border-box!important;
+  display:grid!important;flex:0 0 auto!important;
+  grid-template-columns:minmax(0,1fr) clamp(52px,8vw,90px) minmax(0,1fr)!important;
+  justify-items:center!important;align-items:center!important;
+  width:min(100%,810px)!important;max-width:810px!important;
+  height:auto!important;min-height:0!important;max-height:none!important;
+  gap:clamp(4px,1.2vw,14px)!important;
+  margin:clamp(0px,.3dvh,4px) auto!important;padding:0!important;
+  overflow:visible!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-player[data-house],
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result[data-cm-result-mode="bot"] .cm-final-player[data-house]{
+  box-sizing:border-box!important;
+  position:relative!important;display:block!important;
+  flex:none!important;place-self:center!important;
+  /* 0.722 = largura/altura real da moldura ornamental. */
+  width:min(29.6dvh,238px)!important;
+  height:min(41dvh,330px)!important;
+  min-width:0!important;min-height:0!important;
+  max-width:none!important;max-height:none!important;
+  aspect-ratio:.722!important;
+  margin:0!important;padding:0!important;
+  overflow:visible!important;
+  background:transparent!important;background-image:none!important;
+  border:0!important;outline:0!important;border-radius:0!important;
+  box-shadow:none!important;
+  backdrop-filter:none!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-player[data-house]::after{
+  box-sizing:border-box!important;position:absolute!important;
+  inset:0!important;width:100%!important;height:100%!important;
+  background-position:center!important;background-size:100% 100%!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-player[data-house] .cm-combat-portrait{
+  box-sizing:border-box!important;
+  position:absolute!important;
+  left:14%!important;top:12.5%!important;width:72%!important;height:58%!important;
+  min-height:0!important;max-height:none!important;
+  margin:0!important;padding:0!important;overflow:hidden!important;
+  border:0!important;box-shadow:none!important;background:transparent!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-player[data-house] .cm-combat-portrait img{
+  position:absolute!important;
+  display:block!important;inset:0!important;
+  width:100%!important;height:100%!important;
+  min-width:0!important;min-height:0!important;max-width:none!important;max-height:none!important;
+  object-fit:cover!important;object-position:50% 20%!important;
+  transform:scale(1.42)!important;transform-origin:50% 24%!important;
+  padding:0!important;margin:0!important;
+  background:transparent!important;opacity:1!important;visibility:visible!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-player[data-house]>b{
+  font-size:clamp(12px,1.42vw,18px)!important;
+  line-height:1.05!important;
+  top:71.8%!important;left:12.5%!important;width:75%!important;
+  white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-player[data-house]>small{
+  top:78%!important;left:12.5%!important;width:75%!important;
+  font-size:clamp(8px,.86vw,11px)!important;
+  line-height:1!important;
+  white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-player[data-house] .cm-final-shots{
+  position:absolute!important;left:16%!important;top:86.5%!important;
+  width:68%!important;height:8%!important;
+  min-height:0!important;max-height:8%!important;
+  margin:0!important;padding:0!important;
+  display:flex!important;flex-wrap:nowrap!important;
+  justify-content:center!important;align-items:center!important;gap:2px!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-player[data-house] .cm-final-shots span{
+  box-sizing:border-box!important;
+  flex:1 1 0!important;min-width:0!important;max-width:34px!important;
+  height:100%!important;min-height:0!important;
+  font-size:clamp(10px,1.12vw,14px)!important;
+  line-height:1!important;white-space:nowrap!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-vs{
+  box-sizing:border-box!important;width:100%!important;
+  max-width:90px!important;height:clamp(55px,9.8dvh,115px)!important;
+  margin:0!important;padding:0!important;align-self:center!important;
+}
+/* Os totais ficam fora das cartas, em duas faixas acessíveis. */
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result #finish-results.cm-score-grid,
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result[data-cm-result-mode="bot"] #finish-results.cm-score-grid{
+  box-sizing:border-box!important;
+  display:grid!important;flex:0 0 auto!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  width:min(100%,840px)!important;max-width:840px!important;
+  margin:0 auto!important;padding:0!important;gap:clamp(7px,1.5vw,18px)!important;
+  background:transparent!important;border:0!important;box-shadow:none!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-score-cell{
+  box-sizing:border-box!important;
+  min-width:0!important;min-height:0!important;
+  height:clamp(45px,7.8dvh,64px)!important;
+  padding:4px 9px!important;margin:0!important;
+  display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;
+  justify-content:center!important;align-items:center!important;
+  gap:clamp(4px,.9vw,12px)!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-score-label{
+  font-size:clamp(11px,1.15vw,15px)!important;line-height:1!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-score-value{
+  font-size:clamp(26px,3.3vw,43px)!important;line-height:1!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-score-unit{
+  font-size:clamp(10px,1vw,14px)!important;line-height:1!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .finish-actions{
+  box-sizing:border-box!important;
+  display:flex!important;flex:0 0 auto!important;
+  align-items:center!important;justify-content:center!important;
+  flex-wrap:wrap!important;gap:clamp(6px,1vw,12px)!important;
+  width:min(100%,860px)!important;max-width:860px!important;
+  margin:0 auto!important;padding:0!important;
+  min-height:0!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .finish-actions button:not(.hidden){
+  box-sizing:border-box!important;
+  flex:1 1 180px!important;
+  max-width:400px!important;
+  height:clamp(41px,6.8dvh,53px)!important;
+  min-height:0!important;
+  padding:3px 10px!important;
+  line-height:1.05!important;font-size:clamp(12px,1.4vw,18px)!important;
+  margin:0!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .share-help{
+  display:block!important;flex:0 0 auto!important;
+  box-sizing:border-box!important;
+  max-width:100%!important;margin:0!important;padding:3px 9px!important;
+  font-size:clamp(9px,.87vw,12px)!important;line-height:1.14!important;
+  text-align:center!important;
+}
+/* Paisagem pode continuar visível, sem outra caixa azul atrás da moldura. */
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-player[data-house].cm-result-winner{
+  background:transparent!important;border:0!important;
+  box-shadow:none!important;filter:drop-shadow(0 0 7px #ffd269ac)!important;
+}
+@media(max-height:700px){
+ body[data-page="arena"] #view-arena #finish.cm-cinematic-result #finish-title{
+   font-size:clamp(19px,2.6vw,33px)!important;
+ }
+ body[data-page="arena"] #view-arena #finish.cm-cinematic-result .finish-card{
+   gap:clamp(2px,.48dvh,6px)!important;
+ }
+ body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-player[data-house]{
+   width:min(29.6dvh,207px)!important;height:min(41dvh,287px)!important;
+ }
+ body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-score-cell{height:clamp(42px,7dvh,50px)!important}
+ body[data-page="arena"] #view-arena #finish.cm-cinematic-result .finish-actions button:not(.hidden){height:clamp(40px,6.5dvh,47px)!important}
+}
+@media(max-width:680px){
+ body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-duel{
+   grid-template-columns:minmax(0,1fr) 38px minmax(0,1fr)!important;
+   gap:3px!important;width:100%!important;
+ }
+ body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-player[data-house]{
+   width:min(30dvh,37vw,190px)!important;
+   height:min(41.5dvh,51.2vw,263px)!important;
+ }
+ body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-vs{
+   width:38px!important;height:50px!important;
+ }
+ body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-combat-heading-crest{
+   width:26px!important;height:26px!important;
+ }
+ body[data-page="arena"] #view-arena #finish.cm-cinematic-result #finish-title{
+   font-size:clamp(16px,4.3vw,25px)!important;
+ }
+ body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-score-label{font-size:10px!important}
+ body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-score-value{font-size:clamp(22px,5vw,31px)!important}
+ body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-score-unit{font-size:9px!important}
+ body[data-page="arena"] #view-arena #finish.cm-cinematic-result .finish-actions button:not(.hidden){
+   flex-basis:125px!important;font-size:11px!important;height:40px!important;
+ }
+}
