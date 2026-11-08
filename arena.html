@@ -5,6 +5,23 @@
 <meta name="theme-color" content="#d6f9e9">
 <meta name="description" content="Torneio de Arco e Flecha das três Casas ClassMana: Águia Dourada, Leão de Fogo e Dragão de Esmeralda.">
 <title>ClassMana — Arena de Arco e Flecha</title>
+<!-- Evita exibir a interface antiga antes da restauração da partida V2. -->
+<script>document.documentElement.classList.add('cm-v2-arena-loading');</script>
+<style id="cm-v2-arena-ready-gate">
+html.cm-v2-arena-loading body[data-page="arena"] .page{
+ visibility:hidden!important;
+}
+html.cm-v2-arena-loading body[data-page="arena"]::after{
+ content:"🏹 PREPARANDO A ARENA...";
+ position:fixed;inset:0;z-index:100000;
+ display:grid;place-items:center;padding:20px;
+ box-sizing:border-box;text-align:center;
+ background:#09162c url('assets/v2/backgrounds/arena.webp') center center/cover no-repeat;
+ color:#ffe8aa;font:900 clamp(18px,3.2vw,32px)/1.3 Georgia,serif;
+ text-shadow:0 2px 9px #000,0 1px 3px #000;
+ letter-spacing:.045em;
+}
+</style>
 <style id="cm-arena-no-legacy-flash">
 /* A página arena.html nunca pode mostrar a seleção de Reinos do HTML legado. */
 body[data-page="arena"] #view-inicio,
