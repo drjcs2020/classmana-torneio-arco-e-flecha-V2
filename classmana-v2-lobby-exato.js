@@ -23,7 +23,7 @@
    el.dataset.sessionOccupied=person?'true':'false';
    el.title=person?'Sessão de '+person+'. Se não é você, encerre antes de jogar.':'Pronto para jogar. Escolha seu nome.';
   }
-  if(notice)notice.dataset.visible='false';
+  if(notice){notice.dataset.visible='false';notice.hidden=true;}
  }
  // Tooltip only when the user hovers, focuses or taps; never a fixed banner.
  const notice=$('cm-v2-session-notice');
@@ -36,11 +36,11 @@
   }else{
    notice.textContent=person?'Sessão de '+person+'. Se você é outro aluno, encerre a sessão anterior.':'Sessão livre · Selecione JOGAR para começar.';
   }
-  notice.dataset.visible='true';clearTimeout(noteTimer);
+  notice.hidden=false;notice.dataset.visible='true';clearTimeout(noteTimer);
  }
  function hideTooltip(delay=0){
   clearTimeout(noteTimer);
-  noteTimer=setTimeout(()=>{if(notice)notice.dataset.visible='false'},delay);
+  noteTimer=setTimeout(()=>{if(notice){notice.dataset.visible='false';notice.hidden=true;}},delay);
  }
  for(const action of ['encerrar','jogar']){
   const button=document.querySelector('[data-v2-action="'+action+'"]');
