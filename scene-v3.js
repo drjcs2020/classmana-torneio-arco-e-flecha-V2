@@ -454,7 +454,7 @@ export function initScene(canvas, getSettings) {
       entity.name='Approved House arrow GLB';
       // A flecha importada aponta para a esquerda, não para a profundidade
       // da câmera, para aparecer deitada e encaixada na corda.
-      entity.setLocalScale(.27,.27,.27);
+      entity.setLocalScale(.42,.42,.42);
       entity.setLocalEulerAngles(0,-78,0);
       arrow.addChild(entity);
       for(const child of arrow.children){if(child!==entity)child.enabled=false;}
@@ -503,7 +503,13 @@ export function initScene(canvas, getSettings) {
     const offset=bowRoot.getLocalRotation().transformVector(new pc.Vec3(-1.15*scale,.25*scale,-.08*scale));
     bowRoot.setLocalPosition(sightLocal.sub(offset));
     // A tensão desloca a flecha junto com a corda.
-    if(arrowLoaded)arrowLoaded.setLocalPosition(-.38,-.03,.06+.14*power);
+    if(arrowLoaded){
+      // O GLB do arco tem corda em (-.64,.19) no referencial do bowRoot.
+      // Sua haste tem nock em Z=-1.4: girando -78° em Y, a cauda fica
+      // exatamente na corda; o modelo 3D e a flecha se movem juntos.
+      const modeled=Boolean(bowRoot.__mesh3d);
+      arrowLoaded.setLocalPosition(modeled?-1.20:-.38,modeled?.19:-.03,.06+.14*power);
+    }
     if(bowString)bowString.setLocalPosition(0,0,.19*power);
   }
   function update3D(dt){if(!ready)return;animT+=dt;
