@@ -159,6 +159,8 @@ function resultView({player,house,rival,rivalHouse,gender='m',rivalGender='m',ow
  const outcome=scored?(ownTotal>rivalTotal?'win':ownTotal<rivalTotal?'loss':'draw'):'pending';
  finish.dataset.cmResultOutcome=outcome;
  const card=finish.querySelector('.finish-card');if(!card)return;
+ const eyebrow=card.querySelector(':scope > small');
+ if(eyebrow)eyebrow.textContent=mode==='bot'?'🏆 RESULTADO DO TREINO':mode==='practice'?'🏹 RESULTADO DO TREINO LIVRE':'🏆 RESULTADO DO TORNEIO';
  card.querySelector('.cm-final-duel')?.remove();
  card.querySelector('.cm-embers')?.remove();
  emberLayer(card,house,17);
