@@ -47,6 +47,16 @@ let incoming=null,scoreTab='players',onlineInbox=[],onlineLoading=false,startMat
 let identifiedPlayerId='';
 const CM_ACTIVE_STUDENT='cm_active_student_v2';
 const CM_INTERNAL_RETURN='cm_internal_duel_return_v2';
+const CM_LOBBY_STUDENT='cm_v2_lobby_student';
+function cmStoredLobbyStudent(){try{const id=localStorage.getItem(CM_LOBBY_STUDENT)||'';return /^[ABC]\d{2}$/.test(id)?id:''}catch{return ''}}
+function cmSignalLobbyStudent(){window.dispatchEvent(new Event('classmana:v2-lobby-session-changed'))}
+function cmRememberLobbyStudent(id){
+ if(!/^[ABC]\d{2}$/.test(id||''))return;
+ try{localStorage.setItem(CM_LOBBY_STUDENT,id)}catch{}
+ cmSignalLobbyStudent();
+}
+function cmClearLobbyStudent(){try{localStorage.removeItem(CM_LOBBY_STUDENT)}catch{}cmSignalLobbyStudent()}
+
 function cmMarkInternalReturn(){try{sessionStorage.setItem(CM_INTERNAL_RETURN,'1')}catch{}}
 function cmCanContinue(){
  try{
@@ -57,12 +67,16 @@ function cmCanContinue(){
  }catch{return false}
 }
 function cmSessionId(){try{return sessionStorage.getItem(CM_ACTIVE_STUDENT)||''}catch{return ''}}
-function cmSaveStudent(id){try{sessionStorage.setItem(CM_ACTIVE_STUDENT,id)}catch{}}
+function cmSaveStudent(id){try{sessionStorage.setItem(CM_ACTIVE_STUDENT,id)}catch{}cmRememberLobbyStudent(id)}
 function cmForgetStudent(){try{sessionStorage.removeItem(CM_ACTIVE_STUDENT);sessionStorage.removeItem('cm_active_archery_match_v2')}catch{}}
 const TEAMS=window.CLASSMANA_TEAMS||{};
 const cmNavigationType=performance.getEntriesByType('navigation')[0]?.type;
 const cmIsLobby=document.body.dataset.page==='lobby';
 const cmResumeSameStudent=cmIsLobby&&cmCanContinue();
+// An unfinished lobby session stays visible even after browser reload.
+if(cmIsLobby&&!cmStoredLobbyStudent()){
+ try{const oldId=cmSessionId()||localStorage.getItem('cm_arco_nome_v2');if(/^[ABC]\d{2}$/.test(oldId||''))cmRememberLobbyStudent(oldId)}catch{}
+}
 if(cmIsLobby&&!cmResumeSameStudent){online.logout();cmForgetStudent();}
 if(document.body.dataset.page==='arena'&&cmNavigationType==='reload'){
  online.logout();cmForgetStudent();location.replace('./');
@@ -101,7 +115,7 @@ function setLobbyStep(step){
 }
 function cmShowActiveSession(){
  const panel=$('cm-previous-session');if(!panel)return;
- const id=identifiedPlayerId||cmSessionId(),player=id&&choices(id[0]).find(p=>p.id===id);
+ const id=identifiedPlayerId||cmSessionId()||cmStoredLobbyStudent(),player=id&&choices(id[0]).find(p=>p.id===id);
  const valid=Boolean(player);
  panel.hidden=!valid;
  const label=$('cm-previous-session-name');
@@ -854,7 +868,7 @@ async function startOnlineClient(){
  try{
   const connected=await online.connect();online.lastError=null;showOnlineStatus();
   if(!connected)return;
-  try{await online.list()}catch(err){console.warn('Lista online indisponível; usando nomes cadastrados no jogo:',err)}
+  try{cmSyncRoster(await online.list())}catch(err){console.warn('Lista online indisponível; usando nomes cadastrados no jogo:',err)}
   const request=new URLSearchParams(location.search);
   // Only a deliberate return from the arena preserves identity.
   // Reloading or reopening the lobby always releases the prior student's account.
@@ -906,6 +920,27 @@ function populateIdentityOptions(){
  const label=document.querySelector('label[for="cm-identity-player"]');
  if(label)label.textContent='ALUNOS DO 4º '+house+' — '+H[house].name.toUpperCase();
 }
+// Mantém a lista local sincronizada com os alunos extras do SQLite V2.
+// As IDs geradas pelo professor são sequenciais: a posição no array permanece estável.
+function cmSyncRoster(students){
+ if(!Array.isArray(students))return;
+ let changed=false;
+ for(const p of students){
+  if(!/^[ABC][0-9]{2}$/.test(p?.id||'')||typeof p.name!=='string')continue;
+  const idx=Number(p.id.slice(1))-1,house=p.id[0];
+  if(idx>=99||idx<0)continue;
+  if(R[house][idx]!==p.name){R[house][idx]=p.name;changed=true;}
+  if(typeof p.team==='string' && p.team)TEAMS[p.id]=p.team;
+ }
+ if(changed && document.body.dataset.page==='lobby'){
+  fillPlayer($('player')?.value);populateIdentityOptions();
+  window.dispatchEvent(new Event('classmana:v2-lobby-session-changed'));
+ }
+}
+window.addEventListener('classmana:v2-roster-updated',event=>{
+ const student=event.detail?.student;
+ if(student)cmSyncRoster([student]);
+});
 populateIdentityOptions();
 $('cm-identity-player')?.addEventListener('change',event=>{
  const id=event.currentTarget.value,found=choices(house).find(p=>p.id===id);
@@ -915,7 +950,9 @@ $('cm-identity-player')?.addEventListener('change',event=>{
 $('cm-confirm-identity')?.addEventListener('click',()=>{
  const id=$('cm-identity-player')?.value||'';
  if(!/^[ABC][0-9]{2}$/.test(id)||id[0]!==house){toast('Escolha seu nome no 4º '+house+'.');$('cm-identity-player')?.focus();return;}
- if(identifiedPlayerId&&identifiedPlayerId!==id){toast('Encerre a sessão atual para trocar de jogador.');return;}
+ if((identifiedPlayerId&&identifiedPlayerId!==id)||(cmStoredLobbyStudent()&&cmStoredLobbyStudent()!==id)){
+  toast('Há outra sessão neste computador. Encerre-a no menu antes de trocar de aluno.');return;
+ }
  identifiedPlayerId=id;cmSaveStudent(id);cmShowActiveSession();
  $('player').value=id;fillPlayer(id);fillRivals();
  $('player').disabled=true;
@@ -941,7 +978,7 @@ document.querySelector('.studio-carousel')?.addEventListener('keydown',event=>{
  }
 });
 cinematics.mountAmbient($('view-inicio'),house,72);
-cinematics.mountAmbient($('cm-v2-home'),house,44);
+cinematics.mountAmbient($('cm-v2-home'),house,92);
 cinematics.mountAmbient($('stage'),house,52);
 cinematics.bindMenuSound(effect=>arenaAudio.play(effect));
 const soundButton=$('arena-sound');
@@ -1008,18 +1045,23 @@ $('online-inbox').addEventListener('click',e=>{if(e.target===$('online-inbox'))$
 $('inbox-list').addEventListener('click',onInboxAction);
 function cmEndSession(){
  if(match?.running){toast('Finalize ou abandone a partida antes de encerrar a sessão.');return}
- const person=choices(identifiedPlayerId?.[0]||house).find(p=>p.id===identifiedPlayerId);
+ const id=identifiedPlayerId||cmStoredLobbyStudent()||cmSessionId()||online.user?.id||'';
+ if(!id)return;
+ const person=choices(id[0]).find(p=>p.id===id);
  if(!confirm('Encerrar a sessão de '+(person?.name||online.user?.name||'jogador atual')+'?'))return;
- online.logout();cmForgetStudent();identifiedPlayerId='';onlineInbox=[];cmNoticePlayer='';
+ online.logout();cmForgetStudent();cmClearLobbyStudent();identifiedPlayerId='';onlineInbox=[];cmNoticePlayer='';
  $('player').disabled=false;$('player').value='guest';cmShowActiveSession();
  if($('cm-identity-player'))$('cm-identity-player').value='';
  fillRivals();cmUpdateBell();showOnlineStatus();
  const endBtn=$('cm-end-session');if(endBtn)endBtn.hidden=true;
- setLobbyStep('reino');toast('Sessão encerrada. Escolha a Casa para começar.');
+ setLobbyStep('reino');
+ if(cmIsLobby){document.body.classList.add('cm-v2-home-mode');document.body.classList.remove('cm-v2-onboarding')}
+ toast('Sessão encerrada. Próximo aluno pode jogar.');
 }
 $('logout').addEventListener('click',cmEndSession);
 $('cm-end-session')?.addEventListener('click',cmEndSession);
 $('cm-previous-session-exit')?.addEventListener('click',cmEndSession);
+$('cm-v2-home-exit')?.addEventListener('click',cmEndSession);
 $('cm-ranking-choice')?.addEventListener('click',()=>openView('ranking'));
 $('cm-open-challenges')?.addEventListener('click',()=>openInbox());
 document.querySelectorAll('[data-rank]').forEach(btn=>btn.addEventListener('click',()=>{

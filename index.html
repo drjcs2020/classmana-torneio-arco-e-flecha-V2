@@ -25,10 +25,13 @@
 <link rel="stylesheet" href="classmana-ref-ranking-results.css?v=visual50">
 <link rel="stylesheet" href="classmana-final-visual.css?v=20261108a">
 <link rel="stylesheet" href="classmana-v2-theme.css?v=20261108v2">
+<link rel="stylesheet" href="classmana-v2-lobby-exato.css?v=20261108art03">
+<link rel="stylesheet" href="classmana-professor-v2.css?v=20261108teacher01">
 </head>
 <body data-page="lobby" class="cm-v2-home-mode">
 <div class="sky-sparkles" aria-hidden="true"></div>
 <div class="page">
+<button type="button" id="cm-teacher-toggle" aria-label="Configurações do professor" title="Configurações do professor — requer senha">⚙</button>
 <button type="button" id="cm-lobby-sound" class="cm-lobby-sound" aria-pressed="true" aria-label="Desativar música e efeitos">🔊 Música e sons</button>
 <header class="nav-bar">
  <a class="brand" href="./" title="Início do Torneio">
@@ -45,24 +48,32 @@
 
  
 <section id="cm-v2-home" aria-label="Início do torneio ClassMana versão dois">
+  <div class="cm-v2-exact-backdrop" aria-hidden="true"></div>
   <div class="cm-v2-home-veil"></div>
+  <div id="cm-v2-student-card" class="cm-v2-student-card" role="status" aria-live="polite">
+    <img id="cm-v2-student-crest" src="assets/v2/crests/aguia.webp" alt="">
+    <div class="cm-v2-student-details">
+      <strong id="cm-v2-student-name">Nenhum aluno logado</strong>
+      <span id="cm-v2-student-level" title="O torneio de arco e flecha não armazena níveis nem XP pedagógico">Nv. —</span>
+      <small id="cm-v2-student-house">Escolha seu nome ao jogar</small>
+      <small id="cm-v2-student-instruction">Sessão livre</small>
+    </div>
+  </div>
   <header class="cm-v2-home-heading">
     <span class="cm-v2-top-diamond" aria-hidden="true">✦</span>
-    <h1>Class<span>Mana</span></h1>
+    <img class="cm-v2-official-logo" src="assets/images/logo-classmana-oficial.webp" alt="ClassMana — logo oficial">
     <div class="cm-v2-ribbon">TORNEIO DAS TRÊS CASAS</div>
     <div class="cm-v2-tagline">✦ ARENA DE ARCO E FLECHA ✦</div>
   </header>
-  <div class="cm-v2-hero-splash" aria-hidden="true">
-    <img class="cm-v2-splash-hero cm-v2-splash-blue" src="assets/v2/heroes/aguia-m.webp" alt="">
-    <img class="cm-v2-splash-hero cm-v2-splash-red" src="assets/v2/heroes/leao-m.webp" alt="">
-    <img class="cm-v2-splash-hero cm-v2-splash-green" src="assets/v2/heroes/dragao-f.webp" alt="">
-  </div>
+  <!-- Os arqueiros, raios, leão de fogo e dragão estão na arte original do fundo. -->
   <div class="cm-v2-home-actions" role="group" aria-label="Menu do torneio">
     <button type="button" data-v2-action="ranking" aria-label="Abrir ranking"><img src="assets/v2/buttons/ranking.webp" alt="RANKING"></button>
     <button type="button" data-v2-action="desafios" aria-label="Desafiar alunos"><img src="assets/v2/buttons/desafios.webp" alt="DESAFIOS"></button>
-    <button type="button" class="cm-v2-home-play" data-v2-action="jogar" aria-label="Jogar ClassMana"><img src="assets/v2/buttons/jogar.webp" alt="JOGAR"></button>
+    <button type="button" class="cm-v2-home-end" id="cm-v2-home-exit" data-v2-action="encerrar" disabled title="Não existe sessão para encerrar" aria-label="Encerrar sessão do jogador anterior"><span class="cm-v2-exit-symbol" aria-hidden="true">⏻</span><span>ENCERRAR<br>SESSÃO</span></button>
+    <button type="button" class="cm-v2-home-play" data-v2-action="jogar" aria-label="Jogar ClassMana" title="Jogar ClassMana"><img src="assets/v2/buttons/jogar.webp" alt="JOGAR"></button>
     <button type="button" data-v2-action="regras" aria-label="Consultar regras"><img src="assets/v2/buttons/regras.webp" alt="REGRAS"></button>
   </div>
+  <p class="cm-v2-session-notice" id="cm-v2-session-notice" role="status" aria-live="polite">Escolha JOGAR para entrar no torneio.</p>
   <div class="cm-v2-home-bottom">ÁGUIA DOURADA <span>✦</span> LEÃO DE FOGO <span>✦</span> DRAGÃO DE ESMERALDA</div>
 </section>
 <button type="button" id="cm-v2-navigate-back" aria-label="Voltar à etapa anterior ou ao menu">← VOLTAR</button>
@@ -264,9 +275,58 @@
 </main>
 <footer><img src="assets/images/logo-classmana-oficial.webp" alt="ClassMana"><span>CLASSMANA · TORNEIO DAS TRÊS CASAS · MODO ONLINE</span><span>Feito para jogar na web · Sem conexão local obrigatória</span></footer>
 </div>
+<dialog id="cm-teacher-dialog" aria-labelledby="cm-teacher-title">
+  <button type="button" id="cm-teacher-close" aria-label="Fechar configurações">×</button>
+  <h2 id="cm-teacher-title">⚙ Configurações do Professor</h2>
+  <form id="cm-teacher-login-form" autocomplete="off">
+    <div id="cm-teacher-login-view">
+      <p>Área protegida. Somente o professor pode gerenciar alunos e resultados de testes.</p>
+      <label for="cm-teacher-password">Senha do professor
+        <input id="cm-teacher-password" name="teacher-password" type="password" minlength="8" required autocomplete="off" placeholder="Digite a senha de acesso">
+      </label>
+      <button class="cm-teacher-primary" type="submit">🔒 Entrar como professor</button>
+    </div>
+  </form>
+  <div id="cm-teacher-controls-view" hidden>
+    <p id="cm-teacher-counts" aria-live="polite"></p>
+    <section aria-labelledby="cm-teacher-add-title">
+      <h3 id="cm-teacher-add-title">➕ Cadastrar novo aluno</h3>
+      <form id="cm-teacher-add-form" autocomplete="off">
+        <label for="cm-teacher-name">Nome ou nome abreviado
+          <input id="cm-teacher-name" maxlength="52" required placeholder="Ex.: Luiza M.">
+        </label>
+        <label for="cm-teacher-house">Turma / Casa
+          <select id="cm-teacher-house">
+            <option value="A">4º A — Águia Dourada</option>
+            <option value="B">4º B — Leão de Fogo</option>
+            <option value="C">4º C — Dragão de Esmeralda</option>
+          </select>
+        </label>
+        <label for="cm-teacher-team">Equipe (opcional)
+          <select id="cm-teacher-team"><option value="">Sem equipe definida</option></select>
+        </label>
+        <button type="submit" class="cm-teacher-primary">Cadastrar aluno na V2</button>
+      </form>
+    </section>
+    <section aria-labelledby="cm-teacher-reset-title">
+      <h3 id="cm-teacher-reset-title">🏆 Zerar placar de testes da V2</h3>
+      <p class="cm-teacher-warning">Zera duelos e resultados online da <strong>versão 2</strong>. Não apaga alunos nem altera a V1. Uma cópia dos registros é guardada antes do reset.</p>
+      <form id="cm-teacher-reset-form" autocomplete="off">
+        <label for="cm-teacher-reset-phrase">Para confirmar, digite <strong>ZERAR V2</strong>
+          <input id="cm-teacher-reset-phrase" type="text" placeholder="ZERAR V2" autocomplete="off" required>
+        </label>
+        <button type="submit" class="cm-teacher-danger">Zerar ranking e duelos V2</button>
+      </form>
+      <p id="cm-teacher-last-reset"></p>
+    </section>
+  </div>
+  <p id="cm-teacher-status" role="status" aria-live="polite">Entre com a senha do professor.</p>
+</dialog>
 <div id="toast" role="status" aria-live="polite"></div>
-<script src="roster.js?v=2"></script><script src="teams.js?v=1"></script><script type="module" src="game-v3.js?v=gold48"></script>
+<script src="roster.js?v=2"></script><script src="teams.js?v=1"></script><script type="module" src="game-v3.js?v=20261108session03"></script>
 <script type="module" src="wind-panel-restored.js?v=wind20"></script>
 <script src="classmana-v2-ui.js?v=20261108v2" defer></script>
+<script src="classmana-v2-lobby-exato.js?v=20261108art03" defer></script>
+<script type="module" src="classmana-professor-v2.js?v=20261108teacher01"></script>
 </body>
 </html>

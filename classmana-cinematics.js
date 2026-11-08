@@ -25,12 +25,15 @@ function emberLayer(host,house,count=16){
   const rng=i=>Math.abs(Math.sin(i*19.19+7.713));
   for(let i=0;i<Math.min(100,count);i++){
    const dot=node('span','cm-ember'),v=rng(i+1);
-   dot.style.setProperty('--ember-x',(4+92*rng(i+10)).toFixed(1)+'%');
-   dot.style.setProperty('--ember-size',(2.8+6.5*v).toFixed(1)+'px');
+   const home=host.id==='cm-v2-home';
+   const fromEdge=Math.pow(rng(i+10),2.4);
+   const homeX=i%2===0?2+48*fromEdge:98-48*fromEdge;
+   dot.style.setProperty('--ember-x',home?homeX.toFixed(1)+'%':(4+92*rng(i+10)).toFixed(1)+'%');
+   dot.style.setProperty('--ember-size',home?(3.9+8.3*v+2*(1-fromEdge)).toFixed(1)+'px':(2.8+6.5*v).toFixed(1)+'px');
    dot.style.setProperty('--ember-duration',(3.4+5.4*rng(i+31)).toFixed(2)+'s');
    dot.style.setProperty('--ember-delay',(-9*rng(i+46)).toFixed(2)+'s');
    dot.style.setProperty('--ember-drift',(-72+144*rng(i+64)).toFixed(0)+'px');
-   dot.style.setProperty('--ember-opacity',(.65+.35*v).toFixed(2));
+   dot.style.setProperty('--ember-opacity',home?(.28+.7*(1-fromEdge)).toFixed(2):(.65+.35*v).toFixed(2));
    layer.append(dot);
   }
  }

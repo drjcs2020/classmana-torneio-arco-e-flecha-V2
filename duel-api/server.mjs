@@ -3,6 +3,7 @@ import { DatabaseSync } from 'node:sqlite';
 import {randomUUID,randomBytes,createHash} from 'node:crypto';
 import {readFileSync,mkdirSync} from 'node:fs';
 import {dirname,resolve} from 'node:path';
+import {createTeacherAdmin} from './teacher-admin.mjs';
 
 const roster=JSON.parse(readFileSync(new URL('./roster.json',import.meta.url),'utf8'));
 const teamMembership=JSON.parse(readFileSync(new URL('./teams.json',import.meta.url),'utf8'));
@@ -32,6 +33,7 @@ const sha=x=>createHash('sha256').update(String(x)).digest('hex');
 function fail(message,status=400){const error=Error(message);error.status=status;throw error}
 function auth(request){const token=(request.headers.authorization||'').replace(/^Bearer\s+/i,'');const row=token&&sql.session.get(sha(token));return row&&row.expires>Date.now()?known.get(row.player):null}
 function requirePlayer(request){return auth(request)||fail('Selecione um perfil antes de entrar no duelo.',401)}
+const teacher = createTeacherAdmin({db,players,known,teamMembership,fail});
 function publicDuel(d){return {id:d.id,creator:known.get(d.creator),recipient:known.get(d.recipient),kind:d.kind,level:d.level,created:d.created,status:d.status,creatorShots:d.creator_shots?JSON.parse(d.creator_shots):[],recipientShots:d.recipient_shots?JSON.parse(d.recipient_shots):[],creatorScore:d.creator_score,recipientScore:d.recipient_score,rules:10}}
 function shotsOf(shots){if(!Array.isArray(shots)||shots.length!==5)fail('Exatamente cinco flechas são necessárias');return shots.map((s,i)=>{if(!s||typeof s!=='object')fail('Dados inválidos');const dx=Number(s.dx),dy=Number(s.dy),power=Number(s.power),time=Number(s.time),bow=s.bow||'classico';if(![dx,dy,power,time].every(Number.isFinite)||Math.abs(dx)>100||Math.abs(dy)>100||power<0||power>1||time<0||time>7200||!['classico','real','vento'].includes(bow))fail('Flecha inválida');const blocked=s.blocked===true;const n=Math.hypot(dx,dy)*(bow==='real'?1.12:1),points=blocked||n>1?0:Math.max(1,10-Math.floor(n*10));return {dx,dy,impactDx:dx,impactDy:dy,blocked,power,time,bow,score:Math.min(10,points+(bow==='real'&&points>0?1:0)),number:i+1}})}
 function leaderboard(){
@@ -75,7 +77,7 @@ function route(request,action,data,query){
  fail('Ação desconhecida',404);
 }
 const allow=(process.env.ALLOWED_ORIGINS||'https://drjcs2020.github.io,http://localhost:8000,http://127.0.0.1:8000').split(',');
-const headers=origin=>({'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','Access-Control-Allow-Origin':origin||'*','Access-Control-Allow-Methods':'GET,POST,OPTIONS','Access-Control-Allow-Headers':'Content-Type,Authorization'});
+const headers=origin=>({'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','Access-Control-Allow-Origin':origin||'*','Access-Control-Allow-Methods':'GET,POST,OPTIONS','Access-Control-Allow-Headers':'Content-Type,Authorization,X-ClassMana-Teacher'});
 function send(res,status,json,origin){res.writeHead(status,headers(origin));res.end(JSON.stringify(json))}
 const server=http.createServer(async(req,res)=>{
  const origin=req.headers.origin||'';if(origin&&!allow.includes(origin)){send(res,403,{ok:false,error:'Origem não autorizada'},'null');return}
@@ -86,6 +88,7 @@ const server=http.createServer(async(req,res)=>{
   if(!['GET','POST'].includes(req.method))fail('Método inválido',405);
   let raw='';if(req.method==='POST')for await(const chunk of req){raw+=chunk;if(raw.length>64000)fail('Pedido grande demais',413)}
   const data=raw?JSON.parse(raw):{},action=url.searchParams.get('action')||'';
+  if(teacher.handles(action)){send(res,200,{ok:true,...teacher.route(req,action,data)},origin);return;}
   if(req.method==='POST'&&!['login','ping'].includes(action)){
     const player=requirePlayer(req),id=String(data.requestId||'');if(!/^[\w-]{10,128}$/.test(id))fail('ID do pedido inválido');
     const previous=sql.operation.get(player.id,id);if(previous){send(res,200,JSON.parse(previous.response),origin);return}

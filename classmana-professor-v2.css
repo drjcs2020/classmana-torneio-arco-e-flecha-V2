@@ -1,0 +1,39 @@
+/* Apenas o lobby ClassMana V2. A engrenagem não altera a arena nem outros menus. */
+body.cm-v2-home-mode #cm-teacher-toggle{
+ position:fixed!important;z-index:245!important;top:18px;right:clamp(160px,13vw,191px);
+ width:46px;height:44px;padding:0!important;border:2px solid #f4c674!important;border-radius:9px;
+ background:linear-gradient(160deg,#183b70,#071731)!important;color:#fff0c2!important;
+ box-shadow:0 4px 13px #020b26ad,inset 0 0 0 1px #8d6b40!important;
+ font-size:25px;line-height:1;cursor:pointer;display:grid;place-items:center;
+}
+body:not(.cm-v2-home-mode) #cm-teacher-toggle{display:none!important}
+#cm-teacher-toggle:hover{filter:brightness(1.18)}
+#cm-teacher-toggle:focus-visible{outline:3px solid #7cf1ff;outline-offset:3px}
+#cm-teacher-dialog{
+ position:fixed;inset:0;margin:auto!important;box-sizing:border-box;
+ width:min(92vw,560px);max-height:min(90dvh,760px);overflow:auto;
+ padding:23px 23px 19px;border:3px solid #ecc177;border-radius:19px;
+ background:linear-gradient(148deg,#153c70 0%,#081c3e 52%,#08112a 100%);
+ color:#fff0c9;box-shadow:0 15px 55px #000c,inset 0 0 0 2px #e9bf5c39;
+ font:600 15px/1.55 'Nunito',sans-serif;z-index:10000;
+}
+#cm-teacher-dialog:not([open]){display:none}
+#cm-teacher-dialog::backdrop{background:#020719d9;backdrop-filter:blur(5px)}
+#cm-teacher-dialog h2{font:700 clamp(19px,4vw,27px)/1.2 'Cinzel',Georgia,serif;color:#ffe3a2;margin:0 38px 12px 0}
+#cm-teacher-dialog h3{font:700 17px 'Cinzel',Georgia,serif;color:#ffe4a0;margin:15px 0 8px}
+#cm-teacher-dialog p{color:#e2eafa;margin:8px 0}
+#cm-teacher-dialog label{display:grid;gap:5px;margin:11px 0;color:#fff0ca;font-weight:800}
+#cm-teacher-dialog :is(input,select){box-sizing:border-box;display:block;width:100%;min-height:44px;padding:9px 11px;border:1.5px solid #c8a86c;border-radius:8px;background:#04152f;color:#fff8dd;font:600 15px 'Nunito',sans-serif}
+#cm-teacher-dialog select option{color:#fff8dd;background:#092249}
+#cm-teacher-dialog :is(input,select):focus-visible{outline:2px solid #85edff;outline-offset:2px}
+#cm-teacher-dialog .cm-teacher-primary{background:linear-gradient(#1b9258,#08652e);border:2px solid #e9c377;border-radius:9px;color:#fff5d8;min-height:44px;padding:8px 18px;font:900 14px 'Nunito',sans-serif;cursor:pointer}
+#cm-teacher-dialog .cm-teacher-danger{background:linear-gradient(#8e3037,#4b0e1b);border:2px solid #e6af7c;border-radius:9px;color:#fff3d9;min-height:42px;padding:8px 18px;font:900 14px 'Nunito',sans-serif;cursor:pointer}
+#cm-teacher-dialog button:disabled{opacity:.5;cursor:wait}
+#cm-teacher-close{position:absolute;top:13px;right:12px;width:38px;height:38px;border:1px solid #ddb46b;border-radius:8px;color:#fff0cb;background:#071934;cursor:pointer;font-size:21px}
+#cm-teacher-controls-view[hidden],#cm-teacher-login-view[hidden]{display:none!important}
+#cm-teacher-counts{font-weight:900;color:#a6dbff}
+#cm-teacher-controls-view section{border-top:1px solid #ebc16b66;padding-top:10px;margin-top:12px}
+#cm-teacher-controls-view .cm-teacher-warning{color:#ffe9b0;border-left:3px solid #e9ba5b;padding-left:10px}
+#cm-teacher-status{min-height:30px;margin-top:15px!important;padding:8px 11px;background:#0a2e50;border-radius:8px;border:1px solid #729ad6;color:#defbff!important}
+#cm-teacher-status[data-error="true"]{border-color:#f59d9d;color:#ffc4b9!important}
+@media(max-width:580px){body.cm-v2-home-mode #cm-teacher-toggle{top:18px;right:72px;width:39px;height:38px;font-size:22px}}
