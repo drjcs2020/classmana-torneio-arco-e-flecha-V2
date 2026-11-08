@@ -1,0 +1,202 @@
+/* ClassMana Cinematics — imported from reference ZIP patterns, rewritten for vanilla JS.
+   Functional controls remain DOM elements; this is not a full-screen screenshot. */
+@keyframes cm-ember-rise{0%{transform:translate3d(0,8vh,0) scale(.8);opacity:0}12%{opacity:var(--ember-opacity,.85)}80%{opacity:.75}100%{transform:translate3d(var(--ember-drift,35px),-105vh,0) scale(.15);opacity:0}}
+@keyframes cm-vs-card-enter{from{transform:translateY(45px) scale(.94);opacity:0}to{transform:translateY(0) scale(1);opacity:1}}
+@keyframes cm-vs-slam{0%{transform:scale(2.5) rotate(-12deg);opacity:0}65%{transform:scale(.92) rotate(2deg);opacity:1}100%{transform:scale(1) rotate(0);opacity:1}}
+@keyframes cm-banner-drop{from{transform:translateY(-40px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes cm-pulse-gold{50%{filter:brightness(1.26) drop-shadow(0 0 17px #ffcc6880)}}
+@keyframes cm-landing-spark{0%{transform:translateY(0) scale(.5);opacity:0}20%{opacity:1}100%{transform:translateY(-92px) scale(.12);opacity:0}}
+.cm-embers{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:1;contain:layout paint}
+.cm-ember{position:absolute;bottom:-10%;left:var(--ember-x);height:var(--ember-size);width:var(--ember-size);border-radius:50%;background:radial-gradient(circle at 25% 20%,#fffef0 0%,#ffe894 28%,#ffb52f 59%,#f07823 80%,transparent);box-shadow:0 0 12px #ffa325d8,0 0 22px #e9662259;opacity:0;animation:cm-ember-rise var(--ember-duration) linear var(--ember-delay) infinite}
+/* All houses use fiery gold sparks; house colors remain on UI and characters. */
+.cm-embers[data-house="A"] .cm-ember{background:radial-gradient(circle at 25% 20%,#fffdf1 0%,#ffe588 27%,#ffb535 58%,#e75a17 81%,transparent);box-shadow:0 0 11px #ffb62bd6,0 0 21px #ff87265e}
+.cm-embers[data-house="C"] .cm-ember{background:radial-gradient(circle at 25% 20%,#fffef5 0%,#ffeb93 28%,#ffc03b 58%,#ed721f 82%,transparent);box-shadow:0 0 11px #ffba36d6,0 0 21px #ff80295e}
+.cm-vs-overlay{position:fixed;inset:0;z-index:20000;display:flex;align-items:center;justify-content:center;padding:clamp(10px,3vh,25px);box-sizing:border-box;overflow-y:auto;background:radial-gradient(ellipse at 30% 65%,#1f48956e,transparent 55%),radial-gradient(ellipse at 75% 65%,#b543275c,transparent 52%),linear-gradient(115deg,#05132cf2,#071d45ed 50%,#130e2aef);color:#fff3d1;font-family:Georgia,serif}
+.cm-vs-overlay[hidden]{display:none}
+.cm-vs-overlay .cm-embers{position:fixed}
+.cm-vs-shell{position:relative;z-index:2;width:min(100%,1080px);min-height:0;display:flex;flex-direction:column;align-items:center;gap:clamp(9px,2vh,22px);animation:cm-banner-drop .5s ease-out}
+.cm-vs-title{box-sizing:border-box;text-align:center;width:min(92%,640px);padding:12px 24px;border:5px ridge #f3c15d;border-radius:12px;background:linear-gradient(#7d142f,#4a0a21);box-shadow:0 8px 15px #000a,inset 0 0 0 2px #ffd77d63;font:900 clamp(22px,3.2vw,41px)/1.1 Georgia,serif;letter-spacing:.025em;text-shadow:0 3px 4px #11060a}
+.cm-vs-sub{font:900 clamp(11px,1.5vw,17px)/1.15 'Nunito',sans-serif;color:#ffdc84;letter-spacing:.12em;text-transform:uppercase;text-align:center}
+.cm-vs-fighters{width:100%;display:grid;grid-template-columns:minmax(0,1fr) clamp(62px,11vw,145px) minmax(0,1fr);gap:clamp(5px,1.3vw,16px);align-items:center}
+.cm-vs-fighter{position:relative;isolation:isolate;min-width:0;max-height:min(55vh,430px);height:clamp(190px,46vh,430px);display:flex;flex-direction:column;overflow:hidden;border:5px ridge #f6cb73;border-radius:17px 17px 9px 9px;background:linear-gradient(160deg,#153f87,#051536 75%);box-shadow:0 13px 28px #000b,inset 0 0 0 2px #f8dfaa70;animation:cm-vs-card-enter .5s both}
+.cm-vs-fighter[data-house="B"]{background:linear-gradient(160deg,#8a1c2b,#290a17 75%);border-color:#e2ad45}
+.cm-vs-fighter[data-house="C"]{background:linear-gradient(160deg,#117350,#042f2b 75%);border-color:#b8cc73}
+.cm-vs-fighter:nth-of-type(3){animation-delay:.18s}
+.cm-vs-fighter img{width:100%;height:100%;min-height:0;flex:1 1 auto;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 4px 10px #0008);background:radial-gradient(ellipse at 50% 64%,#ffffff18,transparent 65%)}
+.cm-vs-fighter-info{position:relative;flex:0 0 auto;box-sizing:border-box;max-width:100%;padding:10px 5px 12px;background:linear-gradient(0deg,#031225,#0b2950ed);border-top:3px solid #f4cb6f;text-align:center}
+.cm-vs-fighter-info strong{display:block;color:#fff4d7;font:900 clamp(15px,2.1vw,25px)/1.12 Georgia,serif;overflow-wrap:anywhere;text-shadow:0 2px #000}
+.cm-vs-fighter-info small{display:block;margin-top:6px;font:900 clamp(10px,1.2vw,13px)/1.15 'Nunito',sans-serif;color:#ffdc98}
+.cm-vs-mark{font:italic 900 clamp(45px,8.2vw,100px)/1 Georgia,serif;text-align:center;color:#ffcf6f;text-shadow:0 4px #683113,0 8px #220b0a,0 0 28px #ff7a2b9c;animation:cm-vs-slam .65s .33s both}
+.cm-vs-actions{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;align-items:center}
+.cm-vs-actions button{min-height:52px;padding:10px 24px;cursor:pointer;font:900 clamp(15px,1.8vw,23px)/1.1 Georgia,serif;border-radius:12px;text-shadow:0 2px #000;transition:filter .2s,transform .2s}
+.cm-vs-start{color:#fff4d6;background:linear-gradient(#2fc763,#087239);border:5px ridge #f3c36d;box-shadow:0 6px 0 #5d3f10,0 9px 18px #000a;animation:cm-pulse-gold 2.4s infinite}
+.cm-vs-cancel{color:#fff5df;background:linear-gradient(#244d88,#081c45);border:3px ridge #e7bb66}
+.cm-vs-actions button:hover{filter:brightness(1.18);transform:translateY(-2px)}
+.cm-vs-actions button:focus-visible{outline:3px solid #fff;outline-offset:4px}
+.cm-vs-overlay .cm-vs-note{color:#ffebb6;font:800 12px/1.3 'Nunito',sans-serif;text-align:center}
+.cm-impact-sparks{position:absolute;z-index:70;width:2px;height:2px;pointer-events:none}
+.cm-impact-sparks span{position:absolute;width:var(--sz,6px);height:var(--sz,6px);border-radius:50%;background:radial-gradient(circle,#fffbd8,#ffb52d,#ff542a);animation:cm-landing-spark var(--duration,.9s) ease-out forwards;transform:translateX(var(--tx))}
+#finish.cm-cinematic-result{background:radial-gradient(ellipse at center,#091b41d9,#020916ef)}
+#finish.cm-cinematic-result .finish-card{position:relative;isolation:isolate;box-sizing:border-box;max-height:calc(100dvh - 28px);overflow:auto;width:min(94vw,900px);max-width:900px;border:5px ridge #f3c66c;border-radius:20px;background:linear-gradient(165deg,#132b59,#051535 74%);box-shadow:0 0 0 3px #271404,0 12px 36px #000b}
+#finish.cm-cinematic-result .finish-card>*:not(.cm-embers){position:relative;z-index:2}
+#finish.cm-cinematic-result #finish-title{color:#ffe3a3!important;font:900 clamp(24px,4vw,48px)/1.08 Georgia,serif!important;text-shadow:0 4px #55230d,0 0 13px #000!important;margin:6px 0!important}
+#finish.cm-cinematic-result #finish-desc{color:#fff2d1!important;font-size:clamp(13px,1.55vw,18px)!important}
+#finish.cm-cinematic-result .cm-finish-heroes{display:none!important}
+#finish.cm-cinematic-result .cm-final-duel{display:grid;grid-template-columns:minmax(0,1fr) 70px minmax(0,1fr);gap:12px;align-items:center;margin:12px auto;width:min(100%,740px)}
+#finish.cm-cinematic-result .cm-final-player{display:flex;flex-direction:column;align-items:center;min-width:0;gap:4px;border:3px ridge #e6bd68;border-radius:12px;background:#091e43d9;padding:10px}
+#finish.cm-cinematic-result .cm-final-player img{max-height:clamp(80px,17vh,160px);width:100%;max-width:180px;object-fit:contain}
+#finish.cm-cinematic-result .cm-final-player b{font:900 clamp(13px,1.7vw,20px)/1.1 Georgia,serif;color:#fff4d9;overflow-wrap:anywhere;text-align:center}
+#finish.cm-cinematic-result .cm-final-player small{font:800 11px/1.2 'Nunito',sans-serif;color:#ffe1a4}
+#finish.cm-cinematic-result .cm-final-vs{text-align:center;font:italic 900 clamp(30px,4vw,56px)/1 Georgia,serif;color:#ffc66b}
+#finish.cm-cinematic-result .cm-final-shots{display:flex;justify-content:center;flex-wrap:wrap;gap:5px;margin:7px 0}
+#finish.cm-cinematic-result .cm-final-shots span{min-width:22px;padding:4px 6px;border:1px solid #e4ae4f;border-radius:5px;background:#05122f;color:#ffe2a5;font:900 13px/1 Georgia,serif;text-align:center}
+#finish.cm-cinematic-result .finish-actions button{border:3px ridge #e4b85a;border-radius:10px}
+@media(max-width:680px){.cm-vs-fighters{grid-template-columns:minmax(0,1fr) 44px minmax(0,1fr)}.cm-vs-fighter{height:clamp(190px,38vh,310px)}.cm-vs-title{font-size:22px}.cm-vs-mark{font-size:40px}.cm-vs-actions button{min-height:46px;padding:8px 12px;font-size:14px}#finish.cm-cinematic-result .cm-final-duel{grid-template-columns:minmax(0,1fr) 32px minmax(0,1fr);gap:5px}#finish.cm-cinematic-result .cm-final-player{padding:4px}#finish.cm-cinematic-result .cm-final-player img{max-height:115px}}
+@media(prefers-reduced-motion:reduce){.cm-ember,.cm-vs-shell,.cm-vs-fighter,.cm-vs-mark,.cm-vs-start,.cm-impact-sparks span{animation:none!important}.cm-ember{opacity:.2}}
+
+/* Result score strip is data-dependent: never show an empty pale placeholder. */
+#finish.cm-cinematic-result #finish-results:empty{display:none!important}
+#finish.cm-cinematic-result #finish-results.cm-score-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important;width:min(100%,740px)!important;margin:8px auto!important;background:transparent!important;padding:0!important;border:0!important}
+#finish.cm-cinematic-result .cm-score-cell{background:linear-gradient(155deg,#0b315e,#061530)!important;color:#fff3ce!important;border:3px ridge #d7a64e!important;border-radius:11px!important;box-shadow:0 4px 10px #0006!important;padding:9px!important}
+#finish.cm-cinematic-result .cm-score-label,#finish.cm-cinematic-result .cm-score-unit{color:#f7d897!important}
+#finish.cm-cinematic-result .cm-score-value{color:#ffe5ac!important;font:900 clamp(26px,3.2vw,44px)/1 Georgia,serif!important}
+
+/* House-aware rising embers in the playable landscape and opening.
+   These are visual particles, not background screenshot layers. */
+#view-inicio, #stage{isolation:isolate}
+#view-inicio > .cm-ambient-embers{
+ position:absolute!important;inset:0!important;z-index:2!important;
+ opacity:.68;pointer-events:none!important;overflow:hidden!important;
+}
+#stage > .cm-ambient-embers{
+ position:absolute!important;inset:0!important;z-index:5!important;
+ opacity:.46;pointer-events:none!important;overflow:hidden!important;
+}
+.cm-ambient-embers .cm-ember{
+ will-change:transform,opacity;
+}
+#view-inicio[data-house="B"] > .cm-ambient-embers{
+ opacity:.91;
+}
+#stage.house-b > .cm-ambient-embers{opacity:.68}
+#view-inicio[data-house="A"] > .cm-ambient-embers,
+#stage.house-a > .cm-ambient-embers{opacity:.54}
+#view-inicio[data-house="C"] > .cm-ambient-embers,
+#stage.house-c > .cm-ambient-embers{opacity:.62}
+@media(max-width:680px){
+ #view-inicio > .cm-ambient-embers,
+ #stage > .cm-ambient-embers{opacity:.4}
+}
+@media(prefers-reduced-motion:reduce){
+ #view-inicio > .cm-ambient-embers,
+ #stage > .cm-ambient-embers{display:none!important}
+}
+
+/* Denser golden flames rise from the bottom; no pointer interception. */
+#view-inicio > .cm-ambient-embers{opacity:.96!important}
+#stage > .cm-ambient-embers{opacity:.76!important}
+.cm-vs-overlay > .cm-embers{opacity:.94}
+@media(max-width:680px){
+ #view-inicio > .cm-ambient-embers{opacity:.76!important}
+ #stage > .cm-ambient-embers{opacity:.59!important}
+}
+
+/* VS v49 — shorter, centered illustrated duel cards.
+   Names are abbreviated; cards should emphasize the character, not empty panel area. */
+.cm-vs-shell{
+ width:min(100%,860px)!important;
+ gap:clamp(8px,1.4vh,14px)!important;
+}
+.cm-vs-fighters{
+ width:min(100%,770px)!important;
+ grid-template-columns:minmax(0,1fr) clamp(55px,9vw,100px) minmax(0,1fr)!important;
+ gap:clamp(8px,1.6vw,17px)!important;
+ margin:0 auto!important;
+}
+.cm-vs-fighter{
+ width:100%!important;
+ max-width:320px!important;
+ height:clamp(235px,45vh,345px)!important;
+ max-height:345px!important;
+ justify-self:center!important;
+ border:4px ridge #f6ca6a!important;
+ border-radius:17px!important;
+ box-shadow:0 0 0 2px #132d4b,0 9px 25px #000c,inset 0 0 22px #ffe5aa23!important;
+}
+.cm-vs-fighter img{
+ box-sizing:border-box!important;
+ display:block!important;
+ width:100%!important;
+ height:calc(100% - 70px)!important;
+ flex:1 1 auto!important;
+ min-height:0!important;
+ object-fit:cover!important;
+ object-position:center 32%!important;
+ background:radial-gradient(ellipse at center,#4273c54d,#03132b 78%)!important;
+}
+.cm-vs-fighter[data-house="B"] img{background:radial-gradient(ellipse at center,#e360354c,#2a091c 78%)!important}
+.cm-vs-fighter[data-house="C"] img{background:radial-gradient(ellipse at center,#3bb58b55,#042b27 78%)!important}
+.cm-vs-fighter-info{
+ padding:8px 7px 10px!important;
+ min-height:65px!important;
+ border-top:3px solid #edc571!important;
+ box-shadow:0 -7px 17px #051326b9!important;
+}
+.cm-vs-fighter-info strong{
+ font:900 clamp(15px,1.6vw,21px)/1.15 Georgia,serif!important;
+ letter-spacing:.015em!important;
+}
+.cm-vs-fighter-info small{
+ margin-top:4px!important;
+ font-size:clamp(9px,.9vw,12px)!important;
+ white-space:normal!important;
+}
+.cm-vs-mark{
+ font-size:clamp(44px,6.8vw,79px)!important;
+}
+.cm-vs-title{
+ width:min(94%,550px)!important;
+ padding:9px 16px!important;
+ font-size:clamp(20px,2.65vw,32px)!important;
+}
+.cm-vs-sub{font-size:clamp(11px,1.15vw,14px)!important}
+.cm-vs-actions{gap:10px!important}
+.cm-vs-actions button{
+ min-height:46px!important;
+ padding:8px 19px!important;
+ font-size:clamp(14px,1.45vw,19px)!important;
+}
+@media(max-width:680px){
+ .cm-vs-overlay{padding:7px!important}
+ .cm-vs-shell{gap:8px!important}
+ .cm-vs-fighters{
+  width:100%!important;
+  grid-template-columns:minmax(0,1fr) 38px minmax(0,1fr)!important;
+  gap:5px!important;
+ }
+ .cm-vs-fighter{
+  min-width:0!important;
+  height:clamp(205px,37vh,260px)!important;
+  max-height:260px!important;
+  border-width:3px!important;
+  border-radius:12px!important;
+ }
+ .cm-vs-fighter img{
+  height:calc(100% - 61px)!important;
+  object-position:center 30%!important;
+ }
+ .cm-vs-fighter-info{
+  min-height:59px!important;
+  padding:7px 3px!important;
+ }
+ .cm-vs-fighter-info strong{font-size:clamp(12px,3.5vw,16px)!important}
+ .cm-vs-fighter-info small{font-size:9px!important}
+ .cm-vs-mark{font-size:36px!important}
+ .cm-vs-title{font-size:clamp(18px,5vw,23px)!important}
+ .cm-vs-actions button{min-height:43px!important;padding:8px 11px!important;font-size:13px!important}
+}
+@media(max-height:600px) and (min-width:681px){
+ .cm-vs-fighter{height:clamp(195px,43vh,260px)!important}
+ .cm-vs-shell{gap:6px!important}
+ .cm-vs-sub{margin:0!important}
+}
