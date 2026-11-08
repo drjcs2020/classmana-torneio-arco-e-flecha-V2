@@ -1,6 +1,6 @@
 /* Apenas o lobby ClassMana V2. A engrenagem não altera a arena nem outros menus. */
 body.cm-v2-home-mode #cm-teacher-toggle{
- position:fixed!important;z-index:245!important;top:18px;right:clamp(160px,13vw,191px);
+ position:fixed!important;z-index:245!important;top:18px;right:76px;
  width:46px;height:44px;padding:0!important;border:2px solid #f4c674!important;border-radius:9px;
  background:linear-gradient(160deg,#183b70,#071731)!important;color:#fff0c2!important;
  box-shadow:0 4px 13px #020b26ad,inset 0 0 0 1px #8d6b40!important;
@@ -36,4 +36,4 @@ body:not(.cm-v2-home-mode) #cm-teacher-toggle{display:none!important}
 #cm-teacher-controls-view .cm-teacher-warning{color:#ffe9b0;border-left:3px solid #e9ba5b;padding-left:10px}
 #cm-teacher-status{min-height:30px;margin-top:15px!important;padding:8px 11px;background:#0a2e50;border-radius:8px;border:1px solid #729ad6;color:#defbff!important}
 #cm-teacher-status[data-error="true"]{border-color:#f59d9d;color:#ffc4b9!important}
-@media(max-width:580px){body.cm-v2-home-mode #cm-teacher-toggle{top:18px;right:72px;width:39px;height:38px;font-size:22px}}
+@media(max-width:580px){body.cm-v2-home-mode #cm-teacher-toggle{top:17px;right:58px;width:39px;height:38px;font-size:22px}}
