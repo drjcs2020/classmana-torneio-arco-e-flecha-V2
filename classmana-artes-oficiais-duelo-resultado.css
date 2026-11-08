@@ -191,3 +191,109 @@ body[data-page="arena"] #view-arena #finish.cm-cinematic-result .finish-card{
  body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-player>small{font-size:clamp(6px,1.7vw,9px)!important}
  body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-player .cm-final-shots span{font-size:10px!important}
 }
+
+/* Correção definitiva: molduras oficiais sem painéis e etiquetas CSS sobrepostos. */
+/* Os fundos herdados com [data-house] têm especificidade MAIOR que o
+   seletor genérico: cada Casa precisa do mesmo reset explícito. */
+.cm-vs-overlay .cm-vs-fighter[data-house],
+.cm-vs-overlay .cm-vs-fighter[data-house="A"],
+.cm-vs-overlay .cm-vs-fighter[data-house="B"],
+.cm-vs-overlay .cm-vs-fighter[data-house="C"],
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-player[data-house],
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result[data-cm-result-mode="bot"] .cm-final-player[data-house]{
+  background:none!important;background-color:transparent!important;background-image:none!important;
+  border:0!important;outline:0!important;border-radius:0!important;
+  box-shadow:none!important;
+  backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+  min-width:0!important;max-width:100%!important;
+  overflow:visible!important;
+}
+/* Evita o escudo duplicado (a moldura já tem o brasão no canto). */
+.cm-vs-overlay .cm-vs-fighter[data-house]::before,
+.cm-vs-overlay .cm-vs-fighter[data-house="A"]::before,
+.cm-vs-overlay .cm-vs-fighter[data-house="B"]::before,
+.cm-vs-overlay .cm-vs-fighter[data-house="C"]::before{
+  content:none!important;display:none!important;
+  background:none!important;border:0!important;
+}
+/* A janela interna deve ser transparente: o retrato RGBA fica entre
+   o cenário e a moldura ornamental, nunca diante da moldura. */
+.cm-vs-overlay .cm-vs-fighter[data-house] .cm-combat-portrait,
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-player[data-house] .cm-combat-portrait{
+  background:none!important;background-color:transparent!important;background-image:none!important;
+  border:0!important;border-radius:0!important;outline:0!important;
+  box-shadow:none!important;min-height:0!important;
+  backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+  overflow:hidden!important;
+}
+.cm-vs-overlay .cm-vs-fighter[data-house] .cm-combat-portrait img,
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-player[data-house] .cm-combat-portrait img{
+  background:none!important;background-color:transparent!important;background-image:none!important;
+  padding:0!important;margin:0!important;
+  border:0!important;box-shadow:none!important;
+  min-width:0!important;min-height:0!important;
+  flex:none!important;
+}
+/* Texto puro NA PLAQUETA ORIGINAL — nenhum retângulo extra.
+   Corrige o min-height:75px do CSS legado que fazia o nome invadir a arte. */
+.cm-vs-overlay .cm-vs-fighter[data-house] .cm-vs-fighter-info,
+.cm-vs-overlay .cm-vs-fighter[data-house="A"] .cm-vs-fighter-info,
+.cm-vs-overlay .cm-vs-fighter[data-house="B"] .cm-vs-fighter-info,
+.cm-vs-overlay .cm-vs-fighter[data-house="C"] .cm-vs-fighter-info{
+  position:absolute!important;z-index:6!important;
+  top:72.5%!important;left:13%!important;width:74%!important;
+  height:13.5%!important;min-height:0!important;max-height:13.5%!important;
+  margin:0!important;padding:0 3px!important;
+  background:none!important;background-color:transparent!important;background-image:none!important;
+  border:0!important;border-radius:0!important;outline:0!important;
+  box-shadow:none!important;
+  backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+  display:flex!important;flex-direction:column!important;justify-content:center!important;align-items:center!important;
+  gap:1px!important;overflow:hidden!important;
+}
+.cm-vs-overlay .cm-vs-fighter[data-house] .cm-vs-fighter-info strong{
+  width:100%!important;max-width:100%!important;
+  display:-webkit-box!important;-webkit-box-orient:vertical!important;-webkit-line-clamp:2!important;
+  overflow:hidden!important;text-overflow:ellipsis!important;
+  font:900 clamp(11px,1.35vw,18px)/1.08 'Cinzel',Georgia,serif!important;
+  background:none!important;padding:0!important;margin:0!important;
+  text-align:center!important;color:#fff2d0!important;
+}
+.cm-vs-overlay .cm-vs-fighter[data-house] .cm-vs-fighter-info small{
+  display:block!important;flex:none!important;
+  width:100%!important;max-width:100%!important;
+  overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;
+  font:900 clamp(8px,.9vw,12px)/1.05 'Nunito',sans-serif!important;
+  background:none!important;padding:0!important;margin:0!important;
+  text-align:center!important;color:#ffe2a4!important;
+}
+/* Tela de resultado: mesmas plaquetas vazias, sem placas artificiais.
+   Os valores continuam vindos do jogo, nunca são escritos na imagem. */
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-player[data-house]>b,
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-player[data-house]>small{
+  z-index:6!important;
+  background:none!important;background-color:transparent!important;
+  background-image:none!important;border:0!important;box-shadow:none!important;
+  padding:0!important;margin:0!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-player[data-house] .cm-final-shots{
+  z-index:6!important;
+  background:none!important;border:0!important;box-shadow:none!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-player[data-house] .cm-final-shots span{
+  background:none!important;background-color:transparent!important;background-image:none!important;
+  border:0!important;box-shadow:none!important;
+  text-shadow:0 2px 3px #000!important;
+}
+/* Janela estreita: nunca reaparecerão as caixas antigas. */
+@media(max-width:680px){
+ .cm-vs-overlay .cm-vs-fighter[data-house] .cm-vs-fighter-info{
+   min-height:0!important;max-height:13.5%!important;padding:0 2px!important;
+ }
+ .cm-vs-overlay .cm-vs-fighter[data-house] .cm-vs-fighter-info strong{
+   font-size:clamp(9px,2.4vw,13px)!important;
+ }
+ .cm-vs-overlay .cm-vs-fighter[data-house] .cm-vs-fighter-info small{
+   font-size:clamp(7px,1.45vw,9px)!important;
+ }
+}
