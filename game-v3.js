@@ -246,7 +246,14 @@ function renderWind(wind){
  widget.classList.toggle('wind-calm',still);
  widget.querySelector('.wind-speed').textContent=speed.toFixed(1).replace('.',',')+' km/h';
  const direction=still?'SEM DESVIO':left?'DESVIA À ESQUERDA':'DESVIA À DIREITA';
- widget.querySelector('.wind-direction-text').textContent=direction;
+ const directionWidget=$('wind-direction')||widget;
+ directionWidget.querySelector('.wind-direction-text').textContent=direction;
+ if(directionWidget!==widget){
+  directionWidget.classList.toggle('wind-left',!still&&left);
+  directionWidget.classList.toggle('wind-right',!still&&!left);
+  directionWidget.classList.toggle('wind-calm',still);
+  directionWidget.setAttribute('aria-label','Direção do vento: '+direction.toLowerCase());
+ }
  widget.setAttribute('aria-label','Vento: '+speed.toFixed(1).replace('.',',')+' quilômetros por hora. '+direction.toLowerCase()+'.');
 }
 function uiHud(){if(!match)return;
@@ -263,9 +270,13 @@ function uiHud(){if(!match)return;
    progress.dataset.current=key;
  }
 $('hud-player').textContent=match.player+' · '+H[match.house].grade;$('hud-bot').textContent=match.mode==='bot'?'🤖 Robô · '+({easy:'Fácil',medium:'Médio',hard:'Difícil'}[match.difficulty]):match.mode==='practice'?'🎯 Treinamento':match.incoming?'⚔️ '+byId(match.incoming.playerId):'⚔️ '+byId(match.rivalId);$('hud-score').textContent=match.scores.reduce((a,b)=>a+b,0);$('hud-rival').textContent=match.onlineReplay?.length?(match.onlineReplayPoints||0):match.incoming?match.incoming.score:match.mode==='bot'?'?':'—';renderWind(match.wind);const art=$('stage').classList.contains('cm-art-ready'),n=Math.min(match.scores.length+1,5);
- $('distance').textContent=art?Math.round(match.distance)+' m':'🎯 ETAPA '+n+'/5 · '+Math.round(match.distance)+' METROS';
+ const distanceValue=$('cm-distance-value');
+ if(distanceValue)distanceValue.textContent=Math.round(match.distance)+' m';
+ else $('distance').textContent=art?Math.round(match.distance)+' m':'🎯 ETAPA '+n+'/5 · '+Math.round(match.distance)+' METROS';
  $('distance').setAttribute('aria-label','Etapa '+n+' de 5: '+Math.round(match.distance)+' metros');
- $('shots').textContent=art?n+' / 5':'🏹 FLECHA '+n+' / 5';
+ const shotsValue=$('cm-shots-value');
+ if(shotsValue)shotsValue.textContent=n+' / 5';
+ else $('shots').textContent=art?n+' / 5':'🏹 FLECHA '+n+' / 5';
  $('shots').setAttribute('aria-label','Flecha '+n+' de 5');
  const p=holding?chargePower():.28;$('power').textContent='⚡ FORÇA '+Math.round(p*100)+'%';
  if(holding)spriteHud?.setPower(p);
