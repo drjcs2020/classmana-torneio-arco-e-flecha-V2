@@ -179,8 +179,19 @@ function mountResultHome(){
   }
   if((state.includes('nao confirmado')||state.includes('erro'))&&
       !window.confirm('O resultado ainda não foi confirmado pelo servidor. Sair agora pode descartar esta tentativa. Deseja sair?'))return;
-  try{sessionStorage.removeItem('cm_active_archery_match_v2')}catch{}
-  // Use the repository-relative root, not an absolute GitHub Pages address.
+  // Na saída do resultado, mantenha a sessão e volte aos desafios.
+  if(typeof window.classmanaReturnToChallenge==='function'){
+   window.classmanaReturnToChallenge();return;
+  }
+  // Fallback se o módulo do jogo não estiver disponível.
+  try{
+   const student=sessionStorage.getItem('cm_active_student_v2');
+   sessionStorage.removeItem('cm_active_archery_match_v2');
+   if(/^[ABC][0-9]{2}$/.test(student||'')){
+    sessionStorage.setItem('cm_internal_duel_return_v2','1');
+    window.location.assign('./?continuar=1');return;
+   }
+  }catch{}
   window.location.assign('./');
  });
 }
