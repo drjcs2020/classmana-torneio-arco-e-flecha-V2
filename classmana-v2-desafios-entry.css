@@ -5,7 +5,7 @@ body[data-page="lobby"][data-v2-entry="challenges"]:not(.cm-v2-home-mode) #view-
 body[data-page="lobby"][data-v2-entry="challenges"]:not(.cm-v2-home-mode) #view-inicio[data-step="reino"] #cm-v2-challenge-select{
  display:flex!important;position:fixed;inset:0;z-index:200;overflow:auto;align-items:center;justify-content:center;
  box-sizing:border-box;padding:clamp(62px,9vh,88px) 16px 22px;
- background:linear-gradient(#08152dcd,#061126e0),url('assets/v2/backgrounds/arena.webp') center / cover no-repeat;color:#fff5db;
+ background:url('assets/v2/backgrounds/arena.webp') center / cover no-repeat;color:#fff5db;
 }
 #cm-v2-challenge-select .cm-v2-challenge-inner{width:min(100%,970px);margin:auto;display:flex;flex-direction:column;align-items:center;gap:clamp(11px,2.7vh,24px)}
 #cm-v2-challenge-select .cm-v2-challenge-title{display:block;width:min(78%,410px);height:auto;max-height:clamp(54px,11vh,105px);object-fit:contain;filter:drop-shadow(0 4px 12px #000b)}
