@@ -234,3 +234,33 @@ body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-player
    flex-basis:125px!important;font-size:11px!important;height:40px!important;
  }
 }
+
+/* Treino livre: a carta da direita mostra o mesmo herói em orientação oposta.
+   Inverte apenas o sprite interno, sem inverter moldura, brasão ou textos. */
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result[data-cm-result-mode="practice"]
+  .cm-practice-mirror-duel .cm-practice-mirror-player .cm-combat-portrait img{
+  transform:scale(-1.42,1.42)!important;
+  transform-origin:50% 24%!important;
+}
+
+/* Casa B: a arte vermelha tem o interior da moldura preenchido.
+   Posicionar o retrato ACIMA da parte central da moldura, mas dentro da
+   abertura, evita que o personagem fique escondido atrás do vermelho.
+   O recorte superior direito deixa o brasão original totalmente visível. */
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result
+  .cm-final-player[data-house="B"] .cm-combat-portrait{
+  position:absolute!important;
+  z-index:4!important;
+  background:none!important;
+  clip-path:polygon(0 0,69% 0,69% 20%,100% 20%,100% 100%,0 100%)!important;
+  -webkit-clip-path:polygon(0 0,69% 0,69% 20%,100% 20%,100% 100%,0 100%)!important;
+}
+/* Moldura permanece visível sobre o restante e os campos seguem dinâmicos. */
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result
+  .cm-final-player[data-house="B"]>b,
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result
+  .cm-final-player[data-house="B"]>small,
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result
+  .cm-final-player[data-house="B"] .cm-final-shots{
+  z-index:6!important;
+}
