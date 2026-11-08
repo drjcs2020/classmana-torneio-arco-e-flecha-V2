@@ -1,4 +1,5 @@
-import {initScene} from './scene-v3.js?v=baseV1restore54';
+import {initScene} from './scene-v3.js?v=grounded-art58';
+import {mountArenaVisual} from './classmana-arena-visual.js?v=art58';
 import {CIRCUITS,LEVELS,targetMotion,obstacleBlocks,distanceDifficulty,flightSeconds} from './arena-difficulty.js?v=3';
 import {arenaAudio} from './arena-audio.js?v=lobbydefault49';
 import {cinematics} from './classmana-cinematics.js?v=vs-no-flash56';
@@ -239,10 +240,13 @@ function selectHouse(k){
   document.body.classList.toggle('cm-art-on',Boolean(ready)&&document.body.dataset.page==='arena');
   scene?.setBackdropMode?.(ready);
   if(match)uiHud();
-  // A arena só aparece depois que a Casa e o cenário foram restaurados.
+  // Evitar mostrar o PlayCanvas antigo enquanto carregam as artes aprovadas.
   if(document.body.dataset.page==='arena'&&match&&view==='arena'){
-   requestAnimationFrame(()=>requestAnimationFrame(()=>
+   const stage=$('stage');
+   const reveal=()=>requestAnimationFrame(()=>requestAnimationFrame(()=>
     document.documentElement.classList.remove('cm-v2-arena-loading')));
+   if(['true','failed'].includes(stage?.dataset.arenaVisualReady))reveal();
+   else stage?.addEventListener('classmana:arena-art-ready',reveal,{once:true});
   }
  });
  fillPlayer(incoming?.rivalId?.[0]===k?incoming.rivalId:null);
@@ -1127,6 +1131,10 @@ spriteHud=mountSpriteHUD({
   $('stage').classList.remove('aiming');scene?.setPower(p);fire(p);uiHud();},
  onPause:toggleArenaPause
 });
+// A camada ilustrada só existe na página da Arena, não nos menus do aluno.
+if(document.body.dataset.page==='arena'){
+ mountArenaVisual({getScene:()=>scene,getMatch:()=>match});
+}
 // No retorno de JOGAR NOVAMENTE, a etapa é aberta diretamente.
  // O backend ainda valida a sessão do mesmo aluno, sem reiniciar a jornada visual.
  const cmDirectChallengeReturn=cmIsLobby&&cmResumeSameStudent&&
