@@ -23,7 +23,7 @@ jobs:
           SRC="$RUNNER_TEMP/classmana-v1"
           git clone --depth 1 --branch main https://github.com/drjcs2020/classmana-torneio-arco-e-flecha.git "$SRC"
           test "$(git -C "$SRC" rev-parse HEAD)" = "442ec414d197d9daa39d78b2649c1b7c38150cb7" || { echo "::error::A V1 mudou desde a auditoria. Importacao abortada."; exit 21; }
-          rsync -a --exclude='.git/' "$SRC/" "$GITHUB_WORKSPACE/"
+          rsync -a --exclude='.git/' --exclude='.github/workflows/' "$SRC/" "$GITHUB_WORKSPACE/"
           cat > online-config.js <<'CONFIG'
           /* ClassMana V2 — API ONLINE DESATIVADA ate criar Railway e SQLite exclusivos.
              Nunca ligar esta copia ao ranking da V1. */
