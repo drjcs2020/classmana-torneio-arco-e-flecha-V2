@@ -280,6 +280,7 @@ function renderWind(wind){
  widget.setAttribute('aria-label','Vento: '+speed.toFixed(1).replace('.',',')+' quilômetros por hora. '+direction.toLowerCase()+'.');
 }
 function uiHud(){if(!match)return;
+ $('stage').dataset.matchMode=match.mode||'practice';
  const progress=$('range-progress'),key=match.level+':'+match.scores.length;
  const title=$('range-trail-title'),info=$('range-mode'),badge=$('arena-mode-badge');
  const levelInfo=LEVELS[match.level]||LEVELS.iniciante;
