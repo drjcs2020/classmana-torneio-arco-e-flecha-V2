@@ -239,6 +239,11 @@ function selectHouse(k){
   document.body.classList.toggle('cm-art-on',Boolean(ready)&&document.body.dataset.page==='arena');
   scene?.setBackdropMode?.(ready);
   if(match)uiHud();
+  // A arena só aparece depois que a Casa e o cenário foram restaurados.
+  if(document.body.dataset.page==='arena'&&match&&view==='arena'){
+   requestAnimationFrame(()=>requestAnimationFrame(()=>
+    document.documentElement.classList.remove('cm-v2-arena-loading')));
+  }
  });
  fillPlayer(incoming?.rivalId?.[0]===k?incoming.rivalId:null);
  // A Casa escolhida define a turma. A escolha do nome vem antes do arqueiro.
@@ -347,6 +352,7 @@ function changeTarget(){
 async function startMatch(accepted=null){
  if(onlineLoading||startMatchPending)return;
  startMatchPending=true;
+ let navigatingToArena=false;
  try{
  const fromInbox=accepted&&typeof accepted.id==='string'?accepted:null;
  const mode=fromInbox?duelMode(fromInbox.kind):$('mode').value;
@@ -432,11 +438,16 @@ async function startMatch(accepted=null){
   try{
    sessionStorage.setItem('cm_active_archery_match_v2',JSON.stringify(match));
    window.location.assign('./arena.html');
+   navigatingToArena=true;
    return;
   }catch(error){console.warn('Navegação entre páginas indisponível:',error)}
  }
  openView('arena');refreshArcher();ensureScene();changeTarget();updateReticle();uiHud();
- }finally{startMatchPending=false;}
+ }finally{
+ startMatchPending=false;
+ // Só soltar a sobreposição se a abertura da arena não foi iniciada.
+ if(!navigatingToArena)cinematics.dismissVersusTransition();
+}
 }
 
 function updateReticle(){
