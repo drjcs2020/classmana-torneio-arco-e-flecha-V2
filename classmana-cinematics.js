@@ -64,12 +64,14 @@ function fighter(person){
  const card=node('article','cm-vs-fighter');
  card.dataset.house=house;
  const img=node('img');
- img.alt='Arqueiro estilo gibi da Casa '+houses[house].name;
+ img.alt='Retrato do rosto do arqueiro da Casa '+houses[house].name;
  img.src=portrait(house,person.gender);
+ img.decoding='async';
+ const crop=node('div','cm-combat-portrait');crop.append(img);
  const info=node('div','cm-vs-fighter-info');
  info.append(node('strong','',person.name||'Arqueiro'),
              node('small','',houses[house].short+' · '+houses[house].name));
- card.append(img,info);
+ card.append(crop,info);
  return card;
 }
 let activeDialog=null;
@@ -147,7 +149,7 @@ function versus(config){
   cancel.addEventListener('click',()=>complete(false),{once:true});
  });
 }
-function resultView({player,house,rival,rivalHouse,ownShots=[],rivalShots=[],opponent='—',mode='duel',ownTotal=null,rivalTotal=null}){
+function resultView({player,house,rival,rivalHouse,gender='m',rivalGender='m',ownShots=[],rivalShots=[],opponent='—',mode='duel',ownTotal=null,rivalTotal=null}){
  const finish=document.getElementById('finish');
  if(!finish)return;
  finish.classList.add('cm-cinematic-result');
@@ -162,8 +164,8 @@ function resultView({player,house,rival,rivalHouse,ownShots=[],rivalShots=[],opp
  emberLayer(card,house,17);
  const wrap=node('div','cm-final-duel');
  const playerPortrait=document.getElementById('hud-archer-image')?.getAttribute('src');
- const left=resultPerson(player,house,ownShots,undefined,playerPortrait);
- const right=resultPerson(rival||'Adversário',rivalHouse,rivalShots,opponent);
+ const left=resultPerson(player,house,ownShots,undefined,playerPortrait||portrait(house,gender));
+ const right=resultPerson(rival||'Adversário',rivalHouse,rivalShots,opponent,portrait(rivalHouse,rivalGender));
  if(mode==='bot'&&scored){
   if(outcome==='win'||outcome==='draw'){
    left.classList.add(outcome==='win'?'cm-result-winner':'cm-result-tie');
@@ -180,8 +182,12 @@ function resultView({player,house,rival,rivalHouse,ownShots=[],rivalShots=[],opp
 }
 function resultPerson(name,house,shots,score,selectedPortrait){
  const article=node('div','cm-final-player'),img=node('img');
- img.src=selectedPortrait||portrait(house);img.alt='Arqueiro da Casa '+houses[getHouse(house)].name;
- article.append(img,node('b','',name),node('small','',houses[getHouse(house)].name));
+ article.dataset.house=getHouse(house);
+ img.src=selectedPortrait||portrait(house);
+ img.alt='Retrato do rosto do arqueiro da Casa '+houses[getHouse(house)].name;
+ img.decoding='async';
+ const crop=node('div','cm-combat-portrait');crop.append(img);
+ article.append(crop,node('b','',name),node('small','',houses[getHouse(house)].short+' · '+houses[getHouse(house)].name));
  if(Array.isArray(shots)&&shots.length){
   const strip=node('div','cm-final-shots');strip.setAttribute('aria-label','Pontuação das cinco flechas');
   for(const item of shots.slice(0,5))strip.append(node('span','',Number(item?.score??item)||0));
