@@ -55,13 +55,6 @@ body.cm-art-on #view-arena .stage{height:100%!important;max-height:none!importan
 .stage.cm-art-ready .cm-visual-logo{top:3px;left:5px;width:112px;max-height:65px}
 .stage.cm-art-ready .battle-hud{top:5px!important;width:130px;max-width:32%;height:42px!important}
 .stage.cm-art-ready .battle-hud .score-display{font-size:18px!important}
-.stage.cm-art-ready .game-top-left{top:67px!important;left:3px!important;gap:0!important}
-.stage.cm-art-ready .game-top-right{top:202px!important;left:3px!important}
-.stage.cm-art-ready #wind,.stage.cm-art-ready #distance,.stage.cm-art-ready #shots{width:135px!important;height:65px!important}
-.stage.cm-art-ready #wind .wind-speed{font-size:14px!important}
-.stage.cm-art-ready #wind .wind-direction-text{font-size:7px!important}
-.stage.cm-art-ready #wind .wind-arrow{width:15px!important;height:9px!important}
-.stage.cm-art-ready #distance,.stage.cm-art-ready #shots{font-size:15px!important;padding:22px 0 4px 28px!important}
 .stage.cm-art-ready .cm-force-meter{right:1px;top:29%;width:75px;height:240px}
 .stage.cm-art-ready .cm-force-knob{width:34px}
 .stage.cm-art-ready .cm-force-number{font-size:10px;min-width:32px}
