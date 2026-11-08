@@ -1,0 +1,47 @@
+/* ClassMana V2 · seleção de Casa alternativa APENAS para DESAFIOS.
+   Reaproveita a arte do protótipo. JOGAR, identificação e jogo não mudam. */
+#view-inicio #cm-v2-challenge-select{display:none!important}
+body[data-page="lobby"][data-v2-entry="challenges"]:not(.cm-v2-home-mode) #view-inicio[data-step="reino"] > :not(#cm-v2-challenge-select):not(#cm-v2-navigate-back):not(.cm-ambient-embers):not(.cm-embers){display:none!important}
+body[data-page="lobby"][data-v2-entry="challenges"]:not(.cm-v2-home-mode) #view-inicio[data-step="reino"] #cm-v2-challenge-select{
+ display:flex!important;position:fixed;inset:0;z-index:200;overflow:auto;align-items:center;justify-content:center;
+ box-sizing:border-box;padding:clamp(62px,9vh,88px) 16px 22px;
+ background:linear-gradient(#08152dcd,#061126e0),url('assets/v2/backgrounds/arena.webp') center / cover no-repeat;color:#fff5db;
+}
+#cm-v2-challenge-select .cm-v2-challenge-inner{width:min(100%,970px);margin:auto;display:flex;flex-direction:column;align-items:center;gap:clamp(11px,2.7vh,24px)}
+#cm-v2-challenge-select .cm-v2-challenge-title{display:block;width:min(78%,410px);height:auto;max-height:clamp(54px,11vh,105px);object-fit:contain;filter:drop-shadow(0 4px 12px #000b)}
+#cm-v2-challenge-select .cm-v2-challenge-cards{width:100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:stretch;gap:clamp(9px,2.7vw,25px);justify-items:center}
+#cm-v2-challenge-select .cm-v2-challenge-card{width:100%;min-width:0;max-width:270px;height:clamp(244px,54vh,450px);position:relative;display:block;overflow:hidden;padding:0;background:#071323;border:2px solid #cfa657;border-radius:14px;cursor:pointer;box-shadow:0 0 0 1px #f4cd7170,0 10px 30px #000a;transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease;isolation:isolate}
+#cm-v2-challenge-select .cm-v2-challenge-card img{display:block;width:100%;height:100%;object-fit:cover;object-position:center 40%;filter:saturate(1.05) brightness(.92);transition:filter .25s ease,transform .32s ease}
+#cm-v2-challenge-select .cm-v2-challenge-card::after{content:"";position:absolute;inset:35% 0 0;background:linear-gradient(transparent,#04102647 22%,#020b1ddc 85%);pointer-events:none;z-index:1}
+#cm-v2-challenge-select .cm-v2-challenge-card-label{position:absolute;inset:auto 6px 15px;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;z-index:2;text-shadow:0 2px 5px #000,0 0 9px #000}
+#cm-v2-challenge-select .cm-v2-challenge-card-label b{font:900 clamp(22px,3.5vw,41px) Georgia,serif;color:#fff9eb}
+#cm-v2-challenge-select .cm-v2-challenge-card-label strong{font:900 clamp(11px,1.65vw,18px)/1.1 'Cinzel',Georgia,serif;color:#ffe7ad;letter-spacing:.02em}
+#cm-v2-challenge-select .cm-v2-challenge-card-label small{font:700 clamp(10px,1vw,13px) 'Nunito',sans-serif;color:#b9d9ee}
+#cm-v2-challenge-select .cm-v2-challenge-card:hover,#cm-v2-challenge-select .cm-v2-challenge-card:focus-visible{transform:translateY(-8px) scale(1.035);border-color:#ffe698;box-shadow:0 0 0 2px #ffecac8c,0 0 32px #ffc44666,0 16px 35px #000c;outline:none}
+#cm-v2-challenge-select .cm-v2-challenge-card:hover img,#cm-v2-challenge-select .cm-v2-challenge-card:focus-visible img{filter:brightness(1.09) saturate(1.18);transform:scale(1.04)}
+#cm-v2-challenge-select .cm-v2-challenge-card-b{border-color:#e4a06e}
+#cm-v2-challenge-select .cm-v2-challenge-card-c{border-color:#73ce9c}
+#cm-v2-challenge-select .cm-v2-challenge-guide{margin:0;text-align:center;font:700 clamp(10px,1.13vw,14px) 'Nunito',sans-serif;color:#bbd9f0;text-shadow:0 2px 5px #000}
+#cm-v2-challenge-select .cm-v2-challenge-guide strong{color:#ffeba7}
+/* VOLTAR original apenas nas duas telas de escolha de Casa: JOGAR e DESAFIOS.
+   Etapas subsequentes mantêm seu próprio layout, sem alteração global. */
+#cm-v2-navigate-back .cm-v2-back-art{display:none}
+body[data-page="lobby"]:not(.cm-v2-home-mode) #view-inicio[data-step="reino"] #cm-v2-navigate-back{
+ display:grid!important;place-items:center!important;top:clamp(9px,2vh,18px)!important;left:clamp(9px,1.4vw,20px)!important;width:clamp(112px,12vw,152px)!important;height:clamp(40px,5.3vw,56px)!important;min-width:0!important;min-height:0!important;border:0!important;border-radius:0!important;padding:0!important;box-shadow:none!important;background:transparent!important;filter:drop-shadow(0 4px 9px #0008);cursor:pointer}
+body[data-page="lobby"]:not(.cm-v2-home-mode) #view-inicio[data-step="reino"] #cm-v2-navigate-back .cm-v2-back-art{display:block;width:100%;height:100%;object-fit:fill;pointer-events:none}
+body[data-page="lobby"]:not(.cm-v2-home-mode) #view-inicio[data-step="reino"] #cm-v2-navigate-back .cm-v2-back-label{display:none}
+body[data-page="lobby"] #view-inicio[data-step="reino"] #cm-v2-navigate-back:hover{filter:brightness(1.14) drop-shadow(0 3px 12px #ffdc8094)}
+body[data-page="lobby"] #view-inicio[data-step="reino"] #cm-v2-navigate-back:focus-visible{outline:3px solid #a2f0ff;outline-offset:3px}
+@media(max-width:620px){
+ body[data-page="lobby"][data-v2-entry="challenges"]:not(.cm-v2-home-mode) #view-inicio[data-step="reino"] #cm-v2-challenge-select{padding:68px 7px 15px}
+ #cm-v2-challenge-select .cm-v2-challenge-inner{gap:12px}
+ #cm-v2-challenge-select .cm-v2-challenge-cards{gap:6px}
+ #cm-v2-challenge-select .cm-v2-challenge-card{height:clamp(208px,51vh,345px);border-radius:10px}
+ #cm-v2-challenge-select .cm-v2-challenge-card-label{inset:auto 2px 8px;gap:3px}
+ #cm-v2-challenge-select .cm-v2-challenge-card-label b{font-size:clamp(18px,6vw,27px)}
+ #cm-v2-challenge-select .cm-v2-challenge-card-label strong{font-size:clamp(8px,2.4vw,11px)}
+ #cm-v2-challenge-select .cm-v2-challenge-card-label small{font-size:clamp(8px,2vw,10px)}
+ #cm-v2-challenge-select .cm-v2-challenge-title{max-width:240px;max-height:64px}
+ #cm-v2-challenge-select .cm-v2-challenge-guide{font-size:10px}
+}
+@media(prefers-reduced-motion:reduce){#cm-v2-challenge-select .cm-v2-challenge-card,#cm-v2-challenge-select .cm-v2-challenge-card img{transition:none!important}}
