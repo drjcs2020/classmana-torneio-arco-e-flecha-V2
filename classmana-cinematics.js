@@ -176,6 +176,14 @@ function resultView({player,house,rival,rivalHouse,gender='m',rivalGender='m',ow
  const outcome=scored?(ownTotal>rivalTotal?'win':ownTotal<rivalTotal?'loss':'draw'):'pending';
  finish.dataset.cmResultOutcome=outcome;
  const card=finish.querySelector('.finish-card');if(!card)return;
+ // Controle real e acessível: não deixar o botão verde sem legenda.
+ // O span garante que a arte do botão nunca esconda seu texto.
+ const replay=card.querySelector('#play-again');
+ if(replay){
+  replay.replaceChildren(node('span','cm-result-replay-label','▶ JOGAR NOVAMENTE'));
+  replay.setAttribute('aria-label','Jogar novamente — voltar à escolha dos desafios');
+  replay.title='Voltar aos desafios para escolher outra partida';
+ }
  const eyebrow=card.querySelector(':scope > small');
  if(eyebrow)eyebrow.textContent=mode==='bot'?'🏆 RESULTADO DO TREINO':mode==='practice'?'🏹 RESULTADO DO TREINO LIVRE':'🏆 RESULTADO DO TORNEIO';
  // Mesmo conjunto de escudos e ornamentos na introdução e no resultado.
