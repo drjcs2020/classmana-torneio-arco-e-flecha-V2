@@ -39,7 +39,7 @@ if(dialog&&trigger){
   for(const name of data.teams||[]){const o=document.createElement('option');o.value=name;o.textContent=name;sel.append(o)}
   sel.value=selected;
  }
- function closePanel(){dialog.close();teacherToken='';showAuthenticated(false);notify('Entre com a senha do professor.');}
+ function closePanel(){dialog.close();teacherToken='';$('cm-teacher-change-form').reset();showAuthenticated(false);notify('Entre com a senha do professor.');}
  trigger.addEventListener('click',()=>{
   showAuthenticated(false);teacherToken='';notify('Entre com a senha do professor.');
   if(typeof dialog.showModal==='function')dialog.showModal();
@@ -54,6 +54,24 @@ if(dialog&&trigger){
    const result=await request('teacherLogin',{password:$('cm-teacher-password').value});
    teacherToken=result.token;showAuthenticated(true);await refresh();notify('Acesso do professor liberado.');
   }catch(error){teacherToken='';showAuthenticated(false);notify(error.message,true)}
+  finally{loading(false)}
+ });
+ $('cm-teacher-change-form').addEventListener('submit',async event=>{
+  event.preventDefault();
+  const current=$('cm-teacher-old-password').value;
+  const next=$('cm-teacher-new-password').value;
+  const confirm=$('cm-teacher-confirm-password').value;
+  if(next!==confirm){notify('As duas senhas novas não coincidem.',true);return;}
+  if(next.length<12||next.length>128||!/[\p{L}]/u.test(next)||!/[0-9]/.test(next)){
+    notify('Use 12 a 128 caracteres com letras e números.',true);return;
+  }
+  loading(true);notify('Alterando a senha do professor…');
+  try{
+    await request('teacherChangePassword',{currentPassword:current,newPassword:next});
+    $('cm-teacher-change-form').reset();
+    teacherToken='';showAuthenticated(false);
+    notify('Senha alterada! Entre novamente com sua nova senha.');
+  }catch(error){notify(error.message,true)}
   finally{loading(false)}
  });
  $('cm-teacher-add-form').addEventListener('submit',async event=>{
