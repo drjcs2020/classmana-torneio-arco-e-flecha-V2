@@ -96,7 +96,7 @@ body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compac
  background-image:url('assets/v2/frames/aguia.webp')!important;
 }
 body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact .cm-final-player[data-house="B"]::after{
- background-image:url('assets/v2/frames/leao.webp')!important;
+ background-image:url('assets/v2/frames/leao-moldura-vazada.webp')!important;
 }
 body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact .cm-final-player[data-house="C"]::after{
  background-image:url('assets/v2/frames/dragao.webp')!important;
