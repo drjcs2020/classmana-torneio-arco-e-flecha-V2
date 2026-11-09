@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="560" height="164" viewBox="0 0 560 164" role="img" aria-label="Placa dourada e azul sem texto para pontuação dinâmica">
+<title>ClassMana — Placa de pontuação vazia</title>
+<defs>
+ <linearGradient id="gold" x1="0" y1="0" x2=".25" y2="1">
+  <stop stop-color="#fff8b7"/><stop offset=".13" stop-color="#ffd55d"/><stop offset=".33" stop-color="#a35a13"/><stop offset=".48" stop-color="#fff1a7"/><stop offset=".73" stop-color="#c77b18"/><stop offset=".91" stop-color="#fff0a0"/><stop offset="1" stop-color="#92500d"/>
+ </linearGradient>
+ <linearGradient id="navy" x1="0" y1="0" x2="0" y2="1">
+  <stop stop-color="#1b5c9c"/><stop offset=".18" stop-color="#103667"/><stop offset=".62" stop-color="#061b41"/><stop offset="1" stop-color="#02122f"/>
+ </linearGradient>
+ <linearGradient id="inner" x1="0" y1="0" x2="0" y2="1">
+  <stop stop-color="#0c3976"/><stop offset=".48" stop-color="#08265a"/><stop offset="1" stop-color="#061632"/>
+ </linearGradient>
+ <filter id="shadow" x="-15%" y="-30%" width="130%" height="160%">
+  <feGaussianBlur stdDeviation="5"/>
+ </filter>
+ <linearGradient id="silver" x1="0" x2="1">
+  <stop stop-color="#a9e6ff"/><stop offset=".5" stop-color="#effaff"/><stop offset="1" stop-color="#74bada"/>
+ </linearGradient>
+</defs>
+<path d="M32 22H528L552 45V117L529 141H31L8 117V45Z" fill="#020c23" opacity=".8" filter="url(#shadow)"/>
+<path d="M32 17H528L551 43V115L528 140H32L9 115V43Z" fill="url(#gold)" stroke="#6e3508" stroke-width="4"/>
+<path d="M38 25H522L542 47V111L521 132H39L18 111V47Z" fill="url(#navy)" stroke="#f4ce70" stroke-width="2"/>
+<path d="M44 33H516L532 51V108L514 124H46L28 108V51Z" fill="url(#inner)" stroke="#805522" stroke-width="2"/>
+<path d="M46 34H514" stroke="url(#silver)" stroke-width="1.6" opacity=".75"/>
+<path d="M47 123H514" stroke="#ffcb66" stroke-width="1.4" opacity=".72"/>
+<path d="M49 51H166M394 51H510" stroke="#f5ca65" opacity=".7" stroke-width="1.8"/>
+<path d="M52 104H171M389 104H508" stroke="#f5ca65" opacity=".62" stroke-width="1.6"/>
+<g fill="url(#gold)" stroke="#693509" stroke-width="1.7">
+ <path d="M30 80l12-12 12 12-12 12Z"/><path d="M530 80l-12-12-12 12 12 12Z"/>
+ <path d="M280 10l8 10-8 10-8-10Z"/><path d="M280 133l8 11-8 10-8-10Z"/>
+</g>
+<g fill="none" stroke="#f6d97b" stroke-linecap="round" opacity=".9">
+ <path d="M67 55q9 17 0 34M493 55q-9 17 0 34" stroke-width="2"/>
+ <path d="M60 61q-11 16 0 37M500 61q11 16 0 37" stroke-width="1"/>
+ <path d="M171 61h28M361 61h28M174 99h25M361 99h25" stroke-width="1.4"/>
+</g>
+<g fill="#ffe69c">
+ <circle cx="33" cy="43" r="2.7"/><circle cx="527" cy="43" r="2.7"/>
+ <circle cx="33" cy="115" r="2.7"/><circle cx="527" cy="115" r="2.7"/>
+</g>
+</svg>
