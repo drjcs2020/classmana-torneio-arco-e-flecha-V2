@@ -72,10 +72,14 @@ function cmForgetStudent(){try{sessionStorage.removeItem(CM_ACTIVE_STUDENT);sess
 const TEAMS=window.CLASSMANA_TEAMS||{};
 const cmNavigationType=performance.getEntriesByType('navigation')[0]?.type;
 const cmIsLobby=document.body.dataset.page==='lobby';
-const cmResumeSameStudent=cmIsLobby&&cmCanContinue();
-// An unfinished lobby session stays visible even after browser reload.
+// O aluno mantém o perfil até usar ENCERRAR SESSÃO.
+const cmInternalReturn=cmIsLobby&&cmCanContinue();
 if(cmIsLobby&&!cmStoredLobbyStudent()){
  try{const oldId=cmSessionId()||localStorage.getItem('cm_arco_nome_v2');if(/^[ABC]\d{2}$/.test(oldId||''))cmRememberLobbyStudent(oldId)}catch{}
+}
+const cmResumeSameStudent=cmIsLobby&&(cmInternalReturn||Boolean(cmStoredLobbyStudent()));
+if(cmIsLobby&&cmStoredLobbyStudent()&&cmSessionId()!==cmStoredLobbyStudent()){
+ try{sessionStorage.setItem(CM_ACTIVE_STUDENT,cmStoredLobbyStudent())}catch{}
 }
 if(cmIsLobby&&!cmResumeSameStudent){online.logout();cmForgetStudent();}
 if(document.body.dataset.page==='arena'&&cmNavigationType==='reload'){
@@ -87,6 +91,22 @@ function safeRead(){try{const a=JSON.parse(localStorage.getItem('classmana-arche
 storage=safeRead();
 function persist(row){storage.push({...row,at:new Date().toISOString()});storage=storage.slice(-150);try{localStorage.setItem('classmana-archery-v2-isolated',JSON.stringify(storage))}catch{}renderRanking()}
 function toast(s){const t=$('toast');t.textContent=s;t.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.classList.remove('show'),3100)}
+// Reentrada direta sem escolher novamente a Casa ou confirmar o aluno.
+function cmOpenActiveLobbyStep(step){
+ if(!cmIsLobby||!['heroi','desafio'].includes(step))return false;
+ const id=[cmStoredLobbyStudent(),cmSessionId(),identifiedPlayerId,online.user?.id]
+  .find(value=>/^[ABC][0-9]{2}$/.test(value||'')&&choices(value[0]).some(p=>p.id===value));
+ if(!id||(identifiedPlayerId&&identifiedPlayerId!==id)||(online.user&&online.user.id!==id))return false;
+ identifiedPlayerId=id;
+ if(cmSessionId()!==id||cmStoredLobbyStudent()!==id)cmSaveStudent(id);
+ selectHouse(id[0]);
+ fillPlayer(id);
+ $('player').value=id;$('player').disabled=true;
+ populateIdentityOptions();
+ setLobbyStep(step);
+ return true;
+}
+window.classmanaOpenActiveLobbyStep=cmOpenActiveLobbyStep;
 // Rota compartilhada para sair da arena e jogar novamente sem perder a sessão.
 function cmReturnToChallenge(){
  const playerId=[identifiedPlayerId,match?.playerId,online.user?.id,cmSessionId()]
@@ -925,8 +945,8 @@ async function startOnlineClient(){
   if(!connected)return;
   try{cmSyncRoster(await online.list())}catch(err){console.warn('Lista online indisponível; usando nomes cadastrados no jogo:',err)}
   const request=new URLSearchParams(location.search);
-  // Only a deliberate return from the arena preserves identity.
-  // Reloading or reopening the lobby always releases the prior student's account.
+  // A sessão permanece durante a navegação, mas desafios online ainda exigem
+  // validação pelo servidor antes da criação dos convites.
   const sessionId=cmResumeSameStudent?cmSessionId():'';
   // Initial identity is already cleared synchronously at module start.
   // Never force the lobby back to Casa after a student has begun choosing a character.
@@ -935,7 +955,8 @@ async function startOnlineClient(){
    identifiedPlayerId=sessionId;
    selectHouse(sessionId[0]);fillPlayer(sessionId);populateIdentityOptions();
    $('player').value=sessionId;$('player').disabled=true;updateMode();
-   setLobbyStep('desafio');
+   // A reconexão não deve retirar o aluno da tela que acabou de abrir.
+   if(['reino','perfil'].includes($('view-inicio')?.dataset.step))setLobbyStep('desafio');
    const endBtn=$('cm-end-session');if(endBtn)endBtn.hidden=false;
   }else if(document.body.dataset.page==='lobby'&&!identifiedPlayerId&&online.user&&sessionId!==online.user.id){
    online.logout();cmForgetStudent();identifiedPlayerId='';
@@ -1139,7 +1160,7 @@ spriteHud=mountSpriteHUD({
  const cmDirectChallengeReturn=cmIsLobby&&cmResumeSameStudent&&
   new URLSearchParams(location.search).get('continuar')==='1'&&
   /^[ABC][0-9]{2}$/.test(cmSessionId());
- selectHouse(cmDirectChallengeReturn?cmSessionId()[0]:'A');
+ selectHouse(cmResumeSameStudent&&/^[ABC][0-9]{2}$/.test(cmSessionId())?cmSessionId()[0]:'A');
  updateMode();drawCourse();setLobbyStep(cmDirectChallengeReturn?'desafio':'reino');
 const hostedParams=new URLSearchParams(location.search);
 if(hostedParams.get('hosted')==='1'&&document.body.dataset.page!=='arena'){
