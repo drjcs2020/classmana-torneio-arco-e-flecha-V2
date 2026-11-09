@@ -172,6 +172,7 @@ function resultView({player,house,rival,rivalHouse,gender='m',rivalGender='m',ow
  finish.classList.add('cm-cinematic-result');
  // Apenas a conclusão contra o robô usa o layout amplo sem moldura.
  finish.dataset.cmResultMode=mode;
+ finish.classList.toggle('cm-result-compact',mode==='practice'||mode==='bot');
  const scored=Number.isFinite(ownTotal)&&Number.isFinite(rivalTotal);
  const outcome=scored?(ownTotal>rivalTotal?'win':ownTotal<rivalTotal?'loss':'draw'):'pending';
  finish.dataset.cmResultOutcome=outcome;
@@ -184,8 +185,13 @@ function resultView({player,house,rival,rivalHouse,gender='m',rivalGender='m',ow
   replay.setAttribute('aria-label','Jogar novamente — voltar à escolha dos desafios');
   replay.title='Voltar aos desafios para escolher outra partida';
  }
+ const backButton=card.querySelector('#cm-v2-result-home');
+ if(backButton&&(mode==='practice'||mode==='bot')){
+  backButton.textContent='← VOLTAR';
+  backButton.setAttribute('aria-label','Voltar aos desafios');
+ }
  const eyebrow=card.querySelector(':scope > small');
- if(eyebrow)eyebrow.textContent=mode==='bot'?'🏆 RESULTADO DO TREINO':mode==='practice'?'🏹 RESULTADO DO TREINO LIVRE':'🏆 RESULTADO DO TORNEIO';
+ if(eyebrow)eyebrow.textContent=mode==='practice'?'🏹 RESULTADO DO TREINO LIVRE':'🏆 RESULTADO DO TORNEIO';
  // Mesmo conjunto de escudos e ornamentos na introdução e no resultado.
  const finishTitle=card.querySelector('#finish-title');
  if(finishTitle){
