@@ -1,11 +1,22 @@
 import {initScene} from './scene-v3.js?v=restored-3d-models61';
 import {CIRCUITS,LEVELS,targetMotion,obstacleBlocks,distanceDifficulty,flightSeconds} from './arena-difficulty.js?v=3';
 import {arenaAudio} from './arena-audio.js?v=lobbydefault49';
-import {cinematics} from './classmana-cinematics.js?v=treino-placas71';
+import {cinematics} from './classmana-cinematics.js?v=resultado-v21b';
 import {initAtmosphere} from './arena-atmosphere.js?v=no-crowd15';
 import {online} from './online-client.js?v=api10';
 import {mountSpriteHUD} from './sprite-hud.js?v=1';
 const $=id=>document.getElementById(id);
+function cmResetResultPresentation(){
+ const finish=$('finish');if(!finish)return;
+ finish.classList.add('hidden');
+ finish.classList.remove('cm-v21-result');
+ finish.querySelector('.cm-v21-stage')?.remove();
+ const heading=finish.querySelector('.cm-v21-head');
+ const title=heading?.querySelector('#finish-title');
+ if(title)heading.before(title);
+ heading?.remove();
+}
+
 const H={A:{grade:'4º A',name:'Águia Dourada',color:'#78bdff'},B:{grade:'4º B',name:'Leão de Fogo',color:'#ff9778'},C:{grade:'4º C',name:'Dragão de Esmeralda',color:'#8defac'}};
 const R=window.CLASSMANA_ROSTER||{A:[],B:[],C:[]};
 const clamp=(v,min,max)=>Math.min(max,Math.max(min,v));
@@ -455,7 +466,7 @@ async function startMatch(accepted=null){
    rival:'ROBÔ ARQUEIRO',rivalHouse:'C',mode:'bot',sound:effect=>arenaAudio.play(effect)});
   if(!go){match=null;return;}
  }
- reticle={x:.50,y:.45};$('finish').classList.add('hidden');
+ reticle={x:.50,y:.45};cmResetResultPresentation();
  $('instruction').textContent='MOVA A MIRA DO ARCO • SEGURE PARA PUXAR • SOLTE PARA ATIRAR';
  if(document.body.dataset.page==='lobby'){
   try{
@@ -1101,7 +1112,7 @@ $('my-team').addEventListener('change',()=>{
 });$('start-game').addEventListener('click',startMatch);$('rank-play').addEventListener('click',()=>openView('inicio'));$('rules-play').addEventListener('click',()=>openView('inicio'));$('leave-arena').addEventListener('click',()=>{
  if(match?.running&&!confirm('Abandonar a rodada atual e voltar aos desafios?'))return;
  cmReturnToChallenge();
-});$('play-again').addEventListener('click',cmReturnToChallenge);$('share-result').addEventListener('click',()=>{if(match?.onlineSaveFailed)finishMatch();else if(!match?.online)share()});
+});$('play-again').addEventListener('click',cmReturnToChallenge);$('cm-v2-result-home')?.addEventListener('click',cmReturnToChallenge);$('share-result').addEventListener('click',()=>{if(match?.onlineSaveFailed)finishMatch();else if(!match?.online)share()});
 const world=$('world');world.addEventListener('pointerdown',e=>{if(!match?.running||match.locked||match.paused)return;e.preventDefault();world.setPointerCapture(e.pointerId);holding=true;pointerStart=Date.now();aim(e);scene?.setPower(.28);$('stage').classList.add('aiming');arenaAudio.play('draw');$('instruction').textContent='ARRASTE PARA MOVER O ARCO • SOLTE PARA ATIRAR'});world.addEventListener('pointermove',e=>{if(!match?.running||match.locked||match.paused)return;if(holding||e.pointerType==='mouse')aim(e);if(holding)scene?.setPower(chargePower())});world.addEventListener('pointerup',e=>{if(!holding)return;e.preventDefault();aim(e);holding=false;$('stage').classList.remove('aiming');$('instruction').textContent='MOVA OU ARRASTE PARA MIRAR • SEGURE PARA PUXAR • SOLTE PARA ATIRAR';const p=chargePower();scene?.setPower(p);spriteHud?.setPower(p);fire(p);uiHud()});world.addEventListener('pointercancel',()=>{holding=false;$('stage').classList.remove('aiming');scene?.setPower(0)});
 document.addEventListener('keydown',e=>{if(view!=='arena'||!match?.running||match.locked)return;let action=true;const step=e.shiftKey?.022:.008;switch(e.code){case'ArrowUp':reticle.y=clamp(reticle.y-step,.08,.92);break;case'ArrowDown':reticle.y=clamp(reticle.y+step,.08,.92);break;case'ArrowLeft':reticle.x=clamp(reticle.x-step,.06,.94);break;case'ArrowRight':reticle.x=clamp(reticle.x+step,.06,.94);break;case'Space':fire(1);break;default:action=false}if(action){e.preventDefault();updateReticle()}});
 setInterval(()=>{if(holding&&!match?.paused){scene?.setPower(chargePower());uiHud()}},60);
