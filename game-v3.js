@@ -636,13 +636,14 @@ async function finishMatch(){
  const total=match.scores.reduce((a,b)=>a+b,0),
   bot=match.mode==='bot'?Array.from({length:5},()=>chooseRobotScore(match.difficulty,total/5)):[],
   rivalScore=match.mode==='bot'?bot.reduce((a,b)=>a+b,0):undefined;
- const title=match.mode==='practice'?(total>=37?'MIRA LENDÁRIA!':'TREINAMENTO CONCLUÍDO'):
-  total>rivalScore?'🏆 VITÓRIA! VOCÊ VENCEU O ROBÔ!':total===rivalScore?'🤝 EMPATE COM O ROBÔ!':'🏹 DERROTA! ROBÔ ARQUEIRO VENCEU!';
+ // Resultado: sem informações repetidas no cabeçalho.
+ const title=match.mode==='practice'?'TREINAMENTO CONCLUÍDO':
+  total>rivalScore?'VITÓRIA':total===rivalScore?'EMPATE':'DERROTA';
  $('finish-title').textContent=title;
- $('finish-desc').textContent=match.mode==='bot'
-  ?'Você: '+total+' pontos  •  Robô Arqueiro: '+rivalScore+' pontos  •  '+(total>rivalScore?'Vitória do jogador':total<rivalScore?'Vitória do robô':'Empate')
-  :'Sua pontuação: '+total+' de 50 pontos nesta rodada.';
- renderFinishScore(total,rivalScore===undefined?'—':rivalScore,rivalScore===undefined?'TREINO LIVRE':'ROBÔ');
+ $('finish-desc').textContent='';
+ // Treino livre é um espelho do próprio aluno: ambos exibem seu total real.
+ renderFinishScore(total,match.mode==='practice'?total:rivalScore,
+  match.mode==='practice'?'TREINO LIVRE':'ROBÔ');
  cinematics.resultView({player:match.player,house:match.house,gender:archerGender(),
   rival:match.mode==='bot'?'ROBÔ ARQUEIRO':'SEU RECORDE',
   rivalHouse:match.mode==='bot'?'C':match.house,rivalGender:archerGender(),
