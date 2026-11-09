@@ -48,7 +48,7 @@ body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-player
 }
 .cm-vs-overlay .cm-vs-fighter[data-house="B"]::after,
 body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-player[data-house="B"]::after{
-  background-image:url("assets/v2/frames/leao.webp")!important;
+  background-image:url("assets/v2/frames/leao.webp?v=vazado73")!important;
 }
 .cm-vs-overlay .cm-vs-fighter[data-house="C"]::after,
 body[data-page="arena"] #view-arena #finish.cm-cinematic-result .cm-final-player[data-house="C"]::after{
