@@ -1,0 +1,175 @@
+/* ClassMana V2 — 2026-11-08: somente a abertura DESAFIO DE TREINO.
+   Usa as molduras, portraits e VS existentes; nenhum sprite novo,
+   nenhuma alteração de mira, física, login, resultado ou placar. */
+.cm-vs-overlay[data-mode="bot"] .cm-vs-shell{
+  width:min(97vw,1040px)!important;
+  gap:clamp(5px,1.1dvh,10px)!important;
+  max-height:calc(100dvh - 16px)!important;
+  min-height:0!important;
+}
+.cm-vs-overlay[data-mode="bot"] .cm-combat-heading{
+  width:min(94%,860px)!important;
+  max-width:860px!important;
+  gap:clamp(7px,1vw,14px)!important;
+}
+.cm-vs-overlay[data-mode="bot"] .cm-combat-heading-crest{
+  width:clamp(38px,5vw,64px)!important;
+  height:clamp(38px,5vw,64px)!important;
+}
+.cm-vs-overlay[data-mode="bot"] .cm-combat-heading .cm-vs-title{
+  flex:0 1 690px!important;
+  width:min(100%,690px)!important;
+  max-width:690px!important;
+  margin:0!important;
+  padding:clamp(5px,.95dvh,9px) clamp(8px,1.3vw,16px)!important;
+  font:900 clamp(22px,3vw,40px)/1.06 'Cinzel',Georgia,serif!important;
+  letter-spacing:.013em!important;
+  border-width:3px!important;
+}
+.cm-vs-overlay[data-mode="bot"] .cm-vs-sub{
+  margin:0!important;
+  font-size:clamp(11px,1.12vw,15px)!important;
+  line-height:1.15!important;
+}
+.cm-vs-overlay[data-mode="bot"] .cm-vs-fighters{
+  width:min(100%,990px)!important;
+  max-width:990px!important;
+  grid-template-columns:minmax(0,1fr) clamp(70px,9vw,122px) minmax(0,1fr)!important;
+  gap:clamp(8px,1.5vw,19px)!important;
+  align-items:center!important;
+  justify-items:center!important;
+}
+.cm-vs-overlay[data-mode="bot"] .cm-vs-fighter[data-house]{
+  box-sizing:border-box!important;
+  height:min(56dvh,375px)!important;
+  width:auto!important;
+  aspect-ratio:.722!important;
+  max-height:none!important;
+  max-width:100%!important;
+  min-height:0!important;
+  overflow:visible!important;
+}
+/* Respeita a janela da arte: personagem por trás, bordas oficiais à frente. */
+.cm-vs-overlay[data-mode="bot"] .cm-vs-fighter[data-house]::after{
+  inset:0!important;
+  background-size:100% 100%!important;
+}
+.cm-vs-overlay[data-mode="bot"] .cm-vs-fighter[data-house] .cm-combat-portrait{
+  top:12.5%!important;
+  left:14%!important;
+  width:72%!important;
+  height:58%!important;
+  z-index:1!important;
+}
+.cm-vs-overlay[data-mode="bot"] .cm-vs-fighter[data-house] .cm-combat-portrait img{
+  display:block!important;
+  opacity:1!important;
+  visibility:visible!important;
+}
+/* Aumento REAL da área tipográfica na plaqueta vazia da moldura:
+   nome e turma são elementos HTML dinâmicos, sem caixas CSS por cima. */
+.cm-vs-overlay[data-mode="bot"] .cm-vs-fighter[data-house] .cm-vs-fighter-info{
+  box-sizing:border-box!important;
+  top:70%!important;
+  left:11.5%!important;
+  width:77%!important;
+  height:17%!important;
+  max-height:17%!important;
+  min-height:0!important;
+  padding:1px 4px!important;
+  gap:2px!important;
+  overflow:hidden!important;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+.cm-vs-overlay[data-mode="bot"] .cm-vs-fighter[data-house] .cm-vs-fighter-info strong{
+  width:100%!important;
+  max-width:100%!important;
+  display:block!important;
+  flex:none!important;
+  overflow:visible!important;
+  white-space:normal!important;
+  overflow-wrap:normal!important;
+  text-overflow:clip!important;
+  font:900 clamp(13px,1.3vw,18px)/1.08 'Cinzel',Georgia,serif!important;
+  text-align:center!important;
+  background:transparent!important;
+}
+.cm-vs-overlay[data-mode="bot"] .cm-vs-fighter[data-house] .cm-vs-fighter-info small{
+  width:100%!important;
+  max-width:100%!important;
+  display:block!important;
+  flex:none!important;
+  white-space:normal!important;
+  overflow-wrap:normal!important;
+  text-overflow:clip!important;
+  font:900 clamp(9px,.76vw,11px)/1.05 'Nunito',sans-serif!important;
+  text-align:center!important;
+  background:transparent!important;
+}
+.cm-vs-overlay[data-mode="bot"] .cm-vs-fighters>.cm-vs-mark{
+  width:clamp(72px,9vw,115px)!important;
+  height:clamp(80px,10vw,125px)!important;
+}
+.cm-vs-overlay[data-mode="bot"] .cm-vs-actions{
+  margin:0!important;
+  gap:clamp(7px,1vw,12px)!important;
+}
+.cm-vs-overlay[data-mode="bot"] .cm-vs-actions button{
+  box-sizing:border-box!important;
+  min-height:40px!important;
+  height:clamp(40px,6.6dvh,47px)!important;
+  padding:5px 15px!important;
+  font:900 clamp(13px,1.4vw,18px)/1 'Cinzel',Georgia,serif!important;
+}
+.cm-vs-overlay[data-mode="bot"] .cm-vs-note{
+  margin:0!important;
+  font-size:clamp(10px,.85vw,12px)!important;
+}
+@media (max-height:690px) and (min-width:681px){
+  .cm-vs-overlay[data-mode="bot"] .cm-vs-fighter[data-house]{
+    height:min(56dvh,370px)!important;
+  }
+}
+@media (max-width:680px){
+  .cm-vs-overlay[data-mode="bot"] .cm-combat-heading{
+    width:100%!important;gap:3px!important;
+  }
+  .cm-vs-overlay[data-mode="bot"] .cm-combat-heading-crest{
+    width:clamp(23px,6.5vw,38px)!important;
+    height:clamp(23px,6.5vw,38px)!important;
+  }
+  .cm-vs-overlay[data-mode="bot"] .cm-combat-heading .cm-vs-title{
+    font-size:clamp(16px,4.15vw,24px)!important;
+    padding:5px 6px!important;
+  }
+  .cm-vs-overlay[data-mode="bot"] .cm-vs-fighters{
+    width:100%!important;
+    grid-template-columns:minmax(0,1fr) 38px minmax(0,1fr)!important;
+    gap:3px!important;
+  }
+  .cm-vs-overlay[data-mode="bot"] .cm-vs-fighter[data-house]{
+    width:min(100%,26dvh)!important;
+    height:auto!important;
+    max-height:min(39dvh,285px)!important;
+    aspect-ratio:.722!important;
+  }
+  .cm-vs-overlay[data-mode="bot"] .cm-vs-fighter[data-house] .cm-vs-fighter-info{
+    top:68.5%!important;height:19.5%!important;max-height:19.5%!important;
+    width:79%!important;left:10.5%!important;padding:0 2px!important;gap:1px!important;
+  }
+  .cm-vs-overlay[data-mode="bot"] .cm-vs-fighter[data-house] .cm-vs-fighter-info strong{
+    font-size:clamp(9px,2.7vw,13px)!important;
+  }
+  .cm-vs-overlay[data-mode="bot"] .cm-vs-fighter[data-house] .cm-vs-fighter-info small{
+    font-size:clamp(7px,1.65vw,9px)!important;
+  }
+  .cm-vs-overlay[data-mode="bot"] .cm-vs-fighters>.cm-vs-mark{
+    width:38px!important;height:49px!important;
+  }
+  .cm-vs-overlay[data-mode="bot"] .cm-vs-actions button{
+    height:40px!important;min-height:40px!important;
+    padding:5px 10px!important;font-size:clamp(11px,3vw,14px)!important;
+  }
+}
