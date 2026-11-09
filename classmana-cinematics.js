@@ -168,99 +168,71 @@ function versus(config){
 }
 function resultView({player,house,rival,rivalHouse,gender='m',rivalGender='m',ownShots=[],rivalShots=[],opponent='—',mode='duel',ownTotal=null,rivalTotal=null}){
  const finish=document.getElementById('finish');
- if(!finish)return;
- finish.classList.add('cm-cinematic-result');
- // Apenas a conclusão contra o robô usa o layout amplo sem moldura.
+ const card=finish?.querySelector('.finish-card');
+ if(!card)return;
+ finish.classList.add('cm-cinematic-result','cm-v21-result');
+ finish.classList.remove('cm-result-compact');
  finish.dataset.cmResultMode=mode;
- finish.classList.toggle('cm-result-compact',mode==='practice'||mode==='bot');
- const scored=Number.isFinite(ownTotal)&&Number.isFinite(rivalTotal);
- const outcome=scored?(ownTotal>rivalTotal?'win':ownTotal<rivalTotal?'loss':'draw'):'pending';
+ const ownOk=typeof ownTotal==='number'&&Number.isFinite(ownTotal);
+ const rivalOk=typeof rivalTotal==='number'&&Number.isFinite(rivalTotal);
+ const competitive=mode!=='practice'&&ownOk&&rivalOk;
+ const outcome=competitive?(ownTotal>rivalTotal?'win':ownTotal<rivalTotal?'loss':'draw'):'pending';
  finish.dataset.cmResultOutcome=outcome;
- const card=finish.querySelector('.finish-card');if(!card)return;
- // Controle real e acessível: não deixar o botão verde sem legenda.
- // O span garante que a arte do botão nunca esconda seu texto.
- const replay=card.querySelector('#play-again');
- if(replay){
-  replay.replaceChildren(node('span','cm-result-replay-label','▶ JOGAR NOVAMENTE'));
-  replay.setAttribute('aria-label','Jogar novamente — voltar à escolha dos desafios');
-  replay.title='Voltar aos desafios para escolher outra partida';
+ const title=card.querySelector('#finish-title');
+ let head=card.querySelector('.cm-v21-head');
+ if(!head){
+  head=node('header','cm-v21-head');
+  const logo=node('img','cm-v21-logo');
+  logo.src='assets/images/logo-classmana-oficial.webp';logo.alt='ClassMana';
+  const sub=node('div','cm-v21-subtitle');
+  if(title)head.append(logo,title,sub);
+  card.prepend(head);
+  card.querySelector('.cm-finish-heading')?.remove();
  }
- const backButton=card.querySelector('#cm-v2-result-home');
- if(backButton&&(mode==='practice'||mode==='bot')){
-  backButton.textContent='← VOLTAR';
-  backButton.setAttribute('aria-label','Voltar aos desafios');
- }
- const eyebrow=card.querySelector(':scope > small');
- if(eyebrow)eyebrow.textContent=mode==='practice'?'🏹 RESULTADO DO TREINO LIVRE':'🏆 RESULTADO DO TORNEIO';
- // Mesmo conjunto de escudos e ornamentos na introdução e no resultado.
- const finishTitle=card.querySelector('#finish-title');
- if(finishTitle){
-  let heading=card.querySelector('.cm-finish-heading');
-  if(!heading){
-   heading=node('div','cm-combat-heading cm-finish-heading');
-   finishTitle.before(heading);
-   const lhs=node('img','cm-combat-heading-crest'),rhs=node('img','cm-combat-heading-crest');
-   heading.append(lhs,finishTitle,rhs);
-  }
-  const shields=heading.querySelectorAll('.cm-combat-heading-crest');
-  if(shields.length===2){
-   shields[0].src=crest(house);
-   shields[1].src=crest(rivalHouse);
-   shields[0].alt='Escudo '+houses[getHouse(house)].name;
-   shields[1].alt='Escudo '+houses[getHouse(rivalHouse)].name;
-  }
- }
+ head.querySelector('.cm-v21-subtitle').textContent=mode==='practice'?'RESULTADO DO TREINO LIVRE':'RESULTADO DO DUELO';
+ if(title)title.textContent=mode==='practice'?'TREINO CONCLUÍDO':outcome==='win'?'VITÓRIA':outcome==='loss'?'DERROTA':outcome==='draw'?'EMPATE':mode==='bot'?'TREINO CONCLUÍDO':'DESAFIO ENVIADO';
+ card.querySelector(':scope > small')?.classList.add('cm-v21-hide');
  card.querySelector('.cm-final-duel')?.remove();
+ card.querySelector('.cm-v21-stage')?.remove();
  card.querySelector('.cm-embers')?.remove();
- emberLayer(card,house,17);
- const wrap=node('div','cm-final-duel');
- const practiceMirror=mode==='practice';
- // No Treino Livre, a placa inferior identifica a Casa: os cinco valores
- // individuais não aparecem no cartão, mas continuam guardados no placar.
- const left=resultPerson(player,house,gender,practiceMirror?[]:ownShots,undefined);
- // Treino livre: o segundo cartão representa o MESMO jogador (Casa/skin),
- // não um adversário nem um recorde fictício.
- const right=resultPerson(practiceMirror?player:(rival||'Adversário'),
-  practiceMirror?house:rivalHouse,practiceMirror?gender:rivalGender,
-  practiceMirror?[]:rivalShots,practiceMirror?undefined:opponent);
- if(practiceMirror){
-  wrap.classList.add('cm-practice-mirror-duel');
-  right.classList.add('cm-practice-mirror-player');
-  right.setAttribute('aria-label',player+' — espelho de treino livre');
- }
- if(scored){
-  if(outcome==='win'||outcome==='draw'){
-   left.classList.add(outcome==='win'?'cm-result-winner':'cm-result-tie');
-   left.prepend(node('span','cm-result-winner-tag',outcome==='win'?'🏆 VENCEDOR':'🤝 EMPATE'));
-  }
-  if(outcome==='loss'||outcome==='draw'){
-   right.classList.add(outcome==='loss'?'cm-result-winner':'cm-result-tie');
-   right.prepend(node('span','cm-result-winner-tag',outcome==='loss'?'🏆 VENCEDOR':'🤝 EMPATE'));
-  }
- }
- wrap.append(left,node('div','cm-final-vs','VS'),right);
- const anchor=card.querySelector('#finish-results');
- if(anchor)anchor.before(wrap);else card.append(wrap);
+ const mirrored=mode==='practice';
+ const left=resultPerson(player,house,gender);
+ const right=resultPerson(mirrored?player:(rival||'Adversário'),mirrored?house:rivalHouse,mirrored?gender:rivalGender);
+ if(mirrored){right.classList.add('cm-v21-mirror');right.setAttribute('aria-label',player+' — espelho do treino livre');}
+ if(outcome==='win')addResultBadge(left,'VENCEDOR');
+ if(outcome==='loss')addResultBadge(right,'VENCEDOR');
+ if(outcome==='draw'){addResultBadge(left,'EMPATE');addResultBadge(right,'EMPATE');}
+ const v1=ownOk?String(ownTotal):'—';
+ const v2=mirrored?v1:rivalOk?String(rivalTotal):'—';
+ const scores=node('div','cm-v21-scores');
+ scores.setAttribute('role','group');scores.setAttribute('aria-label',v1+' pontos contra '+v2+' pontos');
+ const vs=node('div','cm-v21-vs');
+ const badge=node('img','cm-v21-vs-art');badge.src='assets/v21/result/versus-empty.svg';badge.alt='';
+ vs.append(badge,node('span','', 'VS'));
+ scores.append(node('strong','cm-v21-total',v1),vs,node('strong','cm-v21-total',v2));
+ if(!rivalOk&&!mirrored)scores.append(node('small','cm-v21-await','AGUARDANDO ADVERSÁRIO'));
+ const stage=node('div','cm-v21-stage');stage.append(left,scores,right);
+ const anchor=card.querySelector('#finish-results');if(anchor)anchor.before(stage);else card.append(stage);
+ const replay=card.querySelector('#play-again');
+ if(replay){replay.replaceChildren(node('span','cm-result-replay-label','▶ JOGAR NOVAMENTE'));replay.setAttribute('aria-label','Jogar novamente');}
+ const back=card.querySelector('#cm-v2-result-home');
+ if(back){back.textContent='⌂ VOLTAR AO MENU';back.setAttribute('aria-label','Voltar ao menu de desafios');}
 }
-function resultPerson(name,house,gender,shots,score){
- const article=node('div','cm-final-player'),img=node('img');
- article.dataset.house=getHouse(house);
- article.dataset.gender=gender==='f'||gender==='female'?'f':'m';
- img.src=portrait(house,gender);
- portraitFallback(img,house,gender);
- img.alt='Retrato do rosto do arqueiro da Casa '+houses[getHouse(house)].name;
- img.decoding='async';
- const crop=node('div','cm-combat-portrait');crop.append(img);
- article.append(crop,node('b','',name),node('small','',houses[getHouse(house)].short+' · '+houses[getHouse(house)].name));
- if(Array.isArray(shots)&&shots.length){
-  const strip=node('div','cm-final-shots');strip.setAttribute('aria-label','Pontuação das cinco flechas');
-  for(const item of shots.slice(0,5))strip.append(node('span','',Number(item?.score??item)||0));
-  article.append(strip);
- }
- // O total já aparece na caixa de pontuação, fora da moldura:
- // não repetir um segundo <small> sobre a etiqueta da Casa.
- if(score!==undefined&&score!=='—')article.setAttribute('aria-label',name+' — '+String(score)+' pontos');
- return article;
+function addResultBadge(card,text){
+ const badge=node('div','cm-v21-winner');
+ badge.append(node('span','',text));
+ card.append(badge);
+}
+function resultPerson(name,house,gender){
+ const h=getHouse(house),card=node('article','cm-v21-player');
+ card.dataset.house=h;
+ const crop=node('div','cm-v21-crop'),hero=node('img');
+ hero.src=portrait(h,gender);portraitFallback(hero,h,gender);hero.decoding='async';
+ hero.alt='Arqueiro da '+houses[h].name;crop.append(hero);
+ const frame=node('img','cm-v21-frame');frame.src='assets/v21/result/frame-'+h+'.svg';frame.alt='';
+ const crestImg=node('img','cm-v21-crest');crestImg.src=crest(h);crestImg.alt='';
+ card.append(crop,frame,crestImg,node('b','cm-v21-name',name||'Arqueiro'),node('small','cm-v21-house',houses[h].short+' · '+houses[h].name));
+ return card;
 }
 function impactSparkle(stage,x,y,score,house){
  if(!stage||score<8||window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
