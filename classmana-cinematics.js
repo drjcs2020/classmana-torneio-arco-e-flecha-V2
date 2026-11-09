@@ -215,7 +215,9 @@ function resultView({player,house,rival,rivalHouse,gender='m',rivalGender='m',ow
  emberLayer(card,house,17);
  const wrap=node('div','cm-final-duel');
  const practiceMirror=mode==='practice';
- const left=resultPerson(player,house,gender,ownShots,undefined);
+ // No Treino Livre, a placa inferior identifica a Casa: os cinco valores
+ // individuais não aparecem no cartão, mas continuam guardados no placar.
+ const left=resultPerson(player,house,gender,practiceMirror?[]:ownShots,undefined);
  // Treino livre: o segundo cartão representa o MESMO jogador (Casa/skin),
  // não um adversário nem um recorde fictício.
  const right=resultPerson(practiceMirror?player:(rival||'Adversário'),
