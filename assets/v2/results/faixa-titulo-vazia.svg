@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="174" viewBox="0 0 1100 174" role="img" aria-label="Faixa rubi com moldura dourada, sem texto">
+<title>ClassMana — Faixa vazia de resultado</title>
+<defs>
+ <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+  <stop stop-color="#fff4a9"/><stop offset=".11" stop-color="#ffcf59"/><stop offset=".34" stop-color="#b15b15"/><stop offset=".46" stop-color="#fff2a3"/><stop offset=".72" stop-color="#ba6918"/><stop offset=".9" stop-color="#ffe58b"/><stop offset="1" stop-color="#85420d"/>
+ </linearGradient>
+ <linearGradient id="ruby" x1="0" y1="0" x2="0" y2="1">
+  <stop stop-color="#b42b43"/><stop offset=".18" stop-color="#86102b"/><stop offset=".68" stop-color="#580722"/><stop offset="1" stop-color="#350416"/>
+ </linearGradient>
+ <radialGradient id="shine" cx=".5" cy="0" r="1">
+  <stop stop-color="#fd7797" stop-opacity=".28"/><stop offset=".7" stop-color="#fd7797" stop-opacity="0"/>
+ </radialGradient>
+ <filter id="shadow" x="-10%" y="-50%" width="120%" height="200%"><feGaussianBlur stdDeviation="7"/></filter>
+</defs>
+<path d="M100 25H1000L1078 87L1000 149H100L22 87Z" fill="#03132b" opacity=".65" filter="url(#shadow)"/>
+<path d="M103 16H997L1080 85L997 154H103L20 85Z" fill="url(#gold)" stroke="#783b09" stroke-width="6"/>
+<path d="M111 26H989L1065 85L989 144H111L35 85Z" fill="url(#ruby)" stroke="#f9d177" stroke-width="3"/>
+<path d="M111 26H989L1065 85L989 144H111L35 85Z" fill="url(#shine)"/>
+<path d="M119 37H981L1049 85L981 133H119L51 85Z" fill="none" stroke="#8e432b" stroke-width="2"/>
+<path d="M156 38H946M156 132H946" stroke="#f3c669" stroke-width="1.6" opacity=".75"/>
+<g fill="url(#gold)" stroke="#7d3b0e" stroke-width="1.2">
+ <path d="M112 85l15-15 15 15-15 15Z"/><path d="M988 85l-15-15-15 15 15 15Z"/>
+ <path d="M550 8l8 9-8 9-8-9Z"/><path d="M550 148l8 9-8 9-8-9Z"/>
+</g>
+<g fill="none" stroke="#f7d67a" stroke-width="2.3" stroke-linecap="round">
+ <path d="M167 109Q143 93 157 58M180 115Q157 99 170 69M933 109Q957 93 943 58M920 115Q943 99 930 69"/>
+ <path d="M162 99q-17-7-20-21M167 88q-16-10-17-23M173 75q-12-7-12-20M938 99q17-7 20-21M933 88q16-10 17-23M927 75q12-7 12-20"/>
+</g>
+<g fill="#fff1a1"><circle cx="103" cy="85" r="3"/><circle cx="997" cy="85" r="3"/><circle cx="550" cy="17" r="3"/></g>
+</svg>
