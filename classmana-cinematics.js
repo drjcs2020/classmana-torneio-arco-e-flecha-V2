@@ -207,7 +207,7 @@ function resultView({player,house,rival,rivalHouse,gender='m',rivalGender='m',ow
  const scores=node('div','cm-v21-scores');
  scores.setAttribute('role','group');scores.setAttribute('aria-label',v1+' pontos contra '+v2+' pontos');
  const vs=node('div','cm-v21-vs');
- const badge=node('img','cm-v21-vs-art');badge.src='assets/v21/result/versus-empty.svg';badge.alt='';
+ const badge=node('img','cm-v21-vs-art');badge.src='assets/v21/result-art/vs.webp';badge.alt='';
  vs.append(badge,node('span','', 'VS'));
  scores.append(node('strong','cm-v21-total',v1),vs,node('strong','cm-v21-total',v2));
  if(!rivalOk&&!mirrored)scores.append(node('small','cm-v21-await','AGUARDANDO ADVERSÁRIO'));
@@ -220,6 +220,7 @@ function resultView({player,house,rival,rivalHouse,gender='m',rivalGender='m',ow
 }
 function addResultBadge(card,text){
  const badge=node('div','cm-v21-winner');
+ badge.setAttribute('aria-label',text);
  badge.append(node('span','',text));
  card.append(badge);
 }
@@ -229,9 +230,8 @@ function resultPerson(name,house,gender){
  const crop=node('div','cm-v21-crop'),hero=node('img');
  hero.src=portrait(h,gender);portraitFallback(hero,h,gender);hero.decoding='async';
  hero.alt='Arqueiro da '+houses[h].name;crop.append(hero);
- const frame=node('img','cm-v21-frame');frame.src='assets/v21/result/frame-'+h+'.svg';frame.alt='';
- const crestImg=node('img','cm-v21-crest');crestImg.src=crest(h);crestImg.alt='';
- card.append(crop,frame,crestImg,node('b','cm-v21-name',name||'Arqueiro'),node('small','cm-v21-house',houses[h].short+' · '+houses[h].name));
+ const frame=node('img','cm-v21-frame');frame.src='assets/v21/result-art/frame-'+h+'.webp';frame.alt='';
+ card.append(crop,frame,node('b','cm-v21-name',name||'Arqueiro'),node('small','cm-v21-house',houses[h].short+' · '+houses[h].name));
  return card;
 }
 function impactSparkle(stage,x,y,score,house){

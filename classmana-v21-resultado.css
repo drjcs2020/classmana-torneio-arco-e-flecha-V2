@@ -188,3 +188,171 @@ body[data-page="arena"] #view-arena #finish.cm-v21-result .finish-actions button
  body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-subtitle{height:4dvh!important}
  body[data-page="arena"] #view-arena #finish.cm-v21-result .finish-actions{height:8dvh!important}
 }
+
+
+/* === ClassMana V2.1: artes ORIGINAIS, transparentes, separadas e aprovadas ===
+   Este bloco substitui o visual vetorial simplificado. Não altera a pontuação,
+   a mecânica, nem os textos dinâmicos dos jogadores. 2026-11-09. */
+body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-head{
+  gap:0!important;overflow:visible!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-logo{
+  height:clamp(27px,4.8dvh,43px)!important;width:min(32vw,290px)!important;
+  margin:0 auto -6px!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-head #finish-title{
+  width:min(70vw,660px)!important;
+  height:clamp(72px,12.8dvh,118px)!important;
+  border:0!important;padding:0 18px!important;
+  background:transparent url('assets/v21/result/ribbon-empty.svg') center/100% 100% no-repeat!important;
+  color:#ffe4a3!important;font:900 clamp(21px,3.5vw,49px)/1 'Cinzel',Georgia,serif!important;
+  text-shadow:0 2px 2px #3f1015,0 4px 5px #0008!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-v21-result[data-cm-result-outcome="win"] .cm-v21-head #finish-title{
+  background-image:url('assets/v21/result-art/title-win.webp')!important;
+  background-size:100% 100%!important;color:transparent!important;
+  font-size:0!important;text-shadow:none!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-v21-result[data-cm-result-outcome="loss"] .cm-v21-head #finish-title{
+  background-image:url('assets/v21/result-art/title-loss.webp')!important;
+  background-size:100% 100%!important;color:transparent!important;
+  font-size:0!important;text-shadow:none!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-subtitle{
+  width:min(57vw,570px)!important;
+  height:clamp(30px,5.2dvh,48px)!important;
+  margin:-7px auto 0!important;padding:2px 8px!important;
+  background:transparent url('assets/v21/result/subtitle-empty.svg') center/100% 100% no-repeat!important;
+  letter-spacing:.07em!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-v21-result:not([data-cm-result-mode="practice"]) .cm-v21-subtitle{
+  background-image:url('assets/v21/result-art/subtitle.webp')!important;
+  background-size:100% 100%!important;
+  color:transparent!important;font-size:0!important;text-shadow:none!important;
+}
+/* As três molduras foram desenhadas para serem 2:3, jamais 600:840. */
+body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-stage{
+  align-items:center!important;justify-items:center!important;
+  grid-template-columns:minmax(0,1fr) minmax(205px,.9fr) minmax(0,1fr)!important;
+  column-gap:clamp(3px,.8vw,12px)!important;
+  padding:0 2px!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-player{
+  width:min(29vw,calc((100dvh - 239px)*.667),395px)!important;
+  height:auto!important;max-height:100%!important;
+  aspect-ratio:2/3!important;overflow:visible!important;
+  background:none!important;border:0!important;box-shadow:none!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-crop{
+  left:17%!important;top:18.5%!important;width:66%!important;height:49%!important;
+  z-index:1!important;overflow:hidden!important;background:transparent!important;
+  border:0!important;box-shadow:none!important;border-radius:0!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-crop img{
+  display:block!important;width:100%!important;height:100%!important;
+  object-fit:cover!important;object-position:50% 15%!important;
+  transform:scale(1.12)!important;transform-origin:50% 27%!important;
+  filter:none!important;background:transparent!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-mirror .cm-v21-crop img{
+  transform:scaleX(-1) scale(1.12)!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-frame{
+  inset:0!important;width:100%!important;height:100%!important;object-fit:fill!important;
+  z-index:3!important;filter:drop-shadow(0 5px 7px #030e2c99)!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-crest{
+  display:none!important; /* As molduras PNG têm os brasões integrados. */
+}
+/* Identificação dentro das duas plaquetas originais, SEM caixas extras. */
+body[data-page="arena"] #view-arena #finish.cm-v21-result :is(.cm-v21-name,.cm-v21-house){
+  left:14%!important;width:72%!important;max-width:72%!important;
+  padding:0 1px!important;overflow:hidden!important;
+  border:0!important;border-radius:0!important;background:none!important;
+  box-shadow:none!important;text-overflow:ellipsis!important;white-space:nowrap!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-name{
+  top:76.4%!important;height:5.9%!important;
+  color:#ffefc6!important;
+  font:900 clamp(11px,1.48vw,23px)/1.08 'Cinzel',Georgia,serif!important;
+  text-shadow:0 2px 3px #061329!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-house{
+  top:87.9%!important;height:4.8%!important;
+  color:#ffe19b!important;
+  font:900 clamp(7px,.91vw,12px)/1.08 'Nunito',Arial,sans-serif!important;
+  text-shadow:0 1px 3px #050d25!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-player[data-house="C"] .cm-v21-name{
+  top:75.4%!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-player[data-house="C"] .cm-v21-house{
+  top:87.5%!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-winner{
+  top:-4.5%!important;left:50%!important;width:70%!important;height:15%!important;
+  z-index:12!important;background-size:contain!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-winner[aria-label="VENCEDOR"]{
+  background-image:url('assets/v21/result-art/winner.webp')!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-winner[aria-label="VENCEDOR"] span{
+  display:none!important; /* texto já faz parte da insígnia */
+}
+body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-vs-art{
+  object-fit:contain!important;filter:drop-shadow(0 2px 7px #071833aa)!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-vs>span{
+  display:none!important; /* a arte VS já contém o lettering dourado */
+}
+body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-vs{
+  width:clamp(80px,9vw,135px)!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-total{
+  color:#d6f3ff!important;
+  font:900 clamp(34px,5vw,81px)/1 'Cinzel',Georgia,serif!important;
+  text-shadow:0 1px 0 #fff,0 3px 3px #12518b,0 7px 11px #001329!important;
+}
+/* O jogo só mostra 42 VS 36; os cinco lançamentos seguem preservados nos dados. */
+body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-final-shots,
+body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-score-cell{
+  display:none!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-v21-result .finish-actions button{
+  letter-spacing:0!important;
+}
+@media(max-width:760px){
+ body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-head #finish-title{
+   width:95vw!important;height:clamp(57px,10.3dvh,90px)!important;
+ }
+ body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-subtitle{
+   width:min(87vw,475px)!important;height:clamp(26px,4dvh,36px)!important;
+ }
+ body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-stage{
+   grid-template-columns:repeat(2,minmax(0,1fr))!important;
+   grid-template-rows:minmax(0,1fr) auto!important;column-gap:2px!important;
+ }
+ body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-player{
+   width:min(45vw,calc((100dvh - 305px)*.667),270px)!important;
+ }
+ body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-total{
+   font-size:clamp(25px,7.5vw,48px)!important;
+ }
+ body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-vs{
+   width:clamp(42px,10vw,70px)!important;
+ }
+ body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-name{
+   font-size:clamp(9px,2.25vw,16px)!important;
+ }
+ body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-house{
+   font-size:clamp(6px,1.34vw,10px)!important;
+ }
+}
+@media(max-height:520px) and (min-width:761px){
+ body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-head #finish-title{height:11dvh!important}
+ body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-logo{height:4dvh!important}
+ body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-subtitle{height:4dvh!important}
+ body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-player{
+   width:min(25vw,calc((100dvh - 170px)*.667),335px)!important;
+ }
+}
