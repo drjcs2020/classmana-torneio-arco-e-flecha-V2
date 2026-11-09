@@ -173,3 +173,125 @@
     padding:5px 10px!important;font-size:clamp(11px,3vw,14px)!important;
   }
 }
+
+
+/* V2.1 — apenas pré-duelo: banner artístico separado, molduras e VS maiores. */
+.cm-vs-overlay[data-mode="bot"] .cm-vs-shell{
+ width:min(98vw,1080px)!important;
+ gap:clamp(4px,.72dvh,8px)!important;
+ max-height:calc(100dvh - 12px)!important;
+}
+.cm-vs-overlay[data-mode="bot"] .cm-combat-heading{
+ width:min(98%,940px)!important;
+ max-width:940px!important;
+ gap:clamp(8px,1.3vw,18px)!important;
+}
+.cm-vs-overlay[data-mode="bot"] .cm-combat-heading-crest{
+ width:clamp(46px,5.8vw,78px)!important;
+ height:clamp(46px,5.8vw,78px)!important;
+ flex:0 0 auto!important;
+ object-fit:contain!important;
+}
+.cm-vs-overlay[data-mode="bot"] .cm-combat-heading .cm-vs-title{
+ box-sizing:border-box!important;
+ flex:0 1 auto!important;
+ width:min(48vw,485px)!important;
+ max-width:485px!important;
+ height:auto!important;
+ min-height:0!important;
+ aspect-ratio:2168/577!important;
+ margin:0!important;padding:0!important;
+ border:0!important;border-radius:0!important;box-shadow:none!important;
+ background:transparent url('assets/v21/versus/desafio-de-treino.webp') center/contain no-repeat!important;
+ font-size:0!important;color:transparent!important;text-shadow:none!important;
+}
+.cm-vs-overlay[data-mode="bot"] .cm-vs-fighters{
+ width:min(100%,1060px)!important;
+ max-width:1060px!important;
+ grid-template-columns:minmax(0,1fr) clamp(145px,14vw,190px) minmax(0,1fr)!important;
+ gap:clamp(4px,1vw,14px)!important;
+ justify-items:center!important;align-items:center!important;
+}
+.cm-vs-overlay[data-mode="bot"] .cm-vs-fighter[data-house]{
+ box-sizing:border-box!important;
+ height:min(59dvh,430px)!important;
+ width:auto!important;
+ max-width:100%!important;max-height:none!important;min-height:0!important;
+ aspect-ratio:.722!important;
+ overflow:visible!important;
+}
+.cm-vs-overlay[data-mode="bot"] .cm-vs-fighters>.cm-vs-mark{
+ width:clamp(140px,13.4vw,184px)!important;
+ height:clamp(145px,14vw,190px)!important;
+ max-width:none!important;
+ background:url('assets/v2/frames/versus.webp') center/contain no-repeat!important;
+ font-size:0!important;color:transparent!important;
+ filter:drop-shadow(0 3px 10px #000b) drop-shadow(0 0 12px #ffc15a70)!important;
+}
+/* Cada informação fica diretamente na respectiva plaqueta da moldura. */
+.cm-vs-overlay[data-mode="bot"] .cm-vs-fighter[data-house] .cm-vs-fighter-info{
+ position:absolute!important;z-index:6!important;
+ inset:0!important;left:0!important;top:0!important;
+ width:100%!important;height:100%!important;
+ max-width:100%!important;max-height:none!important;min-height:0!important;
+ box-sizing:border-box!important;
+ margin:0!important;padding:0!important;gap:0!important;
+ display:block!important;overflow:visible!important;
+ background:none!important;border:0!important;box-shadow:none!important;
+ pointer-events:none!important;
+}
+.cm-vs-overlay[data-mode="bot"] .cm-vs-fighter[data-house] .cm-vs-fighter-info strong{
+ box-sizing:border-box!important;position:absolute!important;
+ top:73.6%!important;left:12%!important;width:76%!important;height:9%!important;
+ max-width:76%!important;
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ margin:0!important;padding:0 2px!important;
+ overflow:hidden!important;white-space:nowrap!important;text-overflow:ellipsis!important;
+ background:none!important;border:0!important;box-shadow:none!important;
+ text-align:center!important;font:900 clamp(11px,1.38vw,19px)/1.08 'Cinzel',Georgia,serif!important;
+ color:#fff1cb!important;text-shadow:0 2px 3px #000b!important;
+}
+.cm-vs-overlay[data-mode="bot"] .cm-vs-fighter[data-house] .cm-vs-fighter-info small{
+ box-sizing:border-box!important;position:absolute!important;
+ top:86.7%!important;left:12%!important;width:76%!important;height:5.7%!important;
+ max-width:76%!important;
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ margin:0!important;padding:0 1px!important;
+ overflow:hidden!important;white-space:nowrap!important;text-overflow:ellipsis!important;
+ background:none!important;border:0!important;box-shadow:none!important;
+ text-align:center!important;font:900 clamp(7px,.86vw,12px)/1.05 'Nunito',Arial,sans-serif!important;
+ color:#ffe1a0!important;text-shadow:0 1px 3px #000b!important;
+}
+/* Somente o arqueiro da direita: moldura, nome e brasão continuam normais. */
+.cm-vs-overlay .cm-vs-fighter.cm-vs-facing-left .cm-combat-portrait img{
+ transform:scaleX(-1) scale(1.72)!important;
+ transform-origin:50% 23%!important;
+}
+@media(max-width:680px){
+ .cm-vs-overlay[data-mode="bot"] .cm-combat-heading-crest{
+  width:clamp(27px,7.1vw,43px)!important;
+  height:clamp(27px,7.1vw,43px)!important;
+ }
+ .cm-vs-overlay[data-mode="bot"] .cm-combat-heading .cm-vs-title{
+  width:min(67vw,430px)!important;height:auto!important;
+  aspect-ratio:2168/577!important;
+ }
+ .cm-vs-overlay[data-mode="bot"] .cm-vs-fighters{
+  grid-template-columns:minmax(0,1fr) clamp(66px,14vw,82px) minmax(0,1fr)!important;
+  gap:3px!important;
+ }
+ .cm-vs-overlay[data-mode="bot"] .cm-vs-fighter[data-house]{
+  width:min(100%,28dvh)!important;
+  height:auto!important;max-height:min(42dvh,300px)!important;
+ }
+ .cm-vs-overlay[data-mode="bot"] .cm-vs-fighters>.cm-vs-mark{
+  width:clamp(66px,15vw,85px)!important;
+  height:clamp(72px,16vw,91px)!important;
+ }
+ .cm-vs-overlay[data-mode="bot"] .cm-vs-fighter[data-house] .cm-vs-fighter-info strong{
+  font-size:clamp(9px,2.5vw,14px)!important;
+ }
+ .cm-vs-overlay[data-mode="bot"] .cm-vs-fighter[data-house] .cm-vs-fighter-info small{
+  font-size:clamp(6px,1.65vw,9px)!important;
+ }
+}

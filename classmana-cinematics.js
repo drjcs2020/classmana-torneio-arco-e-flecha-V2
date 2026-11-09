@@ -122,7 +122,10 @@ function versus(config){
  const sub=node('p','cm-vs-sub','🏹 CINCO FLECHAS • MAIOR PONTUAÇÃO VENCE');
  const fighters=node('div','cm-vs-fighters');
  const versusSign=node('div','cm-vs-mark','VS');
- fighters.append(fighter(own),versusSign,fighter(rival));
+ const ownCard=fighter(own), rivalCard=fighter(rival);
+  // Apenas o retrato do adversário é espelhado: textos e moldura intactos.
+  rivalCard.classList.add('cm-vs-facing-left');
+  fighters.append(ownCard,versusSign,rivalCard);
  const actions=node('div','cm-vs-actions');
  const start=node('button','cm-vs-start','▶ INICIAR DUELO');
  start.id='cm-vs-start';start.type='button';
