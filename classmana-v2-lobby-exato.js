@@ -16,7 +16,7 @@
   if(level)level.textContent='Nv. —';
   if(house)house.textContent=h?h.grade+' · '+h.name:'Selecione seu aluno em JOGAR';
   if(crest){crest.src='assets/v2/crests/'+(h?.crest||'aguia.webp');crest.alt=h?'Brasão da '+h.name:''}
-  if(instruction)instruction.textContent=person?'É você? Clique JOGAR e confirme.':'Sessão livre para novo jogador';
+  if(instruction)instruction.textContent=person?'Sessão ativa · Jogue ou desafie diretamente.':'Sessão livre para novo jogador';
   if(exit){exit.disabled=false;exit.setAttribute('aria-disabled',String(!person));exit.title=person?'Encerrar a sessão de '+person:'Nenhuma sessão ativa';}
   for(const el of [play,challenges]){
    if(!el)continue;
@@ -57,15 +57,7 @@
    event.preventDefault();event.stopImmediatePropagation();tooltipFor(event.currentTarget);hideTooltip(2300);
   }
  },true);
- function guard(event){
-  const id=getId(),person=id?byId(id):null;
-  if(!person)return;
-  const action=event.currentTarget.dataset.v2Action;
-  const ok=window.confirm('Sessão atual: '+person+'.\n\nÉ você quem vai continuar em '+action.toUpperCase()+'?\n\nSe for outro aluno, clique em ENCERRAR SESSÃO.');
-  if(!ok){event.preventDefault();event.stopImmediatePropagation();}
- }
- // Register our guard in the capture phase, before the existing V2 UI handlers.
- for(const action of ['jogar','desafios'])document.querySelector('[data-v2-action="'+action+'"]')?.addEventListener('click',guard,true);
+ // Perfil ativo não exige confirmação repetida. Troca somente por ENCERRAR SESSÃO.
  window.addEventListener('classmana:v2-lobby-session-changed',paint);
  window.addEventListener('storage',e=>{if(e.key===key)paint()});
  document.addEventListener('DOMContentLoaded',paint,{once:true});
