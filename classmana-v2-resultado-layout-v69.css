@@ -1,0 +1,297 @@
+/* ClassMana V2 · RESULTADO compacto 69
+   Única camada visual para Treino Livre e Contra Robô.
+   Não altera resultados online, motor gráfico, controles nem ranking.
+   Os dois SVG são sprites independentes, vazios, com fundo TRANSPARENTE. */
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact:not(.hidden){
+ position:fixed!important;inset:0!important;z-index:1000!important;
+ box-sizing:border-box!important;width:100%!important;height:100dvh!important;
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ padding:4px!important;overflow-x:hidden!important;overflow-y:auto!important;
+ background:#164c78 url('assets/v2/backgrounds/duel.webp') center/cover no-repeat!important;
+ backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact .finish-card{
+ box-sizing:border-box!important;position:relative!important;
+ display:grid!important;flex:0 0 auto!important;
+ grid-template-columns:minmax(0,1fr)!important;
+ grid-template-rows:26px 66px minmax(0,1fr) 60px 52px!important;
+ align-items:stretch!important;justify-content:center!important;
+ justify-items:center!important;align-content:stretch!important;
+ gap:5px!important;
+ width:min(99vw,1120px)!important;max-width:1120px!important;
+ height:calc(100dvh - 8px)!important;min-height:0!important;max-height:none!important;
+ margin:auto!important;padding:clamp(49px,8dvh,59px) 8px clamp(8px,1.4dvh,15px)!important;
+ border:none!important;outline:none!important;border-radius:0!important;
+ box-shadow:none!important;background:none!important;
+ overflow:visible!important;isolation:isolate!important;filter:none!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact .cm-finish-heroes,
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact #finish-desc,
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact .share-help{
+ display:none!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact .finish-card>small{
+ grid-column:1!important;grid-row:1!important;align-self:center!important;
+ display:block!important;min-width:0!important;
+ margin:0!important;padding:0!important;text-align:center!important;
+ background:none!important;color:#ffe4a1!important;
+ font:900 clamp(13px,1.4vw,18px)/1.15 'Cinzel',Georgia,serif!important;
+ letter-spacing:.075em!important;text-shadow:0 2px 3px #111928!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact .cm-finish-heading{
+ grid-column:1!important;grid-row:2!important;align-self:stretch!important;
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ width:min(96%,950px)!important;max-width:950px!important;height:100%!important;
+ min-width:0!important;min-height:0!important;margin:0!important;padding:0!important;
+ background:none!important;border:0!important;box-shadow:none!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact .cm-finish-heading .cm-combat-heading-crest{
+ display:none!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact #finish-title{
+ box-sizing:border-box!important;align-self:stretch!important;
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ width:100%!important;max-width:100%!important;min-width:0!important;
+ height:100%!important;margin:0!important;
+ padding:3px clamp(30px,4vw,65px)!important;
+ background: url('assets/v2/results/faixa-titulo-vazia.svg') center / 100% 100% no-repeat!important;
+ border:none!important;border-radius:0!important;outline:0!important;
+ box-shadow:none!important;
+ font:900 clamp(22px,3.3vw,46px)/1.02 'Cinzel',Georgia,serif!important;
+ white-space:normal!important;word-break:normal!important;overflow-wrap:normal!important;
+ color:#ffe3a2!important;text-align:center!important;letter-spacing:.03em!important;
+ text-shadow:0 2px 2px #5c220e,0 4px 6px #190c11!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact .cm-final-duel{
+ grid-column:1!important;grid-row:3!important;align-self:stretch!important;
+ box-sizing:border-box!important;display:grid!important;flex:none!important;
+ grid-template-columns:minmax(0,1fr) clamp(116px,11.5vw,148px) minmax(0,1fr)!important;
+ align-items:center!important;justify-items:center!important;
+ width:min(100%,960px)!important;max-width:960px!important;
+ height:100%!important;min-height:0!important;max-height:none!important;
+ margin:0 auto!important;padding:0!important;gap:clamp(4px,1vw,12px)!important;
+ overflow:visible!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact .cm-final-player[data-house]{
+ box-sizing:border-box!important;position:relative!important;place-self:center!important;
+ display:block!important;flex:none!important;
+ width:min(38dvh,260px)!important;
+ height:min(53dvh,360px)!important;
+ max-width:none!important;max-height:100%!important;
+ min-width:0!important;min-height:0!important;
+ aspect-ratio:.722!important;
+ margin:0!important;padding:0!important;
+ background:none!important;border:0!important;outline:0!important;
+ border-radius:0!important;box-shadow:none!important;
+ overflow:visible!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact .cm-final-player[data-house]::after{
+ content:""!important;display:block!important;position:absolute!important;inset:0!important;
+ z-index:3!important;width:100%!important;height:100%!important;
+ background-position:center!important;background-size:100% 100%!important;
+ background-repeat:no-repeat!important;border:0!important;
+ pointer-events:none!important;filter:drop-shadow(0 3px 5px #0009)!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact .cm-final-player[data-house="A"]::after{
+ background-image:url('assets/v2/frames/aguia.webp')!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact .cm-final-player[data-house="B"]::after{
+ background-image:url('assets/v2/frames/leao.webp')!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact .cm-final-player[data-house="C"]::after{
+ background-image:url('assets/v2/frames/dragao.webp')!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact .cm-final-player[data-house] .cm-combat-portrait{
+ display:block!important;position:absolute!important;
+ top:12.4%!important;left:13.3%!important;width:73.4%!important;height:59%!important;
+ z-index:2!important;max-height:none!important;min-height:0!important;flex:none!important;
+ box-sizing:border-box!important;margin:0!important;padding:0!important;
+ background:transparent!important;border:none!important;box-shadow:none!important;
+ overflow:hidden!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact .cm-final-player[data-house="B"] .cm-combat-portrait{
+ z-index:4!important;
+ clip-path:polygon(0 0,68% 0,68% 21%,100% 21%,100% 100%,0 100%)!important;
+ -webkit-clip-path:polygon(0 0,68% 0,68% 21%,100% 21%,100% 100%,0 100%)!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact .cm-final-player[data-house] .cm-combat-portrait img{
+ position:absolute!important;inset:0!important;
+ display:block!important;width:100%!important;height:100%!important;
+ max-width:none!important;max-height:none!important;
+ margin:0!important;padding:0!important;
+ object-fit:cover!important;object-position:50% 19%!important;
+ transform:scale(1.34)!important;transform-origin:50% 25%!important;
+ background:transparent!important;filter:none!important;opacity:1!important;
+ pointer-events:none!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact.cm-practice-mirror-duel .cm-practice-mirror-player .cm-combat-portrait img,
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact .cm-practice-mirror-player .cm-combat-portrait img{
+ transform:scale(-1.34,1.34)!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact .cm-final-player[data-house]>b,
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact .cm-final-player[data-house]>small{
+ display:block!important;position:absolute!important;z-index:6!important;
+ left:12.5%!important;width:75%!important;max-width:75%!important;
+ margin:0!important;padding:0!important;
+ text-align:center!important;overflow:hidden!important;text-overflow:ellipsis!important;
+ white-space:nowrap!important;background:none!important;border:none!important;
+ box-shadow:none!important;filter:none!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact .cm-final-player[data-house]>b{
+ top:73%!important;font:900 clamp(12px,1.55vw,19px)/1.05 'Cinzel',Georgia,serif!important;
+ color:#fff0ce!important;text-shadow:0 2px 3px #050915!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact .cm-final-player[data-house]>small{
+ top:79.2%!important;font:800 clamp(8px,.87vw,11px)/1 'Nunito',sans-serif!important;
+ color:#ffe29a!important;text-shadow:0 1px 3px #020714!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact .cm-final-shots{
+ display:none!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact .cm-result-winner-tag{
+ position:absolute!important;top:0!important;left:50%!important;z-index:8!important;
+ transform:translate(-50%,-70%)!important;
+ padding:4px 12px!important;white-space:nowrap!important;
+ font-size:clamp(10px,1vw,13px)!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact .cm-final-vs{
+ box-sizing:border-box!important;display:block!important;
+ align-self:center!important;justify-self:center!important;
+ width:clamp(108px,11vw,150px)!important;max-width:150px!important;
+ height:clamp(105px,19dvh,158px)!important;max-height:none!important;
+ margin:0!important;padding:0!important;
+ background:url('assets/v2/frames/versus.webp') center/contain no-repeat!important;
+ color:transparent!important;font-size:0!important;
+ filter:drop-shadow(0 3px 8px #ffb32870)!important;
+}
+/* Uma placa abaixo de cada herói; sem VOCÊ/ROBÔ repetidos ou cinco tiros. */
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact #finish-results.cm-score-grid{
+ grid-column:1!important;grid-row:4!important;
+ box-sizing:border-box!important;display:grid!important;flex:none!important;
+ grid-template-columns:minmax(0,1fr) clamp(116px,11.5vw,148px) minmax(0,1fr)!important;
+ align-items:center!important;justify-items:center!important;
+ width:min(100%,960px)!important;max-width:960px!important;
+ height:100%!important;margin:0 auto!important;padding:0!important;
+ gap:clamp(4px,1vw,12px)!important;
+ background:none!important;border:0!important;box-shadow:none!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact #finish-results.cm-score-grid>.cm-score-cell{
+ box-sizing:border-box!important;display:flex!important;flex-direction:row!important;
+ flex-wrap:nowrap!important;align-items:center!important;justify-content:center!important;
+ gap:clamp(6px,.8vw,12px)!important;
+ height:100%!important;min-height:0!important;
+ width:min(100%,290px)!important;max-width:290px!important;
+ margin:0!important;padding:5px 20px!important;
+ background:url('assets/v2/results/placa-pontuacao-vazia.svg') center/100% 100% no-repeat!important;
+ border:0!important;border-radius:0!important;outline:0!important;box-shadow:none!important;
+ color:#ffdf94!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact .cm-score-own{
+ grid-column:1!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact .cm-score-other{
+ grid-column:3!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact .cm-score-label{
+ display:none!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact .cm-score-value{
+ display:block!important;margin:0!important;padding:0!important;
+ font:900 clamp(27px,3.2vw,44px)/1 Georgia,serif!important;
+ color:#ffe7a4!important;text-shadow:0 2px 2px #000b!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact .cm-score-unit{
+ display:inline!important;margin:0!important;padding:0!important;
+ color:#ffe3a1!important;font:900 clamp(10px,1vw,14px)/1 'Nunito',sans-serif!important;
+}
+/* Botões menores, textos de verdade e VOLTAR curto. */
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact .finish-actions{
+ grid-column:1!important;grid-row:5!important;
+ box-sizing:border-box!important;display:flex!important;flex-wrap:nowrap!important;
+ align-items:center!important;justify-content:center!important;
+ width:min(100%,590px)!important;max-width:590px!important;
+ height:100%!important;gap:12px!important;margin:0!important;padding:0!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact .finish-actions button:not(.hidden){
+ box-sizing:border-box!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;
+ position:relative!important;
+ flex:1 1 0!important;min-width:0!important;max-width:270px!important;
+ width:auto!important;height:clamp(40px,6dvh,48px)!important;min-height:40px!important;
+ margin:0!important;padding:4px 8px!important;
+ border:2px solid #efc570!important;border-radius:9px!important;
+ font:900 clamp(12px,1.4vw,17px)/1 'Cinzel',Georgia,serif!important;
+ color:#fff2cf!important;-webkit-text-fill-color:#fff2cf!important;text-shadow:0 2px 3px #000b!important;
+ background:linear-gradient(#2464a7,#0a2c66)!important;
+ box-shadow:0 3px 0 #654016,0 5px 8px #0008!important;
+ cursor:pointer!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact #play-again:not(.hidden){
+ background:linear-gradient(#25bb65,#086a38)!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact #play-again .cm-result-replay-label{
+ display:inline-block!important;opacity:1!important;visibility:visible!important;
+ font:900 clamp(12px,1.4vw,17px)/1 'Cinzel',Georgia,serif!important;
+ color:#fff1d1!important;-webkit-text-fill-color:#fff1d1!important;
+ text-indent:0!important;background:none!important;white-space:nowrap!important;pointer-events:none!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact #cm-v2-result-home{
+ display:inline-flex!important;white-space:nowrap!important;
+}
+/* Compactação responsiva sem esconder botões. */
+@media(max-height:680px){
+ body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact .finish-card{
+  grid-template-rows:23px 58px minmax(0,1fr) 52px 44px!important;
+  padding-top:clamp(43px,7dvh,52px)!important;padding-bottom:6px!important;gap:4px!important;
+ }
+ body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact .cm-final-player[data-house]{
+  width:min(38dvh,252px)!important;height:min(53dvh,350px)!important;
+ }
+ body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact #finish-title{
+  font-size:clamp(20px,3vw,40px)!important;
+ }
+}
+@media(max-width:700px){
+ body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact .finish-card{
+  padding:48px 4px 6px!important;
+  grid-template-rows:19px 54px minmax(0,1fr) 51px 44px!important;gap:4px!important;
+ }
+ body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact .cm-final-duel,
+ body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact #finish-results.cm-score-grid{
+  grid-template-columns:minmax(0,1fr) clamp(45px,11vw,70px) minmax(0,1fr)!important;
+  gap:2px!important;
+ }
+ body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact .cm-final-player[data-house]{
+  width:min(34vw,31dvh,185px)!important;height:min(47vw,43dvh,257px)!important;
+ }
+ body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact .cm-final-vs{
+  width:clamp(42px,11vw,65px)!important;height:80px!important;
+ }
+ body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact #finish-title{
+  font-size:clamp(17px,4.7vw,26px)!important;padding:4px 20px!important;
+ }
+ body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact .cm-final-player[data-house]>b{
+  font-size:clamp(10px,2.6vw,15px)!important;
+ }
+ body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact .cm-final-player[data-house]>small{
+  font-size:clamp(6px,1.5vw,9px)!important;
+ }
+ body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact #finish-results.cm-score-grid>.cm-score-cell{
+  padding:3px 5px!important;gap:3px!important;
+ }
+ body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact .cm-score-value{
+  font-size:clamp(21px,5vw,30px)!important;
+ }
+ body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact .cm-score-unit{
+  font-size:9px!important;
+ }
+ body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact .finish-actions{
+  gap:6px!important;width:100%!important;
+ }
+ body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact .finish-actions button:not(.hidden),
+ body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact #play-again .cm-result-replay-label{
+  font-size:clamp(10px,2.8vw,13px)!important;
+ }
+}
+@media(prefers-reduced-motion:reduce){
+ body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact .cm-final-duel{animation:none!important}
+}
