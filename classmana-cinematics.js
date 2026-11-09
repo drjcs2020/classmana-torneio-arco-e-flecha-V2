@@ -182,22 +182,24 @@ function resultView({player,house,rival,rivalHouse,gender='m',rivalGender='m',ow
  let head=card.querySelector('.cm-v21-head');
  if(!head){
   head=node('header','cm-v21-head');
-  const logo=node('img','cm-v21-logo');
-  logo.src='assets/images/logo-classmana-oficial.webp';logo.alt='ClassMana';
+  
+  
   const sub=node('div','cm-v21-subtitle');
-  if(title)head.append(logo,title,sub);
+  if(title)head.append(title,sub);
   card.prepend(head);
   card.querySelector('.cm-finish-heading')?.remove();
  }
  head.querySelector('.cm-v21-subtitle').textContent=mode==='practice'?'RESULTADO DO TREINO LIVRE':'RESULTADO DO DUELO';
  if(title)title.textContent=mode==='practice'?'TREINO CONCLUÍDO':outcome==='win'?'VITÓRIA':outcome==='loss'?'DERROTA':outcome==='draw'?'EMPATE':mode==='bot'?'TREINO CONCLUÍDO':'DESAFIO ENVIADO';
- card.querySelector(':scope > small')?.classList.add('cm-v21-hide');
+ card.querySelector(':scope > small')?.remove(); // faixa azul já identifica o resultado
  card.querySelector('.cm-final-duel')?.remove();
  card.querySelector('.cm-v21-stage')?.remove();
  card.querySelector('.cm-embers')?.remove();
  const mirrored=mode==='practice';
  const left=resultPerson(player,house,gender);
  const right=resultPerson(mirrored?player:(rival||'Adversário'),mirrored?house:rivalHouse,mirrored?gender:rivalGender);
+  // O arqueiro da direita encara o da esquerda: espelho apenas do sprite.
+  right.classList.add('cm-v21-facing-left');
  if(mirrored){right.classList.add('cm-v21-mirror');right.setAttribute('aria-label',player+' — espelho do treino livre');}
  if(outcome==='win')addResultBadge(left,'VENCEDOR');
  if(outcome==='loss')addResultBadge(right,'VENCEDOR');

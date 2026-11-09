@@ -356,3 +356,105 @@ body[data-page="arena"] #view-arena #finish.cm-v21-result .finish-actions button
    width:min(25vw,calc((100dvh - 170px)*.667),335px)!important;
  }
 }
+
+
+/* V2.1 — refinamento final das artes de resultado (2026-11-09).
+   Banners originais recortados somente nas margens TRANSPARENTES.
+   A proporção é a da arte; não distorcer nem o fundo nem os personagens. */
+body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-logo{
+ display:none!important;
+}
+/* Vitória/Derrota (448 × 120 px) */
+body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-head #finish-title{
+ box-sizing:border-box!important;
+ width:min(36vw,465px)!important;
+ height:auto!important;
+ aspect-ratio:448 / 120!important;
+ min-height:0!important;max-height:none!important;
+ margin:0 auto!important;padding:0 12px!important;
+ background-position:center!important;
+ background-repeat:no-repeat!important;
+ background-size:contain!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-v21-result[data-cm-result-outcome="win"] .cm-v21-head #finish-title{
+ background-image:url('assets/v21/result-art/title-win-fitted.webp')!important;
+ background-size:100% 100%!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-v21-result[data-cm-result-outcome="loss"] .cm-v21-head #finish-title{
+ background-image:url('assets/v21/result-art/title-loss-fitted.webp')!important;
+ background-size:100% 100%!important;
+}
+/* Placa azul (363 × 53 px) */
+body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-subtitle{
+ box-sizing:border-box!important;
+ width:min(41vw,520px)!important;
+ height:auto!important;
+ aspect-ratio:363 / 53!important;
+ min-height:0!important;max-height:none!important;
+ margin:-4px auto 0!important;
+ padding:0 5px!important;
+ background-position:center!important;
+ background-repeat:no-repeat!important;
+ background-size:contain!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-v21-result:not([data-cm-result-mode="practice"]) .cm-v21-subtitle{
+ background-image:url('assets/v21/result-art/subtitle-fitted.webp')!important;
+ background-size:100% 100%!important;
+}
+/* Heróis maiores no vão interior sem aumentar nem espelhar a moldura. */
+body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-crop{
+ top:17.3%!important;left:15.7%!important;width:68.6%!important;height:52%!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-crop img{
+ transform:scale(1.19)!important;
+ transform-origin:50% 28%!important;
+ object-position:50% 15%!important;
+}
+/* A direita encara a esquerda — apenas o retrato, não o brasão ou as legendas. */
+body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-player.cm-v21-facing-left .cm-v21-crop img,
+body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-player.cm-v21-facing-left.cm-v21-mirror .cm-v21-crop img{
+ transform:scaleX(-1) scale(1.19)!important;
+ transform-origin:50% 28%!important;
+}
+/* Nome e turma/casa alinhados à área interna das plaquetas ilustradas. */
+body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-player .cm-v21-name,
+body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-player[data-house="C"] .cm-v21-name{
+ top:76.2%!important;height:5.9%!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-player .cm-v21-house,
+body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-player[data-house="C"] .cm-v21-house{
+ top:84.8%!important;height:4.9%!important;
+ font-size:clamp(8px,.96vw,13px)!important;
+}
+/* Azuis-safira mais escuros que a cachoeira, com contorno, relevo e brilho. */
+body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-total{
+ color:#84d8ff!important;
+ font:900 clamp(43px,6.55vw,100px)/1 'Cinzel',Georgia,serif!important;
+ -webkit-text-stroke:1.65px #073c79!important;
+ paint-order:stroke fill!important;
+ text-shadow:0 -1px 0 #edfdff,0 2px 1px #287ac5,0 4px 0 #0e488b,
+   0 8px 9px #00152f,0 0 17px #59baffbb!important;
+}
+@media(max-width:760px){
+ body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-head #finish-title{
+  width:min(78vw,465px)!important;height:auto!important;aspect-ratio:448 / 120!important;
+ }
+ body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-subtitle{
+  width:min(86vw,520px)!important;height:auto!important;aspect-ratio:363 / 53!important;
+  margin:-3px auto 0!important;
+ }
+ body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-total{
+  font-size:clamp(30px,7.6vw,56px)!important;-webkit-text-stroke:1.15px #073c79!important;
+ }
+ body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-player .cm-v21-house{
+  font-size:clamp(6px,1.52vw,10px)!important;
+ }
+}
+@media(max-height:540px) and (min-width:761px){
+ body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-head #finish-title{
+  width:min(30vw,380px)!important;height:auto!important;aspect-ratio:448 / 120!important;
+ }
+ body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-subtitle{
+  width:min(36vw,470px)!important;height:auto!important;aspect-ratio:363 / 53!important;
+ }
+}
