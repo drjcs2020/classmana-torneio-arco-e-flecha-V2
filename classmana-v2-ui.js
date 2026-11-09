@@ -41,10 +41,19 @@ function mount(){
   }
   window.scrollTo?.(0,0);
  };
+ // Um aluno já selecionado não passa novamente por Casa e QUEM VAI JOGAR.
+ const openActive=step=>{
+  if(typeof window.classmanaOpenActiveLobbyStep!=='function'||!window.classmanaOpenActiveLobbyStep(step))return false;
+  document.body.classList.remove('cm-v2-home-mode');
+  document.body.classList.add('cm-v2-onboarding');
+  delete document.body.dataset.v2Entry;
+  window.scrollTo?.(0,0);
+  return true;
+ };
  document.querySelectorAll('[data-v2-action]').forEach(button=>button.addEventListener('click',guard(()=>{
   const action=button.dataset.v2Action;
-  if(action==='jogar'){delete document.body.dataset.v2Entry;enter();}
-  if(action==='desafios'){
+  if(action==='jogar'&&!openActive('heroi')){delete document.body.dataset.v2Entry;enter();}
+  if(action==='desafios'&&!openActive('desafio')){
    enter();
    document.body.dataset.v2Entry='challenges';
   }
