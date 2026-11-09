@@ -1,0 +1,41 @@
+name: Corrigir moldura vazada Leao de Fogo
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/corrigir-frame-leao-v2.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: corrigir-frame-leao-v2
+  cancel-in-progress: false
+jobs:
+  corrigir:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout da ClassMana V2
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Preparar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Dependencias para alfa
+        run: python -m pip install --disable-pip-version-check Pillow numpy scipy
+      - name: Abrir o centro da moldura vermelha
+        run: python scripts/corrigir_frame_leao_vazado.py
+      - name: Registrar imagem corrigida na main
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- assets/v2/frames/leao.webp; then
+            echo 'Frame ja vazado, nenhuma alteracao necessaria'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- assets/v2/frames/leao.webp
+          git commit -m 'Corrigir transparencia central da moldura Leao de Fogo V2'
+          git push origin HEAD:main
