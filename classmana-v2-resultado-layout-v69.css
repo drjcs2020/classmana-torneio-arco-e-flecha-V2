@@ -295,3 +295,91 @@ body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compac
 @media(prefers-reduced-motion:reduce){
  body[data-page="arena"] #view-arena #finish.cm-cinematic-result.cm-result-compact .cm-final-duel{animation:none!important}
 }
+
+/* ClassMana V2 — refinamento V70 exclusivo do RESULTADO DE TREINO LIVRE. */
+/* Mantém a arte oficial do título, mas a tipografia dentro da faixa. */
+body[data-page="arena"] #view-arena
+ #finish.cm-cinematic-result.cm-result-compact[data-cm-result-mode="practice"] #finish-title{
+  box-sizing:border-box!important;
+  flex:0 1 auto!important;
+  width:min(100%,740px)!important;max-width:740px!important;
+  min-width:0!important;height:100%!important;
+  padding:3px clamp(26px,4vw,52px)!important;
+  font:900 clamp(20px,2.5vw,32px)/1.08 'Cinzel',Georgia,serif!important;
+  letter-spacing:.015em!important;
+  white-space:nowrap!important;
+  background-image:url('assets/v2/results/faixa-titulo-vazia.svg')!important;
+  background-position:center!important;background-repeat:no-repeat!important;
+  background-size:100% 100%!important;
+}
+/* Na plaqueta grande fica o nome; na plaqueta INFERIOR vai a Casa.
+   Os nomes/turmas continuam dinâmicos, sem fazer parte do arquivo artístico. */
+body[data-page="arena"] #view-arena
+ #finish.cm-cinematic-result.cm-result-compact[data-cm-result-mode="practice"]
+ .cm-final-player[data-house]>b{
+  top:73.6%!important;
+}
+body[data-page="arena"] #view-arena
+ #finish.cm-cinematic-result.cm-result-compact[data-cm-result-mode="practice"]
+ .cm-final-player[data-house]>small{
+  position:absolute!important;z-index:7!important;display:block!important;
+  top:88.2%!important;left:14.5%!important;
+  width:71%!important;max-width:71%!important;
+  margin:0!important;padding:0 1px!important;
+  font:900 clamp(8px,.85vw,11px)/1.1 'Nunito',Arial,sans-serif!important;
+  text-align:center!important;color:#ffe3a0!important;
+  white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;
+  text-shadow:0 1px 2px #000!important;
+  background:transparent!important;border:0!important;box-shadow:none!important;
+}
+/* Nenhum resultado de flecha individual nas cartas do treino livre. */
+body[data-page="arena"] #view-arena
+ #finish.cm-cinematic-result.cm-result-compact[data-cm-result-mode="practice"]
+ .cm-final-player .cm-final-shots{
+  display:none!important;
+}
+/* Total e unidade menores, sem transbordar da placa oficial azul e dourada. */
+body[data-page="arena"] #view-arena
+ #finish.cm-cinematic-result.cm-result-compact[data-cm-result-mode="practice"]
+ #finish-results.cm-score-grid>.cm-score-cell{
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  width:min(100%,240px)!important;max-width:240px!important;
+  height:100%!important;min-width:0!important;
+  gap:clamp(3px,.5vw,7px)!important;
+  margin:0!important;padding:3px 18px!important;
+  overflow:hidden!important;
+}
+body[data-page="arena"] #view-arena
+ #finish.cm-cinematic-result.cm-result-compact[data-cm-result-mode="practice"]
+ .cm-score-value{
+  display:inline-block!important;
+  flex:0 0 auto!important;
+  margin:0!important;padding:0!important;
+  font:900 clamp(20px,2vw,28px)/1 Georgia,serif!important;
+  white-space:nowrap!important;
+}
+body[data-page="arena"] #view-arena
+ #finish.cm-cinematic-result.cm-result-compact[data-cm-result-mode="practice"]
+ .cm-score-unit{
+  display:inline-block!important;flex:0 1 auto!important;
+  font:900 clamp(8px,.82vw,11px)/1 'Nunito',Arial,sans-serif!important;
+  white-space:nowrap!important;
+}
+@media(max-width:700px){
+ body[data-page="arena"] #view-arena
+  #finish.cm-cinematic-result.cm-result-compact[data-cm-result-mode="practice"] #finish-title{
+   font-size:clamp(15px,3.4vw,24px)!important;
+   letter-spacing:0!important;
+   padding:2px 14px!important;
+ }
+ body[data-page="arena"] #view-arena
+  #finish.cm-cinematic-result.cm-result-compact[data-cm-result-mode="practice"]
+  .cm-final-player[data-house]>small{
+   font-size:clamp(6px,1.4vw,9px)!important;
+ }
+ body[data-page="arena"] #view-arena
+  #finish.cm-cinematic-result.cm-result-compact[data-cm-result-mode="practice"]
+  .cm-score-value{
+   font-size:clamp(17px,4.2vw,24px)!important;
+ }
+}
