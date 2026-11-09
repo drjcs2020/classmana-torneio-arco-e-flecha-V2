@@ -1,0 +1,73 @@
+/* ClassMana V2.1 — carrossel dourado de equipamentos */
+.character-studio .studio-equipment{
+  background:linear-gradient(140deg,#071c3c,#0d3260 55%,#061329)!important;
+  border:3px solid #dba94c!important;border-radius:22px!important;
+  box-shadow:inset 0 0 0 2px #ffe59a66,0 10px 30px #0006!important;
+  color:#ffeac3!important;
+}
+.character-studio .studio-equipment .studio-heading small{color:#ffce67!important}
+.character-studio .studio-equipment .studio-heading h2{color:#ffe7a6!important;font-family:Cinzel,Georgia,serif!important}
+.character-studio .studio-equipment .studio-heading p{color:#d9e6f6!important}
+.character-studio .studio-bows.cm-gear-carousel{
+  display:grid!important;grid-template-columns:clamp(38px,4vw,54px) minmax(0,1fr) clamp(38px,4vw,54px)!important;
+  align-items:center!important;gap:6px!important;min-height:370px!important;flex:1 1 auto!important;
+}
+.character-studio .cm-gear-arrow{
+  cursor:pointer!important;height:clamp(58px,8vh,78px)!important;
+  background:linear-gradient(#ffedaa,#d6a43f 52%,#815016)!important;
+  border:3px ridge #ffe1a0!important;color:#442603!important;
+  border-radius:14px!important;font:900 28px/1 Georgia,serif!important;
+  box-shadow:0 4px 10px #0009,inset 0 0 0 2px #fff7bc!important;
+  touch-action:manipulation;
+}
+.character-studio .cm-gear-arrow:hover{filter:brightness(1.13)}
+.character-studio .cm-gear-arrow:focus-visible{outline:3px solid #72d5ff!important;outline-offset:2px}
+.character-studio .cm-gear-frame{
+  min-width:0;overflow:hidden;border:4px ridge #ffdb78;border-radius:22px;
+  background:radial-gradient(ellipse at center 32%,#1c528a,#061531 76%);
+  box-shadow:inset 0 0 0 3px #af7327,0 7px 19px #000a;
+}
+.character-studio .cm-gear-visual{
+  position:relative;height:clamp(190px,27vh,285px);overflow:hidden;
+  background:radial-gradient(ellipse at 49% 64%,#386da456,transparent 65%);
+}
+.character-studio .cm-gear-fallback{
+  position:absolute;inset:0;margin:auto;width:60%;height:85%;object-fit:contain;
+  filter:drop-shadow(0 7px 12px #000c);opacity:.6;
+}
+.character-studio .cm-gear-model{
+  position:relative;display:block;width:100%;height:100%;z-index:2;
+  --poster-color:transparent;background:transparent;outline:0;
+}
+.character-studio .cm-gear-ready .cm-gear-fallback{opacity:0}
+.character-studio .cm-gear-details{
+  display:flex;flex-direction:column;align-items:center;text-align:center;
+  justify-content:center;gap:5px;padding:10px 8px 15px;
+  border-top:2px solid #e7b855;background:linear-gradient(#0c2f5e,#061a38);
+}
+.character-studio .cm-gear-kind{font:900 11px/1 Nunito,sans-serif;letter-spacing:.22em;color:#ffcb6b}
+.character-studio .cm-gear-name{font:800 clamp(16px,2.2vw,25px)/1.15 Cinzel,Georgia,serif;color:#fff0be}
+.character-studio .cm-gear-ability{
+  font:900 clamp(13px,1.45vw,17px)/1.1 Nunito,sans-serif;
+  color:#8df4d7;text-shadow:0 1px 6px #11d9aa77
+}
+.character-studio .cm-gear-desc{min-height:2.5em;font:800 clamp(11px,1.1vw,14px)/1.25 Nunito,sans-serif;color:#e6ecfa}
+.character-studio .cm-gear-count{font:800 11px Nunito,sans-serif;color:#f7d794;letter-spacing:.2em}
+.character-studio .studio-equipment #equipment-summary{
+  color:#ffe7ad!important;background:#092246!important;border:1px solid #cc9a46!important;
+  border-radius:11px!important;text-align:center!important;
+}
+.character-studio .studio-equipment .official-arrow{
+  background:#0a2953!important;border:1px solid #cfa251!important;color:#ffe9b5!important;
+}
+.character-studio .studio-equipment .official-arrow strong{color:#ffe9b5!important}
+.character-studio .studio-equipment .official-arrow small{color:#d6ebf5!important}
+@media(max-width:980px){.character-studio .studio-bows.cm-gear-carousel{grid-template-columns:42px minmax(0,1fr) 42px!important;max-width:660px;margin:auto;width:100%}}
+@media(max-width:540px){
+  .character-studio .studio-equipment{padding:11px!important}
+  .character-studio .studio-bows.cm-gear-carousel{grid-template-columns:38px minmax(0,1fr) 38px!important;min-height:340px!important;gap:4px!important}
+  .character-studio .cm-gear-visual{height:190px}
+  .character-studio .cm-gear-frame{border-width:3px}
+  .character-studio .cm-gear-arrow{min-width:34px!important;padding:0!important}
+}
+@media(prefers-reduced-motion:reduce){.character-studio .cm-gear-model{--auto-rotate-delay:999999ms}}

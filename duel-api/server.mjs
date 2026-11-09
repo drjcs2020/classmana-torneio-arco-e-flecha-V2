@@ -34,8 +34,27 @@ function fail(message,status=400){const error=Error(message);error.status=status
 function auth(request){const token=(request.headers.authorization||'').replace(/^Bearer\s+/i,'');const row=token&&sql.session.get(sha(token));return row&&row.expires>Date.now()?known.get(row.player):null}
 function requirePlayer(request){return auth(request)||fail('Selecione um perfil antes de entrar no duelo.',401)}
 const teacher = createTeacherAdmin({db,players,known,teamMembership,fail});
-function publicDuel(d){return {id:d.id,creator:known.get(d.creator),recipient:known.get(d.recipient),kind:d.kind,level:d.level,created:d.created,status:d.status,creatorShots:d.creator_shots?JSON.parse(d.creator_shots):[],recipientShots:d.recipient_shots?JSON.parse(d.recipient_shots):[],creatorScore:d.creator_score,recipientScore:d.recipient_score,rules:10}}
-function shotsOf(shots){if(!Array.isArray(shots)||shots.length!==5)fail('Exatamente cinco flechas são necessárias');return shots.map((s,i)=>{if(!s||typeof s!=='object')fail('Dados inválidos');const dx=Number(s.dx),dy=Number(s.dy),power=Number(s.power),time=Number(s.time),bow=s.bow||'classico';if(![dx,dy,power,time].every(Number.isFinite)||Math.abs(dx)>100||Math.abs(dy)>100||power<0||power>1||time<0||time>7200||!['classico','real','vento'].includes(bow))fail('Flecha inválida');const blocked=s.blocked===true;const n=Math.hypot(dx,dy)*(bow==='real'?1.12:1),points=blocked||n>1?0:Math.max(1,10-Math.floor(n*10));return {dx,dy,impactDx:dx,impactDy:dy,blocked,power,time,bow,score:Math.min(10,points+(bow==='real'&&points>0?1:0)),number:i+1}})}
+function publicDuel(d){return {id:d.id,creator:known.get(d.creator),recipient:known.get(d.recipient),kind:d.kind,level:d.level,created:d.created,status:d.status,creatorShots:d.creator_shots?JSON.parse(d.creator_shots):[],recipientShots:d.recipient_shots?JSON.parse(d.recipient_shots):[],creatorScore:d.creator_score,recipientScore:d.recipient_score,rules:11}}
+// Mesmas regras do catálogo do jogo; o servidor valida cada disparo.
+const serverBows=Object.freeze({
+ classico:{ring:1,bonus:0},real:{ring:1.12,bonus:1},
+ vento:{ring:1,bonus:0},lendario:{ring:1.22,bonus:2},
+ besta_leve:{ring:.94,bonus:0},besta_real:{ring:1.08,bonus:1}
+});
+function shotsOf(shots){
+ if(!Array.isArray(shots)||shots.length!==5)fail('Exatamente cinco flechas são necessárias');
+ return shots.map((s,i)=>{
+  if(!s||typeof s!=='object')fail('Dados inválidos');
+  const dx=Number(s.dx),dy=Number(s.dy),power=Number(s.power),time=Number(s.time),
+    bow=s.bow||'classico',rules=serverBows[bow];
+  if(![dx,dy,power,time].every(Number.isFinite)||Math.abs(dx)>100||Math.abs(dy)>100||
+     power<0||power>1||time<0||time>7200||!rules)fail('Flecha inválida');
+  const blocked=s.blocked===true,n=Math.hypot(dx,dy)*rules.ring;
+  const points=blocked||n>1?0:Math.max(1,10-Math.floor(n*10));
+  return {dx,dy,impactDx:dx,impactDy:dy,blocked,power,time,bow,
+    score:points>0?Math.min(10,points+rules.bonus):0,number:i+1};
+ });
+}
 function leaderboard(){
  const data=db.prepare("SELECT creator,recipient,creator_score,recipient_score FROM duels WHERE status='CONCLUIDO' AND creator_score IS NOT NULL AND recipient_score IS NOT NULL").all();
  const rows=new Map(players.map(p=>[p.id,{...p,plays:0,wins:0,losses:0,draws:0,total:0}]));

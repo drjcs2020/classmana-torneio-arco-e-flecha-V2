@@ -13,12 +13,13 @@ const palettes = {
 };
 const rgb = h => [1,3,5].map(i => parseInt(h.slice(i, i+2), 16) / 255);
 
+import {GEAR_BY_ID,modelSource} from './equipment-catalog.js?v=1';
 export function initScene(canvas, getSettings) {
   const parent=canvas.parentElement;
   let pc=null, app=null, gl=null, camera=null, bowRoot=null, bowHandle=null, bowString=null, sightAnchor=null,
       arrowLoaded=null, targetRoot=null, impactMarks=[], currentHouse='A', ready=false, destroyed=false,
       aimX=.5, aimY=.46, power=.3, projectile=null, pendingShot=null, animT=0,
-      equipment={bow:'classico',arrow:'rubi'},terrainElement=null,ambientProps=[],backdropMode=false,targetStand=null,movingRail=null,targetVisual=null,modelAssets={};
+      equipment={bow:'classico',arrow:'rubi'},terrainElement=null,ambientProps=[],backdropMode=false,targetStand=null,movingRail=null,targetVisual=null,modelAssets={},modelLoads={},targetModelKey='';
   // O fallback 2D não pode aparecer antes do PlayCanvas: antes ele causava a
   // troca perceptível de arte após alguns segundos.
   const ctx=canvas.getContext('2d', {alpha:true});
@@ -86,11 +87,12 @@ export function initScene(canvas, getSettings) {
     return {feather:'#e44037',secondary:'#faf0db'};
   }
   function setEquipment(next={}){
-    const bow=['classico','real','vento'].includes(next.bow)?next.bow:'classico',
+    const bow=GEAR_BY_ID[next.bow]?next.bow:'classico',
       arrow=['rubi','esmeralda','solar'].includes(next.arrow)?next.arrow:'rubi';
     if(bow===equipment.bow&&arrow===equipment.arrow)return;
     const rebuild=bow!==equipment.bow;equipment={bow,arrow};
     if(ready&&rebuild&&bowRoot){
+      if(projectile){projectile.destroy();projectile=null;}
       bowRoot.destroy();bowRoot=null;bowString=null;arrowLoaded=null;sightAnchor=null;
       buildBow();
     }
@@ -98,7 +100,7 @@ export function initScene(canvas, getSettings) {
   }
   function setHouse(k){currentHouse=palettes[k]?k:'A';parent.classList.remove('house-a','house-b','house-c');parent.classList.add('house-'+currentHouse.toLowerCase());
     if(ready){colorBow();colorTarget();loadBowModel();}}
-  function setTargetShift(){if(ready){moveTarget();for(const old of impactMarks)old.destroy();impactMarks=[];}}
+  function setTargetShift(){if(ready){moveTarget();loadTargetModel();for(const old of impactMarks)old.destroy();impactMarks=[];}}
   // Keep the bow, arrow and the bow's own sight fully inside the camera.
   // Moving the mouse to the edge must not push the bow out of the viewport.
   function setAim(x=.5,y=.46){
@@ -380,80 +382,96 @@ export function initScene(canvas, getSettings) {
     bowRoot.__fallbacks=[...bowRoot.children];
     loadBowModel();
   }
-  // Use the approved GLB assets; keep the procedural geometry only as a WebGL fallback.
-  const houseModelNames={A:'aguia_dourada',B:'leao_de_fogo',C:'dragao_de_esmeralda'};
-  function loadModel(url,then){
+  // GLBs originais, com a mira 3D independente preservada nos seis equipamentos.
+  const arrowSpecs={
+    'arrow-standard.glb':{scale:1.05,rot:[0,90,0]},
+    'arrow-precision.glb':{scale:.18,rot:[0,90,0]},
+    'arrow-power.glb':{scale:.012,rot:[0,180,0]}
+  };
+  function loadModel(path,callback){
     if(!app||destroyed)return;
-    if(modelAssets[url]){then(null,modelAssets[url]);return;}
-    app.assets.loadFromUrl(url,'container',(err,asset)=>{
-      if(destroyed)return;
-      if(!err&&asset?.resource){modelAssets[url]=asset.resource;then(null,asset.resource);}
-      else{console.warn('[ClassMana] GLB fallback:',url,err);then(err||new Error('GLB missing'));}
-    });
+    if(modelAssets[path]){callback(null,modelAssets[path]);return;}
+    if(!modelLoads[path]){
+      modelLoads[path]=modelSource(path.split('/').pop())
+        .then(url=>new Promise((resolve,reject)=>{
+          if(!app||destroyed)return reject(Error('Cena encerrada'));
+          app.assets.loadFromUrlAndFilename(url,path.split('/').pop(),'container',(err,asset)=>{
+            if(err||!asset?.resource)return reject(err||Error('GLB ausente'));
+            resolve(asset.resource);
+          });
+        }))
+        .then(resource=>(modelAssets[path]=resource,resource));
+    }
+    modelLoads[path].then(resource=>{if(!destroyed)callback(null,resource)})
+      .catch(err=>{console.warn('[ClassMana] GLB:',path,err);if(!destroyed)callback(err)});
+  }
+  const targetSpecs={
+   'target-stand.glb':{scale:1.3,rot:[0,90,0],pos:[.45,0,0]},
+   'target-alt.glb':{scale:.76,rot:[0,0,0],pos:[0,-2.05,0]},
+   'target-light.glb':{scale:2.1,rot:[0,0,0],pos:[0,-.75,0]},
+   'target-suspended.glb':{scale:.47,rot:[0,0,0],pos:[0,0,0]}
+  };
+  function activeTargetFile(){
+    const q=getSettings()||{},level=q.level||'iniciante';
+    if(level==='lendario')return 'target-suspended.glb';
+    if(level==='avancado')return 'target-light.glb';
+    return (q.index||0)>=3?'target-alt.glb':'target-stand.glb';
   }
   function loadTargetModel(){
-    const holder=targetRoot;
-    loadModel('models3d/alvo_suspenso_sem_cavalete.glb',(err,resource)=>{
-      if(err||holder!==targetRoot||!targetVisual)return;
-      const model=resource.instantiateRenderEntity();
-      model.name='Approved floating target GLB';
-      model.setLocalScale(1.22,1.22,1.22);
-      model.setLocalPosition(0,0,.06);
-      holder.addChild(model);
-      // The GLB has no stand. Keep the physical wooden tripod as a sibling of
-      // the target mesh, so fixed targets never float after model loading.
-      if(targetStand&&targetStand.parent===targetVisual){
-        targetVisual.removeChild(targetStand);
-        holder.addChild(targetStand);
-      }
-      if(targetStand){
-        const currentSettings=getSettings();
-        const moving=currentSettings.level==='avancado'||currentSettings.level==='lendario';
-        targetStand.enabled=!moving;
-      }
+    if(!targetRoot||!targetVisual)return;
+    const holder=targetRoot,file=activeTargetFile();
+    if(targetModelKey===file)return;
+    targetModelKey=file;
+    holder.__model3d?.destroy();holder.__model3d=null;targetVisual.enabled=true;
+    loadModel('models3d/equipment/'+file,(err,res)=>{
+      if(err||holder!==targetRoot||targetModelKey!==file)return;
+      const t=targetSpecs[file],container=new pc.Entity('Alvo 3D '+file),model=res.instantiateRenderEntity();
+      model.setLocalScale(t.scale,t.scale,t.scale);
+      model.setLocalEulerAngles(...t.rot);
+      model.setLocalPosition(...t.pos);
+      container.addChild(model);holder.addChild(container);holder.__model3d=container;
       targetVisual.enabled=false;
-      parent.dataset.glbTarget='ready';
-      parent.dataset.targetStand=targetStand?.enabled?'standing':'suspended';
+      parent.dataset.glbTarget='ready';parent.dataset.targetModel=file;
     });
   }
+  function appendArrowModel(parentEntity,model,file){
+    const t=arrowSpecs[file]||arrowSpecs['arrow-standard.glb'];
+    model.setLocalScale(t.scale,t.scale,t.scale);
+    model.setLocalEulerAngles(...t.rot);parentEntity.addChild(model);
+  }
+  function selectedArrow(){
+    return (GEAR_BY_ID[equipment.bow]||GEAR_BY_ID.classico).arrow;
+  }
   function loadArrowModel(owner){
-    const filename='models3d/flecha_'+houseModelNames[currentHouse]+'.glb';
-    const identity=currentHouse;
-    loadModel(filename,(err,resource)=>{
-      if(err||!owner||owner!==bowRoot||identity!==currentHouse||!arrowLoaded)return;
-      const arrow=arrowLoaded;
-      if(arrow.__mesh3d)arrow.__mesh3d.destroy();
-      const entity=resource.instantiateRenderEntity();
-      entity.name='Approved House arrow GLB';
-      entity.setLocalScale(.42,.42,.42);
-      entity.setLocalEulerAngles(0,180,0); // GLB +Z tip becomes in-game -Z tip.
-      arrow.addChild(entity);
-      for(const child of arrow.children){if(child!==entity)child.enabled=false;}
-      arrow.__mesh3d=entity;
-      parent.dataset.glbArrow='ready';
+    const file=selectedArrow(),id=equipment.bow;
+    loadModel('models3d/equipment/'+file,(err,res)=>{
+      if(err||owner!==bowRoot||id!==equipment.bow||!arrowLoaded)return;
+      arrowLoaded.__mesh3d?.destroy();
+      const mesh=res.instantiateRenderEntity();mesh.name='Flecha '+file;
+      appendArrowModel(arrowLoaded,mesh,file);
+      for(const child of arrowLoaded.children)if(child!==mesh)child.enabled=false;
+      arrowLoaded.__mesh3d=mesh;parent.dataset.glbArrow='ready';
     });
   }
   function loadBowModel(){
-    const owner=bowRoot,identity=currentHouse;
+    const owner=bowRoot,id=equipment.bow,gear=GEAR_BY_ID[id]||GEAR_BY_ID.classico;
     if(!owner)return;
-    if(owner.__mesh3d){owner.__mesh3d.destroy();owner.__mesh3d=null;}
+    owner.__mesh3d?.destroy();owner.__mesh3d=null;
     for(const child of owner.__fallbacks||[])child.enabled=true;
     parent.dataset.glbBow='loading';
-    const filename='models3d/arco_'+houseModelNames[identity]+'.glb';
-    loadModel(filename,(err,resource)=>{
-      if(err||owner!==bowRoot||identity!==currentHouse)return;
-      const model=resource.instantiateRenderEntity();
-      model.name='Approved House bow and sight GLB';
-      model.setLocalScale(1,1,1);
-      model.setLocalPosition(-.54,.19,0);
-      model.setLocalEulerAngles(0,180,0);
-      owner.addChild(model);
-      owner.__mesh3d=model;
+    loadArrowModel(owner);
+    loadModel('models3d/equipment/'+gear.model,(err,res)=>{
+      if(err||owner!==bowRoot||id!==equipment.bow)return;
+      const mesh=res.instantiateRenderEntity();mesh.name=gear.name;
+      mesh.setLocalScale(gear.scale,gear.scale,gear.scale);
+      mesh.setLocalEulerAngles(...gear.rotation);
+      mesh.setLocalPosition(...gear.offset);
+      owner.addChild(mesh);owner.__mesh3d=mesh;
+      // Preserva a mira circular e seu suporte mesmo que o GLB não possua mira.
       for(const child of owner.__fallbacks||[]){
-        if(child!==arrowLoaded)child.enabled=false;
+        child.enabled=child===arrowLoaded||child===sightAnchor||/sight bridge/i.test(child.name);
       }
-      parent.dataset.glbBow='ready';
-      loadArrowModel(owner);
+      parent.dataset.glbBow='ready';parent.dataset.bowModel=gear.model;
     });
   }
 
@@ -513,14 +531,12 @@ export function initScene(canvas, getSettings) {
     const {w,h}=canvasSize(),m=getTargetMetrics(),ppu=m.r/1.34;
     const lx=((x*w-m.x)/ppu),ly=-((y*h-m.y)/ppu);
     const e=new pc.Entity('Embedded arrow at impact');targetRoot.addChild(e);e.setLocalPosition(lx,ly,.15);
-    const approved=modelAssets['models3d/flecha_'+houseModelNames[currentHouse]+'.glb'];
+    const file=selectedArrow(),approved=modelAssets['models3d/equipment/'+file];
     if(approved){
-      const arrow3d=approved.instantiateRenderEntity();
-      arrow3d.name='Approved embedded House arrow GLB';
-      arrow3d.setLocalScale(.42,.42,.42);
-      arrow3d.setLocalPosition(.10,-.08,.75);
-      arrow3d.setLocalEulerAngles(0,180,0);
-      e.addChild(arrow3d);impactMarks.push(e);return;
+      const mesh=approved.instantiateRenderEntity();mesh.name='Flecha GLB cravada';
+      appendArrowModel(e,mesh,file);
+      mesh.setLocalPosition(.10,-.08,.75);
+      impactMarks.push(e);return;
     }
     const dark=material('#1b2228',{metal:.45,rough:.35}),red=material('#e33d31'),white=material('#eee7cf');
     tube('embedded carbon shaft',[[0,0,0],[.11,-.11,.37],[.23,-.18,.76]],[.015,.014,.011],dark,e,8);
@@ -538,14 +554,11 @@ export function initScene(canvas, getSettings) {
       tube('projectile feathers '+i,[[0,0,.3],[Math.cos(a)*.09,Math.sin(a)*.09,.21],[0,0,.11]],[.01,.024,.01],i===1?white:red,e,5);
     }
     root().addChild(e);
-    const resource=modelAssets['models3d/flecha_'+houseModelNames[currentHouse]+'.glb'];
+    const file=selectedArrow(),resource=modelAssets['models3d/equipment/'+file];
     if(resource){
-      const model=resource.instantiateRenderEntity();
-      model.name='Approved flying arrow GLB';
-      model.setLocalScale(.42,.42,.42);
-      model.setLocalEulerAngles(0,180,0);
-      e.addChild(model);
-      for(const child of e.children){if(child!==model)child.enabled=false;}
+      const model=resource.instantiateRenderEntity();model.name='Flecha GLB em voo';
+      appendArrowModel(e,model,file);
+      for(const child of e.children)if(child!==model)child.enabled=false;
     }
     return e;
   }

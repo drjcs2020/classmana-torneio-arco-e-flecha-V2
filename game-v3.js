@@ -1,4 +1,6 @@
-import {initScene} from './scene-v3.js?v=restored-3d-models61';
+import {initScene} from './scene-v3.js?v=equipment-20261109';
+import {GEAR,GEAR_BY_ID} from './equipment-catalog.js?v=1';
+import {mountEquipmentCarousel} from './equipment-carousel.js?v=1';
 import {CIRCUITS,LEVELS,targetMotion,obstacleBlocks,distanceDifficulty,flightSeconds} from './arena-difficulty.js?v=3';
 import {arenaAudio} from './arena-audio.js?v=lobbydefault49';
 import {cinematics} from './classmana-cinematics.js?v=treino-arte-1';
@@ -23,29 +25,24 @@ const clamp=(v,min,max)=>Math.min(max,Math.max(min,v));
 let house='A',view='inicio',scene=null,atmosphere=null,match=null,reticle={x:.50,y:.45},pointerStart=0,holding=false,storage=[],spriteHud=null;
 function chargePower(){const t=((Date.now()-pointerStart)/900)%2;return clamp(.28+.72*(t<=1?t:2-t),.28,1)}
 const EQUIPMENT={
- bows:{classico:'Arco Clássico',real:'Arco Real',vento:'Arco dos Ventos'},
- arrows:{rubi:'Pena Rubra',esmeralda:'Esmeralda',solar:'Flecha Solar'}
+ bows:Object.fromEntries(GEAR.map(item=>[item.id,item.name])),
+ arrows:{rubi:'Flecha oficial',esmeralda:'Flecha oficial',solar:'Flecha oficial'}
 };
-const BOW_RULES={
- classico:{wind:1,ring:1,bonus:0,description:'equilibrado: mira estável e pontuação padrão'},
- real:{wind:1,ring:1.12,bonus:1,description:'+1 ponto por acerto (máximo 10), exige maior precisão'},
- vento:{wind:.5,ring:1,bonus:0,description:'reduz o desvio causado pelo vento em 50%'}
-};
+const BOW_RULES=Object.fromEntries(GEAR.map(item=>[item.id,{
+ wind:item.wind,ring:item.ring,bonus:item.bonus,description:item.desc
+}]));
 function readEquipment(){
  try{const x=JSON.parse(localStorage.getItem('classmana-archery-equipment-v2')||'{}');
   return {bow:EQUIPMENT.bows[x.bow]?x.bow:'classico',arrow:'rubi'};}
  catch{return {bow:'classico',arrow:'rubi'}}
 }
 let equipment=readEquipment();
+const gearCarousel=mountEquipmentCarousel({selected:equipment.bow,onSelect:id=>chooseEquipment('bow',id)});
 function applyEquipment(){
- for(const el of document.querySelectorAll('[data-equip-bow]')){
-  const choice=el.dataset.equipBow??el.dataset.equipArrow;
-  const active=el.dataset.equipBow?choice===equipment.bow:choice===equipment.arrow;
-  el.classList.toggle('chosen',active);el.setAttribute('aria-pressed',String(active));
- }
- const status=$('equipment-summary');
- if(status)status.textContent='✓ '+EQUIPMENT.bows[equipment.bow]+' — '+BOW_RULES[equipment.bow].description+'. Flecha oficial igual para todos.';
- scene?.setEquipment?.(equipment);
+  gearCarousel?.select(equipment.bow);
+  const status=$('equipment-summary'),item=GEAR_BY_ID[equipment.bow]||GEAR_BY_ID.classico;
+  if(status)status.textContent='✓ '+item.name+' — '+item.ability+'. '+item.desc;
+  scene?.setEquipment?.(equipment);
 }
 function chooseEquipment(key,value){
  if(match?.running&&view==='arena'){toast('Personalize o equipamento antes de iniciar a próxima rodada.');return}
@@ -1092,7 +1089,7 @@ soundButton?.addEventListener('click',audioControl);
 $('cm-lobby-sound')?.addEventListener('click',audioControl);
 document.addEventListener('pointerdown',()=>queueMicrotask(updateLobbyAudioButton),{passive:true});
 updateSoundButton();updateLobbyAudioButton();
-document.querySelectorAll('[data-equip-bow]').forEach(el=>el.addEventListener('click',()=>chooseEquipment('bow',el.dataset.equipBow)));
+// Seleção de equipamentos controlada pelas setas do carrossel dourado.
 applyEquipment();
 $('mode').addEventListener('change',updateMode);
 $('player').addEventListener('change',()=>{

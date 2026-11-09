@@ -48,6 +48,8 @@ html.cm-v2-resume-pending body[data-page="lobby"]::after{
 <link rel="stylesheet" href="classmana-v2-resultado-layout-v69.css?v=treino-placas71">
 <link rel="stylesheet" href="classmana-v2-desafio-treino-ajuste.css?v=treino-arte-1">
 <link rel="stylesheet" href="classmana-v21-resultado.css?v=20261109-facing-3">
+<link rel="stylesheet" href="equipment-carousel.css?v=20261109-a">
+<script type="module" src="https://cdnjs.cloudflare.com/ajax/libs/model-viewer/4.1.0/model-viewer.min.js"></script>
 </head>
 <body data-page="lobby" class="cm-v2-home-mode">
 <div class="sky-sparkles" aria-hidden="true"></div>
@@ -169,13 +171,9 @@ html.cm-v2-resume-pending body[data-page="lobby"]::after{
   <div class="studio-selected" aria-live="polite"><strong id="archer-carousel-indicator">Auron · Arqueiro</strong><span id="hero-preview-desc">Armadura azul e dourada.</span></div>
  </div>
  <aside id="loadout" class="studio-equipment" aria-label="Personalização do arco">
-  <div class="studio-heading"><small>EQUIPAMENTO</small><h2>Escolha seu arco</h2><p>Três estilos de combate com vantagens diferentes.</p></div>
-  <div class="studio-bows" role="group" aria-label="Acabamentos de arco">
-   <button class="gear-choice chosen" data-equip-bow="classico" aria-pressed="true" type="button"><span class="bow-preview"><img src="assets/equipment/bow.png" alt="" loading="lazy"></span><span class="bow-label"><strong>Arco Clássico</strong><small>Equilibrado · precisão estável</small></span><span class="bow-check">✓</span></button>
-   <button class="gear-choice" data-equip-bow="real" aria-pressed="false" type="button"><span class="bow-preview bow-gold"><img src="assets/equipment/bow.png" alt="" loading="lazy"></span><span class="bow-label"><strong>Arco Real</strong><small>+1 ponto em acertos · exigente</small></span><span class="bow-check">✓</span></button>
-   <button class="gear-choice" data-equip-bow="vento" aria-pressed="false" type="button"><span class="bow-preview bow-silver"><img src="assets/equipment/bow.png" alt="" loading="lazy"></span><span class="bow-label"><strong>Arco dos Ventos</strong><small>50% menos desvio pelo vento</small></span><span class="bow-check">✓</span></button>
-  </div>
-  <div class="official-arrow"><span aria-hidden="true">🏹</span><div><strong>Flecha oficial</strong><small>A mesma flecha para as três Casas.</small></div></div>
+  <div class="studio-heading"><small>EQUIPAMENTO</small><h2>Escolha seu arco</h2><p>Seis equipamentos 3D, cada um com sua habilidade.</p></div>
+  <div class="studio-bows" role="group" aria-label="Carrossel de arcos e bestas 3D"><p class="cm-gear-loading">Preparando equipamentos 3D…</p></div>
+  <div class="official-arrow"><span aria-hidden="true">🏹</span><div><strong>Flechas 3D</strong><small>Flecha 3D adequada ao equipamento escolhido.</small></div></div>
   <p id="equipment-summary" class="equipment-summary" aria-live="polite">Arco Clássico selecionado</p>
   <button class="studio-continue cm-image-control" type="button" id="confirm-archer" aria-label="Confirmar arqueiro e arco e escolher desafio"><img src="assets/ui/buttons/classmana-confirmar.png" alt="" draggable="false"></button>
  </aside>
@@ -391,7 +389,7 @@ html.cm-v2-resume-pending body[data-page="lobby"]::after{
   <p id="cm-teacher-status" role="status" aria-live="polite">Entre com a senha do professor.</p>
 </dialog>
 <div id="toast" role="status" aria-live="polite"></div>
-<script src="roster.js?v=2"></script><script src="teams.js?v=1"></script><script type="module" src="game-v3.js?v=treino-arte-1"></script>
+<script src="roster.js?v=2"></script><script src="teams.js?v=1"></script><script type="module" src="game-v3.js?v=equipment-3d-1"></script>
 <script type="module" src="wind-panel-restored.js?v=20261108hudfour01"></script>
 <script src="classmana-v2-ui.js?v=20261108sessao70" defer></script>
 <script src="classmana-v2-lobby-exato.js?v=20261108sessao70" defer></script>

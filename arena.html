@@ -96,6 +96,8 @@ body[data-page="arena"] #stage #world {
 /* O canvas transparente #world recebe os gestos; PlayCanvas desenha abaixo. */
 </style>
 <link rel="stylesheet" href="classmana-v21-resultado.css?v=20261109-facing-3">
+<link rel="stylesheet" href="equipment-carousel.css?v=20261109-a">
+<script type="module" src="https://cdnjs.cloudflare.com/ajax/libs/model-viewer/4.1.0/model-viewer.min.js"></script>
 </head>
 <body data-page="arena">
 <!-- A arena é a view inicial. A seleção antiga nunca é exibida durante o carregamento. -->
@@ -143,13 +145,9 @@ body[data-page="arena"] #stage #world {
   <div class="studio-selected" aria-live="polite"><strong id="archer-carousel-indicator">Arqueiro · 1 de 2</strong><span id="hero-preview-desc">Armadura azul e dourada.</span></div>
  </div>
  <aside id="loadout" class="studio-equipment" aria-label="Personalização do arco">
-  <div class="studio-heading"><small>EQUIPAMENTO</small><h2>Escolha seu arco</h2><p>Três acabamentos. Mesma precisão para todas as Casas.</p></div>
-  <div class="studio-bows" role="group" aria-label="Acabamentos de arco">
-   <button class="gear-choice chosen" data-equip-bow="classico" aria-pressed="true" type="button"><span class="bow-preview"><img src="assets/equipment/bow.png" alt="" loading="lazy"></span><span class="bow-label"><strong>Arco Clássico</strong><small>Madeira nobre e azul</small></span><span class="bow-check">✓</span></button>
-   <button class="gear-choice" data-equip-bow="real" aria-pressed="false" type="button"><span class="bow-preview bow-gold"><img src="assets/equipment/bow.png" alt="" loading="lazy"></span><span class="bow-label"><strong>Arco Real</strong><small>Acabamento dourado</small></span><span class="bow-check">✓</span></button>
-   <button class="gear-choice" data-equip-bow="vento" aria-pressed="false" type="button"><span class="bow-preview bow-silver"><img src="assets/equipment/bow.png" alt="" loading="lazy"></span><span class="bow-label"><strong>Arco dos Ventos</strong><small>Prata e turquesa</small></span><span class="bow-check">✓</span></button>
-  </div>
-  <div class="official-arrow"><span aria-hidden="true">🏹</span><div><strong>Flecha oficial</strong><small>A mesma flecha para as três Casas.</small></div></div>
+  <div class="studio-heading"><small>EQUIPAMENTO</small><h2>Escolha seu arco</h2><p>Seis equipamentos 3D, cada um com sua habilidade.</p></div>
+  <div class="studio-bows" role="group" aria-label="Carrossel de arcos e bestas 3D"><p class="cm-gear-loading">Preparando equipamentos 3D…</p></div>
+  <div class="official-arrow"><span aria-hidden="true">🏹</span><div><strong>Flechas 3D</strong><small>Flecha 3D adequada ao equipamento escolhido.</small></div></div>
   <p id="equipment-summary" class="equipment-summary" aria-live="polite">Arco Clássico selecionado</p>
   <button class="studio-continue" type="button" id="confirm-archer">⚔️ CONTINUAR PARA A PARTIDA <span>➜</span></button>
  </aside>
@@ -273,7 +271,7 @@ body[data-page="arena"] #stage #world {
 <footer><img src="assets/images/logo-classmana-oficial.webp" alt="ClassMana"><span>CLASSMANA · TORNEIO DAS TRÊS CASAS · MODO ONLINE</span><span>Feito para jogar na web · Sem conexão local obrigatória</span></footer>
 </div>
 <div id="toast" role="status" aria-live="polite"></div>
-<script src="roster.js?v=2"></script><script src="teams.js?v=1"></script><script type="module" src="game-v3.js?v=treino-arte-1"></script>
+<script src="roster.js?v=2"></script><script src="teams.js?v=1"></script><script type="module" src="game-v3.js?v=equipment-3d-1"></script>
 <script type="module" src="wind-panel-restored.js?v=20261108hudfour01"></script>
 <script src="classmana-v2-ui.js?v=20261108sessao70" defer></script>
 </body>
