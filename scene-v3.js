@@ -94,7 +94,9 @@ export function initScene(canvas, getSettings) {
     if(bow===equipment.bow&&arrow===equipment.arrow)return;
     const rebuild=bow!==equipment.bow;equipment={bow,arrow};
     if(ready&&rebuild&&bowRoot){
-      if(projectile){projectile.destroy();projectile=null;}
+      // O projétil é filho do arco, não uma entidade independente.
+      if(pendingShot){pendingShot.done?.();pendingShot=null;}
+      projectile=null;
       sightAnchor?.destroy();sightAnchor=null;
       bowRoot.destroy();bowRoot=null;bowVisualPivot=null;bowFallbackRoot=null;bowString=null;arrowLoaded=null;
       buildBow();
@@ -365,7 +367,10 @@ export function initScene(canvas, getSettings) {
     // X negativo move o topo para -Z, isto é, na direção do alvo.
     bowVisualPivot=new pc.Entity('Bow visual calibration');
     const isCrossbow=GEAR_BY_ID[equipment.bow]?.type==='Besta';
-    bowVisualPivot.setLocalEulerAngles(isCrossbow?0:-20,0,equipment.bow==='classico'?45:0);
+    // Ajuste fino pela captura da arena: +40° anti-horário adicionais
+    // e topo avançado mais 20° para a frente. Apenas o GLB do arco gira;
+    // a flecha e a mira continuam vinculadas ao WeaponPivot estável.
+    bowVisualPivot.setLocalEulerAngles(isCrossbow?0:-40,0,equipment.bow==='classico'?85:0);
     bowRoot.addChild(bowVisualPivot);
     bowFallbackRoot=new pc.Entity('Vertical procedural bow fallback');
     bowRoot.addChild(bowFallbackRoot);
@@ -647,8 +652,13 @@ export function initScene(canvas, getSettings) {
       // Flecha perpendicular à corda vertical, no centro da empunhadura.
       // A haste acompanha o pivot; apenas recua ao aumentar a força.
       const crossbow=GEAR_BY_ID[equipment.bow]?.type==='Besta';
-      arrowLoaded.setLocalPosition(0,crossbow?.09:0,.45+.19*power);
-      arrowLoaded.setLocalEulerAngles(0,0,0);
+      // +0,16 unidade local (aprox. 12 px): flecha mais alta, no centro
+      // visual do punho, sem perder o encaixe da traseira na corda.
+      // Durante o voo a própria flecha é o projétil: NÃO reposicionar.
+      if(!pendingShot){
+        arrowLoaded.setLocalPosition(0,crossbow?.09:.16,.45+.19*power);
+        arrowLoaded.setLocalEulerAngles(0,0,0);
+      }
     }
     if(bowString)bowString.setLocalPosition(0,0,.19*power);
   }
@@ -670,10 +680,22 @@ export function initScene(canvas, getSettings) {
       );
       if(direction.lengthSq()>1e-7){
         direction.normalize();
-        // The modeled arrow tip points along local -Z, as does PlayCanvas lookAt.
+        // A ponta do GLB aponta para -Z. Interpolar a orientação inicial
+        // impede que a flecha dê um salto visual no primeiro frame.
         projectile.lookAt(pos.clone().add(direction));
+        if(t<.20){
+          const heading=projectile.getRotation().clone();
+          projectile.setRotation(new pc.Quat().slerp(s.startRotation,heading,t/.20));
+        }
       }
-      if(t>=1){projectile.enabled=false;pendingShot=null;if(arrowLoaded)arrowLoaded.enabled=true;s.done?.();}}
+      if(t>=1){
+        // Recolocar a mesma flecha no encaixe antes de torná-la visível.
+        // Evita um frame de flecha parada sobre o alvo.
+        projectile.enabled=false;
+        pendingShot=null;projectile=null;
+        if(arrowLoaded){updateBowAim();arrowLoaded.enabled=true;}
+        s.done?.();
+      }}
   }
   function impact({x=.5,y=.45,score=0}={}){
     if(!ready||!targetRoot||score<=0)return;
@@ -693,50 +715,37 @@ export function initScene(canvas, getSettings) {
     tube('embedded white vane',[[.20,-.18,.64],[.29,-.20,.72],[.23,-.18,.77]],[.024,.027,.012],white,e,6);
     impactMarks.push(e);
   }
-  function createArrowProjectile(){
-    if(!app)return null;
-    const e=new pc.Entity('Flying arrow projectile');
-    // A flecha em voo precisa continuar legível, mesmo de frente.
-    e.setLocalScale(1.65,1.65,1.65);
-    const shaft=material('#14181d',{metal:.43,rough:.32}),tip=material('#e4e7e8',{metal:.85,rough:.18}),red=material('#df3934'),white=material('#e8dfc9');
-    tube('projectile shaft',[[0,0,.36],[0,0,.05],[0,0,-.52]],[.012,.012,.011],shaft,e,10);
-    primitive('cone','projectile arrow point',[0,0,-.55],[.038,.08,.038],tip,e,[90,0,0]);
-    for(let i=0;i<3;i++){let a=i*Math.PI*2/3;
-      tube('projectile feathers '+i,[[0,0,.3],[Math.cos(a)*.09,Math.sin(a)*.09,.21],[0,0,.11]],[.01,.024,.01],i===1?white:red,e,5);
-    }
-    const glint=material('#ffe1a0',{metal:.12,rough:.26,glow:1.15});
-    const trail=tube('flight glint',[[0,0,.42],[0,0,.86],[0,0,1.28]],[.016,.010,.002],glint,e,8);
-    e.__trail=trail;
-    root().addChild(e);
-    const file=selectedArrow(),resource=modelAssets['models3d/equipment/'+file];
-    if(resource){
-      const model=resource.instantiateRenderEntity();model.name='Flecha GLB em voo';
-      appendArrowModel(e,model,file);
-      for(const child of e.children)if(child!==model&&child!==trail)child.enabled=false;
-    }
-    return e;
-  }
+  // Não gerar uma segunda flecha: o modelo encaixado será o próprio projétil.
+  // Assim a primeira posição, escala, aparência e materiais são idênticos.
   async function fire({x=.5,y=.45,power:shotPower=1}={}){
     if(destroyed)return;
-    if(!ready) return new Promise(resolve=>setTimeout(resolve,370));
+    if(!ready||!arrowLoaded||!bowRoot?.enabled)
+      return new Promise(resolve=>setTimeout(resolve,370));
     if(pendingShot)return;
-    if(!projectile) projectile=createArrowProjectile();
+    // Fixar a pose de disparo antes de calcular a origem.
+    updateBowAim();
     const {w,h}=canvasSize(),target=targetRoot.getPosition().clone(),m=getTargetMetrics();
     const ppu=m.r/1.34;
     const scale=targetRoot.getLocalScale().x;
     const toX=target.x+((x*w-m.x)/ppu)*scale,toY=target.y-((y*h-m.y)/ppu)*scale;
-    const start=arrowLoaded?.getPosition().clone()||new pc.Vec3(.52,1.64,5.05);
-    const end=new pc.Vec3(toX,toY,target.z+.42*scale);
-    if(arrowLoaded)arrowLoaded.enabled=false;
-    projectile.enabled=true;
-    if(projectile.__trail)projectile.__trail.enabled=true;
-    projectile.setPosition(start);projectile.setEulerAngles(0,0,0);
+    // A flecha carregada é a MESMA flecha que voará. Não há troca de
+    // instância, escala, malha, material, origem ou rotação no disparo.
+    projectile=arrowLoaded;
+    const start=projectile.getPosition().clone();
+    // O ponto da flecha está ~0,72 unidade local à frente da traseira
+    // nos três GLBs normalizados. Encerrar quando a PONTA tocar o alvo,
+    // em vez de atravessá-lo com o centro do modelo.
+    const tipLocalZ=bowRoot.__arrowFailed?-1.23:-.72;
+    const tipWorld=projectile.getWorldTransform().transformPoint(new pc.Vec3(0,0,tipLocalZ));
+    const tipLead=Math.max(0,start.z-tipWorld.z);
+    const end=new pc.Vec3(toX,toY,target.z+.42*scale+tipLead);
     const meters=getSettings()?.distance||30;
     const duration=.43+.42*Math.pow(Math.max(10,meters)/80,.56)+.13*(1-shotPower);
     const trajectory=Math.pow(Math.max(10,meters)/30,.45);
     // Both slopes must be visible even when the target is above the bow.
     const arcHeight=Math.max(.37*trajectory,.28+Math.abs(end.y-start.y)*.42);
-    return new Promise(resolve=>{pendingShot={start,end,arcHeight,elapsed:0,duration,done:resolve};});
+    const startRotation=projectile.getRotation().clone();
+    return new Promise(resolve=>{pendingShot={start,end,startRotation,arcHeight,elapsed:0,duration,done:resolve};});
   }
 
   (async()=>{

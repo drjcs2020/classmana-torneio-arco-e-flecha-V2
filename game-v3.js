@@ -1,4 +1,4 @@
-import {initScene} from './scene-v3.js?v=weapon-pivot-nock-20261109';
+import {initScene} from './scene-v3.js?v=bow-flight-origin-20261109a';
 import {GEAR,GEAR_BY_ID,getGearLevel,isGearUnlocked} from './equipment-catalog.js?v=arsenal-5';
 import {mountEquipmentInventory} from './equipment-inventory.js?v=inventory-1';
 import {CIRCUITS,LEVELS,targetMotion,obstacleBlocks,distanceDifficulty,flightSeconds} from './arena-difficulty.js?v=3';
