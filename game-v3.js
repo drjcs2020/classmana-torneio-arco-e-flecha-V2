@@ -1,6 +1,6 @@
-import {initScene} from './scene-v3.js?v=equipment-20261109';
-import {GEAR,GEAR_BY_ID} from './equipment-catalog.js?v=1';
-import {mountEquipmentCarousel} from './equipment-carousel.js?v=1';
+import {initScene} from './scene-v3.js?v=arsenal-2';
+import {GEAR,GEAR_BY_ID,getGearLevel,isGearUnlocked} from './equipment-catalog.js?v=arsenal-2';
+import {mountEquipmentCarousel} from './equipment-carousel.js?v=arsenal-2';
 import {CIRCUITS,LEVELS,targetMotion,obstacleBlocks,distanceDifficulty,flightSeconds} from './arena-difficulty.js?v=3';
 import {arenaAudio} from './arena-audio.js?v=lobbydefault49';
 import {cinematics} from './classmana-cinematics.js?v=treino-arte-1';
@@ -31,25 +31,64 @@ const EQUIPMENT={
 const BOW_RULES=Object.fromEntries(GEAR.map(item=>[item.id,{
  wind:item.wind,ring:item.ring,bonus:item.bonus,description:item.desc
 }]));
-function readEquipment(){
- try{const x=JSON.parse(localStorage.getItem('classmana-archery-equipment-v2')||'{}');
+const GEAR_STORAGE_PREFIX='classmana-archery-equipment-v2:';
+function readEquipment(playerId=''){
+ if(!/^[ABC]\\d{2}$/.test(playerId))return {bow:'classico',arrow:'rubi'};
+ try{const x=JSON.parse(localStorage.getItem(GEAR_STORAGE_PREFIX+playerId)||'{}');
   return {bow:EQUIPMENT.bows[x.bow]?x.bow:'classico',arrow:'rubi'};}
  catch{return {bow:'classico',arrow:'rubi'}}
 }
-let equipment=readEquipment();
+let equipment=readEquipment(),gearProgress={wins:0,confirmed:false,playerId:''};
 const gearCarousel=mountEquipmentCarousel({selected:equipment.bow,onSelect:id=>chooseEquipment('bow',id)});
 function applyEquipment(){
-  gearCarousel?.select(equipment.bow);
+  gearCarousel?.select(equipment.bow);gearCarousel?.setProgress(gearProgress);
   const status=$('equipment-summary'),item=GEAR_BY_ID[equipment.bow]||GEAR_BY_ID.classico;
-  if(status)status.textContent='✓ '+item.name+' — '+item.ability+'. '+item.desc;
+  if(status)status.textContent='✓ '+item.name+' · Nv. '+item.level+' — '+item.ability;
   scene?.setEquipment?.(equipment);
+}
+function saveEquipment(playerId=identifiedPlayerId){
+ if(!/^[ABC]\\d{2}$/.test(playerId||''))return;
+ try{localStorage.setItem(GEAR_STORAGE_PREFIX+playerId,JSON.stringify(equipment))}catch{}
+}
+function loadPlayerEquipment(playerId){
+ if(!/^[ABC]\\d{2}$/.test(playerId||''))return;
+ gearProgress={wins:0,confirmed:false,playerId};
+ // Enquanto o placar não confirmar as vitórias, só o arco inicial fica ativo.
+ equipment={bow:'classico',arrow:'rubi'};applyEquipment();
+ void syncEquipmentProgress(playerId);
+}
+async function syncEquipmentProgress(playerId){
+ if(!/^[ABC]\\d{2}$/.test(playerId||''))return;
+ const requested=playerId;
+ try{
+  const ranking=await online.ranking();
+  if((identifiedPlayerId||cmSessionId()||cmStoredLobbyStudent())!==requested)return;
+  const row=(ranking.players||[]).find(p=>p.id===requested);
+  const wins=Math.max(0,Number(row?.wins)||0);
+  gearProgress={wins,confirmed:true,playerId:requested};
+  if(document.body.dataset.page==='lobby'){
+   const preferred=readEquipment(requested).bow;
+   equipment={bow:isGearUnlocked(preferred,wins)?preferred:'classico',arrow:'rubi'};
+   if(preferred!==equipment.bow)saveEquipment(requested);
+   applyEquipment();
+  }
+  window.classmanaGearProgress={playerId:requested,wins,level:getGearLevel(wins),confirmed:true};
+  window.dispatchEvent(new Event('classmana:v2-lobby-session-changed'));
+ }catch(error){
+  if((identifiedPlayerId||cmSessionId()||cmStoredLobbyStudent())!==requested)return;
+  gearProgress={wins:0,confirmed:false,playerId:requested};
+  if(document.body.dataset.page==='lobby'){equipment={bow:'classico',arrow:'rubi'};applyEquipment();}
+  console.warn('[ClassMana] Vitórias ainda não verificadas:',error);
+ }
+ gearCarousel?.setProgress(gearProgress);
 }
 function chooseEquipment(key,value){
  if(match?.running&&view==='arena'){toast('Personalize o equipamento antes de iniciar a próxima rodada.');return}
  if(key!=='bow'||!EQUIPMENT.bows[value])return;
- equipment={bow:value,arrow:'rubi'};
- try{localStorage.setItem('classmana-archery-equipment-v2',JSON.stringify(equipment))}catch{}
- applyEquipment();
+ if(value!=='classico'&&(!gearProgress.confirmed||gearProgress.playerId!==identifiedPlayerId||!isGearUnlocked(value,gearProgress.wins))){
+  toast('🔒 Equipamento bloqueado. Vença duelos oficiais para desbloquear.');return;
+ }
+ equipment={bow:value,arrow:'rubi'};saveEquipment();applyEquipment();
 }
 let incoming=null,scoreTab='players',onlineInbox=[],onlineLoading=false,startMatchPending=false;
 let identifiedPlayerId='';
@@ -107,6 +146,7 @@ function cmOpenActiveLobbyStep(step){
  if(!id||(identifiedPlayerId&&identifiedPlayerId!==id)||(online.user&&online.user.id!==id))return false;
  identifiedPlayerId=id;
  if(cmSessionId()!==id||cmStoredLobbyStudent()!==id)cmSaveStudent(id);
+ if(gearProgress.playerId!==id)loadPlayerEquipment(id);else void syncEquipmentProgress(id);
  selectHouse(id[0]);
  fillPlayer(id);
  $('player').value=id;$('player').disabled=true;
@@ -650,6 +690,7 @@ async function finishMatch(){
    $('share-help').textContent='✅ Resultado registrado no servidor do torneio.';
    $('hud-score').textContent=total;$('hud-rival').textContent=rival===null?'—':rival;
    refreshInbox().catch(console.warn);renderRanking().catch(console.warn);
+   void syncEquipmentProgress(current.playerId);
   }catch(error){
    if(match!==current)return;current.onlineSaveFailed=true;current.running=true;
    $('finish-title').textContent='⚠️ RESULTADO AINDA NÃO CONFIRMADO';
@@ -752,6 +793,8 @@ async function loginStudent(){
  try{
   const user=await online.login(id);
   identifiedPlayerId=user.id;cmSaveStudent(user.id);
+  if(document.body.dataset.page==='lobby'&&gearProgress.playerId!==user.id)loadPlayerEquipment(user.id);
+  else void syncEquipmentProgress(user.id);
   showOnlineStatus();
   // A confirmação do perfil libera imediatamente a partida; a caixa
   // de convites não pode travar o botão Iniciar por demora do Google.
@@ -961,6 +1004,8 @@ async function startOnlineClient(){
   if(document.body.dataset.page==='lobby'&&/^[ABC][0-9]{2}$/.test(sessionId)&&(!online.user||online.user.id===sessionId)){
    if(!online.user){try{await online.login(sessionId)}catch(err){console.warn('Não foi possível reconectar o aluno:',err);cmForgetStudent();return;}}
    identifiedPlayerId=sessionId;
+   if(gearProgress.playerId!==sessionId)loadPlayerEquipment(sessionId);
+   else void syncEquipmentProgress(sessionId);
    selectHouse(sessionId[0]);fillPlayer(sessionId);populateIdentityOptions();
    $('player').value=sessionId;$('player').disabled=true;updateMode();
    // A reconexão não deve retirar o aluno da tela que acabou de abrir.
@@ -1038,12 +1083,16 @@ $('cm-confirm-identity')?.addEventListener('click',()=>{
   toast('Há outra sessão neste computador. Encerre-a no menu antes de trocar de aluno.');return;
  }
  identifiedPlayerId=id;cmSaveStudent(id);cmShowActiveSession();
+ loadPlayerEquipment(id);
  $('player').value=id;fillPlayer(id);fillRivals();
  $('player').disabled=true;
  setLobbyStep('heroi');
 });
 
-$('confirm-archer').addEventListener('click',()=>setLobbyStep('desafio'));
+$('confirm-archer').addEventListener('click',()=>{
+ if(equipment.bow!=='classico'&&(!gearProgress.confirmed||!isGearUnlocked(equipment.bow,gearProgress.wins))){toast('Arma ainda bloqueada; escolha um equipamento liberado.');return}
+ setLobbyStep('desafio');
+});
 $('challenge-level').addEventListener('change',drawCourse);
 document.querySelectorAll('.house').forEach(el=>el.addEventListener('click',()=>{
  const chosen=el.dataset.house;
@@ -1209,6 +1258,7 @@ function restoreArena(){
  }
  match=saved;
  identifiedPlayerId=saved.playerId||online.user?.id||cmSessionId();
+ equipment={bow:GEAR_BY_ID[saved.bow]?saved.bow:'classico',arrow:'rubi'};
  match.stageStartedAt=performance.now();match.freezeTime=null;match.locked=false;
  match.running=match.scores.length<5||!!match.onlineSaveFailed;
  selectHouse(match.house);

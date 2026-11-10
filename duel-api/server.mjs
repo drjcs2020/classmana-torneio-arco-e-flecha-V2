@@ -37,11 +37,11 @@ const teacher = createTeacherAdmin({db,players,known,teamMembership,fail});
 function publicDuel(d){return {id:d.id,creator:known.get(d.creator),recipient:known.get(d.recipient),kind:d.kind,level:d.level,created:d.created,status:d.status,creatorShots:d.creator_shots?JSON.parse(d.creator_shots):[],recipientShots:d.recipient_shots?JSON.parse(d.recipient_shots):[],creatorScore:d.creator_score,recipientScore:d.recipient_score,rules:11}}
 // Mesmas regras do catálogo do jogo; o servidor valida cada disparo.
 const serverBows=Object.freeze({
- classico:{ring:1,bonus:0},real:{ring:1.12,bonus:1},
- vento:{ring:1,bonus:0},lendario:{ring:1.22,bonus:2},
- besta_leve:{ring:.94,bonus:0},besta_real:{ring:1.08,bonus:1}
+ classico:{ring:1,bonus:0,requiredWins:0},real:{ring:1.12,bonus:1,requiredWins:2},
+ vento:{ring:1,bonus:0,requiredWins:5},lendario:{ring:1.22,bonus:2,requiredWins:15},
+ besta_leve:{ring:.94,bonus:0,requiredWins:9},besta_real:{ring:1.08,bonus:1,requiredWins:24}
 });
-function shotsOf(shots){
+function shotsOf(shots,officialWins=0){
  if(!Array.isArray(shots)||shots.length!==5)fail('Exatamente cinco flechas são necessárias');
  return shots.map((s,i)=>{
   if(!s||typeof s!=='object')fail('Dados inválidos');
@@ -49,6 +49,7 @@ function shotsOf(shots){
     bow=s.bow||'classico',rules=serverBows[bow];
   if(![dx,dy,power,time].every(Number.isFinite)||Math.abs(dx)>100||Math.abs(dy)>100||
      power<0||power>1||time<0||time>7200||!rules)fail('Flecha inválida');
+  if(officialWins<rules.requiredWins)fail('Equipamento bloqueado: vitórias oficiais insuficientes',403);
   const blocked=s.blocked===true,n=Math.hypot(dx,dy)*rules.ring;
   const points=blocked||n>1?0:Math.max(1,10-Math.floor(n*10));
   return {dx,dy,impactDx:dx,impactDy:dy,blocked,power,time,bow,
@@ -92,7 +93,8 @@ function route(request,action,data,query){
  if(action==='challenge'&&request.method==='GET'){const d=sql.duel.get(query.get('id')||'');if(!d||(d.creator!==player.id&&d.recipient!==player.id))fail('Desafio não encontrado',404);return {challenge:publicDuel(d)}}
  if(action==='challenge'){const to=String(data.to||''),kind=String(data.kind||'');if(!known.has(to)||to===player.id)fail('Adversário inválido');if(!['mesma_turma','entre_equipes','interclasses'].includes(kind))fail('Modo inválido');if(kind==='mesma_turma'&&to[0]!==player.house)fail('Escolha aluno da mesma turma');if(kind==='interclasses'&&to[0]===player.house)fail('Escolha outra turma');const level=['iniciante','avancado','lendario'].includes(data.level)?data.level:'iniciante';const existing=sql.activePair.get(player.id,to,kind,level,new Date(Date.now()-24*3600000).toISOString());if(existing)return {challenge:publicDuel(existing),reused:true};const id=randomUUID();sql.insert.run(id,player.id,to,kind,level,new Date().toISOString(),'CRIADOR_JOGANDO');return {challenge:publicDuel(sql.duel.get(id))}}
  if(action==='answer'){const d=sql.duel.get(String(data.id||''));if(!d||d.recipient!==player.id)fail('Convite não encontrado',404);if(d.status!=='PENDENTE')fail('Convite não está pendente',409);if(!['accept','decline'].includes(data.decision))fail('Resposta inválida');sql.updateState.run(data.decision==='accept'?'ACEITO':'RECUSADO',d.id);return {challenge:publicDuel(sql.duel.get(d.id))}}
- if(action==='submit'){const d=sql.duel.get(String(data.id||''));if(!d||(d.creator!==player.id&&d.recipient!==player.id))fail('Duelo não encontrado',404);const first=d.creator===player.id;if(first?(d.status!=='CRIADOR_JOGANDO'||d.creator_shots):(d.status!=='ACEITO'||d.recipient_shots))fail('Esta rodada não pode ser registrada novamente',409);const shots=shotsOf(data.shots),score=shots.reduce((a,x)=>a+x.score,0);(first?sql.creator:sql.recipient).run(JSON.stringify(shots),score,d.id);return {score,shots,challenge:publicDuel(sql.duel.get(d.id))}}
+ if(action==='submit'){const d=sql.duel.get(String(data.id||''));if(!d||(d.creator!==player.id&&d.recipient!==player.id))fail('Duelo não encontrado',404);const first=d.creator===player.id;if(first?(d.status!=='CRIADOR_JOGANDO'||d.creator_shots):(d.status!=='ACEITO'||d.recipient_shots))fail('Esta rodada não pode ser registrada novamente',409);const officialWins=db.prepare("SELECT COUNT(*) AS n FROM duels WHERE status='CONCLUIDO' AND ((creator=? AND creator_score>recipient_score) OR (recipient=? AND recipient_score>creator_score))").get(player.id,player.id).n;
+ const shots=shotsOf(data.shots,officialWins),score=shots.reduce((a,x)=>a+x.score,0);(first?sql.creator:sql.recipient).run(JSON.stringify(shots),score,d.id);return {score,shots,challenge:publicDuel(sql.duel.get(d.id))}}
  fail('Ação desconhecida',404);
 }
 const allow=(process.env.ALLOWED_ORIGINS||'https://drjcs2020.github.io,http://localhost:8000,http://127.0.0.1:8000').split(',');

@@ -12,8 +12,13 @@
   const challenges=document.querySelector('[data-v2-action="desafios"]');
   const name=$('cm-v2-student-name'),level=$('cm-v2-student-level'),house=$('cm-v2-student-house'),instruction=$('cm-v2-student-instruction'),crest=$('cm-v2-student-crest'),notice=$('cm-v2-session-notice');
   if(name)name.textContent=person||'Nenhum aluno logado';
-  // Torneio atual does not provide XP/level, so never invent them.
-  if(level)level.textContent='Nv. —';
+  // Nível do arsenal calculado exclusivamente por vitórias confirmadas na API V2.
+  const progress=window.classmanaGearProgress;
+  if(level){
+   const verified=Boolean(person&&progress?.confirmed&&progress.playerId===id);
+   level.textContent=verified?'Nv. '+progress.level+' · '+progress.wins+' vitórias':'Nv. —';
+   level.title=verified?'Nível do arsenal por vitórias oficiais':'Aguardando confirmação das vitórias oficiais';
+  }
   if(house)house.textContent=h?h.grade+' · '+h.name:'Selecione seu aluno em JOGAR';
   if(crest){crest.src='assets/v2/crests/'+(h?.crest||'aguia.webp');crest.alt=h?'Brasão da '+h.name:''}
   if(instruction)instruction.textContent=person?'Sessão ativa · Jogue ou desafie diretamente.':'Sessão livre para novo jogador';
