@@ -126,9 +126,13 @@ function versus(config){
   // Apenas o retrato do adversário é espelhado: textos e moldura intactos.
   rivalCard.classList.add('cm-vs-facing-left');
   fighters.append(ownCard,versusSign,rivalCard);
-  // Todas as modalidades: turma e Casa ocupam linhas separadas na plaqueta.
+  // Turma menor, nome da Casa preservado: etiquetas independentes.
   for(const label of fighters.querySelectorAll('.cm-vs-fighter-info small')){
-   label.textContent=label.textContent.replace(' · ','\n');
+   const [grade,...houseParts]=label.textContent.split(' · ');
+   label.replaceChildren(
+    node('span','cm-vs-grade',grade),
+    node('span','cm-vs-house-name',houseParts.join(' · '))
+   );
   }
  const actions=node('div','cm-vs-actions');
  const start=node('button','cm-vs-start','▶ INICIAR DUELO');
@@ -194,9 +198,7 @@ function fitVersusLabels(overlay){
   ctx.font=style.fontStyle+' '+style.fontWeight+' '+size+'px '+style.fontFamily;
   const spacing=parseFloat(style.letterSpacing)||0;
   const width=ctx.measureText(text).width+Math.max(0,text.length-1)*spacing;
-  // A identificação da Casa no modo robô pode ocupar duas linhas sem redução.
-  if(!el.matches('.cm-vs-fighter-info small') && width>available)
-   el.style.setProperty('font-size',Math.max(6,Math.floor(size*available/width*10)/10)+'px','important');
+  // Fontes definidas no CSS; não reduzir os nomes automaticamente.
   el.title=text;
  }
 }
