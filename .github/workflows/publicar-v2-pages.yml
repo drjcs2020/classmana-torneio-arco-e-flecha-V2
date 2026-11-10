@@ -19,6 +19,8 @@ jobs:
     steps:
       - name: Obter arquivos da V2
         uses: actions/checkout@v4
+      - name: Validar os nove modelos do arsenal 3D
+        run: node scripts/qa-arsenal.mjs
       - name: Preparar site estatico da V2
         shell: bash
         run: |
