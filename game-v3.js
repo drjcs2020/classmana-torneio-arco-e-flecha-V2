@@ -508,7 +508,11 @@ async function startMatch(accepted=null){
  if(document.body.dataset.page==='lobby'){
   try{
    sessionStorage.setItem('cm_active_archery_match_v2',JSON.stringify(match));
-   window.location.assign('./arena.html');
+   // Preserva apenas o parâmetro de teste do giro ao entrar na arena.
+   const axialTest=new URLSearchParams(location.search).get('bowAxialTest');
+   const testQuery=['plus90','minus90'].includes(axialTest)
+     ?'?bowAxialTest='+axialTest:'';
+   window.location.assign('./arena.html'+testQuery);
    navigatingToArena=true;
    return;
   }catch(error){console.warn('Navegação entre páginas indisponível:',error)}
