@@ -351,7 +351,8 @@ export function initScene(canvas, getSettings) {
     loadTargetModel();
   }
   function buildBow(){
-    bowRoot=new pc.Entity('Modern competition recurve bow');
+    // WeaponPivot único: arco visual, flecha e mira movem-se juntos.
+    bowRoot=new pc.Entity('WeaponPivot - bow arrow sight');
     camera.addChild(bowRoot);
     // Sem fantasma: o arco provisório fica oculto até ambos os GLBs terminarem.
     bowRoot.enabled=false;
@@ -359,11 +360,12 @@ export function initScene(canvas, getSettings) {
     bowRoot.__bowFailed=false;bowRoot.__arrowFailed=false;
     bowRoot.setLocalScale(.64,.64,.64);
     bowRoot.setLocalPosition(.32,0,-2.7);
-    // O GLB recebe sua própria correção visual; mira e flecha não giram.
-    // Referência: +40° anti-horário e 25° de inclinação para o alvo (-Z).
-    bowVisualPivot=new pc.Entity('Bow GLB visual pitch and roll');
+    // O arco de treino tem eixo maior a +45° no plano XY (medido no GLB).
+    // +45° em Z deixa vertical; -45° o deixaria horizontal.
+    // X negativo move o topo para -Z, isto é, na direção do alvo.
+    bowVisualPivot=new pc.Entity('Bow visual calibration');
     const isCrossbow=GEAR_BY_ID[equipment.bow]?.type==='Besta';
-    bowVisualPivot.setLocalEulerAngles(isCrossbow?0:-25,0,equipment.bow==='classico'?40:0);
+    bowVisualPivot.setLocalEulerAngles(isCrossbow?0:-20,0,equipment.bow==='classico'?45:0);
     bowRoot.addChild(bowVisualPivot);
     bowFallbackRoot=new pc.Entity('Vertical procedural bow fallback');
     bowRoot.addChild(bowFallbackRoot);
@@ -378,7 +380,8 @@ export function initScene(canvas, getSettings) {
     // A projeção do anel é usada para pontuação, sem segunda mira invisível.
     const sight=new pc.Entity('Circle aiming sight');
     sight.setLocalScale(.65,.65,.65);
-    sight.setLocalPosition(-.56,.045,-.05);
+    // Offset fixo: só WeaponPivot se move com mouse/touch.
+    sight.setLocalPosition(-.42,0,0);
     bowRoot.addChild(sight);sightAnchor=sight;
     circleMesh('sight black metal ring',.088,.007,dark,sight);
     circleMesh('sight gilded inner rim',.078,.0026,gold,sight);
@@ -386,20 +389,21 @@ export function initScene(canvas, getSettings) {
     tube('sight horizontal line',[[-.044,0,.003],[0,0,.003],[.044,0,.003]],[.0009,.0009,.0009],silver,sight,5);
     primitive('sphere','sight central dot',[0,0,.005],[.006,.006,.006],red,sight);
     // A single arrow asset: its colors DO NOT change when changing House.
-    arrowLoaded=new pc.Entity('Shared red-and-white arrow');
+    arrowLoaded=new pc.Entity('Arrow nock - child of WeaponPivot');
     bowRoot.addChild(arrowLoaded);
-    // A flecha precisa ter comprimento visível na câmera, não apontar
-    // diretamente para -Z como um pequeno traço visto de ponta.
     arrowLoaded.setLocalScale(1.85,1.85,1.85);
-    // Flecha independente: deitada na tela, sem herdar a rotação do arco.
+    // Eixo -Z = linha de tiro; sem rotação por quadro nem lookAt.
     arrowLoaded.setLocalEulerAngles(0,0,0);
-    arrowLoaded.setLocalPosition(.02,-.03,.10);
-    tube('black arrow shaft',[[0,0,.53],[0,0,.18],[0,0,-.65]],[.012,.012,.011],dark,arrowLoaded,12);
-    primitive('cone','machined arrow point',[0,0,-.70],[.036,.09,.036],silver,arrowLoaded,[90,0,0]);
+    arrowLoaded.setLocalPosition(0,0,.45);
+    const arrowFallback=new pc.Entity('Fallback arrow - nock aligned');
+    arrowFallback.setLocalPosition(0,0,-.53);
+    arrowLoaded.addChild(arrowFallback);
+    tube('black arrow shaft',[[0,0,.53],[0,0,.18],[0,0,-.65]],[.012,.012,.011],dark,arrowFallback,12);
+    primitive('cone','machined arrow point',[0,0,-.70],[.036,.09,.036],silver,arrowFallback,[90,0,0]);
     const fin=[[.0,.0,.47],[.076,.042,.26],[0,0,.16]],vanes=arrowPalette(),primary=material(vanes.feather),secondary=material(vanes.secondary);
     for(let i=0;i<3;i++){
       const a=i*Math.PI*2/3;
-      tube('shared arrow vane '+i,fin.map(([x,y,z])=>[x*Math.cos(a)-y*Math.sin(a),x*Math.sin(a)+y*Math.cos(a),z]),[.023,.038,.014],i===1?secondary:primary,arrowLoaded,6);
+      tube('shared arrow vane '+i,fin.map(([x,y,z])=>[x*Math.cos(a)-y*Math.sin(a),x*Math.sin(a)+y*Math.cos(a),z]),[.023,.038,.014],i===1?secondary:primary,arrowFallback,6);
     }
     // String gets physical tension by shifting central guide while aiming.
     bowString=tube('tensioned carbon cord',[[0,-1.51,.03],[-.11,0,.45],[0,1.51,.03]],[.004,.004,.004],dark,bowFallbackRoot,7);
@@ -407,10 +411,11 @@ export function initScene(canvas, getSettings) {
     loadBowModel();
   }
   // GLBs calibrados individualmente: os arquivos originais não compartilham eixos.
+  // nockZ: extremidade traseira medida no GLB após rot/scale.
   const arrowSpecs={
-    'arrow-standard.glb':{scale:.72,rot:[0,-90,0]},
-    'arrow-precision.glb':{scale:.125,rot:[0,90,0]},
-    'arrow-power.glb':{scale:.0085,rot:[0,180,0]}
+    'arrow-standard.glb':{scale:.72,rot:[0,-90,0],nockZ:.007},
+    'arrow-precision.glb':{scale:.125,rot:[0,90,0],nockZ:.426},
+    'arrow-power.glb':{scale:.0085,rot:[0,180,0],nockZ:.361}
   };
   function loadModel(path,callback){
     if(!app||destroyed)return;
@@ -468,10 +473,12 @@ export function initScene(canvas, getSettings) {
       parent.dataset.glbTarget='ready';parent.dataset.targetModel=file;
     });
   }
-  function appendArrowModel(parentEntity,model,file){
+  function appendArrowModel(parentEntity,model,file,alignNock=false){
     const t=arrowSpecs[file]||arrowSpecs['arrow-standard.glb'];
     model.setLocalScale(t.scale,t.scale,t.scale);
-    model.setLocalEulerAngles(...t.rot);parentEntity.addChild(model);
+    model.setLocalEulerAngles(...t.rot);
+    if(alignNock)model.setLocalPosition(0,0,-t.nockZ);
+    parentEntity.addChild(model);
   }
   function selectedArrow(){
     return (GEAR_BY_ID[equipment.bow]||GEAR_BY_ID.classico).arrow;
@@ -497,7 +504,7 @@ export function initScene(canvas, getSettings) {
       }
       arrowLoaded.__mesh3d?.destroy();
       const mesh=res.instantiateRenderEntity();mesh.name='Flecha '+file;
-      appendArrowModel(arrowLoaded,mesh,file);
+      appendArrowModel(arrowLoaded,mesh,file,true);
       for(const child of arrowLoaded.children)if(child!==mesh)child.enabled=false;
       arrowLoaded.__mesh3d=mesh;
       owner.__arrowLoaded=true;
@@ -629,36 +636,19 @@ export function initScene(canvas, getSettings) {
   function updateBowAim(){
     if(!ready||!camera?.camera||!bowRoot||!sightAnchor)return;
     const {w,h}=canvasSize(),depth=2.70,cssW=gl?.clientWidth||w,cssH=gl?.clientHeight||h;
-    // Projetar o ponto da mira para o plano da arma.
+    // Só o WeaponPivot recebe o movimento da mira.
     const world=camera.camera.screenToWorld(aimX*cssW,aimY*cssH,depth);
     const local=camera.getWorldTransform().clone().invert().transformPoint(world);
     const bowScale=bowRoot.getLocalScale().x;
-    const worldPerPixel=2*depth*Math.tan(camera.camera.fov*Math.PI/360)/Math.max(1,cssH);
-    // Aproximar a arma do anel, preservando margem no lado direito da tela.
-    const availableRight=(1-aimX)*cssW;
-    const followPx=Math.min(108,cssW*.09,Math.max(0,availableRight-72));
-    sightAnchor.setLocalPosition(-followPx*worldPerPixel/bowScale,.045,-.05);
-    // Travar a arma na VERTICAL: a mira e o arco formam um único conjunto.
     bowRoot.setLocalEulerAngles(0,0,0);
     const offset=sightAnchor.getLocalPosition().clone().mulScalar(bowScale);
     bowRoot.setLocalPosition(local.sub(offset));
     if(arrowLoaded){
+      // Flecha perpendicular à corda vertical, no centro da empunhadura.
+      // A haste acompanha o pivot; apenas recua ao aumentar a força.
       const crossbow=GEAR_BY_ID[equipment.bow]?.type==='Besta';
-      arrowLoaded.setLocalPosition(crossbow?0:.02,crossbow?.09:-.03,.08+.18*power);
-      // O eixo longitudinal da flecha aponta para a linha de mira, mas
-      // sua projeção na tela é horizontal (ponta e encaixe na mesma altura).
-      // A flecha acompanha a translação do arco, não sua inclinação visual.
-      if(crossbow){
-        // O virote segue o eixo da besta, sem a inclinação do arco.
-        arrowLoaded.setLocalEulerAngles(0,5,0);
-      }else{
-        const nockScreen=camera.camera.worldToScreen(arrowLoaded.getPosition());
-        const leftward=Math.min(72,cssW*.18);
-        const guideX=Math.min(aimX*cssW,nockScreen.x-leftward);
-        const guide=camera.camera.screenToWorld(guideX,nockScreen.y,3.7);
-        if(Number.isFinite(guide.x)&&Number.isFinite(guide.y)&&Number.isFinite(guide.z))
-          arrowLoaded.lookAt(guide);
-      }
+      arrowLoaded.setLocalPosition(0,crossbow?.09:0,.45+.19*power);
+      arrowLoaded.setLocalEulerAngles(0,0,0);
     }
     if(bowString)bowString.setLocalPosition(0,0,.19*power);
   }
