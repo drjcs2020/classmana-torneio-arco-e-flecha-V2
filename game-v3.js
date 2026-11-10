@@ -1,6 +1,6 @@
-import {initScene} from './scene-v3.js?v=arsenal-5';
+import {initScene} from './scene-v3.js?v=inventory-1';
 import {GEAR,GEAR_BY_ID,getGearLevel,isGearUnlocked} from './equipment-catalog.js?v=arsenal-5';
-import {mountEquipmentCarousel} from './equipment-carousel.js?v=arsenal-5';
+import {mountEquipmentInventory} from './equipment-inventory.js?v=inventory-1';
 import {CIRCUITS,LEVELS,targetMotion,obstacleBlocks,distanceDifficulty,flightSeconds} from './arena-difficulty.js?v=3';
 import {arenaAudio} from './arena-audio.js?v=lobbydefault49';
 import {cinematics} from './classmana-cinematics.js?v=treino-arte-1';
@@ -39,7 +39,7 @@ function readEquipment(playerId=''){
  catch{return {bow:'classico',arrow:'rubi'}}
 }
 let equipment=readEquipment(),gearProgress={wins:0,confirmed:false,playerId:''};
-const gearCarousel=mountEquipmentCarousel({selected:equipment.bow,onSelect:id=>chooseEquipment('bow',id)});
+const gearCarousel=mountEquipmentInventory({selected:equipment.bow,onSelect:id=>chooseEquipment('bow',id)});
 function applyEquipment(){
   gearCarousel?.select(equipment.bow);gearCarousel?.setProgress(gearProgress);
   const status=$('equipment-summary'),item=GEAR_BY_ID[equipment.bow]||GEAR_BY_ID.classico;

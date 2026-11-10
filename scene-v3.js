@@ -426,6 +426,13 @@ export function initScene(canvas, getSettings) {
     if(targetModelKey===file)return;
     targetModelKey=file;
     holder.__model3d?.destroy();holder.__model3d=null;targetVisual.enabled=true;
+    // Alvo de 10–65 m: disco 3D procedural com anéis voltados ao jogador.
+    // O GLB anterior estava exibindo a borda do disco, como um prato de lado.
+    if(file==='target-stand.glb'){
+      parent.dataset.glbTarget='procedural';
+      parent.dataset.targetModel='competition-rings';
+      return;
+    }
     loadModel('models3d/equipment/'+file,(err,res)=>{
       if(err||holder!==targetRoot||targetModelKey!==file)return;
       const t=targetSpecs[file],container=new pc.Entity('Alvo 3D '+file),model=res.instantiateRenderEntity();
@@ -475,7 +482,7 @@ export function initScene(canvas, getSettings) {
       owner.addChild(mesh);owner.__mesh3d=mesh;
       // Preserva a mira circular e seu suporte mesmo que o GLB não possua mira.
       for(const child of owner.__fallbacks||[]){
-        child.enabled=child===arrowLoaded||child===sightAnchor||/sight bridge/i.test(child.name);
+        child.enabled=child===arrowLoaded||child===sightAnchor;
       }
       parent.dataset.glbBow='ready';parent.dataset.bowModel=gear.model;
     });
