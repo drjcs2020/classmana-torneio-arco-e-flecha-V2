@@ -90,8 +90,12 @@ body[data-page="arena"] #stage canvas.world3d {
 }
 body[data-page="arena"] #stage #world {
  visibility:visible!important;
+ opacity:0!important; /* Só capta gestos: nunca exibe o arco 2D antigo sob o GLB. */
  pointer-events:auto!important;
  touch-action:none!important;
+}
+body[data-page="arena"] #stage[data-scene-engine="fallback"] #world {
+ opacity:1!important; /* Modo compatível sem WebGL continua visível. */
 }
 /* O canvas transparente #world recebe os gestos; PlayCanvas desenha abaixo. */
 </style>
