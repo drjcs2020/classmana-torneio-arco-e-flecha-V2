@@ -350,3 +350,75 @@
    font-size:clamp(7px,1.75vw,10px)!important;
  }
 }
+
+
+/* 2026-11-10 — segunda revisão: dimensões físicas das molduras e
+   alinhamento das duas plaquetas, motivada pela captura 1345×642. */
+@media (min-width:681px){
+ .cm-vs-overlay[data-mode="bot"] .cm-vs-shell{
+   width:min(99vw,1190px)!important;max-width:1190px!important;
+   gap:clamp(3px,.5dvh,7px)!important;
+ }
+ .cm-vs-overlay[data-mode="bot"] .cm-vs-fighters{
+   width:min(100%,1140px)!important;max-width:1140px!important;
+   grid-template-columns:minmax(0,1fr) clamp(105px,11vw,148px) minmax(0,1fr)!important;
+   gap:clamp(5px,.9vw,14px)!important;
+ }
+ .cm-vs-overlay[data-mode="bot"] .cm-vs-fighter[data-house]{
+   width:clamp(290px,29vw,368px)!important;
+   height:clamp(350px,63dvh,435px)!important;
+   max-width:100%!important;max-height:none!important;
+   aspect-ratio:auto!important;
+ }
+}
+.cm-vs-overlay[data-mode="bot"] .cm-vs-fighter[data-house]::after{
+ background-size:100% 100%!important;
+}
+.cm-vs-overlay[data-mode="bot"] .cm-vs-fighter[data-house] .cm-vs-fighter-info{
+ inset:0!important;top:0!important;left:0!important;
+ width:100%!important;height:100%!important;
+ max-width:100%!important;max-height:none!important;
+ padding:0!important;overflow:visible!important;
+}
+.cm-vs-overlay[data-mode="bot"] .cm-vs-fighter[data-house] .cm-vs-fighter-info strong{
+ top:73.2%!important;left:10%!important;width:80%!important;
+ max-width:80%!important;height:10.5%!important;
+ padding:0 4px!important;box-sizing:border-box!important;
+ font-size:clamp(12px,1.25vw,17px)!important;
+ line-height:1.08!important;
+ white-space:normal!important;overflow:hidden!important;
+ text-overflow:clip!important;
+}
+.cm-vs-overlay[data-mode="bot"] .cm-vs-fighter[data-house] .cm-vs-fighter-info small{
+ top:85.1%!important;left:7.5%!important;width:85%!important;
+ max-width:85%!important;height:8%!important;
+ padding:0 2px!important;box-sizing:border-box!important;
+ font:900 clamp(9px,.82vw,11px)/1.05 'Nunito',Arial,sans-serif!important;
+ letter-spacing:-.025em!important;
+ white-space:nowrap!important;overflow:hidden!important;
+ text-overflow:clip!important;
+}
+@media (max-width:680px){
+ .cm-vs-overlay[data-mode="bot"] .cm-vs-fighter[data-house]{
+   width:min(43vw,235px)!important;
+   height:min(47dvh,305px)!important;
+   max-width:100%!important;
+   max-height:none!important;
+   aspect-ratio:auto!important;
+ }
+ .cm-vs-overlay[data-mode="bot"] .cm-vs-fighter[data-house] .cm-vs-fighter-info strong{
+   top:73%!important;height:11%!important;
+   font-size:clamp(9px,2.4vw,12px)!important;
+ }
+ .cm-vs-overlay[data-mode="bot"] .cm-vs-fighter[data-house] .cm-vs-fighter-info small{
+   top:84.8%!important;height:9%!important;
+   font-size:clamp(6px,1.55vw,9px)!important;
+   letter-spacing:-.045em!important;
+ }
+}
+@media (max-height:600px) and (min-width:681px){
+ .cm-vs-overlay[data-mode="bot"] .cm-vs-fighter[data-house]{
+   height:min(58dvh,360px)!important;
+   width:min(29vw,320px)!important;
+ }
+}
