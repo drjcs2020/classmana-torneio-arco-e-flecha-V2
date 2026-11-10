@@ -28,7 +28,7 @@ export function modelSource(file){
  })).then(async parts=>{
    let blob=new Blob(parts,{type:file.endsWith('.gz')?'application/gzip':'model/gltf-binary'});
    if(file.endsWith('.gz')){
-     if(typeof DecompressionStream==='undefined)throw Error('Seu navegador não suporta a descompressão de modelos 3D');
+     if(typeof DecompressionStream==='undefined')throw Error('Seu navegador não suporta a descompressão de modelos 3D');
      blob=await new Response(blob.stream().pipeThrough(new DecompressionStream('gzip'))).blob();
    }
    return URL.createObjectURL(new Blob([blob],{type:'model/gltf-binary'}));
