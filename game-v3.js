@@ -1,4 +1,4 @@
-import {initScene} from './scene-v3.js?v=arsenal-2';
+import {initScene} from './scene-v3.js?v=arsenal-3';
 import {GEAR,GEAR_BY_ID,getGearLevel,isGearUnlocked} from './equipment-catalog.js?v=arsenal-2';
 import {mountEquipmentCarousel} from './equipment-carousel.js?v=arsenal-2';
 import {CIRCUITS,LEVELS,targetMotion,obstacleBlocks,distanceDifficulty,flightSeconds} from './arena-difficulty.js?v=3';
