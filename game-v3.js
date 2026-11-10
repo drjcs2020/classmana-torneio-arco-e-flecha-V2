@@ -1,4 +1,4 @@
-import {initScene} from './scene-v3.js?v=bow-arrow-grip-20261110m';
+import {initScene} from './scene-v3.js?v=bow-arrow-fit-20261110n';
 import {GEAR,GEAR_BY_ID,getGearLevel,isGearUnlocked} from './equipment-catalog.js?v=arsenal-5';
 import {mountEquipmentInventory} from './equipment-inventory.js?v=inventory-1';
 import {CIRCUITS,LEVELS,targetMotion,obstacleBlocks,distanceDifficulty,flightSeconds} from './arena-difficulty.js?v=3';

@@ -398,10 +398,10 @@ export function initScene(canvas, getSettings) {
     arrowLoaded.setLocalEulerAngles(0,nock.yaw,0);
     arrowLoaded.setLocalPosition(nock.x,nock.y,nock.z);
     const arrowFallback=new pc.Entity('Fallback arrow - nock aligned');
-    // Proporção aprovada: comprimento -40% (0.60x), espessura +150% (2.50x).
-    // A traseira da haste fica junto à empunhadura, como no GLB calibrado.
-    arrowFallback.setLocalPosition(0,0,-.60);
-    arrowFallback.setLocalScale(5,5,1.2);
+    // Espessura aprovada mantida; comprimento encurtado mais 15% nesta revisão.
+    // Encurtar 15% mantendo a traseira no mesmo encaixe e a espessura intacta.
+    arrowFallback.setLocalPosition(0,0,-.54);
+    arrowFallback.setLocalScale(5,5,1.02);
     arrowLoaded.addChild(arrowFallback);
     tube('black arrow shaft',[[0,0,.53],[0,0,.18],[0,0,-.65]],[.012,.012,.011],dark,arrowFallback,12);
     primitive('cone','machined arrow point',[0,0,-.70],[.036,.09,.036],silver,arrowFallback,[90,0,0]);
@@ -486,9 +486,9 @@ export function initScene(canvas, getSettings) {
     // Nunca calcular escala por AABB runtime: o arquivo standard possui
     // rotação e escala internas, e essa medição produzia uma tora gigante.
     const slim=new pc.Entity('Arrow calibrated shaft');
-    // Somente dimensões da flecha: largura/altura 2.50x e comprimento 0.60x.
-    // Escala anterior: (spec.width*2, spec.width*2, 2).
-    slim.setLocalScale(spec.width*5,spec.width*5,1.2);
+    // Só o comprimento muda: Z 1.20 -> 1.02 (-15%).
+    // Largura e altura continuam EXATAMENTE spec.width*5 (+150% aprovado).
+    slim.setLocalScale(spec.width*5,spec.width*5,1.02);
     parentEntity.addChild(slim);
     model.setLocalEulerAngles(...spec.rot);
     model.setLocalScale(spec.scale,spec.scale,spec.scale);
@@ -506,7 +506,7 @@ export function initScene(canvas, getSettings) {
       child.enabled=owner.__bowFailed||child===arrowLoaded||child===sightAnchor;
     owner.enabled=true;
     updateBowAim();
-    parent.dataset.weaponPose='v1-mechanics-bow-front-arrow-forward-grip-center-v11';
+    parent.dataset.weaponPose='v1-mechanics-arrow-grip-fit-shorter-15pct-v12';
     parent.dataset.glbBow=owner.__bowFailed?'fallback':'ready';
     parent.dataset.glbArrow=owner.__arrowFailed?'fallback':'ready';
   }
@@ -727,10 +727,11 @@ export function initScene(canvas, getSettings) {
       return {x:0,y:.08,z:.12,yaw:0};
     // A flecha calibrada já aponta para -Z. Não girá-la para -X:
     // isso atravessava a tela e a fazia parecer muito maior.
-    // O centro do punho clássico fica perto de Y=0; Y=-.10 alinha a
-    // haste à peça central cinza, abaixo da antiga posição Y=+.135.
+    // Nas capturas, a traseira ficou à direita e abaixo da empunhadura.
+    // Aproximar ~0.175 em X e elevar ~0.18 em Y, sem alterar orientação,
+    // profundidade ou deslocamento de puxada.
     if(equipment.bow==='classico')
-      return {x:.015,y:-.10,z:.13,yaw:0};
+      return {x:-.16,y:.08,z:.13,yaw:0};
     return {x:.015,y:0,z:.13,yaw:0};
   }
   function updateBowAim(){
@@ -788,7 +789,7 @@ export function initScene(canvas, getSettings) {
       const targetScale=Math.max(.001,targetRoot.getLocalScale().x);
       calibrated.setLocalScale(calibrated.getLocalScale().clone().mulScalar(.60/targetScale));
       // Ponta 5 cm dentro da superfície frontal do disco.
-      const worldArrowLength=1.40*1.2*.60;
+      const worldArrowLength=1.40*1.02*.60;
       calibrated.setLocalPosition(.08,-.05,(worldArrowLength-.05)/targetScale+.052-.15);
       impactMarks.push(e);return;
     }
@@ -812,7 +813,7 @@ export function initScene(canvas, getSettings) {
       const shaft=material('#14181d',{metal:.43,rough:.32}),
         tip=material('#e4e7e8',{metal:.85,rough:.18});
       const fallback=new pc.Entity('Fallback flying arrow');
-      fallback.setLocalScale(.60*5,.60*5,.60*1.2);e.addChild(fallback);
+      fallback.setLocalScale(.60*5,.60*5,.60*1.02);e.addChild(fallback);
       tube('projectile shaft',[[0,0,.53],[0,0,.18],[0,0,-.65]],
         [.012,.012,.011],shaft,fallback,12);
       primitive('cone','projectile point',[0,0,-.70],[.036,.09,.036],
