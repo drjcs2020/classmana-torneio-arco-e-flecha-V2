@@ -37,6 +37,11 @@ export function initScene(canvas, getSettings) {
   function targetScale(distance){
     return clamp(Math.pow(30/Math.max(10,distance||30),.65),.31,1.10);
   }
+  // Alvo mais distante, à direita, com margem para não cortar no celular.
+  function targetScreenX(w,h,scale,shift=0){
+    const radius=1.34*scale*h/(2*Math.tan(41*Math.PI/360)*16);
+    return clamp(w*(.77+shift),radius+12,w-radius-12);
+  }
   function getTargetMetrics(){
     const {w,h}=canvasSize(),s=getSettings()||{},distance=s.distance||25,shift=s.shift||0;
     if(ready&&targetRoot)moveTarget();
@@ -49,11 +54,11 @@ export function initScene(canvas, getSettings) {
       const kx=w/(gl.clientWidth||w),ky=h/(gl.clientHeight||h),r=Math.abs(b.x-a.x)*kx;
       if(Number.isFinite(a.x)&&Number.isFinite(a.y)&&r>0)return {x:a.x*kx,y:a.y*ky,r};
     }
-    const r=Math.min(h*.105,w*.082)*targetScale(distance);
+    const r=1.34*targetScale(distance)*h/(2*Math.tan(41*Math.PI/360)*16);
     const moving=s.level==='avancado'||s.level==='lendario';
     const meters=clamp(Number(distance)||10,10,150);
     const footY=h*(.65+.28*Math.pow((150-meters)/140,2.1));
-    return {x:w*(.50+shift),
+    return {x:targetScreenX(w,h,targetScale(distance),shift),
       y:moving?h*(.45+(s.verticalShift||0)):footY-1.48*r,r};
   }
   function fallbackSightGeometry(){
@@ -64,17 +69,8 @@ export function initScene(canvas, getSettings) {
     return {bx,by,size,sightX:w*aimX,sightY:h*aimY};
   }
   function getAimPoint(){
-    // Pontuação usa a posição PROJETADA do centro da mira 3D.
-    // O ponteiro só comanda o arco: não existe uma segunda mira invisível.
-    if(ready&&sightAnchor&&bowRoot&&camera?.camera&&app?.graphicsDevice){
-      updateBowAim();
-      const p=camera.camera.worldToScreen(sightAnchor.getPosition());
-      // worldToScreen devolve pixels CSS; width/height do WebGL são pixels
-       // físicos e causavam desvios horizontais/verticais com zoom/DPR.
-       const width=gl?.clientWidth||canvasSize().w,height=gl?.clientHeight||canvasSize().h;
-      if(Number.isFinite(p.x)&&Number.isFinite(p.y)&&width>0&&height>0)
-        return {x:clamp(p.x/width,0,1),y:clamp(p.y/height,0,1)};
-    }
+    // A mira visível do HUD é a fonte ÚNICA da pontuação.
+    // Não projetar outro círculo 3D nem deslocar o disparo da mira.
     return {x:aimX,y:aimY};
   }
   function bowPalette(){
@@ -268,7 +264,6 @@ export function initScene(canvas, getSettings) {
     if(!targetRoot)return;
     const setting=getSettings()||{},camZ=7,targetZ=-9,{w,h}=canvasSize();
     const units=h/(2*Math.tan(41*Math.PI/360)*(camZ-targetZ));
-    const x=((setting.shift||0)*w)/units;
     const scale=targetScale(setting.distance);
     targetRoot.setLocalScale(scale,scale,scale);
     const moving=setting.level==='avancado'||setting.level==='lendario';
@@ -279,7 +274,8 @@ export function initScene(canvas, getSettings) {
     const footY=h*(.65+.28*Math.pow((150-meters)/140,2.1));
     const projectedRadius=1.34*scale*units;
     const centerY=footY-1.48*projectedRadius;
-    const projectedX=w*(.5+(setting.shift||0));
+    const projectedX=targetScreenX(w,h,scale,setting.shift||0);
+    const x=(projectedX-w*.5)/units;
     const grounded=camera?.camera?.screenToWorld(
       projectedX,centerY,camZ-targetZ);
     const suspendedY=2.05-(setting.verticalShift||0)*h/units;
@@ -362,20 +358,17 @@ export function initScene(canvas, getSettings) {
     bowRoot.__bowFailed=false;bowRoot.__arrowFailed=false;
     bowRoot.setLocalScale(.60,.60,.60);
     bowRoot.setLocalPosition(.32,0,-2.7);
-    // O arco de treino tem eixo maior a +45° no plano XY (medido no GLB).
-    // +45° em Z deixa vertical; -45° o deixaria horizontal.
-    // X negativo move o topo para -Z, isto é, na direção do alvo.
+    // O arco gira pela empunhadura; seu topo inclina 8° para -Z.
+    // O yaw visual de 45° posiciona a corda ATRÁS do punho em 3D.
+    // Roll é sempre zero: o arco não tomba para os lados.
     bowVisualPivot=new pc.Entity('Bow visual calibration');
     const isCrossbow=GEAR_BY_ID[equipment.bow]?.type==='Besta';
-    // O arco aumenta 20% SEM ampliar a mira nem a espessura da flecha.
-    // Inclinação suave: 8° à frente (pitch) e 6° à esquerda (roll),
-    // em direção ao alvo, com o centro da arma preso ao mesmo pivot.
     bowVisualPivot.setLocalScale(1.20,1.20,1.20);
-    bowVisualPivot.setLocalEulerAngles(isCrossbow?0:-8,0,isCrossbow?0:6);
+    bowVisualPivot.setLocalEulerAngles(isCrossbow?0:-8,isCrossbow?0:45,0);
     bowRoot.addChild(bowVisualPivot);
     bowFallbackRoot=new pc.Entity('Vertical procedural bow fallback');
-    bowFallbackRoot.setLocalScale(1.20,1.20,1.20);
-    bowRoot.addChild(bowFallbackRoot);
+    bowFallbackRoot.setLocalScale(.41,.41,.41);
+    bowVisualPivot.addChild(bowFallbackRoot);
     const pp=bowPalette(),body=material(pp.body,{metal:.79,rough:.19}),gold=material(pp.trim,{metal:.9,rough:.18}),
       dark=material('#1b1c20',{metal:.46,rough:.35}),silver=material('#d5e0e7',{metal:.88,rough:.23}),red=material('#dc342a'),ivory=material('#faf0db');
     const p=[[0,-1.52,0],[.045,-1.35,0],[.12,-.99,.035],[.105,-.55,.02],[.055,-.16,0],[.018,.18,0],[.075,.62,.02],[.09,1,.02],[.02,1.37,.02],[0,1.52,0]];
@@ -383,32 +376,21 @@ export function initScene(canvas, getSettings) {
     tube('bow-trim upper line',[[.062,.25,-.028],[.115,.88,-.021],[.05,1.39,.025]],[.01,.011,.007],gold,bowFallbackRoot);
     tube('bow-trim lower line',[[.062,-.2,-.028],[.118,-.90,-.021],[.04,-1.36,.025]],[.01,.011,.007],gold,bowFallbackRoot);
     const grip=primitive('cylinder','ergonomic dark handgrip',[.03,-.12,-.08],[.17,.43,.13],dark,bowFallbackRoot,[0,0,90]);
-    // Mira FISICAMENTE PRESA ao arco: acompanha 100% do movimento.
-    // A projeção do anel é usada para pontuação, sem segunda mira invisível.
-    const sight=new pc.Entity('Circle aiming sight');
-    sight.setLocalScale(.65,.65,.65);
-    // Offset fixo: só WeaponPivot se move com mouse/touch.
-    sight.setLocalPosition(-.42,0,0);
-    bowRoot.addChild(sight);sightAnchor=sight;
-    circleMesh('sight black metal ring',.088,.007,dark,sight);
-    circleMesh('sight gilded inner rim',.078,.0026,gold,sight);
-    tube('sight vertical line',[[0,-.044,.003],[0,0,.003],[0,.044,.003]],[.0009,.0009,.0009],silver,sight,5);
-    tube('sight horizontal line',[[-.044,0,.003],[0,0,.003],[.044,0,.003]],[.0009,.0009,.0009],silver,sight,5);
-    primitive('sphere','sight central dot',[0,0,.005],[.006,.006,.006],red,sight);
+    // Marcador invisível do encaixe, sem segundo círculo sobre o alvo.
+    sightAnchor=new pc.Entity('Nock reference - invisible');
+    sightAnchor.setLocalPosition(-.12,.02,.17);
+    bowRoot.addChild(sightAnchor);
     // A single arrow asset: its colors DO NOT change when changing House.
     arrowLoaded=new pc.Entity('Arrow nock - child of WeaponPivot');
     bowRoot.addChild(arrowLoaded);
-    // A flecha GLB já está calibrada; só seu comprimento será dobrado,
-    // mantendo a espessura original para não virar uma tora.
+    // A flecha mantém as proporções originais e o MESMO ângulo do arco.
     arrowLoaded.setLocalScale(1,1,1);
-    // A ponta aponta para a mira circular à esquerda, com o nock no punho.
-    arrowLoaded.setLocalEulerAngles(0,30,0);
-    arrowLoaded.setLocalPosition(0,0,.45);
+    arrowLoaded.setLocalEulerAngles(0,0,0);
+    arrowLoaded.setLocalPosition(-.12,.02,.17);
     const arrowFallback=new pc.Entity('Fallback arrow - nock aligned');
-    // O fallback também dobra o comprimento, mantendo a ponta fina.
-    // Recuar a origem preserva a traseira em Z=0.
+    // Escala 2x uniforme: largura, altura e comprimento.
     arrowFallback.setLocalPosition(0,0,-1.06);
-    arrowFallback.setLocalScale(1,1,2);
+    arrowFallback.setLocalScale(2,2,2);
     arrowLoaded.addChild(arrowFallback);
     tube('black arrow shaft',[[0,0,.53],[0,0,.18],[0,0,-.65]],[.012,.012,.011],dark,arrowFallback,12);
     primitive('cone','machined arrow point',[0,0,-.70],[.036,.09,.036],silver,arrowFallback,[90,0,0]);
@@ -493,8 +475,8 @@ export function initScene(canvas, getSettings) {
     // Nunca calcular escala por AABB runtime: o arquivo standard possui
     // rotação e escala internas, e essa medição produzia uma tora gigante.
     const slim=new pc.Entity('Arrow calibrated shaft');
-    // Comprimento 2x; espessura inalterada (somente eixo longitudinal).
-    slim.setLocalScale(spec.width,spec.width,2);
+    // O modelo GLB inteiro cresce 2x, sem deformar sua proporção.
+    slim.setLocalScale(spec.width*2,spec.width*2,2);
     parentEntity.addChild(slim);
     model.setLocalEulerAngles(...spec.rot);
     model.setLocalScale(spec.scale,spec.scale,spec.scale);
@@ -512,7 +494,7 @@ export function initScene(canvas, getSettings) {
       child.enabled=owner.__bowFailed||child===arrowLoaded||child===sightAnchor;
     owner.enabled=true;
     updateBowAim();
-    parent.dataset.weaponPose='bow-120pct-arrow-200pct-grip-aligned-v4';
+    parent.dataset.weaponPose='grip-fixed-pitch-only-arrow-uniform-v6';
     parent.dataset.glbBow=owner.__bowFailed?'fallback':'ready';
     parent.dataset.glbArrow=owner.__arrowFailed?'fallback':'ready';
   }
@@ -625,7 +607,11 @@ export function initScene(canvas, getSettings) {
       const scale=Math.min(...b.size.map((v,i)=>limit[i]/Math.max(v,.00001)));
       if(Number.isFinite(scale)&&scale>0&&scale<10000){
         model.setLocalScale(scale,scale,scale);
-        model.setLocalPosition(...b.min.map((v,i)=>-(v+b.max[i])*.5*scale));
+        // No Arco de Treino, a empunhadura real do GLB está em X≈0.534
+        // após a rotação de 45°, não no centro geométrico da malha.
+        const gripOffset=gear.id==='classico'
+          ?(.534-(b.min[0]+b.max[0])*.5)*scale:0;
+        model.setLocalPosition(...b.min.map((v,i)=>-(v+b.max[i])*.5*scale-(i===0?gripOffset:0)));
       }else{
         model.setLocalScale(gear.scale,gear.scale,gear.scale);
         model.setLocalPosition(...gear.offset);
@@ -635,22 +621,9 @@ export function initScene(canvas, getSettings) {
       model.setLocalPosition(...gear.offset);
     }
     bowVisualPivot.addChild(model);
-    // Ajustar o eixo real do GLB ao ângulo VISUAL desejado (96°):
-    // vertical + 6° à esquerda, sem cancelar a inclinação na calibração.
-    if(gear.type==='Arco'){
-      const axis=bowVisualAxis(model);
-      if(axis!==null&&Number.isFinite(axis)){
-        let delta=96-axis;
-        while(delta>90)delta-=180;
-        while(delta< -90)delta+=180;
-        if(Math.abs(delta)>2&&Math.abs(delta)<50){
-          const roll=bowVisualPivot.getLocalEulerAngles().z;
-          bowVisualPivot.setLocalEulerAngles(-8,0,roll+delta);
-        }
-        parent.dataset.bowAxisMeasured=String(Math.round(axis));
-        parent.dataset.bowRollCorrection=String(Math.round(Math.abs(delta)>2&&Math.abs(delta)<50?delta:0));
-      }
-    }
+    // Não aplicar correções de roll pelo PCA: elas tombavam o arco.
+    parent.dataset.bowPivot='grip';
+    parent.dataset.bowRoll='0';
     parent.dataset.bowModel=gear.model;
     temp.destroy();
   }
@@ -679,29 +652,29 @@ export function initScene(canvas, getSettings) {
   }
 
   function updateBowAim(){
-    if(!ready||!camera?.camera||!bowRoot||!sightAnchor)return;
+    if(!ready||!camera?.camera||!bowRoot)return;
     const {w,h}=canvasSize(),depth=2.70,cssW=gl?.clientWidth||w,cssH=gl?.clientHeight||h;
-    // Só o WeaponPivot recebe o movimento da mira.
-    const world=camera.camera.screenToWorld(aimX*cssW,aimY*cssH,depth);
-    const local=camera.getWorldTransform().clone().invert().transformPoint(world);
-    const bowScale=bowRoot.getLocalScale().x;
-    bowRoot.setLocalEulerAngles(0,0,0);
-    const offset=sightAnchor.getLocalPosition().clone().mulScalar(bowScale);
-    bowRoot.setLocalPosition(local.sub(offset));
-    if(arrowLoaded){
-      // Flecha perpendicular à corda vertical, no centro da empunhadura.
-      // A haste acompanha o pivot; apenas recua ao aumentar a força.
+    // Empunhadura FIXA em primeiro plano, à esquerda e abaixo do centro.
+    // Só a orientação muda: a arma não segue o ponteiro pela tela.
+    const gripWorld=camera.camera.screenToWorld(cssW*.20,cssH*.66,depth);
+    const aimWorld=camera.camera.screenToWorld(aimX*cssW,aimY*cssH,16);
+    const inv=camera.getWorldTransform().clone().invert();
+    const gripLocal=inv.transformPoint(gripWorld);
+    const aimLocal=inv.transformPoint(aimWorld);
+    const delta=aimLocal.sub(gripLocal);
+    // -Z é a direção longitudinal calibrada da flecha GLB.
+    // Pitch em X, yaw em Y; nunca aplicar roll em Z.
+    const yaw=-Math.atan2(delta.x,-delta.z)*180/Math.PI;
+    const pitch=Math.atan2(delta.y,Math.hypot(delta.x,delta.z))*180/Math.PI;
+    bowRoot.setLocalPosition(gripLocal);
+    bowRoot.setLocalEulerAngles(clamp(pitch,-30,30),clamp(yaw,-42,42),0);
+    if(arrowLoaded&&!pendingShot){
       const crossbow=GEAR_BY_ID[equipment.bow]?.type==='Besta';
-      // A empunhadura real do arco de treino fica em X≈+0.14 após
-      // a rotação de 45°. A haste passa pelo punho, levemente acima,
-      // apontando para a mira em vez de ficar vertical/de lado.
-      if(!pendingShot){
-        // Encaixe junto à empunhadura: ~1 cm à direita e ~2 cm acima
-        // da pose anterior na projeção; Z mais próximo do plano do arco.
-        // A ponta permanece voltada para a mira/centro do alvo.
-        arrowLoaded.setLocalPosition(crossbow?0:.20,crossbow?.09:.22,.20+.10*power);
-        arrowLoaded.setLocalEulerAngles(0,crossbow?0:30,0);
-      }
+      // A traseira da flecha fica na corda; recua em +Z ao puxar.
+      // Nenhuma rotação independente: acompanha o WeaponPivot.
+      arrowLoaded.setLocalPosition(crossbow?0:-.12,crossbow?.08:.02,
+        (crossbow?.12:.17)+.12*power);
+      arrowLoaded.setLocalEulerAngles(0,0,0);
     }
     if(bowString)bowString.setLocalPosition(0,0,.19*power);
   }
@@ -788,7 +761,8 @@ export function initScene(canvas, getSettings) {
     const tipLocalZ=bowRoot.__arrowFailed?-2.46:-2.80;
     const tipWorld=projectile.getWorldTransform().transformPoint(new pc.Vec3(0,0,tipLocalZ));
     const tipLead=Math.max(0,start.z-tipWorld.z);
-    const end=new pc.Vec3(toX,toY,target.z+.42*scale+tipLead);
+    // A ponta chega à face real do alvo (Z=.052), não para antes dela.
+    const end=new pc.Vec3(toX,toY,target.z+.052*scale+tipLead);
     const meters=getSettings()?.distance||30;
     const duration=.43+.42*Math.pow(Math.max(10,meters)/80,.56)+.13*(1-shotPower);
     const trajectory=Math.pow(Math.max(10,meters)/30,.45);

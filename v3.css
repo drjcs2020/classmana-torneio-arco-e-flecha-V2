@@ -75,8 +75,8 @@ footer{border-top:1px solid #b9a063;color:#e1d0b2}
 .game-top-left,.game-top-right,.instruction,.playcross{pointer-events:none}
 .stage.aiming #world{cursor:grabbing}
 
-/* Hide the old independent UI crosshair: the metal bow sight is the only reticle. */
-#playcross{display:none!important}
+/* Uma única mira: a original do HUD, 15% maior, sem círculo 3D extra. */
+#playcross{display:block!important;width:44px;height:44px;transform:translate(-50%,-50%) scale(1.15)}
 
 /* Indicador de vento ampliado. A seta sempre aponta para o lado do DESVIO da flecha.
    Vento positivo move o impacto para a direita; vento negativo, para a esquerda. */
