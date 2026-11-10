@@ -99,7 +99,7 @@ export function initScene(canvas, getSettings) {
     if(ready)colorBow();
   }
   function setHouse(k){currentHouse=palettes[k]?k:'A';parent.classList.remove('house-a','house-b','house-c');parent.classList.add('house-'+currentHouse.toLowerCase());
-    if(ready){colorBow();colorTarget();loadBowModel();}}
+    if(ready){colorBow();colorTarget();}}
   function setTargetShift(){if(ready){moveTarget();loadTargetModel();for(const old of impactMarks)old.destroy();impactMarks=[];}}
   // Keep the bow, arrow and the bow's own sight fully inside the camera.
   // Moving the mouse to the edge must not push the bow out of the viewport.
@@ -444,8 +444,9 @@ export function initScene(canvas, getSettings) {
   }
   function loadArrowModel(owner){
     const file=selectedArrow(),id=equipment.bow;
+    const token=owner.__arrowLoadToken=(owner.__arrowLoadToken||0)+1;
     loadModel('models3d/equipment/'+file,(err,res)=>{
-      if(err||owner!==bowRoot||id!==equipment.bow||!arrowLoaded)return;
+      if(err||owner!==bowRoot||id!==equipment.bow||!arrowLoaded||owner.__arrowLoadToken!==token)return;
       arrowLoaded.__mesh3d?.destroy();
       const mesh=res.instantiateRenderEntity();mesh.name='Flecha '+file;
       appendArrowModel(arrowLoaded,mesh,file);
@@ -456,12 +457,14 @@ export function initScene(canvas, getSettings) {
   function loadBowModel(){
     const owner=bowRoot,id=equipment.bow,gear=GEAR_BY_ID[id]||GEAR_BY_ID.classico;
     if(!owner)return;
+    const token=owner.__bowLoadToken=(owner.__bowLoadToken||0)+1;
     owner.__mesh3d?.destroy();owner.__mesh3d=null;
     for(const child of owner.__fallbacks||[])child.enabled=true;
     parent.dataset.glbBow='loading';
     loadArrowModel(owner);
     loadModel('models3d/equipment/'+gear.model,(err,res)=>{
-      if(err||owner!==bowRoot||id!==equipment.bow)return;
+      if(err||owner!==bowRoot||id!==equipment.bow||owner.__bowLoadToken!==token)return;
+      owner.__mesh3d?.destroy();
       const mesh=res.instantiateRenderEntity();mesh.name=gear.name;
       mesh.setLocalScale(gear.scale,gear.scale,gear.scale);
       mesh.setLocalEulerAngles(...gear.rotation);
