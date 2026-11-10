@@ -359,11 +359,14 @@ export function initScene(canvas, getSettings) {
     bowRoot.__bowFailed=false;bowRoot.__arrowFailed=false;
     bowRoot.setLocalScale(.60,.60,.60);
     bowRoot.setLocalPosition(.32,0,-2.7);
-    // Eixo vertical calibrado no GLB, sem yaw adicional que entorte o arco.
+    // Arco clássico: giro AXIAL de +90 graus sobre o eixo vertical (Y)
+    // do punho já calibrado; não girar 90 graus no plano da tela (Z).
+    // O giro deixa a altura intacta e mantém o arco apontado para o alvo.
     bowVisualPivot=new pc.Entity('Bow visual calibration');
     const isCrossbow=GEAR_BY_ID[equipment.bow]?.type==='Besta';
+    const classicBow=equipment.bow==='classico';
     bowVisualPivot.setLocalScale(1.20,1.20,1.20);
-    bowVisualPivot.setLocalEulerAngles(isCrossbow?0:-8,0,0);
+    bowVisualPivot.setLocalEulerAngles(classicBow?0:(isCrossbow?0:-8),classicBow?90:0,0);
     bowRoot.addChild(bowVisualPivot);
     bowFallbackRoot=new pc.Entity('Vertical procedural bow fallback');
     bowFallbackRoot.setLocalScale(.41,.41,.41);
@@ -390,10 +393,13 @@ export function initScene(canvas, getSettings) {
     bowRoot.addChild(arrowLoaded);
     // A flecha mantém as proporções originais e o MESMO ângulo do arco.
     arrowLoaded.setLocalScale(1,1,1);
-    // Calibração fixa: flecha encaixada e visível à esquerda do punho.
-    // É filha do mesmo pivô: arco e flecha se movem juntos.
-    arrowLoaded.setLocalEulerAngles(0,23,0);
-    arrowLoaded.setLocalPosition(.03,.18,.45);
+    // Alinhar o eixo da haste à peça arredondada superior do punho:
+    // no GLB clássico calibrado, seu centro está em y≈0.132 no WeaponPivot.
+    // A flecha fica à esquerda do punho, com pequena folga visual.
+    // Como filha do WeaponPivot, acompanha a mira e o arco.
+    const nock=arrowNockPose();
+    arrowLoaded.setLocalEulerAngles(0,nock.yaw,0);
+    arrowLoaded.setLocalPosition(nock.x,nock.y,nock.z);
     const arrowFallback=new pc.Entity('Fallback arrow - nock aligned');
     // Proporção aprovada: comprimento -40% (0.60x), espessura +150% (2.50x).
     arrowFallback.setLocalPosition(0,0,-1.06);
@@ -502,7 +508,7 @@ export function initScene(canvas, getSettings) {
       child.enabled=owner.__bowFailed||child===arrowLoaded||child===sightAnchor;
     owner.enabled=true;
     updateBowAim();
-    parent.dataset.weaponPose='v1-moving-bow-sight-arrow-attached-v7';
+    parent.dataset.weaponPose='classic-axial-plus90-grip-nock-v9';
     parent.dataset.glbBow=owner.__bowFailed?'fallback':'ready';
     parent.dataset.glbArrow=owner.__arrowFailed?'fallback':'ready';
   }
@@ -659,6 +665,15 @@ export function initScene(canvas, getSettings) {
     });
   }
 
+  function arrowNockPose(){
+    if(equipment.bow==='classico')
+      // Centro da esfera superior do punho: (0, .132, 0) após calibração.
+      // Deslocamento lateral deixa a haste ao lado do metal, não dentro dele.
+      return {x:-.10,y:.132,z:.22,yaw:0};
+    if(GEAR_BY_ID[equipment.bow]?.type==='Besta')
+      return {x:0,y:.08,z:.12,yaw:0};
+    return {x:.03,y:.18,z:.45,yaw:23};
+  }
   function updateBowAim(){
     if(!ready||!camera?.camera||!bowRoot||!sightAnchor)return;
     const {w,h}=canvasSize(),cssW=gl?.clientWidth||w,cssH=gl?.clientHeight||h;
@@ -672,10 +687,10 @@ export function initScene(canvas, getSettings) {
       sightAnchor.getLocalPosition().clone().mulScalar(bowRoot.getLocalScale().x));
     bowRoot.setLocalPosition(sightLocal.sub(offset));
     if(arrowLoaded&&!pendingShot){
-      const crossbow=GEAR_BY_ID[equipment.bow]?.type==='Besta';
-      arrowLoaded.setLocalPosition(crossbow?0:.03,crossbow?.08:.18,
-        (crossbow?.12:.45)+.10*power);
-      arrowLoaded.setLocalEulerAngles(0,crossbow?0:23,0);
+      const nock=arrowNockPose();
+      // A mesma pose aprovada é reaplicada ao carregar e após cada disparo.
+      arrowLoaded.setLocalPosition(nock.x,nock.y,nock.z+.10*power);
+      arrowLoaded.setLocalEulerAngles(0,nock.yaw,0);
     }
     if(bowString)bowString.setLocalPosition(0,0,.19*power);
   }
