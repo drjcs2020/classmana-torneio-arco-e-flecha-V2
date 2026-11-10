@@ -18,3 +18,8 @@ Data: 10/11/2026. Alterações feitas diretamente na branch `main`.
 - Referências de arquivos, regras CSS, ligação do botão e atualização dos arquivos verificadas estaticamente após o commit.
 - **Teste visual e funcional no navegador publicado ainda pendente.** Não declarar sucesso de ponta a ponta sem testar uma partida completa.
 - Validar em computador e celular: resultado VITÓRIA/DERROTA/EMPATE, nomes longos das três Casas, espaçamento do placar, botão JOGAR NOVAMENTE iniciando direto na primeira flecha com as mesmas configurações e botão VOLTAR AO MENU retornando à seleção.
+
+## Arte de EMPATE revisada
+- Substituídas as duas artes SVG anteriores que usavam imagens de VITÓRIA e VENCEDOR com lettering sobreposto.
+- Agora `title-draw.svg` e `badge-draw.svg` são **ilustrações vetoriais autônomas**, com faixas vinho, ornamentos dourados, alvo de arco e flecha e lettering EMPATE integrado. Não usam imagens de vitória/derrota nem texto improvisado por CSS.
+- O arquivo `classmana-v21-resultado.css` continua somente posicionando as artes na tela; cache atualizado nas páginas.
