@@ -91,9 +91,9 @@ export function initScene(canvas, getSettings) {
     if(bow===equipment.bow&&arrow===equipment.arrow)return;
     const rebuild=bow!==equipment.bow;equipment={bow,arrow};
     if(ready&&rebuild&&bowRoot){
-      // O projétil é filho do arco, não uma entidade independente.
+      // Como na V1, o projétil voa independente do arco.
       if(pendingShot){pendingShot.done?.();pendingShot=null;}
-      projectile=null;
+      projectile?.destroy();projectile=null;
       sightAnchor?.destroy();sightAnchor=null;
       bowRoot.destroy();bowRoot=null;bowVisualPivot=null;bowFallbackRoot=null;bowString=null;arrowLoaded=null;
       buildBow();
@@ -359,14 +359,12 @@ export function initScene(canvas, getSettings) {
     bowRoot.__bowFailed=false;bowRoot.__arrowFailed=false;
     bowRoot.setLocalScale(.60,.60,.60);
     bowRoot.setLocalPosition(.32,0,-2.7);
-    // Arco clássico: giro AXIAL de +90 graus sobre o eixo vertical (Y)
-    // do punho já calibrado; não girar 90 graus no plano da tela (Z).
-    // O giro deixa a altura intacta e mantém o arco apontado para o alvo.
+    // Giro axial +90° para todos os arcos depois de alinhar seu eixo longo.
+    // As bestas preservam sua orientação específica.
     bowVisualPivot=new pc.Entity('Bow visual calibration');
     const isCrossbow=GEAR_BY_ID[equipment.bow]?.type==='Besta';
-    const classicBow=equipment.bow==='classico';
     bowVisualPivot.setLocalScale(1.20,1.20,1.20);
-    bowVisualPivot.setLocalEulerAngles(classicBow?0:(isCrossbow?0:-8),classicBow?90:0,0);
+    bowVisualPivot.setLocalEulerAngles(0,isCrossbow?0:90,0);
     bowRoot.addChild(bowVisualPivot);
     bowFallbackRoot=new pc.Entity('Vertical procedural bow fallback');
     bowFallbackRoot.setLocalScale(.41,.41,.41);
@@ -381,7 +379,7 @@ export function initScene(canvas, getSettings) {
     // Mira circular original da V1, presa ao arco (sem mira HTML duplicada).
     const sight=new pc.Entity('Circle aiming sight');
     sight.setLocalScale(.65,.65,.65);
-    sight.setLocalPosition(-.95,.18,-.08);
+    sight.setLocalPosition(-1.15,.25,-.08);
     bowRoot.addChild(sight);sightAnchor=sight;
     circleMesh('sight black metal ring',.088,.007,dark,sight);
     circleMesh('sight gilded inner rim',.078,.0026,gold,sight);
@@ -393,10 +391,8 @@ export function initScene(canvas, getSettings) {
     bowRoot.addChild(arrowLoaded);
     // A flecha mantém as proporções originais e o MESMO ângulo do arco.
     arrowLoaded.setLocalScale(1,1,1);
-    // Alinhar o eixo da haste à peça arredondada superior do punho:
-    // no GLB clássico calibrado, seu centro está em y≈0.132 no WeaponPivot.
-    // A flecha fica à esquerda do punho, com pequena folga visual.
-    // Como filha do WeaponPivot, acompanha a mira e o arco.
+    // A flecha segue o mesmo pivô do arco e fica junto da empunhadura,
+    // com o eixo longitudinal horizontal na projeção da câmera.
     const nock=arrowNockPose();
     arrowLoaded.setLocalEulerAngles(0,nock.yaw,0);
     arrowLoaded.setLocalPosition(nock.x,nock.y,nock.z);
@@ -508,7 +504,7 @@ export function initScene(canvas, getSettings) {
       child.enabled=owner.__bowFailed||child===arrowLoaded||child===sightAnchor;
     owner.enabled=true;
     updateBowAim();
-    parent.dataset.weaponPose='classic-axial-plus90-grip-nock-v9';
+    parent.dataset.weaponPose='v1-mechanics-axial90-3d-axis-aligned-v10';
     parent.dataset.glbBow=owner.__bowFailed?'fallback':'ready';
     parent.dataset.glbArrow=owner.__arrowFailed?'fallback':'ready';
   }
@@ -568,6 +564,51 @@ export function initScene(canvas, getSettings) {
     if(anisotropy<.13)return null;
     return Math.atan2(2*xy,xx-yy)*90/Math.PI;
   }
+  // PCA tridimensional dos vértices: encontra o eixo longo do GLB,
+  // inclusive nos modelos cujo eixo original é Z ou está na diagonal.
+  function bowLongAxis3D(model){
+    const samples=[];
+    model.syncHierarchy();
+    for(const render of model.findComponents('render'))for(const inst of render.meshInstances||[]){
+      const mesh=inst.mesh,world=inst.node?.getWorldTransform?.();
+      let found=false;
+      if(mesh&&world&&typeof mesh.getPositions==='function'){
+        try{
+          const coords=[];mesh.getPositions(coords);
+          const step=Math.max(1,Math.ceil(coords.length/3/160));
+          for(let i=0;i+2<coords.length;i+=3*step){
+            const p=world.transformPoint(new pc.Vec3(coords[i],coords[i+1],coords[i+2]));
+            if(Number.isFinite(p.x)&&Number.isFinite(p.y)&&Number.isFinite(p.z)){
+              samples.push(p);found=true;
+            }
+          }
+        }catch(_error){/* Alguns GLBs não expõem vértices na CPU. */}
+      }
+      if(!found&&inst.aabb) samples.push(inst.aabb.center.clone());
+    }
+    if(samples.length<3)return null;
+    const mean=new pc.Vec3();
+    for(const p of samples)mean.add(p);
+    mean.mulScalar(1/samples.length);
+    let xx=0,yy=0,zz=0,xy=0,xz=0,yz=0;
+    for(const p of samples){
+      const x=p.x-mean.x,y=p.y-mean.y,z=p.z-mean.z;
+      xx+=x*x;yy+=y*y;zz+=z*z;xy+=x*y;xz+=x*z;yz+=y*z;
+    }
+    const diag=[xx,yy,zz],dominant=diag.indexOf(Math.max(...diag));
+    const v=new pc.Vec3(.071,.071,.071);
+    v[['x','y','z'][dominant]]+=1;v.normalize();
+    for(let i=0;i<28;i++){
+      const next=new pc.Vec3(
+        xx*v.x+xy*v.y+xz*v.z,
+        xy*v.x+yy*v.y+yz*v.z,
+        xz*v.x+yz*v.y+zz*v.z);
+      if(next.lengthSq()<1e-12)return null;
+      v.copy(next.normalize());
+    }
+    if(v.y<0)v.mulScalar(-1);
+    return v;
+  }
   // Normalizar tamanho e centralização SEM perder os modelos desbloqueados.
   function fitWeaponModel(model,gear){
     const temp=new pc.Entity('Weapon calibration');
@@ -598,21 +639,35 @@ export function initScene(canvas, getSettings) {
     if(knownRotation){
       model.setLocalEulerAngles(...knownRotation);
       b=bounds();
-    }else if(gear.type==='Arco'){
-      const axis=bowVisualAxis(model);
-      if(axis!==null){
-        // Corrigir a inclinação real das malhas, não apenas o ângulo do catálogo.
-        // O eixo principal não tem sentido: 90° e -90° são a mesma vertical.
-        let correction=90-axis;
-        while(correction>90)correction-=180;
-        while(correction< -90)correction+=180;
-        if(Math.abs(correction)>1){
-          model.setLocalEulerAngles(gear.rotation[0],gear.rotation[1],gear.rotation[2]+correction);
+    }
+    if(gear.type==='Arco'){
+      const longitudinal=bowLongAxis3D(model);
+      if(longitudinal){
+        const up=new pc.Vec3(0,1,0),dot=clamp(longitudinal.dot(up),-1,1);
+        const axis=new pc.Vec3().cross(longitudinal,up);
+        if(axis.lengthSq()>1e-10){
+          const correction=new pc.Quat().setFromAxisAngle(
+            axis.normalize(),Math.acos(dot)*180/Math.PI);
+          model.setLocalRotation(correction.mul(model.getLocalRotation().clone()));
+        }else if(dot<0){
+          const correction=new pc.Quat().setFromAxisAngle(new pc.Vec3(0,0,1),180);
+          model.setLocalRotation(correction.mul(model.getLocalRotation().clone()));
+        }
+        b=bounds();
+      }else if(!knownRotation){
+        const axis=bowVisualAxis(model);
+        if(axis!==null){
+          let correction=90-axis;
+          while(correction>90)correction-=180;
+          while(correction< -90)correction+=180;
+          if(Math.abs(correction)>1){
+            model.setLocalEulerAngles(gear.rotation[0],gear.rotation[1],gear.rotation[2]+correction);
+            b=bounds();
+          }
+        }else if(b.size[0]>b.size[1]*1.18){
+          model.setLocalEulerAngles(gear.rotation[0],gear.rotation[1],gear.rotation[2]+90);
           b=bounds();
         }
-      }else if(b.size[0]>b.size[1]*1.18){
-        model.setLocalEulerAngles(gear.rotation[0],gear.rotation[1],gear.rotation[2]+90);
-        b=bounds();
       }
     }
     if(b.size.every(v=>Number.isFinite(v)&&v>=0)){
@@ -666,30 +721,31 @@ export function initScene(canvas, getSettings) {
   }
 
   function arrowNockPose(){
-    if(equipment.bow==='classico')
-      // Centro da esfera superior do punho: (0, .132, 0) após calibração.
-      // Deslocamento lateral deixa a haste ao lado do metal, não dentro dele.
-      return {x:-.10,y:.132,z:.22,yaw:0};
     if(GEAR_BY_ID[equipment.bow]?.type==='Besta')
       return {x:0,y:.08,z:.12,yaw:0};
-    return {x:.03,y:.18,z:.45,yaw:23};
+    // Ponta local -Z -> -X no enquadramento da V1. Pequena folga Z
+    // separa a haste da peça arredondada da empunhadura.
+    if(equipment.bow==='classico')
+      // Centro medido da peça superior do punho após calibração: Y≈0.135.
+      return {x:.015,y:.135,z:.13,yaw:90};
+    // Demais arcos: empunhadura próxima ao centro geométrico.
+    return {x:.015,y:0,z:.13,yaw:90};
   }
   function updateBowAim(){
     if(!ready||!camera?.camera||!bowRoot||!sightAnchor)return;
-    const {w,h}=canvasSize(),cssW=gl?.clientWidth||w,cssH=gl?.clientHeight||h;
-    const depth=2.70,dx=aimX-.5,dy=aimY-.45;
-    // Algoritmo da V1: o arco acompanha a mira, em vez de ficar fixo.
-    // Pitch/yaw discretos; roll sempre zero, sem tombar ou virar de ponta-cabeça.
+    const {w,h}=canvasSize(),dx=aimX-.5,dy=aimY-.45;
+    const depth=2.70,cssW=gl?.clientWidth||w,cssH=gl?.clientHeight||h;
     const sightWorld=camera.camera.screenToWorld(aimX*cssW,aimY*cssH,depth);
     const sightLocal=camera.getWorldTransform().clone().invert().transformPoint(sightWorld);
     bowRoot.setLocalEulerAngles(-dy*2,dx*2,0);
+    const scale=bowRoot.getLocalScale().x;
     const offset=bowRoot.getLocalRotation().transformVector(
-      sightAnchor.getLocalPosition().clone().mulScalar(bowRoot.getLocalScale().x));
+      sightAnchor.getLocalPosition().clone().mulScalar(scale));
     bowRoot.setLocalPosition(sightLocal.sub(offset));
-    if(arrowLoaded&&!pendingShot){
-      const nock=arrowNockPose();
-      // A mesma pose aprovada é reaplicada ao carregar e após cada disparo.
-      arrowLoaded.setLocalPosition(nock.x,nock.y,nock.z+.10*power);
+    if(arrowLoaded){
+      const nock=arrowNockPose(),bow=GEAR_BY_ID[equipment.bow]?.type!=='Besta';
+      arrowLoaded.setLocalPosition(nock.x+(bow ? .12*power : 0),nock.y,
+        nock.z+(bow ? 0 : .10*power));
       arrowLoaded.setLocalEulerAngles(0,nock.yaw,0);
     }
     if(bowString)bowString.setLocalPosition(0,0,.19*power);
@@ -697,37 +753,23 @@ export function initScene(canvas, getSettings) {
   function update3D(dt){if(!ready)return;animT+=dt;
     if(targetRoot)moveTarget();
     updateBowAim();
-    if(projectile&&pendingShot){const s=pendingShot;s.elapsed+=dt;const t=clamp(s.elapsed/s.duration,0,1);
-      // Ballistic arc with exact launch and impact positions. Height and velocity
-      // use the same derivative so the arrow's point rises, levels out and drops.
-      const arc=s.arcHeight;
-      const pos=new pc.Vec3().lerp(s.start,s.end,t);
+    if(projectile&&pendingShot){const shot=pendingShot;shot.elapsed+=dt;
+      const t=clamp(shot.elapsed/shot.duration,0,1),arc=shot.arcHeight;
+      const pos=new pc.Vec3().lerp(shot.start,shot.end,t);
       pos.y+=4*arc*t*(1-t);
       projectile.setPosition(pos);
-      if(projectile.__trail)projectile.__trail.enabled=t<.72;
       const direction=new pc.Vec3(
-        s.end.x-s.start.x,
-        s.end.y-s.start.y+4*arc*(1-2*t),
-        s.end.z-s.start.z
-      );
-      if(direction.lengthSq()>1e-7){
-        direction.normalize();
-        // A ponta do GLB aponta para -Z. Interpolar a orientação inicial
-        // impede que a flecha dê um salto visual no primeiro frame.
-        projectile.lookAt(pos.clone().add(direction));
-        if(t<.20){
-          const heading=projectile.getRotation().clone();
-          projectile.setRotation(new pc.Quat().slerp(s.startRotation,heading,t/.20));
-        }
-      }
+        shot.end.x-shot.start.x,
+        shot.end.y-shot.start.y+4*arc*(1-2*t),
+        shot.end.z-shot.start.z);
+      if(direction.lengthSq()>1e-7)
+        projectile.lookAt(pos.clone().add(direction.normalize()));
       if(t>=1){
-        // Recolocar a mesma flecha no encaixe antes de torná-la visível.
-        // Evita um frame de flecha parada sobre o alvo.
-        projectile.enabled=false;
-        pendingShot=null;projectile=null;
+        projectile.enabled=false;pendingShot=null;
         if(arrowLoaded){updateBowAim();arrowLoaded.enabled=true;}
-        s.done?.();
-      }}
+        shot.done?.();
+      }
+    }
   }
   function impact({x=.5,y=.45,score=0}={}){
     if(!ready||!targetRoot||score<=0)return;
@@ -743,7 +785,7 @@ export function initScene(canvas, getSettings) {
       const targetScale=Math.max(.001,targetRoot.getLocalScale().x);
       calibrated.setLocalScale(calibrated.getLocalScale().clone().mulScalar(.60/targetScale));
       // Ponta 5 cm dentro da superfície frontal do disco.
-      const worldArrowLength=1.40*2*.60;
+      const worldArrowLength=1.40*1.2*.60;
       calibrated.setLocalPosition(.08,-.05,(worldArrowLength-.05)/targetScale+.052-.15);
       impactMarks.push(e);return;
     }
@@ -753,39 +795,53 @@ export function initScene(canvas, getSettings) {
     tube('embedded white vane',[[.20,-.18,.64],[.29,-.20,.72],[.23,-.18,.77]],[.024,.027,.012],white,e,6);
     impactMarks.push(e);
   }
-  // Não gerar uma segunda flecha: o modelo encaixado será o próprio projétil.
-  // Assim a primeira posição, escala, aparência e materiais são idênticos.
-  // Versão de geometria corrigida: bow vertical + arrow axis measured.
+  // A V1 usa projétil independente; a flecha encaixada não abandona o arco.
+  function createArrowProjectile(){
+    if(!app)return null;
+    const e=new pc.Entity('Flying arrow projectile - V1 mechanics');
+    root().addChild(e);
+    const file=selectedArrow(),resource=modelAssets['models3d/equipment/'+file];
+    if(resource){
+      const mesh=resource.instantiateRenderEntity();
+      const calibrated=appendArrowModel(e,mesh,file);
+      calibrated.setLocalScale(calibrated.getLocalScale().clone().mulScalar(.60));
+    }else{
+      const shaft=material('#14181d',{metal:.43,rough:.32}),
+        tip=material('#e4e7e8',{metal:.85,rough:.18});
+      const fallback=new pc.Entity('Fallback flying arrow');
+      fallback.setLocalScale(.60*5,.60*5,.60*1.2);e.addChild(fallback);
+      tube('projectile shaft',[[0,0,.53],[0,0,.18],[0,0,-.65]],
+        [.012,.012,.011],shaft,fallback,12);
+      primitive('cone','projectile point',[0,0,-.70],[.036,.09,.036],
+        tip,fallback,[90,0,0]);
+    }
+    e.enabled=false;
+    return e;
+  }
   async function fire({x=.5,y=.45,power:shotPower=1}={}){
     if(destroyed)return;
     if(!ready||!arrowLoaded||!bowRoot?.enabled)
       return new Promise(resolve=>setTimeout(resolve,370));
     if(pendingShot)return;
-    // Fixar a pose de disparo antes de calcular a origem.
+    if(!projectile)projectile=createArrowProjectile();
+    if(!projectile)return;
     updateBowAim();
     const {w,h}=canvasSize(),target=targetRoot.getPosition().clone(),m=getTargetMetrics();
-    const ppu=m.r/1.34;
-    const scale=targetRoot.getLocalScale().x;
-    const toX=target.x+((x*w-m.x)/ppu)*scale,toY=target.y-((y*h-m.y)/ppu)*scale;
-    // A flecha carregada é a MESMA flecha que voará. Não há troca de
-    // instância, escala, malha, material, origem ou rotação no disparo.
-    projectile=arrowLoaded;
-    const start=projectile.getPosition().clone();
-    // A ponta está a 2,8 unidades locais da traseira após alongamento 2x.
-    // Encerrar quando a PONTA tocar o alvo,
-    // em vez de atravessá-lo com o centro do modelo.
-    const tipLocalZ=bowRoot.__arrowFailed?-2.46:-2.80;
-    const tipWorld=projectile.getWorldTransform().transformPoint(new pc.Vec3(0,0,tipLocalZ));
-    const tipLead=Math.max(0,start.z-tipWorld.z);
-    // A ponta chega à face real do alvo (Z=.052), não para antes dela.
-    const end=new pc.Vec3(toX,toY,target.z+.052*scale+tipLead);
+    const ppu=m.r/1.34,scale=targetRoot.getLocalScale().x;
+    const toX=target.x+((x*w-m.x)/ppu)*scale;
+    const toY=target.y-((y*h-m.y)/ppu)*scale;
+    const start=arrowLoaded.getPosition().clone();
+    const end=new pc.Vec3(toX,toY,target.z+.42*scale);
+    arrowLoaded.enabled=false;
+    projectile.enabled=true;projectile.setPosition(start);
+    projectile.lookAt(end);
     const meters=getSettings()?.distance||30;
     const duration=.43+.42*Math.pow(Math.max(10,meters)/80,.56)+.13*(1-shotPower);
     const trajectory=Math.pow(Math.max(10,meters)/30,.45);
-    // Both slopes must be visible even when the target is above the bow.
     const arcHeight=Math.max(.37*trajectory,.28+Math.abs(end.y-start.y)*.42);
-    const startRotation=projectile.getRotation().clone();
-    return new Promise(resolve=>{pendingShot={start,end,startRotation,arcHeight,elapsed:0,duration,done:resolve};});
+    return new Promise(resolve=>{
+      pendingShot={start,end,arcHeight,elapsed:0,duration,done:resolve};
+    });
   }
 
   (async()=>{

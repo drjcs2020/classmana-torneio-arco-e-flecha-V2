@@ -1,4 +1,4 @@
-import {initScene} from './scene-v3.js?v=classic-axial90-grip-arrow-20261110i';
+import {initScene} from './scene-v3.js?v=v1-rig-axis-arrow-20261110j';
 import {GEAR,GEAR_BY_ID,getGearLevel,isGearUnlocked} from './equipment-catalog.js?v=arsenal-5';
 import {mountEquipmentInventory} from './equipment-inventory.js?v=inventory-1';
 import {CIRCUITS,LEVELS,targetMotion,obstacleBlocks,distanceDifficulty,flightSeconds} from './arena-difficulty.js?v=3';
