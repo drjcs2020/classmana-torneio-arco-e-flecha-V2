@@ -123,7 +123,7 @@ body[data-page="lobby"] #view-inicio[data-step="heroi"] .cm-gear-frame,
 .character-studio .cm-gear-frame[data-locked="true"] .cm-gear-equip{
   background:linear-gradient(#75869a,#3c526b)!important;color:#f3f6fb!important;border-color:#b8c6d6!important;
 }
-.character-studio .cm-gear-frame[data-equiped="true"] .cm-gear-equip{background:linear-gradient(#b9f3c9,#468b59)!important}
+.character-studio .cm-gear-frame[data-equipped="true"] .cm-gear-equip{background:linear-gradient(#b9f3c9,#468b59)!important}
 .character-studio .cm-gear-progress{
   color:#f5d17b;font:800 10px/1.1 Nunito,Arial,sans-serif;
 }

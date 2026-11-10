@@ -33,7 +33,7 @@ const BOW_RULES=Object.fromEntries(GEAR.map(item=>[item.id,{
 }]));
 const GEAR_STORAGE_PREFIX='classmana-archery-equipment-v2:';
 function readEquipment(playerId=''){
- if(!/^[ABC]\\d{2}$/.test(playerId))return {bow:'classico',arrow:'rubi'};
+ if(!/^[ABC]\d{2}$/.test(playerId))return {bow:'classico',arrow:'rubi'};
  try{const x=JSON.parse(localStorage.getItem(GEAR_STORAGE_PREFIX+playerId)||'{}');
   return {bow:EQUIPMENT.bows[x.bow]?x.bow:'classico',arrow:'rubi'};}
  catch{return {bow:'classico',arrow:'rubi'}}
@@ -47,18 +47,18 @@ function applyEquipment(){
   scene?.setEquipment?.(equipment);
 }
 function saveEquipment(playerId=identifiedPlayerId){
- if(!/^[ABC]\\d{2}$/.test(playerId||''))return;
+ if(!/^[ABC]\d{2}$/.test(playerId||''))return;
  try{localStorage.setItem(GEAR_STORAGE_PREFIX+playerId,JSON.stringify(equipment))}catch{}
 }
 function loadPlayerEquipment(playerId){
- if(!/^[ABC]\\d{2}$/.test(playerId||''))return;
+ if(!/^[ABC]\d{2}$/.test(playerId||''))return;
  gearProgress={wins:0,confirmed:false,playerId};
  // Enquanto o placar não confirmar as vitórias, só o arco inicial fica ativo.
  equipment={bow:'classico',arrow:'rubi'};applyEquipment();
  void syncEquipmentProgress(playerId);
 }
 async function syncEquipmentProgress(playerId){
- if(!/^[ABC]\\d{2}$/.test(playerId||''))return;
+ if(!/^[ABC]\d{2}$/.test(playerId||''))return;
  const requested=playerId;
  try{
   const ranking=await online.ranking();
