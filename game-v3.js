@@ -1,4 +1,4 @@
-import {initScene} from './scene-v3.js?v=grip-pivot-reticle-20261110f';
+import {initScene} from './scene-v3.js?v=v1-bow-follow-sight-20261110g';
 import {GEAR,GEAR_BY_ID,getGearLevel,isGearUnlocked} from './equipment-catalog.js?v=arsenal-5';
 import {mountEquipmentInventory} from './equipment-inventory.js?v=inventory-1';
 import {CIRCUITS,LEVELS,targetMotion,obstacleBlocks,distanceDifficulty,flightSeconds} from './arena-difficulty.js?v=3';
@@ -22,7 +22,7 @@ function cmResetResultPresentation(){
 const H={A:{grade:'4º A',name:'Águia Dourada',color:'#78bdff'},B:{grade:'4º B',name:'Leão de Fogo',color:'#ff9778'},C:{grade:'4º C',name:'Dragão de Esmeralda',color:'#8defac'}};
 const R=window.CLASSMANA_ROSTER||{A:[],B:[],C:[]};
 const clamp=(v,min,max)=>Math.min(max,Math.max(min,v));
-let house='A',view='inicio',scene=null,atmosphere=null,match=null,reticle={x:.77,y:.65},pointerStart=0,holding=false,storage=[],spriteHud=null;
+let house='A',view='inicio',scene=null,atmosphere=null,match=null,reticle={x:.50,y:.45},pointerStart=0,holding=false,storage=[],spriteHud=null;
 function chargePower(){const t=((Date.now()-pointerStart)/900)%2;return clamp(.28+.72*(t<=1?t:2-t),.28,1)}
 const EQUIPMENT={
  bows:Object.fromEntries(GEAR.map(item=>[item.id,item.name])),
@@ -503,7 +503,7 @@ async function startMatch(accepted=null){
    rival:'ROBÔ ARQUEIRO',rivalHouse:'C',mode:'bot',sound:effect=>arenaAudio.play(effect)});
   if(!go){match=null;return;}
  }
- reticle={x:.77,y:.65};cmResetResultPresentation();
+ reticle={x:.50,y:.45};cmResetResultPresentation();
  $('instruction').textContent='MOVA A MIRA DO ARCO • SEGURE PARA PUXAR • SOLTE PARA ATIRAR';
  if(document.body.dataset.page==='lobby'){
   try{
@@ -513,7 +513,7 @@ async function startMatch(accepted=null){
    return;
   }catch(error){console.warn('Navegação entre páginas indisponível:',error)}
  }
- openView('arena');refreshArcher();ensureScene();changeTarget();focusReticleOnTarget();uiHud();
+ openView('arena');refreshArcher();ensureScene();changeTarget();updateReticle();uiHud();
  }finally{
  startMatchPending=false;
  // Só soltar a sobreposição se a abertura da arena não foi iniciada.
@@ -522,18 +522,8 @@ async function startMatch(accepted=null){
 }
 
 function updateReticle(){
-  // A mira HTML original é visível e é a ÚNICA referência de pontuação.
-  const marker=$('playcross');
-  if(marker){marker.style.left=(reticle.x*100)+'%';marker.style.top=(reticle.y*100)+'%';}
+  // A mira visível é o anel 3D preso ao arco, como na V1.
   scene?.setAim(reticle.x,reticle.y);
-}
-function focusReticleOnTarget(){
-  const m=scene?.getTargetMetrics?.(),stage=$('stage');
-  if(m&&stage.clientWidth&&stage.clientHeight){
-    reticle.x=clamp(m.x/stage.clientWidth,.06,.94);
-    reticle.y=clamp(m.y/stage.clientHeight,.08,.92);
-  }
-  updateReticle();
 }
 function aim(e){
  const rect=$('world').getBoundingClientRect();
@@ -1276,10 +1266,10 @@ function restoreArena(){
  $('mode').value=match.mode||'practice';
  $('challenge-level').value=match.level||'iniciante';
  $('difficulty').value=match.difficulty||'medium';
- reticle={x:.77,y:.65};
+ reticle={x:.50,y:.45};
  $('finish').classList.add('hidden');
  $('instruction').textContent='MOVA O ARCO PARA MIRAR · SEGURE PARA PUXAR · SOLTE PARA DISPARAR';
- openView('arena');refreshArcher();ensureScene();changeTarget();focusReticleOnTarget();uiHud();
+ openView('arena');refreshArcher();ensureScene();changeTarget();updateReticle();uiHud();
  if(match.scores.length===5)finishMatch();
 }
 if(document.body.dataset.page==='arena')restoreArena();

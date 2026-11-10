@@ -41,7 +41,7 @@ body.cm-art-on #view-arena .stage{height:100%!important;max-height:none!importan
 .stage.cm-art-ready .cm-visual-logo{display:block}
 .stage.cm-art-ready .cm-force-meter,.stage.cm-art-ready .cm-pause-btn{display:block}
 .stage.cm-art-ready .scene-badge,.stage.cm-art-ready .instruction{display:none!important}
-.stage.cm-art-ready .playcross{opacity:1!important}
+.stage.cm-art-ready .playcross{opacity:0!important}
 .stage.cm-art-ready .battle-hud{position:absolute!important;top:10px!important;left:50%!important;right:auto!important;transform:translateX(-50%);width:280px;max-width:24%;height:62px!important;padding:7px!important;margin:0!important;border:2px solid #ebb95e!important;border-radius:16px!important;background:linear-gradient(100deg,#082650e8,#123979f0)!important;box-shadow:0 3px 10px #021b30a8}
 .stage.cm-art-ready .battle-hud .hud-archer,.stage.cm-art-ready .battle-hud .right{display:none!important}
 .stage.cm-art-ready .battle-hud .score-display{width:100%;justify-content:center;font:900 clamp(25px,2.8vw,38px) Georgia,serif!important;color:#fff5cf}
