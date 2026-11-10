@@ -7,11 +7,16 @@ const ARROWS=[
 ];
 const ALL=[...GEAR,...ARROWS],BY_ID=Object.fromEntries(ALL.map(x=>[x.id,x]));
 const make=(tag,cls,value)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(value!==undefined)e.textContent=value;return e};
-const mini=type=>type==='Flecha'
- ? '<svg viewBox="0 0 160 100" aria-hidden="true"><path d="M25 76 134 17" stroke="currentColor" stroke-width="5" stroke-linecap="round"/><path d="m123 13 23-4-10 23-5-13Z" fill="#f6d37a"/><path d="m25 76-14-1 9-15 9 11Z" fill="#89c7e6"/></svg>'
- : type==='Besta'
- ? '<svg viewBox="0 0 160 100" aria-hidden="true"><path d="M24 35Q80 2 136 35" fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round"/><path d="M24 35Q80 50 136 35" fill="none" stroke="#f8e5a2" stroke-width="2"/><path d="M79 13v76" stroke="#b9d1e3" stroke-width="9" stroke-linecap="round"/><path d="M77 46 55 84" stroke="#e3a858" stroke-width="10" stroke-linecap="round"/></svg>'
- : '<svg viewBox="0 0 160 100" aria-hidden="true"><path d="M23 79Q80 -4 137 79" fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round"/><path d="M23 79 137 79" fill="none" stroke="#e8f4f4" stroke-width="2"/><path d="M80 16v69" stroke="#f6c873" stroke-width="5" stroke-linecap="round"/></svg>';
+const MINI_COLORS={classico:'#c9945b',real:'#f2c86e',vento:'#7dddf1',lendario:'#ffce58',recurvo:'#d1d8ec',explorador:'#a7d983',aloy:'#ef7361',besta_leve:'#bca27b',besta_real:'#f8d27a','arrow-standard':'#c6a57a','arrow-precision':'#8adfff','arrow-power':'#f2bd59'};
+function mini(item){
+ const c=MINI_COLORS[item.id]||'#e9c477';
+ if(item.type==='Flecha')return '<svg viewBox="0 0 160 100" aria-hidden="true"><path d="M19 80 138 16" stroke="'+c+'" stroke-width="5" stroke-linecap="round"/><path d="m127 12 22-4-10 22-5-12Z" fill="#ffe5a2"/><path d="m19 80-12-2 8-15 9 12Z" fill="'+c+'"/></svg>';
+ if(item.type==='Besta')return '<svg viewBox="0 0 160 100" aria-hidden="true"><path d="'+(item.id==='besta_real'?'M13 38Q80 -3 147 38':'M25 39Q80 12 135 39')+'" fill="none" stroke="'+c+'" stroke-width="10" stroke-linecap="round"/><path d="M23 39Q80 59 137 39" fill="none" stroke="#f4e7bc" stroke-width="2"/><path d="M79 13v78" stroke="#c2d4e3" stroke-width="9" stroke-linecap="round"/><path d="M79 46 56 84" stroke="'+c+'" stroke-width="10" stroke-linecap="round"/></svg>';
+ const shapes={classico:'M20 76Q80 6 140 76',real:'M13 76Q40 14 62 29Q80 43 98 29Q120 14 147 76',vento:'M18 79Q43 12 65 25Q80 35 95 25Q117 12 142 79',lendario:'M12 78Q37 -5 64 24Q80 41 96 24Q123 -5 148 78',recurvo:'M22 80Q42 28 60 20Q80 48 100 20Q118 28 138 80',explorador:'M18 79Q46 1 75 26Q84 30 93 26Q122 1 142 79',aloy:'M14 79Q36 7 65 28Q80 37 95 28Q124 7 146 79'};
+ const p=shapes[item.id]||shapes.classico;
+ const gem=['real','lendario','aloy'].includes(item.id)?'<path d="m80 33 7 8-7 8-7-8Z" fill="#76dcff" stroke="#ffe5a2" stroke-width="2"/>':'';
+ return '<svg viewBox="0 0 160 100" aria-hidden="true"><path d="'+p+'" fill="none" stroke="#3c241b" stroke-width="13" stroke-linecap="round"/><path d="'+p+'" fill="none" stroke="'+c+'" stroke-width="8" stroke-linecap="round"/><path d="M20 76H140" stroke="#f6e7c4" stroke-width="2"/><path d="M80 26V82" stroke="'+c+'" stroke-width="6" stroke-linecap="round"/>'+gem+'</svg>';
+}
 export function mountEquipmentInventory({selected='classico',onSelect=()=>{}}={}){
  const host=document.querySelector('.studio-bows');
  if(!host)return {select:()=>{},setProgress:()=>{},get value(){return 'classico'}};
@@ -57,7 +62,7 @@ export function mountEquipmentInventory({selected='classico',onSelect=()=>{}}={}
    card.setAttribute('aria-label',item.name+' · '+progressText(item));
    const thumb=make('span','cm-arsenal-thumb');
    if(snapshots.has(item.id)){const img=make('img','cm-arsenal-thumb-image');img.src=snapshots.get(item.id);img.alt='';thumb.append(img)}
-   else thumb.innerHTML=mini(item.type);
+   else thumb.innerHTML=mini(item);
    const lvl=make('span','cm-arsenal-card-level',item.type==='Flecha'?'FLECHA':'NV. '+item.level);
    const name=make('strong','cm-arsenal-card-name',item.name);
    const status=make('span','cm-arsenal-card-status',item.type==='Flecha'?'ACESSÓRIO':item.id===equipped?'✓ EQUIPADA':unlocked(item)?'DISPONÍVEL':'🔒 '+item.requiredWins+' VITÓRIAS');
@@ -79,12 +84,12 @@ export function mountEquipmentInventory({selected='classico',onSelect=()=>{}}={}
   const wind=item.wind==null?'—':item.wind===1?'Normal':(item.wind<1?'-':'+')+Math.abs(Math.round((item.wind-1)*100))+'%';
   const margin=item.ring==null?'—':((1/item.ring-1)>=0?'+':'')+Math.round((1/item.ring-1)*100)+'%';
   const stats=isArrow?[['TIPO','Flecha 3D'],['USO','Automático'],['DISTÂNCIAS','10–150 m'],['CUSTO','Vinculada ao arco']]:
-   [['MARGEM DE ACERTO',margin],['DESVIO DO VENTO',wind],['PONTOS',item.bonus?'+'+item.bonus:'Padrão'],['DISTÂNCIAS','10–150 m'],['DESBLOQUEIO',item.requiredWins?item.requiredWins+' vitórias':'Inicial'],['FLECHA',item.arrowName]];
+   [['MARGEM DE ACERTO',margin],['DESVIO DO VENTO',wind],['PONTOS',item.bonus?'+'+item.bonus:'Padrão'],['DISTÂNCIAS','10–150 m'],['CUSTO PARA LIBERAR',item.requiredWins?item.requiredWins+' vitórias':'Grátis'],['FLECHA',item.arrowName]];
   q('.cm-arsenal-stats').replaceChildren(...stats.map(([k,v])=>{const cell=make('div','cm-arsenal-stat');cell.append(make('span','',k),make('strong','',v));return cell}));
   zoom=75;spin=0;orbit();viewer.setAttribute('orientation',item.previewOrientation||'0deg 0deg 0deg');
   viewer.setAttribute('alt','Modelo tridimensional: '+item.name+'. Arraste para girar.');
   viewer.removeAttribute('src');stage.dataset.ready='false';
-  placeholder.innerHTML=mini(item.type);loading.textContent='CARREGANDO MODELO 3D…';
+  placeholder.innerHTML=mini(item);loading.textContent='CARREGANDO MODELO 3D…';
   if(modal.hidden)return;
   modelSource(item.model).then(url=>{if(!modal.hidden&&token===requestId)viewer.setAttribute('src',url)}).catch(err=>{
    if(token!==requestId)return;loading.textContent='MODELO INDISPONÍVEL · CONSULTE A FICHA';console.warn('[ClassMana] Inventário:',item.model,err)

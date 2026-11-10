@@ -123,7 +123,7 @@ body.cm-arsenal-opened{overflow:hidden!important}
  text-shadow:0 3px 4px #170b0c,0 0 10px #ffbf5760;
 }
 #cm-arsenal-modal .cm-arsenal-close{
- position:absolute;right:31px;top:13px;display:flex;align-items:center;gap:5px;
+ position:absolute;right:47px;top:13px;display:flex;align-items:center;gap:5px;
  border:2px solid #ffde7c!important;border-radius:10px!important;
  padding:6px 12px!important;min-height:39px!important;
  background:linear-gradient(#a92921,#570d17)!important;
