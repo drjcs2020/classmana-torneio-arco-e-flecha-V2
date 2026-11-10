@@ -126,6 +126,12 @@ function versus(config){
   // Apenas o retrato do adversário é espelhado: textos e moldura intactos.
   rivalCard.classList.add('cm-vs-facing-left');
   fighters.append(ownCard,versusSign,rivalCard);
+  // No treino, a plaqueta inferior tem duas linhas, sem miniaturizar a fonte.
+  if(config.mode==='bot'){
+   for(const label of fighters.querySelectorAll('.cm-vs-fighter-info small')){
+    label.textContent=label.textContent.replace(' · ','\n');
+   }
+  }
  const actions=node('div','cm-vs-actions');
  const start=node('button','cm-vs-start','▶ INICIAR DUELO');
  start.id='cm-vs-start';start.type='button';
@@ -192,7 +198,9 @@ function fitVersusLabels(overlay){
   ctx.font=style.fontStyle+' '+style.fontWeight+' '+size+'px '+style.fontFamily;
   const spacing=parseFloat(style.letterSpacing)||0;
   const width=ctx.measureText(text).width+Math.max(0,text.length-1)*spacing;
-  if(width>available)el.style.setProperty('font-size',Math.max(6,Math.floor(size*available/width*10)/10)+'px','important');
+  // A identificação da Casa no modo robô pode ocupar duas linhas sem redução.
+  if(!(overlay.dataset.mode==='bot' && el.matches('.cm-vs-fighter-info small')) && width>available)
+   el.style.setProperty('font-size',Math.max(6,Math.floor(size*available/width*10)/10)+'px','important');
   el.title=text;
  }
 }
