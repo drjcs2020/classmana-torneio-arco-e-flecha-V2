@@ -360,7 +360,7 @@ export function initScene(canvas, getSettings) {
     bowRoot.enabled=false;
     bowRoot.__bowLoaded=false;bowRoot.__arrowLoaded=false;
     bowRoot.__bowFailed=false;bowRoot.__arrowFailed=false;
-    bowRoot.setLocalScale(.64,.64,.64);
+    bowRoot.setLocalScale(.60,.60,.60);
     bowRoot.setLocalPosition(.32,0,-2.7);
     // O arco de treino tem eixo maior a +45° no plano XY (medido no GLB).
     // +45° em Z deixa vertical; -45° o deixaria horizontal.
@@ -370,7 +370,7 @@ export function initScene(canvas, getSettings) {
     // Somente pitch (topo levemente à frente do arqueiro). A correção
     // do roll é aplicada UMA VEZ no próprio GLB, após medir sua geometria.
     // Evita somar +85° a um modelo que já nasce a +45°.
-    bowVisualPivot.setLocalEulerAngles(isCrossbow?0:-20,0,0);
+    bowVisualPivot.setLocalEulerAngles(isCrossbow?0:-12,0,0);
     bowRoot.addChild(bowVisualPivot);
     bowFallbackRoot=new pc.Entity('Vertical procedural bow fallback');
     bowRoot.addChild(bowFallbackRoot);
@@ -400,7 +400,7 @@ export function initScene(canvas, getSettings) {
     // ampliar um arquivo de 37 unidades com um fator 1.85.
     arrowLoaded.setLocalScale(1,1,1);
     // +14° faz a haste convergir visualmente para a mira à esquerda.
-    arrowLoaded.setLocalEulerAngles(0,14,0);
+    arrowLoaded.setLocalEulerAngles(0,30,0);
     arrowLoaded.setLocalPosition(0,0,.45);
     const arrowFallback=new pc.Entity('Fallback arrow - nock aligned');
     arrowFallback.setLocalPosition(0,0,-.53);
@@ -417,14 +417,15 @@ export function initScene(canvas, getSettings) {
     bowRoot.__fallbacks=[bowFallbackRoot];
     loadBowModel();
   }
-  // Eixos medidos nos vértices originais dos três GLBs (não estimados
-  // pela imagem): standard: -Y, precision: -X, power: +Y (ponta em Y=0).
-  // Depois da rotação, todos apontam a ponta para -Z. A escala e o encaixe
-  // da traseira são calculados a partir do AABB REAL do modelo.
+  // Calibração feita nos GLBs COMPLETOS, incluindo as matrizes internas
+  // de cada nó. A ponta aponta para -Z, a traseira fica em Z=0 e o
+  // comprimento é 1.40 unidade para os três modelos.
+  // Eixos da cena original: standard -X (0.95106), precision +X (5.82026),
+  // power +Z (84.41818). A espessura é reduzida após a rotação.
   const arrowSpecs={
-    'arrow-standard.glb':{rot:[90,0,0],length:2.45},
-    'arrow-precision.glb':{rot:[0,-90,0],length:2.45},
-    'arrow-power.glb':{rot:[90,0,0],length:2.45}
+    'arrow-standard.glb':{scale:1.472041,rot:[0,-90,0],offset:[-.002470,-.007943,-.015033],width:.38},
+    'arrow-precision.glb':{scale:.240539,rot:[0,90,0],offset:[.001493,.009730,-.820973],width:.28},
+    'arrow-power.glb':{scale:.0165841,rot:[0,180,0],offset:[.000208,-.005913,-.704571],width:.55}
   };
   function loadModel(path,callback){
     if(!app||destroyed)return;
@@ -482,37 +483,18 @@ export function initScene(canvas, getSettings) {
       parent.dataset.glbTarget='ready';parent.dataset.targetModel=file;
     });
   }
-  function appendArrowModel(parentEntity,model,file,alignNock=false){
+  function appendArrowModel(parentEntity,model,file){
     const spec=arrowSpecs[file]||arrowSpecs['arrow-standard.glb'];
-    // Calibrar na cena temporária, ANTES de acoplar à arma: os GLBs
-    // possuem comprimentos de 5,8 a 84 unidades e centros deslocados.
-    const temp=new pc.Entity('Arrow measurement');
-    app.root.addChild(temp);temp.addChild(model);
-    model.setLocalPosition(0,0,0);
-    model.setLocalScale(1,1,1);
+    // Nunca calcular escala por AABB runtime: o arquivo standard possui
+    // rotação e escala internas, e essa medição produzia uma tora gigante.
+    const slim=new pc.Entity('Arrow calibrated shaft');
+    slim.setLocalScale(spec.width,spec.width,1);
+    parentEntity.addChild(slim);
     model.setLocalEulerAngles(...spec.rot);
-    temp.syncHierarchy();
-    const lo=[Infinity,Infinity,Infinity],hi=[-Infinity,-Infinity,-Infinity];
-    for(const render of model.findComponents('render')){
-      for(const inst of render.meshInstances||[]){
-        const box=inst.aabb;if(!box)continue;
-        for(let i=0;i<3;i++){
-          const k=['x','y','z'][i];
-          lo[i]=Math.min(lo[i],box.center[k]-box.halfExtents[k]);
-          hi[i]=Math.max(hi[i],box.center[k]+box.halfExtents[k]);
-        }
-      }
-    }
-    const length=hi[2]-lo[2],valid=Number.isFinite(length)&&length>.001;
-    const scale=valid?spec.length/length:.06;
-    model.setLocalScale(scale,scale,scale);
-    if(valid){
-      // Centralizar a haste em X/Y e colocar a TRASEIRA em Z=0.
-      // A ponta passa a ficar em -2.45, para todos os tipos de flecha.
-      model.setLocalPosition(-(lo[0]+hi[0])*.5*scale,
-        -(lo[1]+hi[1])*.5*scale,-hi[2]*scale);
-    }
-    parentEntity.addChild(model);temp.destroy();
+    model.setLocalScale(spec.scale,spec.scale,spec.scale);
+    model.setLocalPosition(...spec.offset);
+    slim.addChild(model);
+    return slim;
   }
   function selectedArrow(){
     return (GEAR_BY_ID[equipment.bow]||GEAR_BY_ID.classico).arrow;
@@ -524,7 +506,7 @@ export function initScene(canvas, getSettings) {
       child.enabled=owner.__bowFailed||child===arrowLoaded||child===sightAnchor;
     owner.enabled=true;
     updateBowAim();
-    parent.dataset.weaponPose='vertical-bow-real-arrow-axis-v2';
+    parent.dataset.weaponPose='bow-and-arrow-calibrated-node-matrices-v3';
     parent.dataset.glbBow=owner.__bowFailed?'fallback':'ready';
     parent.dataset.glbArrow=owner.__arrowFailed?'fallback':'ready';
   }
@@ -539,9 +521,9 @@ export function initScene(canvas, getSettings) {
       }
       arrowLoaded.__mesh3d?.destroy();
       const mesh=res.instantiateRenderEntity();mesh.name='Flecha '+file;
-      appendArrowModel(arrowLoaded,mesh,file,true);
-      for(const child of arrowLoaded.children)if(child!==mesh)child.enabled=false;
-      arrowLoaded.__mesh3d=mesh;
+      const calibrated=appendArrowModel(arrowLoaded,mesh,file);
+      for(const child of arrowLoaded.children)if(child!==calibrated)child.enabled=false;
+      arrowLoaded.__mesh3d=calibrated;
       owner.__arrowLoaded=true;
       revealLoadedWeapon(owner);
     });
@@ -604,11 +586,15 @@ export function initScene(canvas, getSettings) {
       return {min,max,size:max.map((v,i)=>v-min[i])};
     }
     let b=bounds();
-    if(gear.id==='classico'){
-      // PCA dos vértices do bow-practice.glb: eixo principal +44.99°
-      // no plano XY. +45° no Z deixa o corpo exatamente VERTICAL.
-      // Não aplicar outra correção Z no bowVisualPivot.
-      model.setLocalEulerAngles(0,0,45);
+    // Modelos conhecidos: rotação absoluta, sem somar correções de PCA.
+    const knownRotation={
+      classico:[0,0,45],  // Bow Practice: +45° -> vertical
+      real:[-90,0,0],    // BOW: Z -> Y
+      vento:[0,0,90],   // Cool Bow: X -> Y
+      lendario:[0,0,0]  // Amos Bow: Y já vertical
+    }[gear.id];
+    if(knownRotation){
+      model.setLocalEulerAngles(...knownRotation);
       b=bounds();
     }else if(gear.type==='Arco'){
       const axis=bowVisualAxis(model);
@@ -629,7 +615,7 @@ export function initScene(canvas, getSettings) {
     }
     if(b.size.every(v=>Number.isFinite(v)&&v>=0)){
       // Dimensões máximas na unidade do arco, antes da escala da câmera (.56).
-      const limit=gear.type==='Besta'?[1.70,1.15,1.60]:[1.35,2.45,1.30];
+      const limit=gear.type==='Besta'?[1.70,1.15,1.60]:[1.00,1.25,1.30];
       const scale=Math.min(...b.size.map((v,i)=>limit[i]/Math.max(v,.00001)));
       if(Number.isFinite(scale)&&scale>0&&scale<10000){
         model.setLocalScale(scale,scale,scale);
@@ -643,6 +629,20 @@ export function initScene(canvas, getSettings) {
       model.setLocalPosition(...gear.offset);
     }
     bowVisualPivot.addChild(model);
+    // Verificar o eixo visual FINAL e corrigir só o roll residual.
+    if(gear.type==='Arco'){
+      const axis=bowVisualAxis(model);
+      if(axis!==null&&Number.isFinite(axis)){
+        let delta=90-axis;
+        while(delta>90)delta-=180;
+        while(delta< -90)delta+=180;
+        if(Math.abs(delta)>3&&Math.abs(delta)<80)
+          bowVisualPivot.setLocalEulerAngles(-12,0,delta);
+        parent.dataset.bowAxisMeasured=String(Math.round(axis));
+        parent.dataset.bowRollCorrection=String(Math.round(Math.abs(delta)>3&&Math.abs(delta)<80?delta:0));
+      }
+    }
+    parent.dataset.bowModel=gear.model;
     temp.destroy();
   }
   function loadBowModel(){
@@ -687,8 +687,8 @@ export function initScene(canvas, getSettings) {
       // a rotação de 45°. A haste passa pelo punho, levemente acima,
       // apontando para a mira em vez de ficar vertical/de lado.
       if(!pendingShot){
-        arrowLoaded.setLocalPosition(crossbow?0:.14,crossbow?.09:.10,.45+.19*power);
-        arrowLoaded.setLocalEulerAngles(0,crossbow?0:14,0);
+        arrowLoaded.setLocalPosition(crossbow?0:.14,crossbow?.09:.10,.34+.12*power);
+        arrowLoaded.setLocalEulerAngles(0,crossbow?0:30,0);
       }
     }
     if(bowString)bowString.setLocalPosition(0,0,.19*power);
@@ -736,9 +736,9 @@ export function initScene(canvas, getSettings) {
     const file=selectedArrow(),approved=modelAssets['models3d/equipment/'+file];
     if(approved){
       const mesh=approved.instantiateRenderEntity();mesh.name='Flecha GLB cravada';
-      appendArrowModel(e,mesh,file,true);
-      // Ponta levemente cravada, haste visível à frente do alvo.
-      mesh.setLocalPosition(mesh.getLocalPosition().clone().add(new pc.Vec3(.08,-.05,2.25)));
+      const calibrated=appendArrowModel(e,mesh,file);
+      // A ponta atravessa 5 cm da superfície do alvo.
+      calibrated.setLocalPosition(.08,-.05,1.35);
       impactMarks.push(e);return;
     }
     const dark=material('#1b2228',{metal:.45,rough:.35}),red=material('#e33d31'),white=material('#eee7cf');
@@ -768,7 +768,7 @@ export function initScene(canvas, getSettings) {
     // O ponto da flecha está ~0,72 unidade local à frente da traseira
     // nos três GLBs normalizados. Encerrar quando a PONTA tocar o alvo,
     // em vez de atravessá-lo com o centro do modelo.
-    const tipLocalZ=bowRoot.__arrowFailed?-1.23:-2.45;
+    const tipLocalZ=bowRoot.__arrowFailed?-1.23:-1.40;
     const tipWorld=projectile.getWorldTransform().transformPoint(new pc.Vec3(0,0,tipLocalZ));
     const tipLead=Math.max(0,start.z-tipWorld.z);
     const end=new pc.Vec3(toX,toY,target.z+.42*scale+tipLead);
