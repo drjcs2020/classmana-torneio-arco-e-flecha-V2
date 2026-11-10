@@ -506,7 +506,7 @@ export function initScene(canvas, getSettings) {
       child.enabled=owner.__bowFailed||child===arrowLoaded||child===sightAnchor;
     owner.enabled=true;
     updateBowAim();
-    parent.dataset.weaponPose='v1-mechanics-arrow-grip-fit-shorter-15pct-v12';
+    parent.dataset.weaponPose='v1-mechanics-arrow-grip-lowered-007-v13';
     parent.dataset.glbBow=owner.__bowFailed?'fallback':'ready';
     parent.dataset.glbArrow=owner.__arrowFailed?'fallback':'ready';
   }
@@ -728,10 +728,11 @@ export function initScene(canvas, getSettings) {
     // A flecha calibrada já aponta para -Z. Não girá-la para -X:
     // isso atravessava a tela e a fazia parecer muito maior.
     // Nas capturas, a traseira ficou à direita e abaixo da empunhadura.
-    // Aproximar ~0.175 em X e elevar ~0.18 em Y, sem alterar orientação,
-    // profundidade ou deslocamento de puxada.
+    // Mantida a aproximação lateral; ajuste fino de altura: Y .08 -> .01.
+    // Aproximadamente 7-8 pixels abaixo no enquadramento de referência,
+    // sem alterar orientação, profundidade ou puxada.
     if(equipment.bow==='classico')
-      return {x:-.16,y:.08,z:.13,yaw:0};
+      return {x:-.16,y:.01,z:.13,yaw:0};
     return {x:.015,y:0,z:.13,yaw:0};
   }
   function updateBowAim(){
