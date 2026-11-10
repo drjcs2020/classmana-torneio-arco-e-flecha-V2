@@ -153,3 +153,7 @@ body[data-page="lobby"] #view-inicio[data-step="heroi"] #confirm-archer{
  .character-studio .cm-gear-visual{min-height:94px}
 }
 @media(prefers-reduced-motion:reduce){.character-studio .cm-gear-arrow{transition:none!important}}
+
+/* Contador de equipamentos: todos os nove modelos enviados são navegáveis. */
+.character-studio .cm-gear-count{color:#eacb81;font:900 10px/1.1 Nunito,Arial,sans-serif;white-space:nowrap;letter-spacing:.1em}
+.character-studio .cm-gear-frame[data-rarity="mítico"] .cm-gear-visual{background:radial-gradient(ellipse at 50% 50%,#a788e850,transparent 62%),#091d3d}

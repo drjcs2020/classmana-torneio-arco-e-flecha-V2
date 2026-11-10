@@ -13,7 +13,7 @@ const palettes = {
 };
 const rgb = h => [1,3,5].map(i => parseInt(h.slice(i, i+2), 16) / 255);
 
-import {GEAR_BY_ID,modelSource} from './equipment-catalog.js?v=arsenal-2';
+import {GEAR_BY_ID,modelSource} from './equipment-catalog.js?v=arsenal-4';
 export function initScene(canvas, getSettings) {
   const parent=canvas.parentElement;
   let pc=null, app=null, gl=null, camera=null, bowRoot=null, bowHandle=null, bowString=null, sightAnchor=null,
@@ -395,7 +395,7 @@ export function initScene(canvas, getSettings) {
       modelLoads[path]=modelSource(path.split('/').pop())
         .then(url=>new Promise((resolve,reject)=>{
           if(!app||destroyed)return reject(Error('Cena encerrada'));
-          app.assets.loadFromUrlAndFilename(url,path.split('/').pop(),'container',(err,asset)=>{
+          app.assets.loadFromUrlAndFilename(url,path.split('/').pop().replace(/\.gz$/i,''),'container',(err,asset)=>{
             if(err||!asset?.resource)return reject(err||Error('GLB ausente'));
             resolve(asset.resource);
           });

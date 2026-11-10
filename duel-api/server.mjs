@@ -39,7 +39,9 @@ function publicDuel(d){return {id:d.id,creator:known.get(d.creator),recipient:kn
 const serverBows=Object.freeze({
  classico:{ring:1,bonus:0,requiredWins:0},real:{ring:1.12,bonus:1,requiredWins:2},
  vento:{ring:1,bonus:0,requiredWins:5},lendario:{ring:1.22,bonus:2,requiredWins:15},
- besta_leve:{ring:.94,bonus:0,requiredWins:9},besta_real:{ring:1.08,bonus:1,requiredWins:24}
+ besta_leve:{ring:.94,bonus:0,requiredWins:9},besta_real:{ring:1.08,bonus:1,requiredWins:24},
+ recurvo:{ring:1.05,bonus:0,requiredWins:32},explorador:{ring:1.1,bonus:1,requiredWins:42},
+ aloy:{ring:1.16,bonus:2,requiredWins:55}
 });
 function shotsOf(shots,officialWins=0){
  if(!Array.isArray(shots)||shots.length!==5)fail('Exatamente cinco flechas são necessárias');

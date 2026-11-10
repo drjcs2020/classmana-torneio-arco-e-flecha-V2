@@ -1,4 +1,4 @@
-import {GEAR,GEAR_BY_ID,modelSource,getGearLevel,isGearUnlocked} from './equipment-catalog.js?v=arsenal-2';
+import {GEAR,GEAR_BY_ID,modelSource,getGearLevel,isGearUnlocked} from './equipment-catalog.js?v=arsenal-4';
 // Prévia e equipamento ativo são estados distintos: navegar nunca equipa uma arma bloqueada.
 export function mountEquipmentCarousel({selected='classico',onSelect=()=>{}}={}){
  const host=document.querySelector('.studio-bows');
@@ -23,8 +23,9 @@ export function mountEquipmentCarousel({selected='classico',onSelect=()=>{}}={})
  visual.append(fallback,viewer,crest,tier,load);
  const details=document.createElement('div');details.className='cm-gear-details';
  const heading=document.createElement('div');heading.className='cm-gear-titleline';
+ const counter=document.createElement('span');counter.className='cm-gear-count';counter.setAttribute('aria-label','Posição no arsenal');
  const kind=document.createElement('span');kind.className='cm-gear-kind';
- const name=document.createElement('strong');name.className='cm-gear-name';heading.append(kind,name);
+ const name=document.createElement('strong');name.className='cm-gear-name';heading.append(kind,name,counter);
  const ability=document.createElement('b');ability.className='cm-gear-ability';
  const description=document.createElement('small');description.className='cm-gear-desc';
  const arrow=document.createElement('span');arrow.className='cm-gear-arrowlabel';
@@ -51,6 +52,7 @@ export function mountEquipmentCarousel({selected='classico',onSelect=()=>{}}={})
    viewer.removeAttribute('src');visual.classList.remove('cm-gear-ready','cm-gear-error');
    load.textContent='Preparando arte 3D…';
    kind.textContent=item.type.toUpperCase();name.textContent=item.name;
+   counter.textContent=(GEAR.indexOf(item)+1)+' / '+GEAR.length;
    ability.textContent='✧ '+item.ability;description.textContent=item.desc;
    arrow.textContent='➶ '+item.arrowName;crest.textContent=item.type==='Besta'?'♜':'✦';
    viewer.setAttribute('aria-label','Modelo tridimensional de '+item.name+'. Arraste para girar.');
