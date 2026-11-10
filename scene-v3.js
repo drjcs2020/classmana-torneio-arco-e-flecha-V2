@@ -367,10 +367,10 @@ export function initScene(canvas, getSettings) {
     // X negativo move o topo para -Z, isto é, na direção do alvo.
     bowVisualPivot=new pc.Entity('Bow visual calibration');
     const isCrossbow=GEAR_BY_ID[equipment.bow]?.type==='Besta';
-    // Ajuste fino pela captura da arena: +40° anti-horário adicionais
-    // e topo avançado mais 20° para a frente. Apenas o GLB do arco gira;
-    // a flecha e a mira continuam vinculadas ao WeaponPivot estável.
-    bowVisualPivot.setLocalEulerAngles(isCrossbow?0:-40,0,equipment.bow==='classico'?85:0);
+    // Somente pitch (topo levemente à frente do arqueiro). A correção
+    // do roll é aplicada UMA VEZ no próprio GLB, após medir sua geometria.
+    // Evita somar +85° a um modelo que já nasce a +45°.
+    bowVisualPivot.setLocalEulerAngles(isCrossbow?0:-20,0,0);
     bowRoot.addChild(bowVisualPivot);
     bowFallbackRoot=new pc.Entity('Vertical procedural bow fallback');
     bowRoot.addChild(bowFallbackRoot);
@@ -396,9 +396,11 @@ export function initScene(canvas, getSettings) {
     // A single arrow asset: its colors DO NOT change when changing House.
     arrowLoaded=new pc.Entity('Arrow nock - child of WeaponPivot');
     bowRoot.addChild(arrowLoaded);
-    arrowLoaded.setLocalScale(1.85,1.85,1.85);
-    // Eixo -Z = linha de tiro; sem rotação por quadro nem lookAt.
-    arrowLoaded.setLocalEulerAngles(0,0,0);
+    // A escala definitiva vem dos limites geométricos do GLB. Não
+    // ampliar um arquivo de 37 unidades com um fator 1.85.
+    arrowLoaded.setLocalScale(1,1,1);
+    // +14° faz a haste convergir visualmente para a mira à esquerda.
+    arrowLoaded.setLocalEulerAngles(0,14,0);
     arrowLoaded.setLocalPosition(0,0,.45);
     const arrowFallback=new pc.Entity('Fallback arrow - nock aligned');
     arrowFallback.setLocalPosition(0,0,-.53);
@@ -415,12 +417,14 @@ export function initScene(canvas, getSettings) {
     bowRoot.__fallbacks=[bowFallbackRoot];
     loadBowModel();
   }
-  // GLBs calibrados individualmente: os arquivos originais não compartilham eixos.
-  // nockZ: extremidade traseira medida no GLB após rot/scale.
+  // Eixos medidos nos vértices originais dos três GLBs (não estimados
+  // pela imagem): standard: -Y, precision: -X, power: +Y (ponta em Y=0).
+  // Depois da rotação, todos apontam a ponta para -Z. A escala e o encaixe
+  // da traseira são calculados a partir do AABB REAL do modelo.
   const arrowSpecs={
-    'arrow-standard.glb':{scale:.72,rot:[0,-90,0],nockZ:.007},
-    'arrow-precision.glb':{scale:.125,rot:[0,90,0],nockZ:.426},
-    'arrow-power.glb':{scale:.0085,rot:[0,180,0],nockZ:.361}
+    'arrow-standard.glb':{rot:[90,0,0],length:2.45},
+    'arrow-precision.glb':{rot:[0,-90,0],length:2.45},
+    'arrow-power.glb':{rot:[90,0,0],length:2.45}
   };
   function loadModel(path,callback){
     if(!app||destroyed)return;
@@ -479,11 +483,36 @@ export function initScene(canvas, getSettings) {
     });
   }
   function appendArrowModel(parentEntity,model,file,alignNock=false){
-    const t=arrowSpecs[file]||arrowSpecs['arrow-standard.glb'];
-    model.setLocalScale(t.scale,t.scale,t.scale);
-    model.setLocalEulerAngles(...t.rot);
-    if(alignNock)model.setLocalPosition(0,0,-t.nockZ);
-    parentEntity.addChild(model);
+    const spec=arrowSpecs[file]||arrowSpecs['arrow-standard.glb'];
+    // Calibrar na cena temporária, ANTES de acoplar à arma: os GLBs
+    // possuem comprimentos de 5,8 a 84 unidades e centros deslocados.
+    const temp=new pc.Entity('Arrow measurement');
+    app.root.addChild(temp);temp.addChild(model);
+    model.setLocalPosition(0,0,0);
+    model.setLocalScale(1,1,1);
+    model.setLocalEulerAngles(...spec.rot);
+    temp.syncHierarchy();
+    const lo=[Infinity,Infinity,Infinity],hi=[-Infinity,-Infinity,-Infinity];
+    for(const render of model.findComponents('render')){
+      for(const inst of render.meshInstances||[]){
+        const box=inst.aabb;if(!box)continue;
+        for(let i=0;i<3;i++){
+          const k=['x','y','z'][i];
+          lo[i]=Math.min(lo[i],box.center[k]-box.halfExtents[k]);
+          hi[i]=Math.max(hi[i],box.center[k]+box.halfExtents[k]);
+        }
+      }
+    }
+    const length=hi[2]-lo[2],valid=Number.isFinite(length)&&length>.001;
+    const scale=valid?spec.length/length:.06;
+    model.setLocalScale(scale,scale,scale);
+    if(valid){
+      // Centralizar a haste em X/Y e colocar a TRASEIRA em Z=0.
+      // A ponta passa a ficar em -2.45, para todos os tipos de flecha.
+      model.setLocalPosition(-(lo[0]+hi[0])*.5*scale,
+        -(lo[1]+hi[1])*.5*scale,-hi[2]*scale);
+    }
+    parentEntity.addChild(model);temp.destroy();
   }
   function selectedArrow(){
     return (GEAR_BY_ID[equipment.bow]||GEAR_BY_ID.classico).arrow;
@@ -495,6 +524,7 @@ export function initScene(canvas, getSettings) {
       child.enabled=owner.__bowFailed||child===arrowLoaded||child===sightAnchor;
     owner.enabled=true;
     updateBowAim();
+    parent.dataset.weaponPose='vertical-bow-real-arrow-axis-v2';
     parent.dataset.glbBow=owner.__bowFailed?'fallback':'ready';
     parent.dataset.glbArrow=owner.__arrowFailed?'fallback':'ready';
   }
@@ -575,9 +605,10 @@ export function initScene(canvas, getSettings) {
     }
     let b=bounds();
     if(gear.id==='classico'){
-      // O GLB original tem eixo visual a 45°. A correção de +40°
-      // acontece UMA ÚNICA VEZ no bowVisualPivot, sem dupla rotação.
-      model.setLocalEulerAngles(0,0,0);
+      // PCA dos vértices do bow-practice.glb: eixo principal +44.99°
+      // no plano XY. +45° no Z deixa o corpo exatamente VERTICAL.
+      // Não aplicar outra correção Z no bowVisualPivot.
+      model.setLocalEulerAngles(0,0,45);
       b=bounds();
     }else if(gear.type==='Arco'){
       const axis=bowVisualAxis(model);
@@ -652,12 +683,12 @@ export function initScene(canvas, getSettings) {
       // Flecha perpendicular à corda vertical, no centro da empunhadura.
       // A haste acompanha o pivot; apenas recua ao aumentar a força.
       const crossbow=GEAR_BY_ID[equipment.bow]?.type==='Besta';
-      // +0,16 unidade local (aprox. 12 px): flecha mais alta, no centro
-      // visual do punho, sem perder o encaixe da traseira na corda.
-      // Durante o voo a própria flecha é o projétil: NÃO reposicionar.
+      // A empunhadura real do arco de treino fica em X≈+0.14 após
+      // a rotação de 45°. A haste passa pelo punho, levemente acima,
+      // apontando para a mira em vez de ficar vertical/de lado.
       if(!pendingShot){
-        arrowLoaded.setLocalPosition(0,crossbow?.09:.16,.45+.19*power);
-        arrowLoaded.setLocalEulerAngles(0,0,0);
+        arrowLoaded.setLocalPosition(crossbow?0:.14,crossbow?.09:.10,.45+.19*power);
+        arrowLoaded.setLocalEulerAngles(0,crossbow?0:14,0);
       }
     }
     if(bowString)bowString.setLocalPosition(0,0,.19*power);
@@ -705,8 +736,9 @@ export function initScene(canvas, getSettings) {
     const file=selectedArrow(),approved=modelAssets['models3d/equipment/'+file];
     if(approved){
       const mesh=approved.instantiateRenderEntity();mesh.name='Flecha GLB cravada';
-      appendArrowModel(e,mesh,file);
-      mesh.setLocalPosition(.10,-.08,.75);
+      appendArrowModel(e,mesh,file,true);
+      // Ponta levemente cravada, haste visível à frente do alvo.
+      mesh.setLocalPosition(mesh.getLocalPosition().clone().add(new pc.Vec3(.08,-.05,2.25)));
       impactMarks.push(e);return;
     }
     const dark=material('#1b2228',{metal:.45,rough:.35}),red=material('#e33d31'),white=material('#eee7cf');
@@ -717,6 +749,7 @@ export function initScene(canvas, getSettings) {
   }
   // Não gerar uma segunda flecha: o modelo encaixado será o próprio projétil.
   // Assim a primeira posição, escala, aparência e materiais são idênticos.
+  // Versão de geometria corrigida: bow vertical + arrow axis measured.
   async function fire({x=.5,y=.45,power:shotPower=1}={}){
     if(destroyed)return;
     if(!ready||!arrowLoaded||!bowRoot?.enabled)
@@ -735,7 +768,7 @@ export function initScene(canvas, getSettings) {
     // O ponto da flecha está ~0,72 unidade local à frente da traseira
     // nos três GLBs normalizados. Encerrar quando a PONTA tocar o alvo,
     // em vez de atravessá-lo com o centro do modelo.
-    const tipLocalZ=bowRoot.__arrowFailed?-1.23:-.72;
+    const tipLocalZ=bowRoot.__arrowFailed?-1.23:-2.45;
     const tipWorld=projectile.getWorldTransform().transformPoint(new pc.Vec3(0,0,tipLocalZ));
     const tipLead=Math.max(0,start.z-tipWorld.z);
     const end=new pc.Vec3(toX,toY,target.z+.42*scale+tipLead);
