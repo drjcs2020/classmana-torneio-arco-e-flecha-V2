@@ -57,14 +57,14 @@ export function initScene(canvas, getSettings) {
       y:moving?h*(.45+(s.verticalShift||0)):footY-1.48*r,r};
   }
   function fallbackSightGeometry(){
-    const {w,h}=canvasSize(),size=h*.89;
-    const bx=w*aimX+115,by=h*aimY+size*.03;
-    return {bx,by,size,sightX:bx-115,sightY:by-size*.03};
+    const {w,h}=canvasSize(),size=h*.67;
+    const bx=w*(.81+(aimX-.5)*.08),by=h*(.56+(aimY-.45)*.08);
+    return {bx,by,size,sightX:w*aimX,sightY:h*aimY};
   }
   function getAimPoint(){
     // Pontuação usa a posição PROJETADA do centro da mira 3D.
     // O ponteiro só comanda o arco: não existe uma segunda mira invisível.
-    if(ready&&sightAnchor&&camera?.camera&&app?.graphicsDevice){
+    if(ready&&sightAnchor&&bowRoot&&camera?.camera&&app?.graphicsDevice){
       updateBowAim();
       const p=camera.camera.worldToScreen(sightAnchor.getPosition());
       // worldToScreen devolve pixels CSS; width/height do WebGL são pixels
@@ -93,7 +93,8 @@ export function initScene(canvas, getSettings) {
     const rebuild=bow!==equipment.bow;equipment={bow,arrow};
     if(ready&&rebuild&&bowRoot){
       if(projectile){projectile.destroy();projectile=null;}
-      bowRoot.destroy();bowRoot=null;bowString=null;arrowLoaded=null;sightAnchor=null;
+      sightAnchor?.destroy();sightAnchor=null;
+      bowRoot.destroy();bowRoot=null;bowString=null;arrowLoaded=null;
       buildBow();
     }
     if(ready)colorBow();
@@ -147,7 +148,7 @@ export function initScene(canvas, getSettings) {
     ctx.beginPath();ctx.arc(m.x,m.y,m.r*.07,0,Math.PI*2);ctx.strokeStyle='#9d682b';ctx.lineWidth=1.4;ctx.stroke();
     ctx.save();ctx.translate(m.x,m.y);for(let i=0;i<64;i++){const a=i*Math.PI*2/64;ctx.strokeStyle=i%3?'rgba(255,212,114,.43)':'rgba(81,46,17,.46)';ctx.lineWidth=i%2?2.2:1.3;ctx.beginPath();ctx.moveTo(Math.cos(a)*m.r*1.03,Math.sin(a)*m.r*1.03);ctx.lineTo(Math.cos(a+.055)*m.r*1.13,Math.sin(a+.055)*m.r*1.13);ctx.stroke();}ctx.restore();
     // Modern recurve bow with metallic grooves, not a wooden longbow.
-    const {bx,by,size}=fallbackSightGeometry(),bend=Math.sin(time/1600)*1.3;
+    const {bx,by,size,sightX,sightY}=fallbackSightGeometry();
     const bladeTop={x:bx-12,y:by-size*.58},bladeBottom={x:bx-10,y:by+size*.58};
     ctx.save();ctx.lineCap='round';ctx.lineJoin='round';
     let metal=ctx.createLinearGradient(bx-35,0,bx+32,0);metal.addColorStop(0,'#17212b');metal.addColorStop(.20,p.body);metal.addColorStop(.43,'#d8e1eb');metal.addColorStop(.62,p.body);metal.addColorStop(1,p.trim);
@@ -155,16 +156,18 @@ export function initScene(canvas, getSettings) {
     ctx.strokeStyle=metal;ctx.lineWidth=22;ctx.stroke();ctx.strokeStyle=p.trim;ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(bx+3,by-size*.34);ctx.lineTo(bx+5,by-size*.08);ctx.moveTo(bx+5,by+size*.18);ctx.lineTo(bx+1,by+size*.37);ctx.stroke();
     // Drawn string, rings of an actual circular front sight.
     const pull=power*size*.07;ctx.strokeStyle='#1b1c20';ctx.lineWidth=2.3;ctx.beginPath();ctx.moveTo(bladeTop.x,bladeTop.y);ctx.lineTo(bx+pull+5,by);ctx.lineTo(bladeBottom.x,bladeBottom.y);ctx.stroke();
-    const sightX=bx-115,sightY=by-size*.03,sightR=size*.055;
-    ctx.strokeStyle='#25292d';ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(bx-13,sightY);ctx.lineTo(sightX+sightR,sightY);ctx.stroke();
+    const sightR=Math.max(11,Math.min(17,size*.048));
+    // Mira livre: sem ponte atravessando o alvo.
+    ctx.strokeStyle='#25292d';ctx.lineWidth=3;
     ctx.beginPath();ctx.arc(sightX,sightY,sightR,0,Math.PI*2);ctx.strokeStyle='#26292d';ctx.lineWidth=4.2;ctx.stroke();
     ctx.strokeStyle=p.trim;ctx.lineWidth=1.3;ctx.beginPath();ctx.arc(sightX,sightY,sightR-3,0,Math.PI*2);ctx.stroke();
     ctx.strokeStyle='rgba(230,239,240,.7)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(sightX-sightR+7,sightY);ctx.lineTo(sightX+sightR-7,sightY);ctx.moveTo(sightX,sightY-sightR+7);ctx.lineTo(sightX,sightY+sightR-7);ctx.stroke();
     // Shared black arrow, white/red feathers. Drawn from nocking point toward the target.
-    ctx.strokeStyle='#11151d';ctx.lineWidth=7;ctx.beginPath();ctx.moveTo(bx+pull+140,by+110);ctx.lineTo(bx-48,by-38);ctx.stroke();
-    ctx.strokeStyle='#9baab4';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(bx+pull+135,by+109);ctx.lineTo(bx-48,by-38);ctx.stroke();
-    ctx.fillStyle=arrowPalette().feather;ctx.beginPath();ctx.moveTo(bx+pull+140,by+110);ctx.lineTo(bx+pull+118,by+66);ctx.lineTo(bx+pull+100,by+82);ctx.closePath();ctx.fill();
-    ctx.fillStyle=arrowPalette().secondary;ctx.beginPath();ctx.moveTo(bx+pull+140,by+110);ctx.lineTo(bx+pull+96,by+91);ctx.lineTo(bx+pull+100,by+112);ctx.closePath();ctx.fill();
+    // Flecha curta junto ao punho, sem atravessar a zona de pontuação.
+    ctx.strokeStyle='#11151d';ctx.lineWidth=6;ctx.beginPath();ctx.moveTo(bx+pull+25,by+26);ctx.lineTo(bx-76,by-12);ctx.stroke();
+    ctx.strokeStyle='#9baab4';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(bx+pull+24,by+25);ctx.lineTo(bx-76,by-12);ctx.stroke();
+    ctx.fillStyle=arrowPalette().feather;ctx.beginPath();ctx.moveTo(bx+pull+27,by+27);ctx.lineTo(bx+pull+10,by+8);ctx.lineTo(bx+pull+5,by+25);ctx.closePath();ctx.fill();
+    ctx.fillStyle=arrowPalette().secondary;ctx.beginPath();ctx.moveTo(bx+pull+27,by+27);ctx.lineTo(bx+pull+7,by+22);ctx.lineTo(bx+pull+14,by+36);ctx.closePath();ctx.fill();
     ctx.restore();
     requestAnimationFrame(renderFallback);
   }
@@ -291,10 +294,10 @@ export function initScene(canvas, getSettings) {
     d.addChild(targetStand);
     // Cavaletes permanecem apenas no alvo FIXO. O alvo suspenso usa trilho,
     // sem pernas de madeira flutuando.
-    tube('left wood leg',[[-.50,-1.97,-.28],[-.38,-1.20,-.17],[-.18,-.40,-.12]],[.10,.085,.07],metals.wood,targetStand,12);
-    tube('right wood leg',[[.5,-1.97,-.28],[.38,-1.20,-.17],[.18,-.40,-.12]],[.10,.085,.07],metals.wood,targetStand,12);
-    tube('cross wood beam',[[-.50,-1.2,-.18],[0,-1.2,-.18],[.5,-1.2,-.18]],[.065,.067,.065],metals.woodlight,targetStand,10);
-    tube('rear wood support',[[0,-2.02,-.69],[0,-1.1,-.48],[0,-.15,-.25]],[.065,.064,.058],metals.wood,targetStand,10);
+    // Cavalete simétrico abaixo e atrás do disco; sem suportes diagonais sobre os anéis.
+    tube('left wood leg',[[-.82,-1.97,-.38],[-.66,-1.12,-.35],[-.53,-.58,-.32]],[.09,.085,.07],metals.wood,targetStand,12);
+    tube('right wood leg',[[.82,-1.97,-.38],[.66,-1.12,-.35],[.53,-.58,-.32]],[.09,.085,.07],metals.wood,targetStand,12);
+    tube('cross wood beam',[[-.74,-1.48,-.40],[0,-1.48,-.40],[.74,-1.48,-.40]],[.055,.06,.055],metals.woodlight,targetStand,10);
     movingRail=new pc.Entity('Suspended target sliding rail');
     root().addChild(movingRail);
     // Trilho compacto, colocado acima do alvo: sem estrutura gigante cobrindo a paisagem.
@@ -350,7 +353,7 @@ export function initScene(canvas, getSettings) {
     camera.addChild(bowRoot);
     // Modelo proporcional ao enquadramento; não deve ocupar toda a tela.
     bowRoot.setLocalScale(.43,.43,.43);
-    bowRoot.setLocalPosition(.46,-.15,-2.7);
+    bowRoot.setLocalPosition(.92,-.25,-2.7);
     const pp=bowPalette(),body=material(pp.body,{metal:.79,rough:.19}),gold=material(pp.trim,{metal:.9,rough:.18}),
       dark=material('#1b1c20',{metal:.46,rough:.35}),silver=material('#d5e0e7',{metal:.88,rough:.23}),red=material('#dc342a'),ivory=material('#faf0db');
     const p=[[0,-1.52,0],[.045,-1.35,0],[.12,-.99,.035],[.105,-.55,.02],[.055,-.16,0],[.018,.18,0],[.075,.62,.02],[.09,1,.02],[.02,1.37,.02],[0,1.52,0]];
@@ -358,11 +361,10 @@ export function initScene(canvas, getSettings) {
     tube('bow-trim upper line',[[.062,.25,-.028],[.115,.88,-.021],[.05,1.39,.025]],[.01,.011,.007],gold,bowRoot);
     tube('bow-trim lower line',[[.062,-.2,-.028],[.118,-.90,-.021],[.04,-1.36,.025]],[.01,.011,.007],gold,bowRoot);
     const grip=primitive('cylinder','ergonomic dark handgrip',[.03,-.12,-.08],[.17,.43,.13],dark,bowRoot,[0,0,90]);
-    // Sight rig: ring placed left of riser, towards player, distinct from 2D crosshair.
-    tube('sight bridge',[[-.02,.25,-.08],[-.57,.25,-.08],[-1.12,.25,-.08]],[.013,.012,.009],dark,bowRoot);
-    // Visão em primeira pessoa: o corpo do arco fica à direita do alvo,
-    // enquanto o anel da mira acompanha exatamente o ponteiro.
-    const sight=new pc.Entity('Circle aiming sight');sight.setLocalPosition(-1.15,.25,-.08);bowRoot.addChild(sight);sightAnchor=sight;
+    // Mira 3D separada da arma: só ela acompanha o ponteiro.
+    const sight=new pc.Entity('Circle aiming sight');
+    sight.setLocalScale(.43,.43,.43);sight.setLocalPosition(0,0,-2.7);
+    camera.addChild(sight);sightAnchor=sight;
     circleMesh('sight black metal ring',.088,.007,dark,sight);
     circleMesh('sight gilded inner rim',.078,.0026,gold,sight);
     tube('sight vertical line',[[0,-.044,.003],[0,0,.003],[0,.044,.003]],[.0009,.0009,.0009],silver,sight,5);
@@ -384,9 +386,9 @@ export function initScene(canvas, getSettings) {
   }
   // GLBs calibrados individualmente: os arquivos originais não compartilham eixos.
   const arrowSpecs={
-    'arrow-standard.glb':{scale:1.05,rot:[0,-90,0]},
-    'arrow-precision.glb':{scale:.18,rot:[0,90,0]},
-    'arrow-power.glb':{scale:.012,rot:[0,180,0]}
+    'arrow-standard.glb':{scale:.72,rot:[0,-90,0]},
+    'arrow-precision.glb':{scale:.125,rot:[0,90,0]},
+    'arrow-power.glb':{scale:.0085,rot:[0,180,0]}
   };
   function loadModel(path,callback){
     if(!app||destroyed)return;
@@ -428,7 +430,7 @@ export function initScene(canvas, getSettings) {
     holder.__model3d?.destroy();holder.__model3d=null;targetVisual.enabled=true;
     // Alvo de 10–65 m: disco 3D procedural com anéis voltados ao jogador.
     // O GLB anterior estava exibindo a borda do disco, como um prato de lado.
-    if(file==='target-stand.glb'){
+    if(file==='target-stand.glb'||file==='target-alt.glb'){
       parent.dataset.glbTarget='procedural';
       parent.dataset.targetModel='competition-rings';
       return;
@@ -464,6 +466,47 @@ export function initScene(canvas, getSettings) {
       arrowLoaded.__mesh3d=mesh;parent.dataset.glbArrow='ready';
     });
   }
+  // Normalização dos GLBs: escalas e pivôs originais variam entre modelos.
+  function fitWeaponModel(model,gear){
+    const temp=new pc.Entity('Weapon calibration');
+    app.root.addChild(temp);temp.addChild(model);
+    model.setLocalScale(1,1,1);model.setLocalPosition(0,0,0);
+    model.setLocalEulerAngles(...gear.rotation);
+    function bounds(){
+      temp.syncHierarchy();
+      const min=[Infinity,Infinity,Infinity],max=[-Infinity,-Infinity,-Infinity];
+      for(const render of model.findComponents('render'))for(const inst of render.meshInstances||[]){
+        const box=inst.aabb;if(!box)continue;
+        for(let i=0;i<3;i++){
+          const k=['x','y','z'][i];
+          min[i]=Math.min(min[i],box.center[k]-box.halfExtents[k]);
+          max[i]=Math.max(max[i],box.center[k]+box.halfExtents[k]);
+        }
+      }
+      return {min,max,size:max.map((v,i)=>v-min[i])};
+    }
+    let b=bounds();
+    if(b.size.every(v=>Number.isFinite(v)&&v>=0)){
+      if(gear.type==='Arco'&&b.size[0]>b.size[1]*1.35){
+        model.setLocalEulerAngles(gear.rotation[0],gear.rotation[1],gear.rotation[2]+90);
+        b=bounds();
+      }
+      const limit=gear.type==='Besta'?[1.70,1.15,1.60]:[1.45,2.45,1.30];
+      const scale=Math.min(...b.size.map((v,i)=>limit[i]/Math.max(v,.00001)));
+      if(Number.isFinite(scale)&&scale>0&&scale<10000){
+        model.setLocalScale(scale,scale,scale);
+        model.setLocalPosition(...b.min.map((v,i)=>-(v+b.max[i])*.5*scale));
+      }else{
+        model.setLocalScale(gear.scale,gear.scale,gear.scale);
+        model.setLocalPosition(...gear.offset);
+      }
+    }else{
+      model.setLocalScale(gear.scale,gear.scale,gear.scale);
+      model.setLocalPosition(...gear.offset);
+    }
+    bowRoot.addChild(model);
+    temp.destroy();
+  }
   function loadBowModel(){
     const owner=bowRoot,id=equipment.bow,gear=GEAR_BY_ID[id]||GEAR_BY_ID.classico;
     if(!owner)return;
@@ -476,44 +519,33 @@ export function initScene(canvas, getSettings) {
       if(err||owner!==bowRoot||id!==equipment.bow||owner.__bowLoadToken!==token)return;
       owner.__mesh3d?.destroy();
       const mesh=res.instantiateRenderEntity();mesh.name=gear.name;
-      mesh.setLocalScale(gear.scale,gear.scale,gear.scale);
-      mesh.setLocalEulerAngles(...gear.rotation);
-      mesh.setLocalPosition(...gear.offset);
-      owner.addChild(mesh);owner.__mesh3d=mesh;
+      fitWeaponModel(mesh,gear);
+      owner.__mesh3d=mesh;
       // Preserva a mira circular e seu suporte mesmo que o GLB não possua mira.
       for(const child of owner.__fallbacks||[]){
-        child.enabled=child===arrowLoaded||child===sightAnchor;
+        child.enabled=child===arrowLoaded;
       }
       parent.dataset.glbBow='ready';parent.dataset.bowModel=gear.model;
     });
   }
 
   function updateBowAim(){
-    if(!ready||!camera?.camera||!bowRoot)return;
-    const {w,h}=canvasSize(),dx=aimX-.5,dy=aimY-.45,t=performance.now()*.001;
-    // Converter o PONTEIRO para o mesmo raio da câmera em que o alvo é renderizado:
-    // o retículo metálico 3D coincide com o pixel CSS apontado, sem ajuste manual.
-    const depth=2.70;
-    // screenToWorld EXIGE pixels CSS do canvas (offsetWidth/offsetHeight).
-    // Usar width/height do buffer multiplicava a mira pelo DPR da tela.
-    const cssW=gl?.clientWidth||w;
-    const cssH=gl?.clientHeight||h;
+    if(!ready||!camera?.camera||!bowRoot||!sightAnchor)return;
+    const {w,h}=canvasSize(),dx=aimX-.5,dy=aimY-.45;
+    // Retículo projetado no pixel CSS; não deslocar o arco para segui-lo.
+    const depth=2.70,cssW=gl?.clientWidth||w,cssH=gl?.clientHeight||h;
     const sightWorld=camera.camera.screenToWorld(aimX*cssW,aimY*cssH,depth);
     const sightLocal=camera.getWorldTransform().clone().invert().transformPoint(sightWorld);
-    bowRoot.setLocalEulerAngles(-dy*2,dx*2,Math.sin(t*1.7)*.1);
-    const scale=bowRoot.getLocalScale().x;
-    const offset=bowRoot.getLocalRotation().transformVector(new pc.Vec3(-1.15*scale,.25*scale,-.08*scale));
-    bowRoot.setLocalPosition(sightLocal.sub(offset));
+    sightAnchor.setLocalPosition(sightLocal);
+    // Arma fixa à direita em primeira pessoa; leve resposta ao movimento.
+    bowRoot.setLocalEulerAngles(-dy*.65,dx*.65,0);
+    bowRoot.setLocalPosition(clamp(.92+dx*.20,.80,1.04),clamp(-.25-dy*.10,-.30,-.20),-2.70);
     if(arrowLoaded){
       // Alinhar a flecha ao eixo frontal (-Z) da arma. A montagem antiga
       // deslocava o GLB .63 unidade para a esquerda e parecia solto/de lado.
       const modeled=Boolean(bowRoot.__mesh3d&&arrowLoaded.__mesh3d);
       const crossbow=(GEAR_BY_ID[equipment.bow]?.type==='Besta');
-      arrowLoaded.setLocalPosition(
-        .02,
-        modeled?(crossbow?.13:-.03):-.03,
-        modeled?-.14+.19*power:-.40+.36*power
-      );
+      arrowLoaded.setLocalPosition(crossbow?0:.02,crossbow?.08:-.03,-.02+.12*power);
     }
     if(bowString)bowString.setLocalPosition(0,0,.19*power);
   }
