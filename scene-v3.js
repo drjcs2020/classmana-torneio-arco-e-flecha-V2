@@ -382,9 +382,9 @@ export function initScene(canvas, getSettings) {
     bowRoot.__fallbacks=[...bowRoot.children];
     loadBowModel();
   }
-  // GLBs calibrados: frente do alvo e da arma voltadas para a câmera, sem giro lateral.
+  // GLBs calibrados individualmente: os arquivos originais não compartilham eixos.
   const arrowSpecs={
-    'arrow-standard.glb':{scale:1.05,rot:[0,90,0]},
+    'arrow-standard.glb':{scale:1.05,rot:[0,-90,0]},
     'arrow-precision.glb':{scale:.18,rot:[0,90,0]},
     'arrow-power.glb':{scale:.012,rot:[0,180,0]}
   };
@@ -405,11 +405,14 @@ export function initScene(canvas, getSettings) {
     modelLoads[path].then(resource=>{if(!destroyed)callback(null,resource)})
       .catch(err=>{console.warn('[ClassMana] GLB:',path,err);if(!destroyed)callback(err)});
   }
+  // Cada GLB foi criado em um sistema de eixos diferente. Calibração medida
+  // nas malhas originais: a face colorida fica perpendicular ao disparo,
+  // voltada para a câmera (+Z), e o centro dos anéis coincide com a pontuação.
   const targetSpecs={
-   'target-stand.glb':{scale:1.3,rot:[0,0,0],pos:[.45,0,0]},
-   'target-alt.glb':{scale:.76,rot:[0,0,0],pos:[0,-2.05,0]},
-   'target-light.glb':{scale:2.1,rot:[0,0,0],pos:[0,-.75,0]},
-   'target-suspended.glb':{scale:.47,rot:[0,0,0],pos:[0,0,0]}
+   'target-stand.glb':{scale:1.3,rot:[0,-90,0],pos:[0,0,0]},      // disco original no plano YZ
+   'target-alt.glb':{scale:1.10,rot:[0,180,0],pos:[0,-3.05,0]},   // face original aponta -Z
+   'target-light.glb':{scale:3.45,rot:[0,0,0],pos:[0,-1.80,0]},  // disco original de raio .385
+   'target-suspended.glb':{scale:.47,rot:[0,0,0],pos:[0,0,0]}    // disco original no plano XY
   };
   function activeTargetFile(){
     const q=getSettings()||{},level=q.level||'iniciante';
@@ -495,13 +498,13 @@ export function initScene(canvas, getSettings) {
     const offset=bowRoot.getLocalRotation().transformVector(new pc.Vec3(-1.15*scale,.25*scale,-.08*scale));
     bowRoot.setLocalPosition(sightLocal.sub(offset));
     if(arrowLoaded){
-      // Flecha GLB: encaixar a pena (nock) na corda GLB real, sem
-      // separar o modelo do arco ao mirar ou tensionar.
-      // A corda da malha do arco fica em x=-.63,y=.19,z~.45.
+      // Alinhar a flecha ao eixo frontal (-Z) da arma. A montagem antiga
+      // deslocava o GLB .63 unidade para a esquerda e parecia solto/de lado.
       const modeled=Boolean(bowRoot.__mesh3d&&arrowLoaded.__mesh3d);
+      const crossbow=(GEAR_BY_ID[equipment.bow]?.type==='Besta');
       arrowLoaded.setLocalPosition(
-        modeled?-.63:.02,
-        modeled?.19:-.03,
+        .02,
+        modeled?(crossbow?.13:-.03):-.03,
         modeled?-.14+.19*power:-.40+.36*power
       );
     }
