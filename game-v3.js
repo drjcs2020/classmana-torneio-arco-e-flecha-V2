@@ -1,4 +1,4 @@
-import {initScene} from './scene-v3.js?v=v1-bow-follow-sight-20261110g';
+import {initScene} from './scene-v3.js?v=arrow-60-length-250-thickness-20261110h';
 import {GEAR,GEAR_BY_ID,getGearLevel,isGearUnlocked} from './equipment-catalog.js?v=arsenal-5';
 import {mountEquipmentInventory} from './equipment-inventory.js?v=inventory-1';
 import {CIRCUITS,LEVELS,targetMotion,obstacleBlocks,distanceDifficulty,flightSeconds} from './arena-difficulty.js?v=3';

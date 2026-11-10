@@ -395,9 +395,9 @@ export function initScene(canvas, getSettings) {
     arrowLoaded.setLocalEulerAngles(0,23,0);
     arrowLoaded.setLocalPosition(.03,.18,.45);
     const arrowFallback=new pc.Entity('Fallback arrow - nock aligned');
-    // Escala 2x uniforme: largura, altura e comprimento.
+    // Proporção aprovada: comprimento -40% (0.60x), espessura +150% (2.50x).
     arrowFallback.setLocalPosition(0,0,-1.06);
-    arrowFallback.setLocalScale(2,2,2);
+    arrowFallback.setLocalScale(5,5,1.2);
     arrowLoaded.addChild(arrowFallback);
     tube('black arrow shaft',[[0,0,.53],[0,0,.18],[0,0,-.65]],[.012,.012,.011],dark,arrowFallback,12);
     primitive('cone','machined arrow point',[0,0,-.70],[.036,.09,.036],silver,arrowFallback,[90,0,0]);
@@ -482,8 +482,9 @@ export function initScene(canvas, getSettings) {
     // Nunca calcular escala por AABB runtime: o arquivo standard possui
     // rotação e escala internas, e essa medição produzia uma tora gigante.
     const slim=new pc.Entity('Arrow calibrated shaft');
-    // O modelo GLB inteiro cresce 2x, sem deformar sua proporção.
-    slim.setLocalScale(spec.width*2,spec.width*2,2);
+    // Somente dimensões da flecha: largura/altura 2.50x e comprimento 0.60x.
+    // Escala anterior: (spec.width*2, spec.width*2, 2).
+    slim.setLocalScale(spec.width*5,spec.width*5,1.2);
     parentEntity.addChild(slim);
     model.setLocalEulerAngles(...spec.rot);
     model.setLocalScale(spec.scale,spec.scale,spec.scale);
