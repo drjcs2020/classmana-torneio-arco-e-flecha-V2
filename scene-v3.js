@@ -359,20 +359,14 @@ export function initScene(canvas, getSettings) {
     bowRoot.__bowFailed=false;bowRoot.__arrowFailed=false;
     bowRoot.setLocalScale(.60,.60,.60);
     bowRoot.setLocalPosition(.32,0,-2.7);
-    // TESTE A/B isolado do giro axial: a versão anterior usava Y=90°.
-    // ?bowAxialTest=plus90  => +90° adicionais (Y=180°).
-    // ?bowAxialTest=minus90 => -90° adicionais (Y=0°).
-    // Sem parâmetro, a orientação anterior (Y=90°) permanece intacta.
-    // Não muda flecha, mira, alvo, escala nem mecânica da V1.
+    // O eixo longo do GLB já foi alinhado a +Y por fitWeaponModel.
+    // A face do arco deve permanecer no plano XY, perpendicular à linha de tiro -Z.
+    // O antigo giro Y=90° mostrava o arco de perfil, voltado para a esquerda.
     bowVisualPivot=new pc.Entity('Bow visual calibration');
-    const isCrossbow=GEAR_BY_ID[equipment.bow]?.type==='Besta';
-    const axialTest=new URLSearchParams(location.search).get('bowAxialTest');
-    const axialDelta=axialTest==='plus90'?90:axialTest==='minus90'?-90:0;
-    const axialAngle=isCrossbow?0:90+axialDelta;
     bowVisualPivot.setLocalScale(1.20,1.20,1.20);
-    bowVisualPivot.setLocalEulerAngles(0,axialAngle,0);
-    parent.dataset.bowAxialTest=axialTest==='plus90'||axialTest==='minus90'?axialTest:'original';
-    parent.dataset.bowAxialAngle=String(axialAngle);
+    bowVisualPivot.setLocalEulerAngles(0,0,0);
+    parent.dataset.bowAxialAngle='0';
+    parent.dataset.bowFacing='target-negative-z';
     bowRoot.addChild(bowVisualPivot);
     bowFallbackRoot=new pc.Entity('Vertical procedural bow fallback');
     bowFallbackRoot.setLocalScale(.41,.41,.41);
@@ -397,16 +391,16 @@ export function initScene(canvas, getSettings) {
     // A single arrow asset: its colors DO NOT change when changing House.
     arrowLoaded=new pc.Entity('Arrow nock - child of WeaponPivot');
     bowRoot.addChild(arrowLoaded);
-    // A flecha mantém as proporções originais e o MESMO ângulo do arco.
+    // A flecha conserva as proporções aprovadas e acompanha o WeaponPivot.
+    // Seu eixo -Z aponta para o alvo, sem herdar a rotação axial do arco.
     arrowLoaded.setLocalScale(1,1,1);
-    // A flecha segue o mesmo pivô do arco e fica junto da empunhadura,
-    // com o eixo longitudinal horizontal na projeção da câmera.
     const nock=arrowNockPose();
     arrowLoaded.setLocalEulerAngles(0,nock.yaw,0);
     arrowLoaded.setLocalPosition(nock.x,nock.y,nock.z);
     const arrowFallback=new pc.Entity('Fallback arrow - nock aligned');
     // Proporção aprovada: comprimento -40% (0.60x), espessura +150% (2.50x).
-    arrowFallback.setLocalPosition(0,0,-1.06);
+    // A traseira da haste fica junto à empunhadura, como no GLB calibrado.
+    arrowFallback.setLocalPosition(0,0,-.60);
     arrowFallback.setLocalScale(5,5,1.2);
     arrowLoaded.addChild(arrowFallback);
     tube('black arrow shaft',[[0,0,.53],[0,0,.18],[0,0,-.65]],[.012,.012,.011],dark,arrowFallback,12);
@@ -512,7 +506,7 @@ export function initScene(canvas, getSettings) {
       child.enabled=owner.__bowFailed||child===arrowLoaded||child===sightAnchor;
     owner.enabled=true;
     updateBowAim();
-    parent.dataset.weaponPose='v1-mechanics-axial90-3d-axis-aligned-v10';
+    parent.dataset.weaponPose='v1-mechanics-bow-front-arrow-forward-grip-center-v11';
     parent.dataset.glbBow=owner.__bowFailed?'fallback':'ready';
     parent.dataset.glbArrow=owner.__arrowFailed?'fallback':'ready';
   }
@@ -731,13 +725,13 @@ export function initScene(canvas, getSettings) {
   function arrowNockPose(){
     if(GEAR_BY_ID[equipment.bow]?.type==='Besta')
       return {x:0,y:.08,z:.12,yaw:0};
-    // Ponta local -Z -> -X no enquadramento da V1. Pequena folga Z
-    // separa a haste da peça arredondada da empunhadura.
+    // A flecha calibrada já aponta para -Z. Não girá-la para -X:
+    // isso atravessava a tela e a fazia parecer muito maior.
+    // O centro do punho clássico fica perto de Y=0; Y=-.10 alinha a
+    // haste à peça central cinza, abaixo da antiga posição Y=+.135.
     if(equipment.bow==='classico')
-      // Centro medido da peça superior do punho após calibração: Y≈0.135.
-      return {x:.015,y:.135,z:.13,yaw:90};
-    // Demais arcos: empunhadura próxima ao centro geométrico.
-    return {x:.015,y:0,z:.13,yaw:90};
+      return {x:.015,y:-.10,z:.13,yaw:0};
+    return {x:.015,y:0,z:.13,yaw:0};
   }
   function updateBowAim(){
     if(!ready||!camera?.camera||!bowRoot||!sightAnchor)return;
@@ -752,8 +746,9 @@ export function initScene(canvas, getSettings) {
     bowRoot.setLocalPosition(sightLocal.sub(offset));
     if(arrowLoaded){
       const nock=arrowNockPose(),bow=GEAR_BY_ID[equipment.bow]?.type!=='Besta';
-      arrowLoaded.setLocalPosition(nock.x+(bow ? .12*power : 0),nock.y,
-        nock.z+(bow ? 0 : .10*power));
+      // Puxada axial da V1: a flecha recua em Z, nunca de lado em X.
+      arrowLoaded.setLocalPosition(nock.x,nock.y,
+        nock.z+(bow ? .12 : .10)*power);
       arrowLoaded.setLocalEulerAngles(0,nock.yaw,0);
     }
     if(bowString)bowString.setLocalPosition(0,0,.19*power);

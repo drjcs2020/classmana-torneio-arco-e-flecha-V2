@@ -1,4 +1,4 @@
-import {initScene} from './scene-v3.js?v=bow-axial-ab-20261110k';
+import {initScene} from './scene-v3.js?v=bow-arrow-grip-20261110m';
 import {GEAR,GEAR_BY_ID,getGearLevel,isGearUnlocked} from './equipment-catalog.js?v=arsenal-5';
 import {mountEquipmentInventory} from './equipment-inventory.js?v=inventory-1';
 import {CIRCUITS,LEVELS,targetMotion,obstacleBlocks,distanceDifficulty,flightSeconds} from './arena-difficulty.js?v=3';
@@ -508,11 +508,12 @@ async function startMatch(accepted=null){
  if(document.body.dataset.page==='lobby'){
   try{
    sessionStorage.setItem('cm_active_archery_match_v2',JSON.stringify(match));
-   // Preserva apenas o parâmetro de teste do giro ao entrar na arena.
-   const axialTest=new URLSearchParams(location.search).get('bowAxialTest');
-   const testQuery=['plus90','minus90'].includes(axialTest)
-     ?'?bowAxialTest='+axialTest:'';
-   window.location.assign('./arena.html'+testQuery);
+   // Preservar o token de atualização visual ao sair do lobby:
+   // a arena.html também precisa ter URL nova para ignorar HTML em cache.
+   const visualFix=new URLSearchParams(location.search).get('visualFix');
+   const cacheQuery=visualFix&&/^[a-zA-Z0-9_-]{1,48}$/.test(visualFix)
+     ?'?visualFix='+encodeURIComponent(visualFix):'';
+   window.location.assign('./arena.html'+cacheQuery);
    navigatingToArena=true;
    return;
   }catch(error){console.warn('Navegação entre páginas indisponível:',error)}
