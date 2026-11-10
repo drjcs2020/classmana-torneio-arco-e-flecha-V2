@@ -359,12 +359,20 @@ export function initScene(canvas, getSettings) {
     bowRoot.__bowFailed=false;bowRoot.__arrowFailed=false;
     bowRoot.setLocalScale(.60,.60,.60);
     bowRoot.setLocalPosition(.32,0,-2.7);
-    // Giro axial +90° para todos os arcos depois de alinhar seu eixo longo.
-    // As bestas preservam sua orientação específica.
+    // TESTE A/B isolado do giro axial: a versão anterior usava Y=90°.
+    // ?bowAxialTest=plus90  => +90° adicionais (Y=180°).
+    // ?bowAxialTest=minus90 => -90° adicionais (Y=0°).
+    // Sem parâmetro, a orientação anterior (Y=90°) permanece intacta.
+    // Não muda flecha, mira, alvo, escala nem mecânica da V1.
     bowVisualPivot=new pc.Entity('Bow visual calibration');
     const isCrossbow=GEAR_BY_ID[equipment.bow]?.type==='Besta';
+    const axialTest=new URLSearchParams(location.search).get('bowAxialTest');
+    const axialDelta=axialTest==='plus90'?90:axialTest==='minus90'?-90:0;
+    const axialAngle=isCrossbow?0:90+axialDelta;
     bowVisualPivot.setLocalScale(1.20,1.20,1.20);
-    bowVisualPivot.setLocalEulerAngles(0,isCrossbow?0:90,0);
+    bowVisualPivot.setLocalEulerAngles(0,axialAngle,0);
+    parent.dataset.bowAxialTest=axialTest==='plus90'||axialTest==='minus90'?axialTest:'original';
+    parent.dataset.bowAxialAngle=String(axialAngle);
     bowRoot.addChild(bowVisualPivot);
     bowFallbackRoot=new pc.Entity('Vertical procedural bow fallback');
     bowFallbackRoot.setLocalScale(.41,.41,.41);
