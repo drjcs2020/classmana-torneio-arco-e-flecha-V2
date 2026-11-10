@@ -35,7 +35,7 @@ export function initScene(canvas, getSettings) {
   const canvasSize=()=>({w:parent.clientWidth||1050,h:parent.clientHeight||540});
 
   function targetScale(distance){
-    return clamp(Math.pow(30/Math.max(10,distance||30),.65),.31,1.75);
+    return clamp(Math.pow(30/Math.max(10,distance||30),.65),.31,1.10);
   }
   function getTargetMetrics(){
     const {w,h}=canvasSize(),s=getSettings()||{},distance=s.distance||25,shift=s.shift||0;
@@ -57,8 +57,10 @@ export function initScene(canvas, getSettings) {
       y:moving?h*(.45+(s.verticalShift||0)):footY-1.48*r,r};
   }
   function fallbackSightGeometry(){
-    const {w,h}=canvasSize(),size=h*.67;
-    const bx=w*(.81+(aimX-.5)*.08),by=h*(.56+(aimY-.45)*.08);
+    const {w,h}=canvasSize(),size=h*.76;
+    const offset=Math.min(w*.085,Math.max(0,(1-aimX)*w-65));
+    // Fallback também segue o ponteiro, sem deixar o arco parado na direita.
+    const bx=w*aimX+offset,by=h*aimY+size*.035;
     return {bx,by,size,sightX:w*aimX,sightY:h*aimY};
   }
   function getAimPoint(){
@@ -351,9 +353,10 @@ export function initScene(canvas, getSettings) {
   function buildBow(){
     bowRoot=new pc.Entity('Modern competition recurve bow');
     camera.addChild(bowRoot);
-    // Modelo proporcional ao enquadramento; não deve ocupar toda a tela.
-    bowRoot.setLocalScale(.43,.43,.43);
-    bowRoot.setLocalPosition(.92,-.25,-2.7);
+    // Arco grande, em primeira pessoa: aproximadamente 2/3 da altura útil.
+    // A mira ficará presa ao próprio arco, e a posição é atualizada em updateBowAim.
+    bowRoot.setLocalScale(.56,.56,.56);
+    bowRoot.setLocalPosition(.32,0,-2.7);
     const pp=bowPalette(),body=material(pp.body,{metal:.79,rough:.19}),gold=material(pp.trim,{metal:.9,rough:.18}),
       dark=material('#1b1c20',{metal:.46,rough:.35}),silver=material('#d5e0e7',{metal:.88,rough:.23}),red=material('#dc342a'),ivory=material('#faf0db');
     const p=[[0,-1.52,0],[.045,-1.35,0],[.12,-.99,.035],[.105,-.55,.02],[.055,-.16,0],[.018,.18,0],[.075,.62,.02],[.09,1,.02],[.02,1.37,.02],[0,1.52,0]];
@@ -361,17 +364,25 @@ export function initScene(canvas, getSettings) {
     tube('bow-trim upper line',[[.062,.25,-.028],[.115,.88,-.021],[.05,1.39,.025]],[.01,.011,.007],gold,bowRoot);
     tube('bow-trim lower line',[[.062,-.2,-.028],[.118,-.90,-.021],[.04,-1.36,.025]],[.01,.011,.007],gold,bowRoot);
     const grip=primitive('cylinder','ergonomic dark handgrip',[.03,-.12,-.08],[.17,.43,.13],dark,bowRoot,[0,0,90]);
-    // Mira 3D separada da arma: só ela acompanha o ponteiro.
+    // Mira FISICAMENTE PRESA ao arco: acompanha 100% do movimento.
+    // A projeção do anel é usada para pontuação, sem segunda mira invisível.
     const sight=new pc.Entity('Circle aiming sight');
-    sight.setLocalScale(.43,.43,.43);sight.setLocalPosition(0,0,-2.7);
-    camera.addChild(sight);sightAnchor=sight;
+    sight.setLocalScale(.65,.65,.65);
+    sight.setLocalPosition(-.56,.045,-.05);
+    bowRoot.addChild(sight);sightAnchor=sight;
     circleMesh('sight black metal ring',.088,.007,dark,sight);
     circleMesh('sight gilded inner rim',.078,.0026,gold,sight);
     tube('sight vertical line',[[0,-.044,.003],[0,0,.003],[0,.044,.003]],[.0009,.0009,.0009],silver,sight,5);
     tube('sight horizontal line',[[-.044,0,.003],[0,0,.003],[.044,0,.003]],[.0009,.0009,.0009],silver,sight,5);
     primitive('sphere','sight central dot',[0,0,.005],[.006,.006,.006],red,sight);
     // A single arrow asset: its colors DO NOT change when changing House.
-    arrowLoaded=new pc.Entity('Shared red-and-white arrow');bowRoot.addChild(arrowLoaded);arrowLoaded.setLocalPosition(.02,-.03,-.40);
+    arrowLoaded=new pc.Entity('Shared red-and-white arrow');
+    bowRoot.addChild(arrowLoaded);
+    // A flecha precisa ter comprimento visível na câmera, não apontar
+    // diretamente para -Z como um pequeno traço visto de ponta.
+    arrowLoaded.setLocalScale(1.60,1.60,1.60);
+    arrowLoaded.setLocalEulerAngles(0,40,0);
+    arrowLoaded.setLocalPosition(.02,-.03,.10);
     tube('black arrow shaft',[[0,0,.53],[0,0,.18],[0,0,-.65]],[.012,.012,.011],dark,arrowLoaded,12);
     primitive('cone','machined arrow point',[0,0,-.70],[.036,.09,.036],silver,arrowLoaded,[90,0,0]);
     const fin=[[.0,.0,.47],[.076,.042,.26],[0,0,.16]],vanes=arrowPalette(),primary=material(vanes.feather),secondary=material(vanes.secondary);
@@ -466,7 +477,45 @@ export function initScene(canvas, getSettings) {
       arrowLoaded.__mesh3d=mesh;parent.dataset.glbArrow='ready';
     });
   }
-  // Normalização dos GLBs: escalas e pivôs originais variam entre modelos.
+  // Calibração de arco: medir o eixo visual dominante das peças do GLB.
+  // Um simples bounding box X/Y não detecta modelos a 30–45 graus.
+  function bowVisualAxis(model){
+    const samples=[];
+    model.syncHierarchy();
+    for(const render of model.findComponents('render')){
+      for(const inst of render.meshInstances||[]){
+        const mesh=inst.mesh,transform=inst.node?.getWorldTransform?.();
+        let added=0;
+        if(mesh&&transform&&typeof mesh.getPositions==='function'){
+          try{
+            const positions=[];
+            mesh.getPositions(positions);
+            const step=Math.max(1,Math.ceil(positions.length/3/110));
+            for(let i=0;i+2<positions.length;i+=3*step){
+              const p=transform.transformPoint(new pc.Vec3(positions[i],positions[i+1],positions[i+2]));
+              if(Number.isFinite(p.x)&&Number.isFinite(p.y)){
+                samples.push([p.x,p.y]);added++;
+              }
+            }
+          }catch(_error){/* GLBs sem posições CPU: usar centros das peças. */}
+        }
+        if(!added&&inst.aabb){
+          const p=inst.aabb.center;
+          if(Number.isFinite(p.x)&&Number.isFinite(p.y))samples.push([p.x,p.y]);
+        }
+      }
+    }
+    if(samples.length<3)return null;
+    let mx=0,my=0;
+    for(const p of samples){mx+=p[0];my+=p[1]}
+    mx/=samples.length;my/=samples.length;
+    let xx=0,yy=0,xy=0;
+    for(const [x,y] of samples){const dx=x-mx,dy=y-my;xx+=dx*dx;yy+=dy*dy;xy+=dx*dy}
+    const anisotropy=Math.hypot(xx-yy,2*xy)/Math.max(1e-8,xx+yy);
+    if(anisotropy<.13)return null;
+    return Math.atan2(2*xy,xx-yy)*90/Math.PI;
+  }
+  // Normalizar tamanho e centralização SEM perder os modelos desbloqueados.
   function fitWeaponModel(model,gear){
     const temp=new pc.Entity('Weapon calibration');
     app.root.addChild(temp);temp.addChild(model);
@@ -486,12 +535,26 @@ export function initScene(canvas, getSettings) {
       return {min,max,size:max.map((v,i)=>v-min[i])};
     }
     let b=bounds();
-    if(b.size.every(v=>Number.isFinite(v)&&v>=0)){
-      if(gear.type==='Arco'&&b.size[0]>b.size[1]*1.35){
+    if(gear.type==='Arco'){
+      const axis=bowVisualAxis(model);
+      if(axis!==null){
+        // Corrigir a inclinação real das malhas, não apenas o ângulo do catálogo.
+        // O eixo principal não tem sentido: 90° e -90° são a mesma vertical.
+        let correction=90-axis;
+        while(correction>90)correction-=180;
+        while(correction< -90)correction+=180;
+        if(Math.abs(correction)>1){
+          model.setLocalEulerAngles(gear.rotation[0],gear.rotation[1],gear.rotation[2]+correction);
+          b=bounds();
+        }
+      }else if(b.size[0]>b.size[1]*1.18){
         model.setLocalEulerAngles(gear.rotation[0],gear.rotation[1],gear.rotation[2]+90);
         b=bounds();
       }
-      const limit=gear.type==='Besta'?[1.70,1.15,1.60]:[1.45,2.45,1.30];
+    }
+    if(b.size.every(v=>Number.isFinite(v)&&v>=0)){
+      // Dimensões máximas na unidade do arco, antes da escala da câmera (.56).
+      const limit=gear.type==='Besta'?[1.70,1.15,1.60]:[1.35,2.45,1.30];
       const scale=Math.min(...b.size.map((v,i)=>limit[i]/Math.max(v,.00001)));
       if(Number.isFinite(scale)&&scale>0&&scale<10000){
         model.setLocalScale(scale,scale,scale);
@@ -523,7 +586,7 @@ export function initScene(canvas, getSettings) {
       owner.__mesh3d=mesh;
       // Preserva a mira circular e seu suporte mesmo que o GLB não possua mira.
       for(const child of owner.__fallbacks||[]){
-        child.enabled=child===arrowLoaded;
+        child.enabled=child===arrowLoaded||child===sightAnchor;
       }
       parent.dataset.glbBow='ready';parent.dataset.bowModel=gear.model;
     });
@@ -531,21 +594,24 @@ export function initScene(canvas, getSettings) {
 
   function updateBowAim(){
     if(!ready||!camera?.camera||!bowRoot||!sightAnchor)return;
-    const {w,h}=canvasSize(),dx=aimX-.5,dy=aimY-.45;
-    // Retículo projetado no pixel CSS; não deslocar o arco para segui-lo.
-    const depth=2.70,cssW=gl?.clientWidth||w,cssH=gl?.clientHeight||h;
-    const sightWorld=camera.camera.screenToWorld(aimX*cssW,aimY*cssH,depth);
-    const sightLocal=camera.getWorldTransform().clone().invert().transformPoint(sightWorld);
-    sightAnchor.setLocalPosition(sightLocal);
-    // Arma fixa à direita em primeira pessoa; leve resposta ao movimento.
-    bowRoot.setLocalEulerAngles(-dy*.65,dx*.65,0);
-    bowRoot.setLocalPosition(clamp(.92+dx*.20,.80,1.04),clamp(-.25-dy*.10,-.30,-.20),-2.70);
+    const {w,h}=canvasSize(),depth=2.70,cssW=gl?.clientWidth||w,cssH=gl?.clientHeight||h;
+    // Projetar o ponto da mira para o plano da arma.
+    const world=camera.camera.screenToWorld(aimX*cssW,aimY*cssH,depth);
+    const local=camera.getWorldTransform().clone().invert().transformPoint(world);
+    const bowScale=bowRoot.getLocalScale().x;
+    const worldPerPixel=2*depth*Math.tan(camera.camera.fov*Math.PI/360)/Math.max(1,cssH);
+    // Aproximar a arma do anel, preservando margem no lado direito da tela.
+    const availableRight=(1-aimX)*cssW;
+    const followPx=Math.min(108,cssW*.09,Math.max(0,availableRight-72));
+    sightAnchor.setLocalPosition(-followPx*worldPerPixel/bowScale,.045,-.05);
+    // Travar a arma na VERTICAL: a mira e o arco formam um único conjunto.
+    bowRoot.setLocalEulerAngles(0,0,0);
+    const offset=sightAnchor.getLocalPosition().clone().mulScalar(bowScale);
+    bowRoot.setLocalPosition(local.sub(offset));
     if(arrowLoaded){
-      // Alinhar a flecha ao eixo frontal (-Z) da arma. A montagem antiga
-      // deslocava o GLB .63 unidade para a esquerda e parecia solto/de lado.
-      const modeled=Boolean(bowRoot.__mesh3d&&arrowLoaded.__mesh3d);
-      const crossbow=(GEAR_BY_ID[equipment.bow]?.type==='Besta');
-      arrowLoaded.setLocalPosition(crossbow?0:.02,crossbow?.08:-.03,-.02+.12*power);
+      const crossbow=GEAR_BY_ID[equipment.bow]?.type==='Besta';
+      arrowLoaded.setLocalEulerAngles(0,crossbow?12:40,0);
+      arrowLoaded.setLocalPosition(crossbow?0:.02,crossbow?.09:-.03,.08+.18*power);
     }
     if(bowString)bowString.setLocalPosition(0,0,.19*power);
   }
