@@ -13,7 +13,7 @@ const palettes = {
 };
 const rgb = h => [1,3,5].map(i => parseInt(h.slice(i, i+2), 16) / 255);
 
-import {GEAR_BY_ID,modelSource} from './equipment-catalog.js?v=1';
+import {GEAR_BY_ID,modelSource} from './equipment-catalog.js?v=arsenal-2';
 export function initScene(canvas, getSettings) {
   const parent=canvas.parentElement;
   let pc=null, app=null, gl=null, camera=null, bowRoot=null, bowHandle=null, bowString=null, sightAnchor=null,
@@ -382,7 +382,7 @@ export function initScene(canvas, getSettings) {
     bowRoot.__fallbacks=[...bowRoot.children];
     loadBowModel();
   }
-  // GLBs originais, com a mira 3D independente preservada nos seis equipamentos.
+  // GLBs calibrados: frente do alvo e da arma voltadas para a câmera, sem giro lateral.
   const arrowSpecs={
     'arrow-standard.glb':{scale:1.05,rot:[0,90,0]},
     'arrow-precision.glb':{scale:.18,rot:[0,90,0]},
@@ -406,7 +406,7 @@ export function initScene(canvas, getSettings) {
       .catch(err=>{console.warn('[ClassMana] GLB:',path,err);if(!destroyed)callback(err)});
   }
   const targetSpecs={
-   'target-stand.glb':{scale:1.3,rot:[0,90,0],pos:[.45,0,0]},
+   'target-stand.glb':{scale:1.3,rot:[0,0,0],pos:[.45,0,0]},
    'target-alt.glb':{scale:.76,rot:[0,0,0],pos:[0,-2.05,0]},
    'target-light.glb':{scale:2.1,rot:[0,0,0],pos:[0,-.75,0]},
    'target-suspended.glb':{scale:.47,rot:[0,0,0],pos:[0,0,0]}
