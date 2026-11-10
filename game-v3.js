@@ -753,7 +753,8 @@ async function finishMatch(){
   ownShots:match.scores,rivalShots:bot,
   opponent:rivalScore===undefined?'—':rivalScore,mode:match.mode,ownTotal:total,rivalTotal:rivalScore??null});
  if(match.mode==='bot')arenaAudio.play(total>rivalScore?'victory':total<rivalScore?'defeat':'banner');
- $('share-help').textContent='Treino e partidas com robô ficam neste navegador; somente desafios validados entram no ranking oficial.';
+ // Treino local: sem aviso redundante sobre o ranking na tela final.
+ $('share-help').textContent='';
  if(match.playerId!=='guest')persist({house:match.house,id:match.playerId,score:total,mode:match.mode,win:rivalScore===undefined?null:total>rivalScore});
  uiHud();
 }
