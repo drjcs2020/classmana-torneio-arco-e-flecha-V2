@@ -422,3 +422,63 @@
    width:min(29vw,320px)!important;
  }
 }
+
+
+/* 2026-11-10 revisão 3 — priorizar moldura REALMENTE MAIOR, não fonte menor.
+   O conteúdo pode rolar verticalmente em telas baixas, em vez de encolher as artes. */
+@media (min-width:900px){
+ .cm-vs-overlay[data-mode="bot"]{
+   align-items:flex-start!important;
+   overflow-y:auto!important;
+   padding:12px 10px 16px!important;
+ }
+ .cm-vs-overlay[data-mode="bot"] .cm-vs-shell{
+   flex:none!important;
+   width:min(99vw,1240px)!important;
+   max-width:1240px!important;
+   max-height:none!important;
+   height:auto!important;
+   margin:0 auto!important;
+   overflow:visible!important;
+   gap:8px!important;
+ }
+ .cm-vs-overlay[data-mode="bot"] .cm-vs-fighters{
+   width:min(100%,1190px)!important;
+   max-width:1190px!important;
+   grid-template-columns:minmax(390px,1fr) 150px minmax(390px,1fr)!important;
+   gap:12px!important;
+ }
+ .cm-vs-overlay[data-mode="bot"] .cm-vs-fighter[data-house]{
+   box-sizing:border-box!important;
+   width:390px!important;
+   height:480px!important;
+   min-width:390px!important;
+   min-height:480px!important;
+   max-width:none!important;
+   max-height:none!important;
+   aspect-ratio:390/480!important;
+   flex-shrink:0!important;
+ }
+ .cm-vs-overlay[data-mode="bot"] .cm-vs-fighters>.cm-vs-mark{
+   width:150px!important;height:165px!important;
+ }
+ .cm-vs-overlay[data-mode="bot"] .cm-vs-fighter[data-house] .cm-vs-fighter-info strong{
+   font-size:19px!important;
+ }
+ .cm-vs-overlay[data-mode="bot"] .cm-vs-fighter[data-house] .cm-vs-fighter-info small{
+   font-size:13px!important;letter-spacing:0!important;
+   white-space:normal!important;line-height:1.05!important;
+   text-overflow:clip!important;
+ }
+}
+@media (min-width:681px) and (max-width:899px){
+ .cm-vs-overlay[data-mode="bot"] .cm-vs-shell{max-height:none!important}
+ .cm-vs-overlay[data-mode="bot"] .cm-vs-fighter[data-house]{
+   width:clamp(260px,36vw,340px)!important;
+   height:clamp(350px,50vw,440px)!important;
+   max-width:none!important;aspect-ratio:auto!important;
+ }
+ .cm-vs-overlay[data-mode="bot"] .cm-vs-fighter[data-house] .cm-vs-fighter-info small{
+   font-size:12px!important;white-space:normal!important;
+ }
+}
