@@ -214,10 +214,10 @@
 }
 .cm-vs-overlay[data-mode="bot"] .cm-vs-fighter[data-house]{
  box-sizing:border-box!important;
- height:min(59dvh,430px)!important;
+ height:min(61dvh,440px)!important;
  width:auto!important;
  max-width:100%!important;max-height:none!important;min-height:0!important;
- aspect-ratio:.722!important;
+ aspect-ratio:.82!important;
  overflow:visible!important;
 }
 .cm-vs-overlay[data-mode="bot"] .cm-vs-fighters>.cm-vs-mark{
@@ -242,8 +242,8 @@
 }
 .cm-vs-overlay[data-mode="bot"] .cm-vs-fighter[data-house] .cm-vs-fighter-info strong{
  box-sizing:border-box!important;position:absolute!important;
- top:73.6%!important;left:12%!important;width:76%!important;height:9%!important;
- max-width:76%!important;
+ top:73.4%!important;left:11%!important;width:78%!important;height:9.4%!important;
+ max-width:78%!important;
  display:flex!important;align-items:center!important;justify-content:center!important;
  margin:0!important;padding:0 2px!important;
  overflow:hidden!important;white-space:nowrap!important;text-overflow:ellipsis!important;
@@ -253,8 +253,8 @@
 }
 .cm-vs-overlay[data-mode="bot"] .cm-vs-fighter[data-house] .cm-vs-fighter-info small{
  box-sizing:border-box!important;position:absolute!important;
- top:86.7%!important;left:12%!important;width:76%!important;height:5.7%!important;
- max-width:76%!important;
+ top:85.9%!important;left:10.5%!important;width:79%!important;height:6.5%!important;
+ max-width:79%!important;
  display:flex!important;align-items:center!important;justify-content:center!important;
  margin:0!important;padding:0 1px!important;
  overflow:hidden!important;white-space:nowrap!important;text-overflow:ellipsis!important;
@@ -277,16 +277,17 @@
   aspect-ratio:2168/577!important;
  }
  .cm-vs-overlay[data-mode="bot"] .cm-vs-fighters{
-  grid-template-columns:minmax(0,1fr) clamp(66px,14vw,82px) minmax(0,1fr)!important;
+  grid-template-columns:minmax(0,1fr) clamp(58px,12vw,74px) minmax(0,1fr)!important;
   gap:3px!important;
  }
  .cm-vs-overlay[data-mode="bot"] .cm-vs-fighter[data-house]{
-  width:min(100%,28dvh)!important;
-  height:auto!important;max-height:min(42dvh,300px)!important;
+  width:min(100%,30dvh)!important;
+  height:auto!important;max-height:min(43dvh,310px)!important;
+  aspect-ratio:.74!important;
  }
  .cm-vs-overlay[data-mode="bot"] .cm-vs-fighters>.cm-vs-mark{
-  width:clamp(66px,15vw,85px)!important;
-  height:clamp(72px,16vw,91px)!important;
+  width:clamp(58px,13vw,76px)!important;
+  height:clamp(65px,14vw,83px)!important;
  }
  .cm-vs-overlay[data-mode="bot"] .cm-vs-fighter[data-house] .cm-vs-fighter-info strong{
   font-size:clamp(9px,2.5vw,14px)!important;

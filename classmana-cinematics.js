@@ -133,8 +133,15 @@ function versus(config){
  cancel.id='cm-vs-cancel';cancel.type='button';
  actions.append(start,cancel);
  heading.append(leftCrest,title,rightCrest);
- shell.append(heading,sub,fighters,actions,node('p','cm-vs-note','O convite só é enviado uma vez. O placar permanece vinculado ao jogador.'));
+ const note=config.mode==='bot'
+   ?'Treino contra o robô: sem envio ao servidor e sem pontos no ranking oficial.'
+   :'O convite só é enviado uma vez. O placar permanece vinculado ao jogador.';
+ shell.append(heading,sub,fighters,actions,node('p','cm-vs-note',note));
  outer.append(shell);document.body.append(outer);
+ if(config.mode==='bot'){
+   requestAnimationFrame(()=>requestAnimationFrame(()=>fitVersusLabels(outer)));
+   document.fonts?.ready?.then(()=>requestAnimationFrame(()=>fitVersusLabels(outer)));
+ }
  const previousFocus=document.activeElement;
  activeDialog=outer;
  try{config.sound?.('banner')}catch{}
@@ -173,6 +180,22 @@ function versus(config){
 // As plaquetas são parte da arte original; ajustar o texto ao espaço real,
 // sem cortar nomes longos ou deixar a Casa passar sobre o filete dourado.
 const resultFitCanvas=document.createElement('canvas');
+// Ajusta os textos da plaqueta ao espaço interno real, preservando os nomes completos.
+function fitVersusLabels(overlay){
+ if(!overlay?.isConnected)return;
+ const ctx=resultFitCanvas.getContext('2d');if(!ctx)return;
+ for(const el of overlay.querySelectorAll('.cm-vs-fighter-info strong,.cm-vs-fighter-info small')){
+  el.style.removeProperty('font-size');
+  const style=getComputedStyle(el),size=parseFloat(style.fontSize);
+  const available=el.clientWidth-10,text=el.textContent||'';
+  if(!(size>0&&available>0))continue;
+  ctx.font=style.fontStyle+' '+style.fontWeight+' '+size+'px '+style.fontFamily;
+  const spacing=parseFloat(style.letterSpacing)||0;
+  const width=ctx.measureText(text).width+Math.max(0,text.length-1)*spacing;
+  if(width>available)el.style.setProperty('font-size',Math.max(6,Math.floor(size*available/width*10)/10)+'px','important');
+  el.title=text;
+ }
+}
 function fitResultLabels(){
  const finish=document.getElementById('finish');
  if(!finish?.classList.contains('cm-v21-result')||finish.classList.contains('hidden'))return;
@@ -189,7 +212,11 @@ function fitResultLabels(){
   el.title=text;
  }
 }
-window.addEventListener('resize',()=>requestAnimationFrame(fitResultLabels));
+window.addEventListener('resize',()=>{
+ requestAnimationFrame(fitResultLabels);
+ const overlay=document.getElementById('cm-vs-overlay');
+ if(overlay?.dataset.mode==='bot')requestAnimationFrame(()=>fitVersusLabels(overlay));
+});
 
 function resultView({player,house,rival,rivalHouse,gender='m',rivalGender='m',ownShots=[],rivalShots=[],opponent='—',mode='duel',ownTotal=null,rivalTotal=null}){
  const finish=document.getElementById('finish');

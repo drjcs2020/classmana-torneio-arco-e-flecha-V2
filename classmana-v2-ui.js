@@ -182,11 +182,15 @@ function mountResultHome(){
  if(!button||!title)return;
  button.addEventListener('click',()=>{
   const state=normal(title.textContent);
-  if(state.includes('salvando')){
+  // Treino livre e contra o robô são locais: não exigem confirmação do servidor.
+  // A busca genérica por "erro" também encontrava "dERROta" e exibia um alerta falso.
+  const resultMode=$('finish')?.dataset.cmResultMode;
+  const needsServerConfirmation=resultMode!=='bot'&&resultMode!=='practice';
+  if(needsServerConfirmation&&state.includes('salvando')){
    window.alert('O resultado ainda está sendo enviado. Conclua o salvamento antes de sair.');
    return;
   }
-  if((state.includes('nao confirmado')||state.includes('erro'))&&
+  if(needsServerConfirmation&&state.includes('nao confirmado')&&
       !window.confirm('O resultado ainda não foi confirmado pelo servidor. Sair agora pode descartar esta tentativa. Deseja sair?'))return;
   // Na saída do resultado, mantenha a sessão e volte aos desafios.
   if(typeof window.classmanaReturnToChallenge==='function'){
