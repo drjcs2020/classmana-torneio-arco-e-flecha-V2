@@ -138,3 +138,59 @@ body[data-page="arena"] #view-arena #finish.cm-v21-result .finish-actions{flex:0
  body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-player .cm-v21-name{font-size:clamp(10px,2.1vw,14px)!important}
  body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-player .cm-v21-house{font-size:clamp(8px,1.6vw,10px)!important}
 }
+
+
+/* Ajuste fino das prévias VS: dimensões VISUAIS, sem mudar o fluxo dos botões.
+   Transformações não aumentam a altura ocupada no layout. */
+@media (min-width:681px){
+ .cm-vs-overlay .cm-vs-fighter[data-house]{
+  transform:translateY(-12px) scale(1.075,1.075)!important;
+  transform-origin:center center!important;
+  animation:none!important;
+ }
+ .cm-vs-overlay .cm-vs-fighters>.cm-vs-mark{
+  transform:scale(1.30)!important;
+  transform-origin:center!important;
+  animation:none!important;
+ }
+}
+.cm-vs-overlay[data-mode="bot"] .cm-combat-heading .cm-vs-title{
+ transform:translateY(-15px) scale(.94)!important;
+ transform-origin:center!important;
+}
+.cm-vs-overlay .cm-vs-fighter[data-house] .cm-combat-portrait img{
+ transform:scale(1.45)!important;
+ transform-origin:50% 23%!important;
+}
+.cm-vs-overlay .cm-vs-fighter.cm-vs-facing-left .cm-combat-portrait img{
+ transform:scaleX(-1) scale(1.45)!important;
+ transform-origin:50% 23%!important;
+}
+.cm-vs-overlay .cm-vs-fighter[data-house] .cm-vs-fighter-info strong{
+ top:71%!important;height:11%!important;
+ font-size:clamp(13px,1.55vw,19px)!important;
+}
+.cm-vs-overlay .cm-vs-fighter[data-house] .cm-vs-fighter-info small{
+ top:82.1%!important;height:12%!important;
+ flex-direction:column!important;gap:0!important;
+ white-space:normal!important;overflow:hidden!important;
+}
+.cm-vs-overlay .cm-vs-fighter[data-house] .cm-vs-grade{
+ display:block!important;flex:none!important;
+ font:900 clamp(9px,.87vw,11px)/1.07 'Nunito',Arial,sans-serif!important;
+}
+.cm-vs-overlay .cm-vs-fighter[data-house] .cm-vs-house-name{
+ display:block!important;flex:none!important;
+ font:900 clamp(11px,1.05vw,14px)/1.07 'Nunito',Arial,sans-serif!important;
+ white-space:normal!important;text-align:center!important;
+}
+@media(max-width:680px){
+ .cm-vs-overlay .cm-vs-fighter[data-house] .cm-combat-portrait img{
+  transform:scale(1.45)!important;
+ }
+ .cm-vs-overlay .cm-vs-fighter.cm-vs-facing-left .cm-combat-portrait img{
+  transform:scaleX(-1) scale(1.45)!important;
+ }
+ .cm-vs-overlay .cm-vs-fighter[data-house] .cm-vs-grade{font-size:clamp(8px,1.8vw,10px)!important}
+ .cm-vs-overlay .cm-vs-fighter[data-house] .cm-vs-house-name{font-size:clamp(9px,2vw,11px)!important}
+}
