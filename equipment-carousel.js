@@ -1,4 +1,4 @@
-import {GEAR,GEAR_BY_ID,modelSource,getGearLevel,isGearUnlocked} from './equipment-catalog.js?v=arsenal-4';
+import {GEAR,GEAR_BY_ID,modelSource,getGearLevel,isGearUnlocked} from './equipment-catalog.js?v=arsenal-5';
 // Prévia e equipamento ativo são estados distintos: navegar nunca equipa uma arma bloqueada.
 export function mountEquipmentCarousel({selected='classico',onSelect=()=>{}}={}){
  const host=document.querySelector('.studio-bows');

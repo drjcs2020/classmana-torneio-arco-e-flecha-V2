@@ -13,7 +13,7 @@ const palettes = {
 };
 const rgb = h => [1,3,5].map(i => parseInt(h.slice(i, i+2), 16) / 255);
 
-import {GEAR_BY_ID,modelSource} from './equipment-catalog.js?v=arsenal-4';
+import {GEAR_BY_ID,modelSource} from './equipment-catalog.js?v=arsenal-5';
 export function initScene(canvas, getSettings) {
   const parent=canvas.parentElement;
   let pc=null, app=null, gl=null, camera=null, bowRoot=null, bowHandle=null, bowString=null, sightAnchor=null,
