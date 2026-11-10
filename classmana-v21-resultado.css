@@ -100,7 +100,7 @@ body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-winner{
 body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-winner span{margin-top:15%!important}
 body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-scores{
  position:relative!important;display:flex!important;align-items:center!important;justify-content:center!important;
- width:100%!important;height:clamp(92px,17dvh,200px)!important;min-width:0!important;margin:0!important;padding:0!important;
+ width:100%!important;height:clamp(92px,17dvh,200px)!important;gap:clamp(22px,2.6vw,42px)!important;min-width:0!important;margin:0!important;padding:0!important;
  background:none!important;border:0!important;box-shadow:none!important;filter:drop-shadow(0 4px 7px #00122dbb)!important;
 }
 body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-total{
@@ -233,14 +233,15 @@ body[data-page="arena"] #view-arena #finish.cm-v21-result:not([data-cm-result-mo
 /* As três molduras foram desenhadas para serem 2:3, jamais 600:840. */
 body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-stage{
   align-items:center!important;justify-items:center!important;
-  grid-template-columns:minmax(0,1fr) minmax(205px,.9fr) minmax(0,1fr)!important;
+  grid-template-columns:minmax(0,1fr) minmax(390px,1.05fr) minmax(0,1fr)!important;
   column-gap:clamp(3px,.8vw,12px)!important;
   padding:0 2px!important;
 }
 body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-player{
-  width:min(29vw,calc((100dvh - 239px)*.667),395px)!important;
+  width:min(31vw,calc((100dvh - 220px)*.667),405px)!important;
   height:auto!important;max-height:100%!important;
   aspect-ratio:2/3!important;overflow:visible!important;
+  transform:scale(1.06)!important;transform-origin:center center!important;
   background:none!important;border:0!important;box-shadow:none!important;
 }
 body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-crop{
@@ -266,7 +267,7 @@ body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-crest{
 }
 /* Identificação dentro das duas plaquetas originais, SEM caixas extras. */
 body[data-page="arena"] #view-arena #finish.cm-v21-result :is(.cm-v21-name,.cm-v21-house){
-  left:14%!important;width:72%!important;max-width:72%!important;
+  left:9.5%!important;width:81%!important;max-width:81%!important;
   padding:0 1px!important;overflow:hidden!important;
   border:0!important;border-radius:0!important;background:none!important;
   box-shadow:none!important;text-overflow:ellipsis!important;white-space:nowrap!important;
@@ -299,6 +300,10 @@ body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-winner[aria-la
 body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-winner[aria-label="VENCEDOR"] span{
   display:none!important; /* texto já faz parte da insígnia */
 }
+body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-winner[aria-label="EMPATE"]{
+  background-image:url('assets/v21/result-art/badge-draw.svg')!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-winner[aria-label="EMPATE"] span{display:none!important;}
 body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-vs-art{
   object-fit:contain!important;filter:drop-shadow(0 2px 7px #071833aa)!important;
 }
@@ -384,6 +389,11 @@ body[data-page="arena"] #view-arena #finish.cm-v21-result[data-cm-result-outcome
  background-image:url('assets/v21/result-art/title-loss-fitted.webp')!important;
  background-size:100% 100%!important;
 }
+body[data-page="arena"] #view-arena #finish.cm-v21-result[data-cm-result-outcome="draw"] .cm-v21-head #finish-title{
+ background-image:url('assets/v21/result-art/title-draw.svg')!important;
+ background-size:100% 100%!important;
+ color:transparent!important;font-size:0!important;text-shadow:none!important;
+}
 /* Placa azul (363 × 53 px) */
 body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-subtitle{
  box-sizing:border-box!important;
@@ -424,7 +434,7 @@ body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-player[data-ho
 body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-player .cm-v21-house,
 body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-player[data-house="C"] .cm-v21-house{
  top:84.8%!important;height:4.9%!important;
- font-size:clamp(8px,.96vw,13px)!important;
+ font-size:clamp(8px,.88vw,12px)!important;
 }
 /* Azuis-safira mais escuros que a cachoeira, com contorno, relevo e brilho. */
 body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-total{
@@ -443,6 +453,7 @@ body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-total{
   width:min(86vw,520px)!important;height:auto!important;aspect-ratio:363 / 53!important;
   margin:-3px auto 0!important;
  }
+ body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-scores{gap:clamp(12px,3.2vw,20px)!important;max-width:min(94vw,340px)!important;}
  body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-total{
   font-size:clamp(30px,7.6vw,56px)!important;-webkit-text-stroke:1.15px #073c79!important;
  }

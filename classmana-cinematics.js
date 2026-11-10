@@ -169,6 +169,28 @@ function versus(config){
   cancel.addEventListener('click',()=>complete(false),{once:true});
  });
 }
+
+// As plaquetas são parte da arte original; ajustar o texto ao espaço real,
+// sem cortar nomes longos ou deixar a Casa passar sobre o filete dourado.
+const resultFitCanvas=document.createElement('canvas');
+function fitResultLabels(){
+ const finish=document.getElementById('finish');
+ if(!finish?.classList.contains('cm-v21-result')||finish.classList.contains('hidden'))return;
+ const ctx=resultFitCanvas.getContext('2d');if(!ctx)return;
+ for(const el of finish.querySelectorAll('.cm-v21-name,.cm-v21-house')){
+  el.style.removeProperty('font-size');
+  const style=getComputedStyle(el),size=parseFloat(style.fontSize);
+  const available=el.clientWidth-10,text=el.textContent||'';
+  if(!(size>0&&available>0))continue;
+  ctx.font=style.fontStyle+' '+style.fontWeight+' '+size+'px '+style.fontFamily;
+  const spacing=parseFloat(style.letterSpacing)||0;
+  const width=ctx.measureText(text).width+Math.max(0,text.length-1)*spacing;
+  if(width>available)el.style.setProperty('font-size',Math.max(7,Math.floor(size*available/width*10)/10)+'px','important');
+  el.title=text;
+ }
+}
+window.addEventListener('resize',()=>requestAnimationFrame(fitResultLabels));
+
 function resultView({player,house,rival,rivalHouse,gender='m',rivalGender='m',ownShots=[],rivalShots=[],opponent='—',mode='duel',ownTotal=null,rivalTotal=null}){
  const finish=document.getElementById('finish');
  const card=finish?.querySelector('.finish-card');
@@ -218,8 +240,10 @@ function resultView({player,house,rival,rivalHouse,gender='m',rivalGender='m',ow
  if(!rivalOk&&!mirrored)scores.append(node('small','cm-v21-await','AGUARDANDO ADVERSÁRIO'));
  const stage=node('div','cm-v21-stage');stage.append(left,scores,right);
  const anchor=card.querySelector('#finish-results');if(anchor)anchor.before(stage);else card.append(stage);
+ requestAnimationFrame(()=>requestAnimationFrame(fitResultLabels));
+ document.fonts?.ready?.then(()=>requestAnimationFrame(fitResultLabels));
  const replay=card.querySelector('#play-again');
- if(replay){replay.replaceChildren(node('span','cm-result-replay-label','▶ JOGAR NOVAMENTE'));replay.setAttribute('aria-label','Jogar novamente');}
+ if(replay){const local=mode==='bot'||mode==='practice';replay.replaceChildren(node('span','cm-result-replay-label',local?'▶ JOGAR NOVAMENTE':'▶ NOVO DESAFIO'));replay.setAttribute('aria-label',local?'Jogar novamente com as mesmas configurações':'Voltar para escolher um novo desafio');}
  const back=card.querySelector('#cm-v2-result-home');
  if(back){back.textContent='⌂ VOLTAR AO MENU';back.setAttribute('aria-label','Voltar ao menu de desafios');}
 }

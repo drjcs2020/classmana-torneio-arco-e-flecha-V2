@@ -3,7 +3,7 @@ import {GEAR,GEAR_BY_ID,getGearLevel,isGearUnlocked} from './equipment-catalog.j
 import {mountEquipmentInventory} from './equipment-inventory.js?v=inventory-1';
 import {CIRCUITS,LEVELS,targetMotion,obstacleBlocks,distanceDifficulty,flightSeconds} from './arena-difficulty.js?v=3';
 import {arenaAudio} from './arena-audio.js?v=lobbydefault49';
-import {cinematics} from './classmana-cinematics.js?v=treino-arte-1';
+import {cinematics} from './classmana-cinematics.js?v=20261110-resultfix-1';
 import {initAtmosphere} from './arena-atmosphere.js?v=no-crowd15';
 import {online} from './online-client.js?v=api10';
 import {mountSpriteHUD} from './sprite-hud.js?v=1';
@@ -177,6 +177,35 @@ function cmReturnToChallenge(){
  }else{
   setLobbyStep('reino');
  }
+}
+
+// Reinicia imediatamente a MESMA configuração de treino, sem retornar ao lobby.
+// Desafios online não podem ser reexecutados como se o adversário já tivesse jogado.
+function cmReplayCurrentMatch(){
+ const previous=match;
+ if(!previous||!['bot','practice'].includes(previous.mode)){cmReturnToChallenge();return;}
+ if(startMatchPending||document.body.dataset.page!=='arena')return;
+ const course=CIRCUITS[previous.level]||CIRCUITS.iniciante;
+ holding=false;
+ match={...previous,scores:[],running:true,locked:false,paused:false,
+  pauseSince:null,freezeTime:null,stageStartedAt:performance.now(),
+  wind:0,shift:0,distance:course[0],online:null,onlineShots:[],
+  onlineReplay:[],onlineReplayPoints:0,onlineSaveFailed:false,
+  botShots:[],botTotal:null,seed:Math.floor(rand(100000,999999))};
+ reticle={x:.50,y:.45};
+ cmResetResultPresentation();
+ $('finish').removeAttribute('data-cm-result-outcome');
+ $('finish').removeAttribute('data-cm-result-mode');
+ $('stage').classList.remove('aiming','firing');
+ $('hit').classList.remove('show');$('hit').textContent='';
+ hideDuelTurn();
+ scene?.setPower(0);
+ spriteHud?.setPower?.(0);
+ spriteHud?.setPaused?.(false);
+ arenaAudio.setActive(true);
+ $('instruction').textContent='MOVA O ARCO PARA MIRAR · SEGURE PARA PUXAR · SOLTE PARA DISPARAR';
+ ensureScene();changeTarget();updateReticle();uiHud();
+ try{sessionStorage.setItem('cm_active_archery_match_v2',JSON.stringify(match))}catch{}
 }
 window.classmanaReturnToChallenge=cmReturnToChallenge;
 function openView(name){
@@ -1163,7 +1192,7 @@ $('my-team').addEventListener('change',()=>{
 });$('start-game').addEventListener('click',startMatch);$('rank-play').addEventListener('click',()=>openView('inicio'));$('rules-play').addEventListener('click',()=>openView('inicio'));$('leave-arena').addEventListener('click',()=>{
  if(match?.running&&!confirm('Abandonar a rodada atual e voltar aos desafios?'))return;
  cmReturnToChallenge();
-});$('play-again').addEventListener('click',cmReturnToChallenge);$('cm-v2-result-home')?.addEventListener('click',cmReturnToChallenge);$('share-result').addEventListener('click',()=>{if(match?.onlineSaveFailed)finishMatch();else if(!match?.online)share()});
+});$('play-again').addEventListener('click',cmReplayCurrentMatch);$('cm-v2-result-home')?.addEventListener('click',cmReturnToChallenge);$('share-result').addEventListener('click',()=>{if(match?.onlineSaveFailed)finishMatch();else if(!match?.online)share()});
 const world=$('world');world.addEventListener('pointerdown',e=>{if(!match?.running||match.locked||match.paused)return;e.preventDefault();world.setPointerCapture(e.pointerId);holding=true;pointerStart=Date.now();aim(e);scene?.setPower(.28);$('stage').classList.add('aiming');arenaAudio.play('draw');$('instruction').textContent='ARRASTE PARA MOVER O ARCO • SOLTE PARA ATIRAR'});world.addEventListener('pointermove',e=>{if(!match?.running||match.locked||match.paused)return;if(holding||e.pointerType==='mouse')aim(e);if(holding)scene?.setPower(chargePower())});world.addEventListener('pointerup',e=>{if(!holding)return;e.preventDefault();aim(e);holding=false;$('stage').classList.remove('aiming');$('instruction').textContent='MOVA OU ARRASTE PARA MIRAR • SEGURE PARA PUXAR • SOLTE PARA ATIRAR';const p=chargePower();scene?.setPower(p);spriteHud?.setPower(p);fire(p);uiHud()});world.addEventListener('pointercancel',()=>{holding=false;$('stage').classList.remove('aiming');scene?.setPower(0)});
 document.addEventListener('keydown',e=>{if(view!=='arena'||!match?.running||match.locked)return;let action=true;const step=e.shiftKey?.022:.008;switch(e.code){case'ArrowUp':reticle.y=clamp(reticle.y-step,.08,.92);break;case'ArrowDown':reticle.y=clamp(reticle.y+step,.08,.92);break;case'ArrowLeft':reticle.x=clamp(reticle.x-step,.06,.94);break;case'ArrowRight':reticle.x=clamp(reticle.x+step,.06,.94);break;case'Space':fire(1);break;default:action=false}if(action){e.preventDefault();updateReticle()}});
 setInterval(()=>{if(holding&&!match?.paused){scene?.setPower(chargePower());uiHud()}},60);
