@@ -353,9 +353,11 @@ export function initScene(canvas, getSettings) {
   function buildBow(){
     bowRoot=new pc.Entity('Modern competition recurve bow');
     camera.addChild(bowRoot);
-    // Arco grande, em primeira pessoa: aproximadamente 2/3 da altura útil.
-    // A mira ficará presa ao próprio arco, e a posição é atualizada em updateBowAim.
-    bowRoot.setLocalScale(.56,.56,.56);
+    // Sem fantasma: o arco provisório fica oculto até ambos os GLBs terminarem.
+    bowRoot.enabled=false;
+    bowRoot.__bowLoaded=false;bowRoot.__arrowLoaded=false;
+    bowRoot.__bowFailed=false;bowRoot.__arrowFailed=false;
+    bowRoot.setLocalScale(.64,.64,.64);
     bowRoot.setLocalPosition(.32,0,-2.7);
     const pp=bowPalette(),body=material(pp.body,{metal:.79,rough:.19}),gold=material(pp.trim,{metal:.9,rough:.18}),
       dark=material('#1b1c20',{metal:.46,rough:.35}),silver=material('#d5e0e7',{metal:.88,rough:.23}),red=material('#dc342a'),ivory=material('#faf0db');
@@ -380,8 +382,9 @@ export function initScene(canvas, getSettings) {
     bowRoot.addChild(arrowLoaded);
     // A flecha precisa ter comprimento visível na câmera, não apontar
     // diretamente para -Z como um pequeno traço visto de ponta.
-    arrowLoaded.setLocalScale(1.60,1.60,1.60);
-    arrowLoaded.setLocalEulerAngles(0,40,0);
+    arrowLoaded.setLocalScale(2.40,2.40,2.40);
+    // O GLB é orientado para -Z: apenas leve perspectiva para mostrar a haste.
+    arrowLoaded.setLocalEulerAngles(0,12,0);
     arrowLoaded.setLocalPosition(.02,-.03,.10);
     tube('black arrow shaft',[[0,0,.53],[0,0,.18],[0,0,-.65]],[.012,.012,.011],dark,arrowLoaded,12);
     primitive('cone','machined arrow point',[0,0,-.70],[.036,.09,.036],silver,arrowLoaded,[90,0,0]);
@@ -465,16 +468,32 @@ export function initScene(canvas, getSettings) {
   function selectedArrow(){
     return (GEAR_BY_ID[equipment.bow]||GEAR_BY_ID.classico).arrow;
   }
+  // Só revelar a arma quando arco E flecha GLB terminarem de carregar.
+  function revealLoadedWeapon(owner){
+    if(owner!==bowRoot||!owner.__bowLoaded||!owner.__arrowLoaded)return;
+    for(const child of owner.__fallbacks||[])
+      child.enabled=owner.__bowFailed||child===arrowLoaded||child===sightAnchor;
+    owner.enabled=true;
+    updateBowAim();
+    parent.dataset.glbBow=owner.__bowFailed?'fallback':'ready';
+    parent.dataset.glbArrow=owner.__arrowFailed?'fallback':'ready';
+  }
   function loadArrowModel(owner){
     const file=selectedArrow(),id=equipment.bow;
     const token=owner.__arrowLoadToken=(owner.__arrowLoadToken||0)+1;
     loadModel('models3d/equipment/'+file,(err,res)=>{
-      if(err||owner!==bowRoot||id!==equipment.bow||!arrowLoaded||owner.__arrowLoadToken!==token)return;
+      if(owner!==bowRoot||id!==equipment.bow||!arrowLoaded||owner.__arrowLoadToken!==token)return;
+      if(err||!res){
+        owner.__arrowFailed=true;owner.__arrowLoaded=true;
+        revealLoadedWeapon(owner);return;
+      }
       arrowLoaded.__mesh3d?.destroy();
       const mesh=res.instantiateRenderEntity();mesh.name='Flecha '+file;
       appendArrowModel(arrowLoaded,mesh,file);
       for(const child of arrowLoaded.children)if(child!==mesh)child.enabled=false;
-      arrowLoaded.__mesh3d=mesh;parent.dataset.glbArrow='ready';
+      arrowLoaded.__mesh3d=mesh;
+      owner.__arrowLoaded=true;
+      revealLoadedWeapon(owner);
     });
   }
   // Calibração de arco: medir o eixo visual dominante das peças do GLB.
@@ -535,7 +554,11 @@ export function initScene(canvas, getSettings) {
       return {min,max,size:max.map((v,i)=>v-min[i])};
     }
     let b=bounds();
-    if(gear.type==='Arco'){
+    if(gear.id==='classico'){
+      // bow-practice.glb: eixo visual original a 45°; +45° = vertical.
+      model.setLocalEulerAngles(0,0,45);
+      b=bounds();
+    }else if(gear.type==='Arco'){
       const axis=bowVisualAxis(model);
       if(axis!==null){
         // Corrigir a inclinação real das malhas, não apenas o ângulo do catálogo.
@@ -574,21 +597,23 @@ export function initScene(canvas, getSettings) {
     const owner=bowRoot,id=equipment.bow,gear=GEAR_BY_ID[id]||GEAR_BY_ID.classico;
     if(!owner)return;
     const token=owner.__bowLoadToken=(owner.__bowLoadToken||0)+1;
+    owner.enabled=false;
+    owner.__bowLoaded=false;owner.__arrowLoaded=false;
+    owner.__bowFailed=false;owner.__arrowFailed=false;
     owner.__mesh3d?.destroy();owner.__mesh3d=null;
-    for(const child of owner.__fallbacks||[])child.enabled=true;
-    parent.dataset.glbBow='loading';
+    parent.dataset.glbBow='loading';parent.dataset.glbArrow='loading';
     loadArrowModel(owner);
     loadModel('models3d/equipment/'+gear.model,(err,res)=>{
-      if(err||owner!==bowRoot||id!==equipment.bow||owner.__bowLoadToken!==token)return;
+      if(owner!==bowRoot||id!==equipment.bow||owner.__bowLoadToken!==token)return;
+      if(err||!res){
+        owner.__bowFailed=true;owner.__bowLoaded=true;
+        revealLoadedWeapon(owner);return;
+      }
       owner.__mesh3d?.destroy();
       const mesh=res.instantiateRenderEntity();mesh.name=gear.name;
       fitWeaponModel(mesh,gear);
-      owner.__mesh3d=mesh;
-      // Preserva a mira circular e seu suporte mesmo que o GLB não possua mira.
-      for(const child of owner.__fallbacks||[]){
-        child.enabled=child===arrowLoaded||child===sightAnchor;
-      }
-      parent.dataset.glbBow='ready';parent.dataset.bowModel=gear.model;
+      owner.__mesh3d=mesh;owner.__bowLoaded=true;
+      revealLoadedWeapon(owner);
     });
   }
 
@@ -610,7 +635,7 @@ export function initScene(canvas, getSettings) {
     bowRoot.setLocalPosition(local.sub(offset));
     if(arrowLoaded){
       const crossbow=GEAR_BY_ID[equipment.bow]?.type==='Besta';
-      arrowLoaded.setLocalEulerAngles(0,crossbow?12:40,0);
+      arrowLoaded.setLocalEulerAngles(0,crossbow?5:12,0);
       arrowLoaded.setLocalPosition(crossbow?0:.02,crossbow?.09:-.03,.08+.18*power);
     }
     if(bowString)bowString.setLocalPosition(0,0,.19*power);
@@ -625,6 +650,7 @@ export function initScene(canvas, getSettings) {
       const pos=new pc.Vec3().lerp(s.start,s.end,t);
       pos.y+=4*arc*t*(1-t);
       projectile.setPosition(pos);
+      if(projectile.__trail)projectile.__trail.enabled=t<.72;
       const direction=new pc.Vec3(
         s.end.x-s.start.x,
         s.end.y-s.start.y+4*arc*(1-2*t),
@@ -658,18 +684,23 @@ export function initScene(canvas, getSettings) {
   function createArrowProjectile(){
     if(!app)return null;
     const e=new pc.Entity('Flying arrow projectile');
+    // A flecha em voo precisa continuar legível, mesmo de frente.
+    e.setLocalScale(1.65,1.65,1.65);
     const shaft=material('#14181d',{metal:.43,rough:.32}),tip=material('#e4e7e8',{metal:.85,rough:.18}),red=material('#df3934'),white=material('#e8dfc9');
     tube('projectile shaft',[[0,0,.36],[0,0,.05],[0,0,-.52]],[.012,.012,.011],shaft,e,10);
     primitive('cone','projectile arrow point',[0,0,-.55],[.038,.08,.038],tip,e,[90,0,0]);
     for(let i=0;i<3;i++){let a=i*Math.PI*2/3;
       tube('projectile feathers '+i,[[0,0,.3],[Math.cos(a)*.09,Math.sin(a)*.09,.21],[0,0,.11]],[.01,.024,.01],i===1?white:red,e,5);
     }
+    const glint=material('#ffe1a0',{metal:.12,rough:.26,glow:1.15});
+    const trail=tube('flight glint',[[0,0,.42],[0,0,.86],[0,0,1.28]],[.016,.010,.002],glint,e,8);
+    e.__trail=trail;
     root().addChild(e);
     const file=selectedArrow(),resource=modelAssets['models3d/equipment/'+file];
     if(resource){
       const model=resource.instantiateRenderEntity();model.name='Flecha GLB em voo';
       appendArrowModel(e,model,file);
-      for(const child of e.children)if(child!==model)child.enabled=false;
+      for(const child of e.children)if(child!==model&&child!==trail)child.enabled=false;
     }
     return e;
   }
@@ -685,7 +716,9 @@ export function initScene(canvas, getSettings) {
     const start=arrowLoaded?.getPosition().clone()||new pc.Vec3(.52,1.64,5.05);
     const end=new pc.Vec3(toX,toY,target.z+.42*scale);
     if(arrowLoaded)arrowLoaded.enabled=false;
-    projectile.enabled=true;projectile.setPosition(start);projectile.setEulerAngles(0,0,0);
+    projectile.enabled=true;
+    if(projectile.__trail)projectile.__trail.enabled=true;
+    projectile.setPosition(start);projectile.setEulerAngles(0,0,0);
     const meters=getSettings()?.distance||30;
     const duration=.43+.42*Math.pow(Math.max(10,meters)/80,.56)+.13*(1-shotPower);
     const trajectory=Math.pow(Math.max(10,meters)/30,.45);
