@@ -367,12 +367,14 @@ export function initScene(canvas, getSettings) {
     // X negativo move o topo para -Z, isto é, na direção do alvo.
     bowVisualPivot=new pc.Entity('Bow visual calibration');
     const isCrossbow=GEAR_BY_ID[equipment.bow]?.type==='Besta';
-    // Somente pitch (topo levemente à frente do arqueiro). A correção
-    // do roll é aplicada UMA VEZ no próprio GLB, após medir sua geometria.
-    // Evita somar +85° a um modelo que já nasce a +45°.
-    bowVisualPivot.setLocalEulerAngles(isCrossbow?0:-12,0,0);
+    // O arco aumenta 20% SEM ampliar a mira nem a espessura da flecha.
+    // Inclinação suave: 8° à frente (pitch) e 6° à esquerda (roll),
+    // em direção ao alvo, com o centro da arma preso ao mesmo pivot.
+    bowVisualPivot.setLocalScale(1.20,1.20,1.20);
+    bowVisualPivot.setLocalEulerAngles(isCrossbow?0:-8,0,isCrossbow?0:6);
     bowRoot.addChild(bowVisualPivot);
     bowFallbackRoot=new pc.Entity('Vertical procedural bow fallback');
+    bowFallbackRoot.setLocalScale(1.20,1.20,1.20);
     bowRoot.addChild(bowFallbackRoot);
     const pp=bowPalette(),body=material(pp.body,{metal:.79,rough:.19}),gold=material(pp.trim,{metal:.9,rough:.18}),
       dark=material('#1b1c20',{metal:.46,rough:.35}),silver=material('#d5e0e7',{metal:.88,rough:.23}),red=material('#dc342a'),ivory=material('#faf0db');
@@ -396,14 +398,17 @@ export function initScene(canvas, getSettings) {
     // A single arrow asset: its colors DO NOT change when changing House.
     arrowLoaded=new pc.Entity('Arrow nock - child of WeaponPivot');
     bowRoot.addChild(arrowLoaded);
-    // A escala definitiva vem dos limites geométricos do GLB. Não
-    // ampliar um arquivo de 37 unidades com um fator 1.85.
+    // A flecha GLB já está calibrada; só seu comprimento será dobrado,
+    // mantendo a espessura original para não virar uma tora.
     arrowLoaded.setLocalScale(1,1,1);
-    // +14° faz a haste convergir visualmente para a mira à esquerda.
+    // A ponta aponta para a mira circular à esquerda, com o nock no punho.
     arrowLoaded.setLocalEulerAngles(0,30,0);
     arrowLoaded.setLocalPosition(0,0,.45);
     const arrowFallback=new pc.Entity('Fallback arrow - nock aligned');
-    arrowFallback.setLocalPosition(0,0,-.53);
+    // O fallback também dobra o comprimento, mantendo a ponta fina.
+    // Recuar a origem preserva a traseira em Z=0.
+    arrowFallback.setLocalPosition(0,0,-1.06);
+    arrowFallback.setLocalScale(1,1,2);
     arrowLoaded.addChild(arrowFallback);
     tube('black arrow shaft',[[0,0,.53],[0,0,.18],[0,0,-.65]],[.012,.012,.011],dark,arrowFallback,12);
     primitive('cone','machined arrow point',[0,0,-.70],[.036,.09,.036],silver,arrowFallback,[90,0,0]);
@@ -419,7 +424,7 @@ export function initScene(canvas, getSettings) {
   }
   // Calibração feita nos GLBs COMPLETOS, incluindo as matrizes internas
   // de cada nó. A ponta aponta para -Z, a traseira fica em Z=0 e o
-  // comprimento é 1.40 unidade para os três modelos.
+  // comprimento base é 1.40 unidade para os três modelos.
   // Eixos da cena original: standard -X (0.95106), precision +X (5.82026),
   // power +Z (84.41818). A espessura é reduzida após a rotação.
   const arrowSpecs={
@@ -488,7 +493,8 @@ export function initScene(canvas, getSettings) {
     // Nunca calcular escala por AABB runtime: o arquivo standard possui
     // rotação e escala internas, e essa medição produzia uma tora gigante.
     const slim=new pc.Entity('Arrow calibrated shaft');
-    slim.setLocalScale(spec.width,spec.width,1);
+    // Comprimento 2x; espessura inalterada (somente eixo longitudinal).
+    slim.setLocalScale(spec.width,spec.width,2);
     parentEntity.addChild(slim);
     model.setLocalEulerAngles(...spec.rot);
     model.setLocalScale(spec.scale,spec.scale,spec.scale);
@@ -506,7 +512,7 @@ export function initScene(canvas, getSettings) {
       child.enabled=owner.__bowFailed||child===arrowLoaded||child===sightAnchor;
     owner.enabled=true;
     updateBowAim();
-    parent.dataset.weaponPose='bow-and-arrow-calibrated-node-matrices-v3';
+    parent.dataset.weaponPose='bow-120pct-arrow-200pct-grip-aligned-v4';
     parent.dataset.glbBow=owner.__bowFailed?'fallback':'ready';
     parent.dataset.glbArrow=owner.__arrowFailed?'fallback':'ready';
   }
@@ -629,17 +635,20 @@ export function initScene(canvas, getSettings) {
       model.setLocalPosition(...gear.offset);
     }
     bowVisualPivot.addChild(model);
-    // Verificar o eixo visual FINAL e corrigir só o roll residual.
+    // Ajustar o eixo real do GLB ao ângulo VISUAL desejado (96°):
+    // vertical + 6° à esquerda, sem cancelar a inclinação na calibração.
     if(gear.type==='Arco'){
       const axis=bowVisualAxis(model);
       if(axis!==null&&Number.isFinite(axis)){
-        let delta=90-axis;
+        let delta=96-axis;
         while(delta>90)delta-=180;
         while(delta< -90)delta+=180;
-        if(Math.abs(delta)>3&&Math.abs(delta)<80)
-          bowVisualPivot.setLocalEulerAngles(-12,0,delta);
+        if(Math.abs(delta)>2&&Math.abs(delta)<50){
+          const roll=bowVisualPivot.getLocalEulerAngles().z;
+          bowVisualPivot.setLocalEulerAngles(-8,0,roll+delta);
+        }
         parent.dataset.bowAxisMeasured=String(Math.round(axis));
-        parent.dataset.bowRollCorrection=String(Math.round(Math.abs(delta)>3&&Math.abs(delta)<80?delta:0));
+        parent.dataset.bowRollCorrection=String(Math.round(Math.abs(delta)>2&&Math.abs(delta)<50?delta:0));
       }
     }
     parent.dataset.bowModel=gear.model;
@@ -687,7 +696,10 @@ export function initScene(canvas, getSettings) {
       // a rotação de 45°. A haste passa pelo punho, levemente acima,
       // apontando para a mira em vez de ficar vertical/de lado.
       if(!pendingShot){
-        arrowLoaded.setLocalPosition(crossbow?0:.14,crossbow?.09:.10,.34+.12*power);
+        // Encaixe junto à empunhadura: ~1 cm à direita e ~2 cm acima
+        // da pose anterior na projeção; Z mais próximo do plano do arco.
+        // A ponta permanece voltada para a mira/centro do alvo.
+        arrowLoaded.setLocalPosition(crossbow?0:.20,crossbow?.09:.22,.20+.10*power);
         arrowLoaded.setLocalEulerAngles(0,crossbow?0:30,0);
       }
     }
@@ -737,8 +749,13 @@ export function initScene(canvas, getSettings) {
     if(approved){
       const mesh=approved.instantiateRenderEntity();mesh.name='Flecha GLB cravada';
       const calibrated=appendArrowModel(e,mesh,file);
-      // A ponta atravessa 5 cm da superfície do alvo.
-      calibrated.setLocalPosition(.08,-.05,1.35);
+      // A flecha cravada mantém o MESMO comprimento e espessura em
+      // unidades do mundo que a flecha disparada, em qualquer distância.
+      const targetScale=Math.max(.001,targetRoot.getLocalScale().x);
+      calibrated.setLocalScale(calibrated.getLocalScale().clone().mulScalar(.60/targetScale));
+      // Ponta 5 cm dentro da superfície frontal do disco.
+      const worldArrowLength=1.40*2*.60;
+      calibrated.setLocalPosition(.08,-.05,(worldArrowLength-.05)/targetScale+.052-.15);
       impactMarks.push(e);return;
     }
     const dark=material('#1b2228',{metal:.45,rough:.35}),red=material('#e33d31'),white=material('#eee7cf');
@@ -765,10 +782,10 @@ export function initScene(canvas, getSettings) {
     // instância, escala, malha, material, origem ou rotação no disparo.
     projectile=arrowLoaded;
     const start=projectile.getPosition().clone();
-    // O ponto da flecha está ~0,72 unidade local à frente da traseira
-    // nos três GLBs normalizados. Encerrar quando a PONTA tocar o alvo,
+    // A ponta está a 2,8 unidades locais da traseira após alongamento 2x.
+    // Encerrar quando a PONTA tocar o alvo,
     // em vez de atravessá-lo com o centro do modelo.
-    const tipLocalZ=bowRoot.__arrowFailed?-1.23:-1.40;
+    const tipLocalZ=bowRoot.__arrowFailed?-2.46:-2.80;
     const tipWorld=projectile.getWorldTransform().transformPoint(new pc.Vec3(0,0,tipLocalZ));
     const tipLead=Math.max(0,start.z-tipWorld.z);
     const end=new pc.Vec3(toX,toY,target.z+.42*scale+tipLead);
