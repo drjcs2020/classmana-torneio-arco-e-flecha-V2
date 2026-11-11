@@ -394,3 +394,54 @@ body.cm-arsenal-opened{overflow:hidden!important}
  #cm-arsenal-modal .cm-arsenal-equip{width:100%}
 }
 @media(prefers-reduced-motion:reduce){.cm-inventory-crest{transition:none!important}}
+
+
+/* CLASSMANA · artes independentes do acesso ao Arsenal (2026-11-10).
+   SOMENTE a peça central do inventário: não altera cenário, herói ou confirmar. */
+body[data-page="lobby"] #view-inicio[data-step="heroi"] .studio-bows.cm-inventory-entry{
+ gap:clamp(1px,.3dvh,4px)!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="heroi"] .studio-bows.cm-inventory-entry>.cm-inventory-panel-art,
+.character-studio .studio-bows.cm-inventory-entry>.cm-inventory-panel-art{
+ display:block!important;flex:0 1 auto!important;
+ box-sizing:border-box!important;
+ width:min(100%,390px)!important;
+ height:clamp(170px,34dvh,270px)!important;
+ max-width:390px!important;max-height:270px!important;
+ object-fit:contain!important;
+ margin:0 auto -7px!important;
+ padding:0!important;pointer-events:none!important;
+ filter:drop-shadow(0 5px 7px #07102999)!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="heroi"] .studio-bows.cm-inventory-entry>.cm-inventory-launch,
+.character-studio .studio-bows.cm-inventory-entry>.cm-inventory-launch{
+ display:block!important;flex:0 0 auto!important;
+ width:min(100%,360px)!important;
+ max-width:360px!important;height:auto!important;
+ aspect-ratio:6/1!important;min-height:0!important;
+ padding:0!important;margin:0 auto!important;
+ background:none!important;border:0!important;box-shadow:none!important;
+ filter:drop-shadow(0 3px 5px #0008)!important;
+ cursor:pointer!important;overflow:visible!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="heroi"] .studio-bows.cm-inventory-entry .cm-inventory-open-art{
+ display:block!important;width:100%!important;height:100%!important;
+ object-fit:contain!important;pointer-events:none!important;
+ transition:transform .15s ease,filter .15s ease!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="heroi"] .cm-inventory-launch:hover .cm-inventory-open-art,
+body[data-page="lobby"] #view-inicio[data-step="heroi"] .cm-inventory-launch:focus-visible .cm-inventory-open-art{
+ transform:scale(1.035)!important;filter:brightness(1.13)!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="heroi"] .studio-bows.cm-inventory-entry>.cm-inventory-equipped{
+ margin:2px auto 0!important;
+ font-size:clamp(10px,.9vw,12px)!important;
+}
+@media(max-width:700px){
+ body[data-page="lobby"] #view-inicio[data-step="heroi"] .studio-bows.cm-inventory-entry>.cm-inventory-panel-art{
+  width:min(100%,310px)!important;height:clamp(145px,30dvh,210px)!important;
+ }
+ body[data-page="lobby"] #view-inicio[data-step="heroi"] .studio-bows.cm-inventory-entry>.cm-inventory-launch{
+  width:min(100%,310px)!important;
+ }
+}
