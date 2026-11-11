@@ -203,7 +203,7 @@ export function mountEquipmentInventory({selected='classico',onSelect=()=>{}}={}
   const item=GEAR_BY_ID[equipped]||GEAR[0];
   summary.textContent='✓ EQUIPADO: '+item.name+' · '+(confirmed?'NÍVEL '+getGearLevel(wins):'AGUARDANDO PLACAR');
   q('.cm-arsenal-wins').textContent=confirmed?String(wins):'—';
-  q('.cm-arsenal-level').textContent=confirmed?'Nv. '+getGearLevel(wins):'Nv. 1';
+  q('.cm-arsenal-level').textContent=confirmed?String(getGearLevel(wins)):'1';
  }
  function renderCards(){
   const items=ALL.filter(item=>item.type===category);
