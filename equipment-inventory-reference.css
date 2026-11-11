@@ -679,47 +679,83 @@
 #cm-arsenal-modal.cm-art-progress .cm-arsenal-progress>span:nth-of-type(2){top:68.4%!important}
 
 
-/* PROGRESSO V7 — medidas da arte real de 504×598 pixels.
-   Separador em x=219; campos de texto em x=229..430.
-   Primeira janela y=180..314; segunda y=340..472.
-   O texto ocupa somente a coluna direita de cada janela. */
-#cm-arsenal-modal.cm-art-progress .cm-arsenal-progress{
- width:min(100%,205px)!important;
- max-width:205px!important;
- height:auto!important;
- aspect-ratio:504/598!important;
- position:relative!important;
- background-image:url('assets/ui/arsenal-painel-progresso.png')!important;
- background-position:center!important;
- background-size:100% 100%!important;
- background-repeat:no-repeat!important;
- isolation:isolate!important;
- overflow:hidden!important;
+/* CORREÇÃO LOCAL — coluna esquerda (categorias e progresso).
+   Não modifica coleção, painel 3D, paginação nem dados de progresso. */
+@media(min-width:781px){
+ #cm-arsenal-modal .cm-arsenal-sidebar{
+  padding:0 2px!important;
+  gap:0!important;
+  align-items:stretch!important;
+  justify-content:flex-start!important;
+ }
+ #cm-arsenal-modal .cm-arsenal-section-label{
+  flex:0 0 26px!important;min-height:0!important;
+  display:flex!important;align-items:flex-start!important;justify-content:center!important;
+  padding:0!important;margin:-8px 0 5px!important;
+  font:900 clamp(12px,1vw,16px)/1.1 Georgia,serif!important;
+  text-align:center!important;color:#fff0bf!important;
+ }
+ #cm-arsenal-modal .cm-arsenal-categories{
+  flex:0 0 auto!important;gap:clamp(4px,.9vh,10px)!important;
+  align-items:center!important;justify-content:flex-start!important;
+ }
+ #cm-arsenal-modal .cm-arsenal-categories button,
+ #cm-arsenal-modal .cm-arsenal-categories button.cm-arsenal-png-button{
+  flex:0 0 clamp(52px,8vh,76px)!important;
+  width:100%!important;height:clamp(52px,8vh,76px)!important;
+  min-height:0!important;max-width:none!important;
+  background-size:contain!important;
+  background-position:center!important;
+ }
+ #cm-arsenal-modal.cm-art-progress .cm-arsenal-progress{
+  display:block!important;position:relative!important;
+  flex:0 0 auto!important;
+  width:min(100%,220px)!important;max-width:220px!important;
+  height:auto!important;aspect-ratio:504/598!important;
+  margin:clamp(6px,1.6vh,16px) auto 0!important;
+  padding:0!important;
+  background:url('assets/ui/arsenal-painel-progresso.png') center/100% 100% no-repeat!important;
+  border:0!important;box-shadow:none!important;
+  overflow:hidden!important;
+ }
+ #cm-arsenal-modal.cm-art-progress .cm-arsenal-progress p{
+  position:absolute!important;width:1px!important;height:1px!important;
+  overflow:hidden!important;clip-path:inset(50%)!important;
+ }
+ #cm-arsenal-modal.cm-art-progress .cm-arsenal-wins,
+ #cm-arsenal-modal.cm-art-progress .cm-arsenal-level{
+  position:absolute!important;z-index:2!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  left:46%!important;width:40%!important;height:8%!important;min-height:0!important;
+  margin:0!important;padding:0!important;
+  font:900 clamp(16px,1.65vw,27px)/1 Georgia,serif!important;
+  letter-spacing:0!important;white-space:nowrap!important;
+  color:#fff3c5!important;text-align:center!important;text-shadow:0 2px 3px #000!important;
+ }
+ #cm-arsenal-modal.cm-art-progress .cm-arsenal-wins{top:32.7%!important}
+ #cm-arsenal-modal.cm-art-progress .cm-arsenal-level{top:59.2%!important}
+ #cm-arsenal-modal.cm-art-progress .cm-arsenal-progress>span{
+  position:absolute!important;z-index:2!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  left:43%!important;width:46%!important;height:8%!important;min-height:0!important;
+  margin:0!important;padding:0!important;
+  font:800 clamp(8px,.74vw,11px)/1.08 Nunito,Arial,sans-serif!important;
+  color:#f0f5ff!important;text-align:center!important;
+  white-space:normal!important;overflow-wrap:normal!important;
+  text-shadow:0 1px 2px #000!important;
+ }
+ #cm-arsenal-modal.cm-art-progress .cm-arsenal-progress>span:nth-of-type(1){top:41%!important}
+ #cm-arsenal-modal.cm-art-progress .cm-arsenal-progress>span:nth-of-type(2){top:67.6%!important}
 }
-#cm-arsenal-modal.cm-art-progress .cm-arsenal-wins,
-#cm-arsenal-modal.cm-art-progress .cm-arsenal-level{
- position:absolute!important;
- left:45.4%!important;width:40.1%!important;
- display:flex!important;align-items:center!important;justify-content:center!important;
- height:7.8%!important;min-height:0!important;
- margin:0!important;padding:0!important;
- font:900 clamp(17px,1.6vw,25px)/1 Georgia,serif!important;
- color:#fff0ba!important;text-shadow:0 2px 3px #000!important;
- letter-spacing:0!important;white-space:nowrap!important;
+@media(min-width:781px) and (max-height:700px){
+ #cm-arsenal-modal .cm-arsenal-categories button,
+ #cm-arsenal-modal .cm-arsenal-categories button.cm-arsenal-png-button{
+  flex-basis:clamp(46px,7.4vh,58px)!important;
+  height:clamp(46px,7.4vh,58px)!important;
+ }
+ #cm-arsenal-modal.cm-art-progress .cm-arsenal-progress{
+  width:min(100%,178px)!important;max-width:178px!important;
+  margin-top:6px!important;
+ }
+ #cm-arsenal-modal .cm-arsenal-section-label{margin-top:-4px!important}
 }
-#cm-arsenal-modal.cm-art-progress .cm-arsenal-wins{top:33.2%!important}
-#cm-arsenal-modal.cm-art-progress .cm-arsenal-level{top:60.1%!important}
-#cm-arsenal-modal.cm-art-progress .cm-arsenal-progress>span{
- position:absolute!important;
- left:45%!important;width:41%!important;
- height:8.3%!important;min-height:0!important;
- display:flex!important;align-items:flex-start!important;justify-content:center!important;
- margin:0!important;padding:0!important;
- color:#f4f5ff!important;
- font:800 clamp(8px,.77vw,11px)/1.05 Nunito,Arial,sans-serif!important;
- text-align:center!important;
- white-space:normal!important;overflow-wrap:normal!important;
- text-shadow:0 1px 3px #000!important;
-}
-#cm-arsenal-modal.cm-art-progress .cm-arsenal-progress>span:nth-of-type(1){top:41.7%!important}
-#cm-arsenal-modal.cm-art-progress .cm-arsenal-progress>span:nth-of-type(2){top:68.5%!important}
