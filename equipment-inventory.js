@@ -237,15 +237,17 @@ export function mountEquipmentInventory({selected='classico',onSelect=()=>{}}={}
   equipButton.disabled=!canEquip;
   equipButton.textContent=isArrow?'VINCULADA À ARMA':!unlocked(item)?'🔒 BLOQUEADA':isEquipped?'✓ EQUIPADA':'✓ EQUIPAR';
   equipButton.dataset.state=isArrow?'linked':!unlocked(item)?'locked':isEquipped?'equipped':'ready';
-  // Aplicar verde diretamente nos dois estados desabilitados: evita que PNG/CSS antigo deixe o botão azul.
-  // Reverter as propriedades inline ao voltar para EQUIPAR ou VINCULADA.
-  const greenStatus=equipButton.dataset.state==='equipped'||equipButton.dataset.state==='locked';
+  // Garante cores distintas mesmo quando uma arte legada tenta cobrir o fundo.
+  const state=equipButton.dataset.state;
   for(const prop of ['background','background-image','background-color','color','-webkit-text-fill-color']){
    equipButton.style.removeProperty(prop);
   }
-  if(greenStatus){
-   equipButton.style.setProperty('background','linear-gradient(180deg,#24a75c 0%,#137e48 55%,#095632 100%)','important');
-   equipButton.style.setProperty('background-color','#147a46','important');
+  if(state==='equipped'||state==='locked'){
+   const green=state==='equipped';
+   equipButton.style.setProperty('background',green
+    ?'linear-gradient(180deg,#24a75c 0%,#137e48 55%,#095632 100%)'
+    :'linear-gradient(180deg,#d84848 0%,#a9272d 55%,#6e151c 100%)','important');
+   equipButton.style.setProperty('background-color',green?'#147a46':'#a32929','important');
    equipButton.style.setProperty('color','#ffffff','important');
    equipButton.style.setProperty('-webkit-text-fill-color','#ffffff','important');
   }
