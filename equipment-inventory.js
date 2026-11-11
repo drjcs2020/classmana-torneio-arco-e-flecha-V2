@@ -107,8 +107,8 @@ export function mountEquipmentInventory({selected='classico',onSelect=()=>{}}={}
  thumbViewer.setAttribute('environment-image','neutral');
  thumbViewer.setAttribute('shadow-intensity','0');
  thumbViewer.setAttribute('camera-target','auto auto auto');
- thumbViewer.setAttribute('camera-orbit','0deg 90deg 85%');
- thumbViewer.setAttribute('field-of-view','24deg');
+ thumbViewer.setAttribute('camera-orbit','42deg 76deg 72%');
+ thumbViewer.setAttribute('field-of-view','22deg');
  thumbViewer.setAttribute('loading','eager');
  thumbViewer.setAttribute('reveal','auto');
  thumbViewer.setAttribute('aria-hidden','true');
