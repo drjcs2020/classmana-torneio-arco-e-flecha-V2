@@ -208,8 +208,8 @@
 @keyframes cm-ember-rise {
  0% {transform:translate3d(0,8vh,0) scale(.8);opacity:0}
  12% {opacity:var(--ember-opacity,.85)}
- 55% {transform:translate3d(calc(var(--ember-drift,0px)*.45),-55vh,0) scale(.54);opacity:calc(var(--ember-opacity,.6) * .72)}
- 80% {opacity:calc(var(--ember-opacity,.6) * .35)}
+ 55% {transform:translate3d(calc(var(--ember-drift,0px)*.45),-55vh,0) scale(.54);opacity:.7}
+ 80% {opacity:.36}
  100% {transform:translate3d(var(--ember-drift,0px),-115vh,0) scale(.10);opacity:0}
 }
 .cm-ember {
