@@ -1,6 +1,6 @@
 import {initScene} from './scene-v3.js?v=bow-arrow-lower-20261110o';
 import {GEAR,GEAR_BY_ID,getGearLevel,isGearUnlocked} from './equipment-catalog.js?v=win-progress-linear-20261110';
-import {mountEquipmentInventory} from './equipment-inventory.js?v=arsenal-art-real-20261110';
+import {mountEquipmentInventory} from './equipment-inventory.js?v=arsenal-art-real-20261110b';
 import {CIRCUITS,LEVELS,targetMotion,obstacleBlocks,distanceDifficulty,flightSeconds} from './arena-difficulty.js?v=3';
 import {arenaAudio} from './arena-audio.js?v=lobbydefault49';
 import {cinematics} from './classmana-cinematics.js?v=20261110-match-result-layout';
