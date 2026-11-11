@@ -487,3 +487,100 @@
  #cm-arsenal-modal.cm-art-card .cm-arsenal-card-name{font-size:10px!important}
  #cm-arsenal-modal.cm-art-card .cm-arsenal-card-status{font-size:9px!important}
 }
+
+
+/* FINALIZAÇÃO DO ARSENAL — progresso, botão e emblemas de atributos.
+   Sem alterações na grade, nas molduras das cartas ou nas miniaturas. */
+#cm-arsenal-modal.cm-art-progress .cm-arsenal-progress{
+ overflow:hidden!important;
+}
+#cm-arsenal-modal.cm-art-progress .cm-arsenal-wins,
+#cm-arsenal-modal.cm-art-progress .cm-arsenal-level{
+ position:absolute!important;display:flex!important;
+ align-items:center!important;justify-content:center!important;
+ text-align:center!important;margin:0!important;padding:0!important;
+ color:#fff2ba!important;text-shadow:0 2px 3px #000d!important;
+ letter-spacing:-.02em!important;white-space:nowrap!important;
+}
+#cm-arsenal-modal.cm-art-progress .cm-arsenal-wins{
+ top:31%!important;left:54%!important;width:34%!important;height:12%!important;
+ font:900 clamp(18px,1.65vw,27px)/1 Georgia,serif!important;
+}
+#cm-arsenal-modal.cm-art-progress .cm-arsenal-level{
+ top:62%!important;left:49%!important;width:43%!important;height:12%!important;
+ font:900 clamp(16px,1.52vw,24px)/1 Georgia,serif!important;
+}
+#cm-arsenal-modal.cm-art-progress .cm-arsenal-progress>span{
+ position:absolute!important;display:block!important;margin:0!important;padding:0!important;
+ color:#e7efff!important;
+ font:800 clamp(8px,.65vw,11px)/1.08 Nunito,Arial,sans-serif!important;
+ text-align:center!important;white-space:normal!important;
+ text-shadow:0 1px 2px #000b!important;
+}
+#cm-arsenal-modal.cm-art-progress .cm-arsenal-progress>span:nth-of-type(1){
+ top:44%!important;left:47%!important;width:46%!important;height:11%!important;
+}
+#cm-arsenal-modal.cm-art-progress .cm-arsenal-progress>span:nth-of-type(2){
+ top:75%!important;left:46%!important;width:49%!important;height:11%!important;
+}
+/* Texto da ação é único: o PNG antigo já tinha escrita gravada, então
+   não deve ficar sob uma segunda legenda dinâmica. */
+#cm-arsenal-modal .cm-arsenal-action-row{
+ display:flex!important;align-items:center!important;justify-content:space-between!important;
+ gap:clamp(8px,.9vw,15px)!important;min-width:0!important;
+ padding:1px 8px 4px!important;margin:0!important;
+}
+#cm-arsenal-modal .cm-arsenal-unlock{
+ flex:1 1 auto!important;max-width:none!important;min-width:0!important;
+ font:900 clamp(10px,.78vw,13px)/1.15 Nunito,Arial,sans-serif!important;
+ color:#ffe0a0!important;text-align:left!important;white-space:normal!important;
+}
+#cm-arsenal-modal .cm-arsenal-equip,
+#cm-arsenal-modal .cm-arsenal-equip.cm-arsenal-png-button,
+#cm-arsenal-modal .cm-arsenal-equip[data-state="ready"],
+#cm-arsenal-modal .cm-arsenal-equip[data-state="locked"],
+#cm-arsenal-modal .cm-arsenal-equip[data-state="equipped"],
+#cm-arsenal-modal .cm-arsenal-equip[data-state="linked"]{
+ flex:0 0 clamp(165px,16vw,248px)!important;
+ width:clamp(165px,16vw,248px)!important;max-width:48%!important;
+ height:clamp(37px,5.3dvh,51px)!important;min-height:0!important;
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ background-image:none!important;
+ background:linear-gradient(180deg,#1aa757 0%,#08764a 58%,#064630 100%)!important;
+ border:2px solid #e8b85b!important;border-radius:9px!important;
+ padding:4px 8px!important;margin:0!important;
+ color:#fff2c2!important;font:900 clamp(12px,1vw,17px)/1.05 Georgia,serif!important;
+ text-shadow:0 2px 3px #00271c!important;
+ box-shadow:inset 0 0 0 1px #faeab462,0 3px 6px #0008!important;
+ filter:none!important;opacity:1!important;white-space:nowrap!important;
+}
+#cm-arsenal-modal .cm-arsenal-equip[data-state="locked"],
+#cm-arsenal-modal .cm-arsenal-equip[data-state="linked"]{
+ background:linear-gradient(180deg,#535c70,#333c50 60%,#202838)!important;
+ color:#fff3d4!important;border-color:#bba16b!important;opacity:.94!important;
+}
+#cm-arsenal-modal .cm-arsenal-equip[data-state="equipped"]{
+ background:linear-gradient(180deg,#176c52,#10533f 60%,#073c35)!important;
+ color:#e9ffe8!important;
+}
+#cm-arsenal-modal .cm-arsenal-equip:disabled{cursor:default!important}
+#cm-arsenal-modal .cm-arsenal-detail{padding-bottom:clamp(16px,2.7dvh,27px)!important}
+#cm-arsenal-modal .cm-arsenal-stat-icon{
+ display:block!important;height:auto!important;
+ font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif!important;
+ font-size:clamp(19px,1.65vw,27px)!important;font-weight:normal!important;
+ line-height:1!important;color:initial!important;
+ text-shadow:none!important;filter:none!important;
+}
+#cm-arsenal-modal .cm-arsenal-stat-label{
+ color:#f6e4b5!important;font:900 clamp(10px,.85vw,13px)/1.1 Nunito,Arial,sans-serif!important;
+}
+@media(max-width:1000px){
+ #cm-arsenal-modal .cm-arsenal-equip,
+ #cm-arsenal-modal .cm-arsenal-equip.cm-arsenal-png-button{
+  flex-basis:clamp(128px,17vw,185px)!important;
+  width:clamp(128px,17vw,185px)!important;
+  font-size:12px!important;
+ }
+ #cm-arsenal-modal .cm-arsenal-unlock{font-size:10px!important}
+}
