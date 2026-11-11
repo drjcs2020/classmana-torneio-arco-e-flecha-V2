@@ -21,11 +21,18 @@ export function mountEquipmentInventory({selected='classico',onSelect=()=>{}}={}
  const host=document.querySelector('.studio-bows');
  if(!host)return {select:()=>{},setProgress:()=>{},get value(){return 'classico'}};
  host.replaceChildren();host.className='studio-bows cm-inventory-entry';
+ // Duas artes independentes: painel decorativo e botão funcional.
+ const art=make('img','cm-inventory-panel-art');
+ art.src='assets/ui/inventory-ornate-panel.svg';art.alt='INVENTÁRIO DE ARMAS — Arcos, Bestas e Flechas';
+ art.decoding='async';art.draggable=false;
  const openButton=make('button','cm-inventory-launch');openButton.type='button';
+ openButton.setAttribute('aria-label','Clique para abrir o arsenal');
  openButton.setAttribute('aria-haspopup','dialog');openButton.setAttribute('aria-controls','cm-arsenal-modal');
- openButton.innerHTML='<span class="cm-inventory-crest"><img src="assets/ui/arsenal-crest.svg" alt="" draggable="false"></span><span class="cm-inventory-launch-copy"><strong>INVENTÁRIO DE ARMAS</strong><span>Arcos · Bestas · Flechas</span><em>CLIQUE PARA ABRIR O ARSENAL</em></span>';
+ const buttonArt=make('img','cm-inventory-open-art');
+ buttonArt.src='assets/ui/inventory-open-button.svg';buttonArt.alt='';buttonArt.draggable=false;
+ openButton.append(buttonArt);
  const summary=make('div','cm-inventory-equipped');summary.setAttribute('aria-live','polite');
- host.append(openButton,summary);
+ host.append(art,openButton,summary);
  document.getElementById('cm-arsenal-modal')?.remove();
  const modal=make('div','cm-arsenal-modal');modal.id='cm-arsenal-modal';modal.hidden=true;
  modal.setAttribute('role','dialog');modal.setAttribute('aria-modal','true');modal.setAttribute('aria-labelledby','cm-arsenal-title');
