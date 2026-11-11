@@ -306,3 +306,102 @@
  #cm-arsenal-modal .cm-arsenal-detail{min-height:480px!important}
  #cm-arsenal-modal .cm-arsenal-stage{min-height:310px!important}
 }
+
+
+/* ARSENAL EM TELA CHEIA V2 — substitui somente proporções da camada do arsenal. */
+#cm-arsenal-modal{
+ position:fixed!important;inset:0!important;width:100vw!important;height:100dvh!important;
+ margin:0!important;padding:0!important;overflow:hidden!important;place-items:stretch!important;
+ background:#06152e!important;
+}
+#cm-arsenal-modal .cm-arsenal-shell,
+#cm-arsenal-modal.cm-art-frame .cm-arsenal-shell{
+ width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;
+ min-width:0!important;min-height:0!important;
+ padding:clamp(12px,1.4vw,25px)!important;margin:0!important;
+ background-size:100% 100%!important;
+}
+#cm-arsenal-modal .cm-arsenal-core{
+ overflow:visible!important;padding:0 clamp(5px,.6vw,12px) clamp(5px,.6vh,10px)!important;
+}
+#cm-arsenal-modal .cm-arsenal-header,
+#cm-arsenal-modal.cm-art-title .cm-arsenal-header{
+ flex:0 0 clamp(105px,17dvh,155px)!important;
+ height:clamp(105px,17dvh,155px)!important;
+ min-height:0!important;max-height:none!important;
+ background-size:auto clamp(190px,24dvh,260px)!important;
+ background-position:center 55%!important;
+ overflow:visible!important;
+}
+#cm-arsenal-modal .cm-arsenal-close{right:clamp(6px,1vw,16px)!important;top:clamp(17px,3vh,29px)!important}
+#cm-arsenal-modal .cm-arsenal-layout{
+ grid-template-columns:minmax(150px,17%) minmax(0,41%) minmax(0,42%)!important;
+ gap:0!important;
+ padding:0 clamp(7px,.9vw,16px) clamp(6px,1vh,12px)!important;
+}
+#cm-arsenal-modal .cm-arsenal-sidebar{gap:clamp(6px,1vh,12px)!important}
+#cm-arsenal-modal .cm-arsenal-categories{
+ gap:clamp(8px,1.35vh,16px)!important;
+}
+#cm-arsenal-modal .cm-arsenal-categories button,
+#cm-arsenal-modal .cm-arsenal-categories button.cm-arsenal-png-button{
+ flex:0 0 clamp(52px,8vh,75px)!important;height:clamp(52px,8vh,75px)!important;
+ min-height:0!important;
+}
+#cm-arsenal-modal.cm-art-progress .cm-arsenal-progress{
+ margin:clamp(14px,3vh,30px) auto auto!important;
+ max-width:min(100%,225px)!important;
+ width:min(100%,225px)!important;
+}
+#cm-arsenal-modal.cm-art-card .cm-arsenal-card-name{
+ top:67%!important;height:10%!important;font-size:clamp(12px,1vw,17px)!important;
+}
+#cm-arsenal-modal.cm-art-card .cm-arsenal-card-status{
+ top:84%!important;height:9%!important;font-size:clamp(10px,.84vw,14px)!important;
+}
+#cm-arsenal-modal.cm-art-card .cm-arsenal-thumb{
+ top:15%!important;height:50%!important;
+}
+#cm-arsenal-modal.cm-art-card .cm-arsenal-thumb-image{
+ transform:none!important;width:100%!important;height:100%!important;object-fit:contain!important;
+}
+#cm-arsenal-modal .cm-arsenal-detail-top{
+ flex:0 0 clamp(46px,6dvh,67px)!important;
+}
+#cm-arsenal-modal .cm-arsenal-stage{min-height:165px!important}
+#cm-arsenal-modal .cm-arsenal-stats{
+ flex:0 0 clamp(66px,9vh,91px)!important;
+}
+#cm-arsenal-modal .cm-arsenal-stat-icon{
+ display:block!important;flex:0 0 auto!important;
+ font:900 clamp(20px,2.1vw,32px)/1 Georgia,serif!important;
+ color:#ffd46b!important;text-shadow:0 2px 3px #000!important;
+}
+#cm-arsenal-modal .cm-arsenal-stat-label{
+ font-size:clamp(10px,.85vw,13px)!important;
+}
+#cm-arsenal-modal .cm-arsenal-stats .cm-arsenal-stat{
+ gap:2px!important;
+}
+#cm-arsenal-modal .cm-arsenal-action-row{
+ flex:0 0 clamp(55px,7.2vh,76px)!important;
+}
+@media (max-height:700px) and (min-width:781px){
+ #cm-arsenal-modal .cm-arsenal-header,
+ #cm-arsenal-modal.cm-art-title .cm-arsenal-header{
+  flex-basis:95px!important;height:95px!important;background-size:auto 180px!important;
+ }
+ #cm-arsenal-modal .cm-arsenal-categories button,
+ #cm-arsenal-modal .cm-arsenal-categories button.cm-arsenal-png-button{
+  flex-basis:42px!important;height:42px!important;
+ }
+ #cm-arsenal-modal .cm-arsenal-stats{flex-basis:58px!important}
+ #cm-arsenal-modal .cm-arsenal-stat-icon{font-size:19px!important}
+}
+@media (max-width:780px){
+ #cm-arsenal-modal .cm-arsenal-shell{overflow:auto!important}
+ #cm-arsenal-modal .cm-arsenal-core{min-height:100%!important;height:auto!important}
+ #cm-arsenal-modal .cm-arsenal-layout{display:flex!important;flex-direction:column!important;overflow:visible!important}
+ #cm-arsenal-modal .cm-arsenal-header{flex-basis:96px!important;height:96px!important}
+ #cm-arsenal-modal .cm-arsenal-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-template-rows:repeat(3,190px)!important}
+}
