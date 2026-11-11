@@ -38,7 +38,7 @@ export function mountEquipmentInventory({selected='classico',onSelect=()=>{}}={}
  const categories=[...modal.querySelectorAll('[data-category]')];
  // Botões com imagens fornecidas; se PNG faltar, manter o botão original funcional.
  const categoryArtwork={Arco:'01_categoria_arcos.png',Besta:'02_categoria_bestas.png',Flecha:'03_categoria_flechas.png'};
- const imageRoot='assets/ui/arsenal-buttons/';
+ const imageRoot='assets/ui/';
  function useButtonArtwork(element,filename){
   if(!element)return;
   const img=new Image();
