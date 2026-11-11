@@ -31,9 +31,8 @@ function emberLayer(host,house,count=16){
  const layer=node('div','cm-embers');
  layer.setAttribute('aria-hidden','true');
  layer.dataset.house=getHouse(house);
- if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
-  const rng=i=>Math.abs(Math.sin(i*19.19+7.713));
-  for(let i=0;i<Math.min(host.id==='cm-v2-home'?165:100,count);i++){
+ const rng=i=>Math.abs(Math.sin(i*19.19+7.713));
+ for(let i=0;i<Math.min(host.id==='cm-v2-home'?165:100,count);i++){
    const dot=node('span','cm-ember'),v=rng(i+1);
    const home=host.id==='cm-v2-home';
    const fromEdge=Math.pow(rng(i+10),3.0);
@@ -46,7 +45,6 @@ function emberLayer(host,house,count=16){
    dot.style.setProperty('--ember-opacity',home?(.23+.76*(1-fromEdge)).toFixed(2):(.65+.35*v).toFixed(2));
    layer.append(dot);
   }
- }
  host.prepend(layer);
  return layer;
 }
