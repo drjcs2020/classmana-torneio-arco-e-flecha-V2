@@ -202,29 +202,24 @@
 }
 
 
-/* Brasas originais: pontos circulares sobem continuamente, diminuem até sumir.
-   Sem posições estáticas, agrupamentos espelhados, corações ou imagens novas. */
-@keyframes cm-ember-rise{
- 0%{transform:translate3d(0,8vh,0) scale(1);opacity:0}
- 9%{opacity:var(--ember-opacity,.85)}
- 45%{transform:translate3d(calc(var(--ember-drift,0px)*.4),-42vh,0) scale(.65);opacity:.75}
- 80%{opacity:.32}
- 100%{transform:translate3d(var(--ember-drift,0px),-115vh,0) scale(.07);opacity:0}
+/* Efeito original: nascem abaixo do quadro, ascendem, encolhem e
+   esmaecem completamente antes de sair pelo topo. A distribuição
+   esquerda/direita é definida por emberLayer (JS), não por CSS. */
+@keyframes cm-ember-rise {
+ 0% {transform:translate3d(0,8vh,0) scale(.8);opacity:0}
+ 12% {opacity:var(--ember-opacity,.85)}
+ 55% {transform:translate3d(calc(var(--ember-drift,0px)*.45),-55vh,0) scale(.54);opacity:.7}
+ 80% {opacity:.36}
+ 100% {transform:translate3d(var(--ember-drift,0px),-115vh,0) scale(.10);opacity:0}
 }
-.cm-ember{
+.cm-ember {
  border-radius:50%!important;
- animation-name:cm-ember-rise!important;
- animation-duration:var(--ember-duration,8s)!important;
- animation-timing-function:linear!important;
- animation-delay:var(--ember-delay,0s)!important;
- animation-iteration-count:infinite!important;
- animation-fill-mode:both!important;
+ animation:cm-ember-rise var(--ember-duration,7s) linear var(--ember-delay,0s) infinite both!important;
 }
 @media(prefers-reduced-motion:reduce){
- /* Preserva a preferência no restante do jogo; o efeito decorativo solicitado
-    continua discreto e em movimento em vez de ficar congelado em um desenho. */
  #view-inicio > .cm-ambient-embers,
  #stage > .cm-ambient-embers,
- #cm-v2-home > .cm-ambient-embers{display:block!important;visibility:visible!important}
- .cm-ember{animation-name:cm-ember-rise!important;opacity:0}
+ #cm-v2-home > .cm-ambient-embers{
+  display:block!important;visibility:visible!important;
+ }
 }
