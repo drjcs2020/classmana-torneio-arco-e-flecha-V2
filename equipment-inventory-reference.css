@@ -772,7 +772,11 @@
 #cm-arsenal-modal .cm-arsenal-action-row .cm-arsenal-equip[data-state="equipped"],
 #cm-arsenal-modal .cm-arsenal-action-row .cm-arsenal-equip.cm-arsenal-png-button[data-state="equipped"]{
  position:relative!important;
- left:-38px!important; /* aproximadamente 1 cm em pixels CSS */
+ left:-38px!important; /* manter deslocamento horizontal anterior */
+ flex:0 0 clamp(127px,calc(16vw - 38px),210px)!important;
+ width:clamp(127px,calc(16vw - 38px),210px)!important;
+ max-width:calc(48% - 38px)!important;
+ box-sizing:border-box!important;
  background:linear-gradient(180deg,#218d56 0%,#0e6844 54%,#08412f 100%)!important;
  background-image:none!important;
  color:#ffffff!important;
