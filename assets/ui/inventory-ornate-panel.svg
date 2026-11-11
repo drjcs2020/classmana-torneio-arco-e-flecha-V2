@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="570" viewBox="0 0 760 570" role="img" aria-labelledby="title desc">
+<title id="title">Inventário de Armas</title><desc id="desc">Brasão azul e dourado de arquearia unido a uma placa vermelha ornamental.</desc>
+<defs>
+ <linearGradient id="gold" x1="0" x2="1" y1="0" y2=".85"><stop stop-color="#74400a"/><stop offset=".16" stop-color="#ffe69a"/><stop offset=".34" stop-color="#db971d"/><stop offset=".52" stop-color="#fff2b1"/><stop offset=".72" stop-color="#be6915"/><stop offset=".9" stop-color="#faca52"/><stop offset="1" stop-color="#63300a"/></linearGradient>
+ <linearGradient id="red" x1="0" x2=".2" y1="0" y2="1"><stop stop-color="#ad2634"/><stop offset=".23" stop-color="#721024"/><stop offset=".73" stop-color="#44091b"/><stop offset="1" stop-color="#290c20"/></linearGradient>
+ <radialGradient id="blue"><stop stop-color="#247dc7"/><stop offset=".56" stop-color="#0d3979"/><stop offset="1" stop-color="#071b40"/></radialGradient>
+ <linearGradient id="gem" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#ecffff"/><stop offset=".36" stop-color="#31d6ff"/><stop offset=".72" stop-color="#155be5"/><stop offset="1" stop-color="#10165f"/></linearGradient>
+ <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%"><feGaussianBlur in="SourceAlpha" stdDeviation="8"/><feOffset dy="9"/><feComponentTransfer><feFuncA type="linear" slope=".8"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+ <filter id="type"><feDropShadow dx="1" dy="4" stdDeviation="2" flood-color="#180411" flood-opacity=".9"/></filter>
+</defs>
+<g filter="url(#shadow)">
+ <path d="M65 292 L96 272 Q142 259 193 270 L570 270 Q624 261 666 279 L697 297 L724 325 L709 360 L724 389 L699 418 L708 455 L670 490 Q596 501 380 501 Q160 501 90 490 L52 455 L60 418 L35 390 L51 357 L34 329Z" fill="url(#gold)" stroke="#6d3107" stroke-width="7"/>
+ <path d="M82 303 Q136 290 192 299 L569 299 Q633 291 674 306 L690 330 L676 361 L689 390 L673 416 L676 449 L654 466 Q556 480 380 480 Q198 480 109 466 L84 450 L90 414 L72 390 L88 361 L68 330Z" fill="url(#red)" stroke="#ffe4a0" stroke-width="4"/>
+ <path d="M114 311 Q380 291 646 311 M109 461 Q380 478 653 461" fill="none" stroke="#ffcf62" stroke-opacity=".55" stroke-width="3"/>
+ <path d="M78 333 l16 -9 15 9 -15 10Z M666 333 l16 -9 15 9 -15 10Z M78 432 l16 -9 15 9 -15 10Z M666 432 l16 -9 15 9 -15 10Z" fill="url(#gem)" stroke="#ffdf78" stroke-width="4"/>
+ <path d="M218 310 Q188 288 170 260 Q134 274 112 289 Q139 308 169 310 M542 310 Q572 288 590 260 Q626 274 648 289 Q621 308 591 310" fill="url(#gold)" stroke="#9a4b0e" stroke-width="3"/>
+ <path d="M380 44 L398 65 L425 55 L439 78 L460 84 L453 129 L455 216 Q440 271 380 304 Q320 271 305 216 L307 129 L300 84 L322 78 L335 55 L362 65Z" fill="url(#gold)" stroke="#6b320b" stroke-width="7"/>
+ <path d="M380 67 L399 84 L425 75 L437 102 L441 127 L441 216 Q429 252 380 282 Q331 252 319 216 L319 127 L323 102 L335 75 L361 84Z" fill="url(#blue)" stroke="#f5ca60" stroke-width="5"/>
+ <path d="M380 83 L400 101 L422 92 L426 126 L426 212 Q413 241 380 259 Q347 241 334 212 L334 126 L338 92 L360 101Z" fill="none" stroke="#6aa4dd" stroke-opacity=".6" stroke-width="2"/>
+ <path d="M380 44 394 62 380 81 366 62Z M380 267 392 283 380 302 368 283Z" fill="url(#gem)" stroke="#fff3ba" stroke-width="4"/>
+ <g stroke="#ffe5a0" stroke-linecap="round" fill="none">
+  <path d="M354 132 Q315 194 354 239" stroke="#f8b537" stroke-width="11"/>
+  <path d="M358 138 Q326 192 358 234" stroke="#65370f" stroke-width="3"/>
+  <path d="M356 132 L357 236" stroke="#d7f8ff" stroke-width="3"/>
+  <path d="M350 213 L418 152" stroke="#f4ba55" stroke-width="7"/>
+  <path d="M417 152 l-8 22 22 -12 -13 -10Z" fill="#ffe7a1" stroke="#d28f26" stroke-width="2"/>
+  <path d="M348 216 l-12 -1 3 -15 11 8Z" fill="#65cfff" stroke="#d6dafe" stroke-width="2"/>
+ </g>
+ <g fill="url(#gold)" stroke="#9c530c" stroke-width="2">
+  <path d="M302 270 Q259 232 241 188 Q228 218 246 252 Q214 234 207 209 Q205 244 236 271 L278 299Z"/>
+  <path d="M458 270 Q501 232 519 188 Q532 218 514 252 Q546 234 553 209 Q555 244 524 271 L482 299Z"/>
+ </g>
+ <g text-anchor="middle" filter="url(#type)">
+  <text x="380" y="369" font-family="Georgia,serif" font-size="58" font-weight="bold" fill="#ffdea0" stroke="#51200b" stroke-width="1.2">INVENTÁRIO</text>
+  <text x="380" y="424" font-family="Georgia,serif" font-size="58" font-weight="bold" fill="#ffdea0" stroke="#51200b" stroke-width="1.2">DE ARMAS</text>
+  <text x="380" y="457" font-family="Georgia,serif" font-size="22" font-weight="bold" fill="#fff0bd">ARCOS  ◆  BESTAS  ◆  FLECHAS</text>
+ </g>
+ <path d="M339 498 L380 519 L421 498 L380 475Z" fill="url(#gold)" stroke="#763c0d" stroke-width="3"/>
+ <path d="M380 487 L393 499 L380 513 L367 499Z" fill="url(#gem)" stroke="#fff0b5" stroke-width="3"/>
+</g>
+</svg>
