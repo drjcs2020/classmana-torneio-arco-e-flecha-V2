@@ -677,3 +677,49 @@
 }
 #cm-arsenal-modal.cm-art-progress .cm-arsenal-progress>span:nth-of-type(1){top:42%!important}
 #cm-arsenal-modal.cm-art-progress .cm-arsenal-progress>span:nth-of-type(2){top:68.4%!important}
+
+
+/* PROGRESSO V7 — medidas da arte real de 504×598 pixels.
+   Separador em x=219; campos de texto em x=229..430.
+   Primeira janela y=180..314; segunda y=340..472.
+   O texto ocupa somente a coluna direita de cada janela. */
+#cm-arsenal-modal.cm-art-progress .cm-arsenal-progress{
+ width:min(100%,205px)!important;
+ max-width:205px!important;
+ height:auto!important;
+ aspect-ratio:504/598!important;
+ position:relative!important;
+ background-image:url('assets/ui/arsenal-painel-progresso.png')!important;
+ background-position:center!important;
+ background-size:100% 100%!important;
+ background-repeat:no-repeat!important;
+ isolation:isolate!important;
+ overflow:hidden!important;
+}
+#cm-arsenal-modal.cm-art-progress .cm-arsenal-wins,
+#cm-arsenal-modal.cm-art-progress .cm-arsenal-level{
+ position:absolute!important;
+ left:45.4%!important;width:40.1%!important;
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ height:7.8%!important;min-height:0!important;
+ margin:0!important;padding:0!important;
+ font:900 clamp(17px,1.6vw,25px)/1 Georgia,serif!important;
+ color:#fff0ba!important;text-shadow:0 2px 3px #000!important;
+ letter-spacing:0!important;white-space:nowrap!important;
+}
+#cm-arsenal-modal.cm-art-progress .cm-arsenal-wins{top:33.2%!important}
+#cm-arsenal-modal.cm-art-progress .cm-arsenal-level{top:60.1%!important}
+#cm-arsenal-modal.cm-art-progress .cm-arsenal-progress>span{
+ position:absolute!important;
+ left:45%!important;width:41%!important;
+ height:8.3%!important;min-height:0!important;
+ display:flex!important;align-items:flex-start!important;justify-content:center!important;
+ margin:0!important;padding:0!important;
+ color:#f4f5ff!important;
+ font:800 clamp(8px,.77vw,11px)/1.05 Nunito,Arial,sans-serif!important;
+ text-align:center!important;
+ white-space:normal!important;overflow-wrap:normal!important;
+ text-shadow:0 1px 3px #000!important;
+}
+#cm-arsenal-modal.cm-art-progress .cm-arsenal-progress>span:nth-of-type(1){top:41.7%!important}
+#cm-arsenal-modal.cm-art-progress .cm-arsenal-progress>span:nth-of-type(2){top:68.5%!important}
