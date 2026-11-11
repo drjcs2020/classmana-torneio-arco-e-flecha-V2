@@ -68,7 +68,7 @@ export function mountEquipmentInventory({selected='classico',onSelect=()=>{}}={}
    button.setAttribute('aria-label',button.textContent.trim());
    useButtonArtwork(button,categoryArtwork[button.dataset.category]);
  }
- useButtonArtwork(q('.cm-arsenal-close'),'08_fechar.png');
+ useButtonArtwork(q('.cm-arsenal-close'),'arsenal-botao-fechar.png');
  // Miras ainda não têm modelos registrados no catálogo; não inventar miras.
  const sights=make('button','');sights.type='button';
  sights.textContent='◎ MIRAS';sights.disabled=true;sights.title='Miras ainda não cadastradas';
@@ -94,7 +94,7 @@ export function mountEquipmentInventory({selected='classico',onSelect=()=>{}}={}
  }
  prevPage.addEventListener('click',()=>{currentPage=Math.max(0,currentPage-1);renderCards()});
  nextPage.addEventListener('click',()=>{currentPage++;renderCards()});
- useButtonArtwork(equipButton,'07_equipar.png');
+ useButtonArtwork(equipButton,'arsenal-botao-equipar.png');
  let equipped=GEAR_BY_ID[selected]?selected:'classico',preview=equipped,category='Arco',wins=0,confirmed=false;
  let zoom=75,spin=0,requestId=0,previousFocus=null;
  // Miniaturas SEM desenhos inventados: fotografias renderizadas dos GLBs reais.
