@@ -43,6 +43,7 @@ function emberLayer(host,house,count=16){
    dot.style.setProperty('--ember-delay',(-9*rng(i+46)).toFixed(2)+'s');
    dot.style.setProperty('--ember-drift',(-72+144*rng(i+64)).toFixed(0)+'px');
    dot.style.setProperty('--ember-opacity',home?(.23+.76*(1-fromEdge)).toFixed(2):(.65+.35*v).toFixed(2));
+   dot.style.setProperty('--ember-static-bottom',(8+76*rng(i+87)).toFixed(1)+'%');
    layer.append(dot);
   }
  host.prepend(layer);
