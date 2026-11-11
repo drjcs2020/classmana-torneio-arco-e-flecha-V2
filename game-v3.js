@@ -1277,6 +1277,10 @@ document.querySelectorAll('[data-play-mode]').forEach(button=>{
     setLobbyStep('perfil');populateIdentityOptions();$('cm-identity-player')?.focus();
     toast('🏹 Escolha seu nome antes de iniciar o duelo.');return;
   }
+  // Os três botões de treino contra o robô continuam independentes.
+  if(chosen==='bot'&&['easy','medium','hard'].includes(button.dataset.botDifficulty||'')){
+   $('difficulty').value=button.dataset.botDifficulty;
+  }
   $('mode').value=chosen;updateMode();
   setLobbyStep('partida');
  });
