@@ -1,4 +1,4 @@
-import {GEAR,GEAR_BY_ID,modelSource,getGearLevel,isGearUnlocked} from './equipment-catalog.js?v=inventory-1';
+import {GEAR,GEAR_BY_ID,modelSource,getGearLevel,isGearUnlocked} from './equipment-catalog.js?v=win-progress-20261110';
 // Inventário isolado: somente um modelo 3D por vez. Nenhum GLB no painel do herói.
 const ARROWS=[
  {id:'arrow-standard',name:'Flecha Clássica',type:'Flecha',rarity:'Comum',model:'arrow-standard.glb',desc:'Flecha padrão do Arco de Treino e da Besta Leve.',ability:'Disparo equilibrado'},
@@ -78,8 +78,9 @@ export function mountEquipmentInventory({selected='classico',onSelect=()=>{}}={}
       const src=await modelSource(item.model);
       if(modal.hidden)break;
       await new Promise((resolve,reject)=>{
-       const cleanup=()=>{thumbViewer.removeEventListener('load',onLoad);thumbViewer.removeEventListener('error',onError)};
-       const onError=()=>{cleanup();reject(new Error('Modelo 3D indisponível'))};
+       const timeout=setTimeout(()=>onError(),20000);
+       const cleanup=()=>{clearTimeout(timeout);thumbViewer.removeEventListener('load',onLoad);thumbViewer.removeEventListener('error',onError)};
+       const onError=()=>{cleanup();reject(new Error('Modelo 3D indisponível ou captura expirada'))};
        const onLoad=()=>{
         requestAnimationFrame(()=>requestAnimationFrame(()=>{
          try{
