@@ -710,14 +710,14 @@
  #cm-arsenal-modal.cm-art-progress .cm-arsenal-progress{
   display:block!important;position:relative!important;
   flex:0 0 auto!important;box-sizing:border-box!important;
-  width:calc(100% + 8px)!important;max-width:none!important;
+  width:calc(100% + 4px)!important;max-width:none!important;
   height:auto!important;aspect-ratio:504/598!important;
-  margin:clamp(5px,1.2vh,12px) -4px 0!important;
+  margin:clamp(5px,1.2vh,12px) -2px 0!important;
   padding:0!important;
   background:url('assets/ui/arsenal-painel-progresso.png') center/100% 100% no-repeat!important;
   border:0!important;box-shadow:none!important;
   isolation:isolate!important;overflow:hidden!important;
-  transform:translate(8px,-8px)!important;
+  transform:translate(16px,-8px)!important;
  }
  #cm-arsenal-modal.cm-art-progress .cm-arsenal-progress p{
   position:absolute!important;width:1px!important;height:1px!important;
@@ -728,17 +728,17 @@
  #cm-arsenal-modal.cm-art-progress .cm-arsenal-level{
   position:absolute!important;z-index:2!important;
   display:flex!important;align-items:center!important;justify-content:center!important;
-  left:47%!important;width:42%!important;height:9%!important;min-height:0!important;
+  left:45%!important;width:46%!important;height:12%!important;min-height:0!important;
   margin:0!important;padding:0!important;
   font-family:Georgia,serif!important;
-  font-size:14pt!important;
+  font-size:22pt!important;
   font-weight:900!important;
-  line-height:14pt!important;
+  line-height:22pt!important;
   letter-spacing:0!important;white-space:nowrap!important;
   color:#fff3c5!important;text-align:center!important;text-shadow:0 2px 3px #000!important;
  }
- #cm-arsenal-modal.cm-art-progress .cm-arsenal-wins{top:32.2%!important}
- #cm-arsenal-modal.cm-art-progress .cm-arsenal-level{top:59.1%!important}
+ #cm-arsenal-modal.cm-art-progress .cm-arsenal-wins{top:35%!important}
+ #cm-arsenal-modal.cm-art-progress .cm-arsenal-level{top:55.5%!important}
  #cm-arsenal-modal.cm-art-progress .cm-arsenal-progress>span{
   display:none!important;
   position:absolute!important;z-index:2!important;
@@ -761,9 +761,9 @@
   height:clamp(46px,7.4vh,58px)!important;
  }
  #cm-arsenal-modal.cm-art-progress .cm-arsenal-progress{
-  width:calc(100% + 8px)!important;
+  width:calc(100% + 4px)!important;
   max-width:none!important;
-  margin:5px -4px 0!important;
+  margin:5px -2px 0!important;
  }
  #cm-arsenal-modal .cm-arsenal-section-label{margin-top:7px!important}
 }
