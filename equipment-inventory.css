@@ -445,3 +445,119 @@ body[data-page="lobby"] #view-inicio[data-step="heroi"] .studio-bows.cm-inventor
   width:min(100%,310px)!important;
  }
 }
+
+
+/* ARSENAL ART KIT 2026-11-10 — peças isoladas, mantendo modelos 3D e interações.
+   Moldura, título, abas, cartões, progresso, vitrine e botão são SVGs separados. */
+#cm-arsenal-modal .cm-arsenal-shell{
+  background:transparent!important;
+  clip-path:none!important;
+  padding:8px!important;
+  filter:drop-shadow(0 12px 22px #000d)!important;
+}
+#cm-arsenal-modal .cm-arsenal-core{
+  clip-path:none!important;
+  overflow:hidden!important;
+  border:0!important;
+  border-radius:16px!important;
+  background:
+    url('assets/ui/arsenal-ui-frame.svg') center center/100% 100% no-repeat,
+    linear-gradient(155deg,#0b315b,#061932 54%,#081b37)!important;
+  padding:22px 25px 20px!important;
+}
+#cm-arsenal-modal .cm-arsenal-header{
+  background:url('assets/ui/arsenal-ui-title.svg') center/100% 100% no-repeat!important;
+  border:0!important;
+  box-shadow:none!important;
+  min-height:85px!important;
+  margin:-15px 0 2px!important;
+  padding:15px 70px 10px!important;
+}
+#cm-arsenal-modal .cm-arsenal-header h2{
+  font-size:clamp(22px,2.55vw,36px)!important;
+  text-shadow:0 3px 4px #21050c,0 0 8px #e98d3d66!important;
+}
+#cm-arsenal-modal .cm-arsenal-header-crest{
+  display:none!important;
+}
+#cm-arsenal-modal .cm-arsenal-close{
+  right:10px!important;
+  top:12px!important;
+  z-index:5!important;
+}
+#cm-arsenal-modal .cm-arsenal-layout{
+  padding:10px 10px 2px!important;
+  grid-template-columns:minmax(145px,178px) minmax(280px,1fr) minmax(335px,1.1fr)!important;
+  gap:12px!important;
+}
+#cm-arsenal-modal .cm-arsenal-sidebar{
+  background:transparent!important;
+  border:none!important;
+  box-shadow:none!important;
+  padding:6px 2px!important;
+}
+#cm-arsenal-modal .cm-arsenal-categories button{
+  border:0!important;
+  border-radius:0!important;
+  background:url('assets/ui/arsenal-ui-tab.svg') center/100% 100% no-repeat!important;
+  box-shadow:none!important;
+  min-height:51px!important;
+  padding:8px 15px!important;
+}
+#cm-arsenal-modal .cm-arsenal-categories button[aria-pressed="true"]{
+  background:url('assets/ui/arsenal-ui-tab.svg') center/100% 100% no-repeat!important;
+  filter:brightness(1.2) drop-shadow(0 0 6px #f9c65b88)!important;
+  box-shadow:none!important;
+}
+#cm-arsenal-modal .cm-arsenal-progress{
+  background:url('assets/ui/arsenal-ui-progress.svg') center/100% 100% no-repeat!important;
+  border:0!important;
+  border-radius:0!important;
+  min-height:190px!important;
+  padding:16px 10px!important;
+}
+#cm-arsenal-modal .cm-arsenal-card{
+  border:0!important;
+  border-radius:0!important;
+  background:url('assets/ui/arsenal-ui-card.svg') center/100% 100% no-repeat!important;
+  box-shadow:none!important;
+  padding:8px 9px 10px!important;
+}
+#cm-arsenal-modal .cm-arsenal-card[data-selected="true"]{
+  border:0!important;
+  background:url('assets/ui/arsenal-ui-card.svg') center/100% 100% no-repeat!important;
+  filter:drop-shadow(0 0 6px #50ee86)!important;
+  box-shadow:none!important;
+}
+#cm-arsenal-modal .cm-arsenal-card[data-rarity="épico"]{filter:drop-shadow(0 0 2px #bb7eff)}
+#cm-arsenal-modal .cm-arsenal-card[data-rarity="lendário"]{filter:drop-shadow(0 0 3px #ffbe56)}
+#cm-arsenal-modal .cm-arsenal-card[data-rarity="mítico"]{filter:drop-shadow(0 0 3px #ed7472)}
+#cm-arsenal-modal .cm-arsenal-stage{
+  background:
+    url('assets/ui/arsenal-ui-detail-frame.svg') center/100% 100% no-repeat,
+    url('assets/v2/backgrounds/castle.webp') center/cover!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+}
+#cm-arsenal-modal .cm-arsenal-stage::after{display:none!important}
+#cm-arsenal-modal .cm-arsenal-equip{
+  border:0!important;
+  border-radius:0!important;
+  background:url('assets/ui/arsenal-ui-equip.svg') center/100% 100% no-repeat!important;
+  box-shadow:none!important;
+  min-height:46px!important;
+  padding:9px 22px!important;
+  text-shadow:0 2px 3px #002511!important;
+}
+#cm-arsenal-modal .cm-arsenal-equip[data-state="locked"],
+#cm-arsenal-modal .cm-arsenal-equip[data-state="equipped"]{
+  background:url('assets/ui/arsenal-ui-equip.svg') center/100% 100% no-repeat!important;
+  filter:grayscale(.65) brightness(.75)!important;
+}
+@media(max-width:960px){
+ #cm-arsenal-modal .cm-arsenal-core{padding:12px!important}
+ #cm-arsenal-modal .cm-arsenal-header{min-height:60px!important;margin:-6px 0 0!important;padding:9px 40px!important}
+ #cm-arsenal-modal .cm-arsenal-layout{grid-template-columns:minmax(100px,150px) minmax(185px,1fr) minmax(200px,1fr)!important;gap:5px!important;padding:6px!important}
+ #cm-arsenal-modal .cm-arsenal-progress{min-height:130px!important;padding:12px 6px!important}
+}
