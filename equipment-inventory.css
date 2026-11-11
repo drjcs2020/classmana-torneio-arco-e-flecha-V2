@@ -561,3 +561,59 @@ body[data-page="lobby"] #view-inicio[data-step="heroi"] .studio-bows.cm-inventor
  #cm-arsenal-modal .cm-arsenal-layout{grid-template-columns:minmax(100px,150px) minmax(185px,1fr) minmax(200px,1fr)!important;gap:5px!important;padding:6px!important}
  #cm-arsenal-modal .cm-arsenal-progress{min-height:130px!important;padding:12px 6px!important}
 }
+
+
+/* Botões PNG aprovados: aplicados somente depois de carregados (JS adiciona classe).
+   Se um arquivo faltar, conserva o botão funcional anterior. */
+#cm-arsenal-modal .cm-arsenal-categories button.cm-arsenal-png-button,
+#cm-arsenal-modal .cm-arsenal-categories button.cm-arsenal-png-button[aria-pressed="true"],
+#cm-arsenal-modal .cm-arsenal-close.cm-arsenal-png-button,
+#cm-arsenal-modal .cm-arsenal-pagination button.cm-arsenal-png-button,
+#cm-arsenal-modal .cm-arsenal-equip.cm-arsenal-png-button[data-state="ready"]{
+ background-image:var(--cm-png-button)!important;
+ background-position:center!important;
+ background-repeat:no-repeat!important;
+ background-size:100% 100%!important;
+ background-color:transparent!important;
+ border:0!important;
+ box-shadow:none!important;
+ border-radius:0!important;
+ color:transparent!important;
+ text-shadow:none!important;
+ font-size:0!important;
+}
+#cm-arsenal-modal .cm-arsenal-categories button.cm-arsenal-png-button span,
+#cm-arsenal-modal .cm-arsenal-close.cm-arsenal-png-button span{display:none!important}
+#cm-arsenal-modal .cm-arsenal-categories button.cm-arsenal-png-button{padding:0!important;min-height:47px!important}
+#cm-arsenal-modal .cm-arsenal-close.cm-arsenal-png-button{
+ width:112px!important;height:42px!important;min-height:42px!important;padding:0!important;
+}
+#cm-arsenal-modal .cm-arsenal-equip.cm-arsenal-png-button[data-state="ready"]{
+ min-width:170px!important;min-height:48px!important;padding:0!important;
+}
+#cm-arsenal-modal .cm-arsenal-pagination{
+ flex:0 0 38px;display:flex;align-items:center;justify-content:center;
+ gap:12px;min-height:38px;margin-top:3px;
+}
+#cm-arsenal-modal .cm-arsenal-pagination[hidden]{display:none!important}
+#cm-arsenal-modal .cm-arsenal-pagination button{
+ box-sizing:border-box;width:62px;height:37px;min-width:62px;min-height:37px;
+ padding:0!important;cursor:pointer;
+ color:#ffdea0;font:bold 21px Georgia,serif;
+ background:linear-gradient(#183e77,#071735);
+ border:2px solid #e6b348;border-radius:8px;
+}
+#cm-arsenal-modal .cm-arsenal-pagination button.cm-arsenal-png-button{
+ background-image:var(--cm-png-button)!important;background-position:center!important;
+ background-size:contain!important;background-repeat:no-repeat!important;
+ background-color:transparent!important;border:0!important;color:transparent!important;
+ font-size:0!important;
+}
+#cm-arsenal-modal .cm-arsenal-pagination button:disabled{opacity:.45!important;cursor:default!important}
+#cm-arsenal-modal .cm-arsenal-page-count{font:bold 17px/1.1 Cinzel,Georgia,serif;color:#ffe4a7}
+#cm-arsenal-modal .cm-arsenal-categories button:disabled{opacity:.65!important;cursor:default!important}
+@media(max-height:720px) and (min-width:781px){
+ #cm-arsenal-modal .cm-arsenal-pagination{flex-basis:33px;min-height:33px}
+ #cm-arsenal-modal .cm-arsenal-pagination button{height:31px;min-height:31px;width:52px;min-width:52px}
+ #cm-arsenal-modal .cm-arsenal-grid{grid-auto-rows:minmax(102px,1fr)!important}
+}
