@@ -31,18 +31,22 @@ function emberLayer(host,house,count=16){
  const layer=node('div','cm-embers');
  layer.setAttribute('aria-hidden','true');
  layer.dataset.house=getHouse(house);
- // Brasas independentes e distribuídas por toda a largura, SEM desenho espelhado.
  const rng=i=>Math.abs(Math.sin(i*19.19+7.713));
- const total=Math.min(host.id==='cm-v2-home'?105:80,count);
+ const home=host.id==='cm-v2-home';
+ const total=Math.min(home?165:100,count);
+ // Volta à densidade original das bordas: X cúbico aproxima brasas dos cantos.
+ // A semente de cada lado é distinta: nenhuma dupla espelhada ou forma desenhada.
  for(let i=0;i<total;i++){
   const dot=node('span','cm-ember'),v=rng(i+1);
-  const x=3+94*((i*.61803398875+rng(i+17)*.12)%1);
-  dot.style.setProperty('--ember-x',x.toFixed(2)+'%');
-  dot.style.setProperty('--ember-size',(3.2+5.7*v).toFixed(1)+'px');
-  dot.style.setProperty('--ember-duration',(5.5+5.8*rng(i+31)).toFixed(2)+'s');
-  dot.style.setProperty('--ember-delay',(-12*rng(i+46)).toFixed(2)+'s');
-  dot.style.setProperty('--ember-drift',(-35+70*rng(i+64)).toFixed(0)+'px');
-  dot.style.setProperty('--ember-opacity',(.5+.45*v).toFixed(2));
+  const side=i%2;
+  const edge=Math.pow(rng(i*7+21+side*113),3);
+  const x=side===0?2+48*edge:98-48*edge;
+  dot.style.setProperty('--ember-x',x.toFixed(1)+'%');
+  dot.style.setProperty('--ember-size',(home?4.4+8.7*v+2.2*(1-edge):2.8+6.5*v).toFixed(1)+'px');
+  dot.style.setProperty('--ember-duration',(3.4+5.4*rng(i+31)).toFixed(2)+'s');
+  dot.style.setProperty('--ember-delay',(-9*rng(i+46)).toFixed(2)+'s');
+  dot.style.setProperty('--ember-drift',(-72+144*rng(i+64)).toFixed(0)+'px');
+  dot.style.setProperty('--ember-opacity',(home?.23+.76*(1-edge):.65+.35*v).toFixed(2));
   layer.append(dot);
  }
  host.prepend(layer);
