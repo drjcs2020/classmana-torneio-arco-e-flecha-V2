@@ -643,3 +643,37 @@
   transform-origin:center!important;
  }
 }
+
+
+/* Ajuste fino medido sobre o PNG original (700 × 887).
+   As duas janelas úteis da arte ficam entre x≈45–88%, y≈29–51% e 54–76%.
+   Nenhuma legenda pode invadir a moldura dourada ou a janela vizinha. */
+#cm-arsenal-modal.cm-art-progress .cm-arsenal-progress{
+ box-sizing:border-box!important;isolation:isolate!important;
+ flex-shrink:0!important;overflow:visible!important;
+}
+#cm-arsenal-modal.cm-art-progress .cm-arsenal-wins,
+#cm-arsenal-modal.cm-art-progress .cm-arsenal-level{
+ position:absolute!important;z-index:2!important;
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ left:46%!important;width:42%!important;height:9%!important;
+ margin:0!important;padding:0!important;min-height:0!important;
+ color:#fff3c6!important;
+ font:900 clamp(15px,1.55vw,26px)/1 Georgia,serif!important;
+ white-space:nowrap!important;letter-spacing:0!important;
+ text-shadow:0 2px 3px #000!important;
+}
+#cm-arsenal-modal.cm-art-progress .cm-arsenal-wins{top:32.6%!important}
+#cm-arsenal-modal.cm-art-progress .cm-arsenal-level{top:58.8%!important}
+#cm-arsenal-modal.cm-art-progress .cm-arsenal-progress>span{
+ position:absolute!important;z-index:2!important;
+ left:44%!important;width:47%!important;height:9%!important;
+ margin:0!important;padding:0 1px!important;min-height:0!important;
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ color:#e9f0ff!important;text-align:center!important;
+ font:800 clamp(8px,.66vw,10px)/1.08 Nunito,Arial,sans-serif!important;
+ white-space:normal!important;overflow-wrap:normal!important;
+ text-shadow:0 1px 2px #000!important;
+}
+#cm-arsenal-modal.cm-art-progress .cm-arsenal-progress>span:nth-of-type(1){top:42%!important}
+#cm-arsenal-modal.cm-art-progress .cm-arsenal-progress>span:nth-of-type(2){top:68.4%!important}
