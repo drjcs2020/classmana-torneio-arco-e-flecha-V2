@@ -52,7 +52,7 @@
 #finish.cm-cinematic-result .cm-final-shots span{min-width:22px;padding:4px 6px;border:1px solid #e4ae4f;border-radius:5px;background:#05122f;color:#ffe2a5;font:900 13px/1 Georgia,serif;text-align:center}
 #finish.cm-cinematic-result .finish-actions button{border:3px ridge #e4b85a;border-radius:10px}
 @media(max-width:680px){.cm-vs-fighters{grid-template-columns:minmax(0,1fr) 44px minmax(0,1fr)}.cm-vs-fighter{height:clamp(190px,38vh,310px)}.cm-vs-title{font-size:22px}.cm-vs-mark{font-size:40px}.cm-vs-actions button{min-height:46px;padding:8px 12px;font-size:14px}#finish.cm-cinematic-result .cm-final-duel{grid-template-columns:minmax(0,1fr) 32px minmax(0,1fr);gap:5px}#finish.cm-cinematic-result .cm-final-player{padding:4px}#finish.cm-cinematic-result .cm-final-player img{max-height:115px}}
-@media(prefers-reduced-motion:reduce){.cm-ember,.cm-vs-shell,.cm-vs-fighter,.cm-vs-mark,.cm-vs-start,.cm-impact-sparks span{animation:none!important}.cm-ember{opacity:.2}}
+@media(prefers-reduced-motion:reduce){.cm-vs-shell,.cm-vs-fighter,.cm-vs-mark,.cm-vs-start,.cm-impact-sparks span{animation:none!important}}
 
 /* Result score strip is data-dependent: never show an empty pale placeholder. */
 #finish.cm-cinematic-result #finish-results:empty{display:none!important}
@@ -202,19 +202,29 @@
 }
 
 
-/* ClassMana 2026-11-11: brasas visíveis em todas as resoluções.
-   Quando reduzir movimento estiver ativo, mostrar partículas estáticas,
-   sem animação, em vez de ocultar completamente os efeitos. */
+/* Brasas originais: pontos circulares sobem continuamente, diminuem até sumir.
+   Sem posições estáticas, agrupamentos espelhados, corações ou imagens novas. */
+@keyframes cm-ember-rise{
+ 0%{transform:translate3d(0,8vh,0) scale(1);opacity:0}
+ 9%{opacity:var(--ember-opacity,.85)}
+ 45%{transform:translate3d(calc(var(--ember-drift,0px)*.4),-42vh,0) scale(.65);opacity:.75}
+ 80%{opacity:.32}
+ 100%{transform:translate3d(var(--ember-drift,0px),-115vh,0) scale(.07);opacity:0}
+}
+.cm-ember{
+ border-radius:50%!important;
+ animation-name:cm-ember-rise!important;
+ animation-duration:var(--ember-duration,8s)!important;
+ animation-timing-function:linear!important;
+ animation-delay:var(--ember-delay,0s)!important;
+ animation-iteration-count:infinite!important;
+ animation-fill-mode:both!important;
+}
 @media(prefers-reduced-motion:reduce){
+ /* Preserva a preferência no restante do jogo; o efeito decorativo solicitado
+    continua discreto e em movimento em vez de ficar congelado em um desenho. */
  #view-inicio > .cm-ambient-embers,
  #stage > .cm-ambient-embers,
- #cm-v2-home > .cm-ambient-embers{
-  display:block!important;visibility:visible!important;
- }
- .cm-ambient-embers .cm-ember,
- .cm-vs-overlay .cm-ember{
-  animation:none!important;opacity:.7!important;transform:none!important;
-  top:var(--ember-static-y,auto)!important;
-  bottom:var(--ember-static-bottom,15%)!important;
- }
+ #cm-v2-home > .cm-ambient-embers{display:block!important;visibility:visible!important}
+ .cm-ember{animation-name:cm-ember-rise!important;opacity:0}
 }
