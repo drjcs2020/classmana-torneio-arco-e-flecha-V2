@@ -1,725 +1,396 @@
-/* ClassMana — inventário fiel à prancha (11/11/2026).
-   Esta é a única camada de escala da tela do arsenal.
-   Arquivos de arte originais: assets/ui/arsenal-*.png.
-   As armas continuam sendo os GLBs originais do catálogo. */
+/* CLASSMANA — ARSENAL / RECONSTRUÇÃO 1
+   Fonte de verdade: Inventário de Armas Fantástico.png (1672 x 941).
+   Regras de proporção unificadas. Este arquivo substitui integralmente
+   as antigas tentativas de ajustar as posições com !important cumulativos.
+   Todas as artes usadas são os PNGs originais entregues para o jogo.
+ */
 #cm-arsenal-modal{
+ position:fixed!important;inset:0!important;z-index:999999!important;
  display:grid!important;place-items:center!important;overflow:auto!important;
- padding:clamp(3px,.7vw,10px)!important;
+ box-sizing:border-box!important;padding:5px!important;
+ background:rgba(1,10,25,.34)!important;color:#fff0c4!important;
+ font-family:Nunito,Arial,sans-serif!important;
 }
-#cm-arsenal-modal .cm-arsenal-shell,
-#cm-arsenal-modal.cm-art-frame .cm-arsenal-shell{
- width:min(98vw,1600px)!important;height:min(97dvh,905px)!important;
- min-height:0!important;max-height:none!important;
- border:0!important;border-image:none!important;clip-path:none!important;
- padding:clamp(9px,1.6vw,24px)!important;
+#cm-arsenal-modal[hidden]{display:none!important}
+#cm-arsenal-modal *,#cm-arsenal-modal *::before,#cm-arsenal-modal *::after{box-sizing:border-box!important}
+#cm-arsenal-modal button{cursor:pointer!important}
+#cm-arsenal-modal button:focus-visible{outline:2px solid #83e4ff!important;outline-offset:2px!important}
+#cm-arsenal-modal .cm-arsenal-shell{
+ position:relative!important;display:block!important;
+ width:min(96vw,calc(88dvh * 2.02),1650px)!important;
+ height:auto!important;aspect-ratio:2.02!important;
+ min-height:0!important;max-height:unset!important;
+ margin:0!important;padding:0!important;
  background:url('assets/ui/arsenal-moldura-principal.png') center/100% 100% no-repeat!important;
- border-radius:0!important;filter:drop-shadow(0 15px 20px #000b)!important;
+ border:0!important;border-image:none!important;border-radius:0!important;
+ clip-path:none!important;overflow:visible!important;
+ filter:drop-shadow(0 10px 20px #000b)!important;
 }
-#cm-arsenal-modal .cm-arsenal-core,
-#cm-arsenal-modal.cm-art-frame .cm-arsenal-core{
- display:flex!important;flex-direction:column!important;
- width:100%!important;height:100%!important;min-height:0!important;
- background:transparent!important;border:0!important;clip-path:none!important;
- padding:0!important;overflow:hidden!important;
+#cm-arsenal-modal .cm-arsenal-core{
+ position:absolute!important;inset:0!important;
+ display:block!important;width:100%!important;height:100%!important;
+ padding:0!important;margin:0!important;
+ border:0!important;border-radius:0!important;clip-path:none!important;
+ overflow:visible!important;background:none!important;
 }
-#cm-arsenal-modal .cm-arsenal-header,
-#cm-arsenal-modal.cm-art-title .cm-arsenal-header{
- flex:0 0 clamp(77px,14vh,133px)!important;
- height:clamp(77px,14vh,133px)!important;
- min-height:0!important;max-height:none!important;
- display:flex!important;align-items:center!important;justify-content:center!important;
- overflow:visible!important;margin:0!important;padding:0!important;
- background:url('assets/ui/arsenal-placa-titulo.png') center center / auto clamp(157px,29vh,284px) no-repeat!important;
- border:0!important;box-shadow:none!important;
+#cm-arsenal-modal .cm-arsenal-header{
+ position:absolute!important;left:17%!important;top:-5%!important;
+ width:66%!important;height:23%!important;
+ display:block!important;margin:0!important;padding:0!important;
+ min-height:0!important;max-height:none!important;flex:none!important;
+ background:url('assets/ui/arsenal-placa-titulo.png') center/contain no-repeat!important;
+ box-shadow:none!important;border:0!important;border-radius:0!important;overflow:visible!important;
+ z-index:4!important;
 }
-#cm-arsenal-modal.cm-art-title .cm-arsenal-header>div{
- position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;
- clip-path:inset(50%)!important;white-space:nowrap!important;
+#cm-arsenal-modal .cm-arsenal-header>div{
+ position:absolute!important;width:1px!important;height:1px!important;
+ overflow:hidden!important;clip-path:inset(50%)!important;white-space:nowrap!important;
 }
 #cm-arsenal-modal .cm-arsenal-header-crest{display:none!important}
 #cm-arsenal-modal .cm-arsenal-close{
- right:4px!important;top:clamp(14px,3.4vh,35px)!important;z-index:10!important;
- min-width:95px!important;width:clamp(96px,9vw,145px)!important;
- min-height:44px!important;height:clamp(43px,6vh,62px)!important;
- padding:0!important;border:0!important;box-shadow:none!important;
- background-size:contain!important;
+ position:absolute!important;top:61%!important;right:-22%!important;
+ width:clamp(40px,5vw,74px)!important;height:clamp(29px,3.8vw,56px)!important;
+ min-width:0!important;min-height:0!important;
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ margin:0!important;padding:0!important;
+ background:url('assets/ui/arsenal-botao-fechar.png') center/contain no-repeat!important;
+ border:0!important;border-radius:0!important;box-shadow:none!important;
+ color:transparent!important;font-size:0!important;text-shadow:none!important;
+ z-index:10!important;
 }
+#cm-arsenal-modal .cm-arsenal-close span{display:none!important}
 #cm-arsenal-modal .cm-arsenal-layout{
- display:grid!important;flex:1 1 auto!important;min-height:0!important;
- grid-template-columns:minmax(137px,17%) minmax(0,41%) minmax(0,42%)!important;
- gap:0!important;padding:0 8px 6px!important;overflow:hidden!important;
+ position:absolute!important;left:3.3%!important;right:3.3%!important;
+ top:19.2%!important;bottom:6.0%!important;
+ display:grid!important;grid-template-columns:16% 40.2% 43.8%!important;
+ gap:0!important;min-height:0!important;height:auto!important;
+ margin:0!important;padding:0!important;overflow:hidden!important;
 }
 #cm-arsenal-modal .cm-arsenal-sidebar{
- display:flex!important;flex-direction:column!important;
- padding:clamp(3px,.8vw,12px) clamp(2px,.65vw,10px)!important;gap:7px!important;
- min-width:0!important;min-height:0!important;background:transparent!important;
- border:0!important;box-shadow:none!important;
+ display:flex!important;flex-direction:column!important;gap:0!important;
+ align-items:stretch!important;justify-content:flex-start!important;
+ position:relative!important;min-height:0!important;min-width:0!important;
+ margin:0!important;padding:1.8% 6% 1%!important;
+ background:none!important;border:0!important;border-radius:0!important;box-shadow:none!important;
 }
 #cm-arsenal-modal .cm-arsenal-section-label{
- flex:0 0 24px!important;min-height:24px!important;
- text-align:center!important;font:900 clamp(11px,.9vw,15px)/1.1 Georgia,serif!important;
- color:#fff1c1!important;
+ flex:0 0 5%!important;min-height:0!important;
+ margin:0!important;padding:0!important;
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ color:#ffeac0!important;
+ font:900 clamp(10px,1vw,15px)/1.1 Georgia,serif!important;
+ text-align:center!important;
 }
 #cm-arsenal-modal .cm-arsenal-categories{
- flex:0 0 auto!important;display:flex!important;flex-direction:column!important;
- gap:clamp(5px,1vh,13px)!important;
+ display:flex!important;flex-direction:column!important;flex-wrap:nowrap!important;
+ gap:2.2%!important;align-items:stretch!important;justify-content:flex-start!important;
+ flex:0 0 53%!important;min-height:0!important;margin:0!important;padding:0!important;
 }
 #cm-arsenal-modal .cm-arsenal-categories button,
 #cm-arsenal-modal .cm-arsenal-categories button[aria-pressed="true"]{
- display:block!important;flex:0 0 clamp(41px,6.9vh,69px)!important;
- height:clamp(41px,6.9vh,69px)!important;min-height:0!important;
- padding:0!important;margin:0!important;border:0!important;box-shadow:none!important;
- background-size:contain!important;background-position:center!important;
- border-radius:0!important;
-}
-#cm-arsenal-modal .cm-arsenal-categories button.cm-arsenal-png-button,
-#cm-arsenal-modal .cm-arsenal-categories button.cm-arsenal-png-button[aria-pressed="true"]{
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ position:relative!important;flex:0 0 22.5%!important;
+ width:100%!important;max-width:none!important;height:22.5%!important;
+ min-height:0!important;min-width:0!important;margin:0!important;padding:0!important;
+ border:0!important;border-radius:0!important;box-shadow:none!important;
  background:var(--cm-png-button) center/contain no-repeat!important;
- filter:drop-shadow(0 2px 3px #0008)!important;
+ color:transparent!important;text-shadow:none!important;font-size:0!important;
+ transition:filter .15s ease!important;
 }
+#cm-arsenal-modal .cm-arsenal-categories button span{visibility:hidden!important}
 #cm-arsenal-modal .cm-arsenal-categories button[aria-pressed="true"]{
- filter:brightness(1.18) drop-shadow(0 0 5px #f6dc78)!important;
+ filter:brightness(1.17) drop-shadow(0 0 4px #ffe28588)!important;
 }
 #cm-arsenal-modal .cm-arsenal-categories button:disabled{opacity:.6!important}
-#cm-arsenal-modal.cm-art-progress .cm-arsenal-progress{
- position:relative!important;display:block!important;flex:0 1 auto!important;
- width:min(100%,205px)!important;max-width:205px!important;
+#cm-arsenal-modal .cm-arsenal-progress{
+ display:block!important;position:relative!important;
+ flex:0 0 auto!important;align-self:stretch!important;
+ width:100%!important;max-width:none!important;
  height:auto!important;aspect-ratio:700/887!important;
- min-height:0!important;padding:0!important;margin:auto auto 8px!important;
+ min-height:0!important;
+ margin:auto 0 0!important;padding:0!important;
  background:url('assets/ui/arsenal-painel-progresso.png') center/contain no-repeat!important;
- border:0!important;box-shadow:none!important;
+ border:0!important;border-radius:0!important;box-shadow:none!important;
+ overflow:hidden!important;
 }
-#cm-arsenal-modal.cm-art-progress .cm-arsenal-progress p{
+#cm-arsenal-modal .cm-arsenal-progress p{
  position:absolute!important;width:1px!important;height:1px!important;
  clip-path:inset(50%)!important;overflow:hidden!important;
 }
-#cm-arsenal-modal.cm-art-progress .cm-arsenal-wins,
-#cm-arsenal-modal.cm-art-progress .cm-arsenal-level{
- position:absolute!important;left:50%!important;width:42%!important;
- text-align:center!important;
- font:900 clamp(18px,2vw,33px)/1.05 Georgia,serif!important;
- color:#fff4c8!important;text-shadow:0 2px 4px #000!important;
+#cm-arsenal-modal .cm-arsenal-wins,
+#cm-arsenal-modal .cm-arsenal-level{
+ position:absolute!important;left:44%!important;width:43%!important;
+ height:10%!important;min-height:0!important;
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ margin:0!important;padding:0!important;
+ color:#fff1c2!important;
+ font:900 clamp(12px,1.5vw,26px)/1 Georgia,serif!important;
+ white-space:nowrap!important;text-shadow:0 2px 3px #000!important;
 }
-#cm-arsenal-modal.cm-art-progress .cm-arsenal-wins{top:30%!important}
-#cm-arsenal-modal.cm-art-progress .cm-arsenal-level{top:60%!important}
-#cm-arsenal-modal.cm-art-progress .cm-arsenal-progress>span{
- position:absolute!important;left:46%!important;width:49%!important;
- text-align:center!important;font:800 clamp(9px,.82vw,12px)/1.1 Nunito,Arial,sans-serif!important;
- color:#ecf2fe!important;
+#cm-arsenal-modal .cm-arsenal-wins{top:33%!important}
+#cm-arsenal-modal .cm-arsenal-level{top:61%!important}
+#cm-arsenal-modal .cm-arsenal-progress>span{
+ position:absolute!important;left:40%!important;width:53%!important;
+ height:8%!important;min-height:0!important;
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ margin:0!important;padding:0!important;
+ font:800 clamp(7px,.65vw,11px)/1.08 Nunito,Arial,sans-serif!important;
+ color:#edf2ff!important;text-align:center!important;text-shadow:0 1px 2px #000!important;
 }
-#cm-arsenal-modal.cm-art-progress .cm-arsenal-progress>span:nth-of-type(1){top:45%!important}
-#cm-arsenal-modal.cm-art-progress .cm-arsenal-progress>span:nth-of-type(2){top:76%!important}
+#cm-arsenal-modal .cm-arsenal-progress>span:nth-of-type(1){top:43%!important}
+#cm-arsenal-modal .cm-arsenal-progress>span:nth-of-type(2){top:71%!important}
 #cm-arsenal-modal .cm-arsenal-help{display:none!important}
 #cm-arsenal-modal .cm-arsenal-collection{
- display:flex!important;flex-direction:column!important;min-width:0!important;min-height:0!important;
- padding:0 clamp(5px,.6vw,10px) 0 2px!important;gap:2px!important;
- border-right:2px solid #b5823d!important;
+ display:flex!important;flex-direction:column!important;
+ min-height:0!important;min-width:0!important;
+ margin:0!important;padding:0 2.5%!important;gap:0!important;
+ border:0!important;border-radius:0!important;background:none!important;overflow:hidden!important;
 }
 #cm-arsenal-modal .cm-arsenal-collection-heading{
- flex:0 0 clamp(26px,4vh,43px)!important;min-height:0!important;
  display:flex!important;align-items:center!important;justify-content:space-between!important;
- padding:0 4px!important;
+ flex:0 0 6.5%!important;min-height:0!important;
+ margin:0!important;padding:0 1%!important;
 }
 #cm-arsenal-modal .cm-arsenal-collection-heading h3{
- font:900 clamp(16px,1.5vw,22px)/1.1 Georgia,serif!important;
- color:#ffdf9c!important;margin:0!important;
+ margin:0!important;
+ font:900 clamp(14px,1.35vw,24px)/1 Georgia,serif!important;
+ color:#ffe3aa!important;
 }
 #cm-arsenal-modal .cm-arsenal-count{
- font:900 clamp(10px,.9vw,13px)/1 Nunito,Arial,sans-serif!important;
+ font:900 clamp(9px,.68vw,12px)/1 Nunito,Arial,sans-serif!important;
+ color:#e8efff!important;
 }
 #cm-arsenal-modal .cm-arsenal-grid{
- display:grid!important;flex:1 1 auto!important;min-height:0!important;
- grid-template-columns:repeat(3,minmax(0,1fr))!important;
+ display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;
  grid-template-rows:repeat(2,minmax(0,1fr))!important;
  grid-auto-rows:minmax(0,1fr)!important;
- gap:clamp(3px,.7vw,12px)!important;
- justify-items:stretch!important;align-items:stretch!important;
- padding:0!important;overflow:hidden!important;
-}
-#cm-arsenal-modal.cm-art-card .cm-arsenal-card,
-#cm-arsenal-modal.cm-art-card .cm-arsenal-card[data-selected="true"]{
- position:relative!important;display:block!important;
- width:100%!important;max-width:none!important;
- height:100%!important;min-height:0!important;aspect-ratio:auto!important;
+ flex:1 1 auto!important;min-height:0!important;min-width:0!important;
+ gap:1.5% 1.2%!important;
+ align-items:stretch!important;justify-items:stretch!important;align-content:stretch!important;
  margin:0!important;padding:0!important;
- background:url('assets/ui/arsenal-moldura-carta.png') center/140% 100% no-repeat!important;
- border:0!important;box-shadow:none!important;overflow:hidden!important;
- filter:none!important;
+ overflow:hidden!important;
 }
-#cm-arsenal-modal.cm-art-card .cm-arsenal-card[data-selected="true"]{
- filter:drop-shadow(0 0 4px #42f595)!important;
+#cm-arsenal-modal .cm-arsenal-card{
+ position:relative!important;display:block!important;
+ min-width:0!important;min-height:0!important;
+ width:100%!important;height:100%!important;max-width:none!important;
+ margin:0!important;padding:0!important;
+ color:#fff1bd!important;background:url('assets/ui/arsenal-moldura-carta.png') center/100% 100% no-repeat!important;
+ border:0!important;border-radius:0!important;box-shadow:none!important;
+ overflow:hidden!important;text-align:center!important;
 }
-#cm-arsenal-modal.cm-art-card .cm-arsenal-card-level{
- position:absolute!important;top:4%!important;left:12%!important;width:76%!important;height:9%!important;
- min-height:0!important;display:flex!important;justify-content:center!important;align-items:center!important;
- font:900 clamp(12px,1vw,17px)/1 Georgia,serif!important;color:#ffeec3!important;
- text-shadow:0 2px 4px #120b0a!important;
+#cm-arsenal-modal .cm-arsenal-card[data-selected="true"]{
+ background:url('assets/ui/arsenal-moldura-carta.png') center/100% 100% no-repeat!important;
+ box-shadow:inset 0 0 15px #17a66b99!important;
+ filter:drop-shadow(0 0 5px #63ec9c)!important;
 }
-#cm-arsenal-modal.cm-art-card .cm-arsenal-thumb{
- position:absolute!important;top:15%!important;left:10%!important;
- width:80%!important;height:48%!important;max-height:none!important;min-height:0!important;
+#cm-arsenal-modal .cm-arsenal-card-level{
+ position:absolute!important;top:3%!important;left:15%!important;width:70%!important;height:9%!important;
+ min-height:0!important;display:flex!important;align-items:center!important;justify-content:center!important;
+ font:900 clamp(10px,1.03vw,16px)/1 Georgia,serif!important;
+ color:#fff0ba!important;text-shadow:0 2px 3px #000!important;
+}
+#cm-arsenal-modal .cm-arsenal-thumb{
+ position:absolute!important;left:10%!important;top:12%!important;
+ width:80%!important;height:51%!important;min-height:0!important;max-height:none!important;
  display:grid!important;place-items:center!important;
- padding:0!important;margin:0!important;overflow:hidden!important;
- filter:none!important;font-size:10px!important;
+ margin:0!important;padding:0!important;overflow:hidden!important;
+ color:#debd81!important;font-size:clamp(7px,.65vw,11px)!important;
+ filter:none!important;opacity:1!important;
 }
-#cm-arsenal-modal.cm-art-card .cm-arsenal-thumb-image{
- display:block!important;width:100%!important;height:100%!important;
- object-fit:contain!important;object-position:center!important;
- transform:scale(1.45)!important;transform-origin:center!important;
- filter:drop-shadow(0 3px 5px #000e)!important;
+#cm-arsenal-modal .cm-arsenal-thumb-image{
+ display:block!important;object-fit:contain!important;object-position:center!important;
+ width:100%!important;height:100%!important;
+ max-height:none!important;transform:none!important;
+ filter:drop-shadow(0 2px 3px #000d)!important;
 }
-#cm-arsenal-modal.cm-art-card .cm-arsenal-card-name{
- position:absolute!important;top:65%!important;left:8%!important;
- width:84%!important;height:11%!important;min-height:0!important;
- display:flex!important;align-items:center!important;justify-content:center!important;
- margin:0!important;padding:0 2px!important;
- color:#fff2bd!important;font:900 clamp(10px,.96vw,15px)/1.07 Georgia,serif!important;
- text-align:center!important;text-shadow:0 2px 4px #000!important;
- overflow-wrap:normal!important;text-wrap:balance!important;
+#cm-arsenal-modal .cm-arsenal-card-name{
+ position:absolute!important;left:8%!important;top:67%!important;width:84%!important;height:10%!important;
+ min-height:0!important;display:flex!important;align-items:center!important;justify-content:center!important;
+ margin:0!important;padding:0 3px!important;
+ color:#fff1c1!important;font:900 clamp(9px,.96vw,15px)/1.05 Georgia,serif!important;
+ text-shadow:0 2px 4px #000!important;overflow-wrap:normal!important;text-wrap:balance!important;
 }
-#cm-arsenal-modal.cm-art-card .cm-arsenal-card-status{
- position:absolute!important;top:82%!important;left:8%!important;width:84%!important;height:10%!important;
+#cm-arsenal-modal .cm-arsenal-card-status{
+ position:absolute!important;left:11%!important;top:83%!important;width:78%!important;height:9%!important;
  min-height:0!important;display:flex!important;align-items:center!important;justify-content:center!important;
  margin:0!important;padding:0!important;
- font:900 clamp(9px,.83vw,12px)/1.05 Nunito,Arial,sans-serif!important;
- text-shadow:0 2px 4px #000!important;
+ font:900 clamp(8px,.72vw,12px)/1.04 Nunito,Arial,sans-serif!important;
+ color:#ebf5ff!important;text-shadow:0 1px 3px #000!important;
 }
 #cm-arsenal-modal .cm-arsenal-pagination{
- display:flex!important;flex:0 0 clamp(31px,4.6vh,49px)!important;
- min-height:0!important;align-items:center!important;justify-content:center!important;
- gap:clamp(9px,1.5vw,18px)!important;margin:0!important;padding:0!important;
+ display:flex!important;flex:0 0 5.5%!important;min-height:0!important;
+ align-items:center!important;justify-content:center!important;gap:3%!important;
+ padding:0!important;margin:0!important;
 }
-#cm-arsenal-modal .cm-arsenal-pagination[hidden]{display:none!important}
 #cm-arsenal-modal .cm-arsenal-pagination button{
- width:clamp(52px,5.3vw,78px)!important;min-width:0!important;
- height:clamp(27px,4vh,39px)!important;min-height:0!important;
- padding:0!important;border:0!important;border-radius:0!important;
+ flex:0 0 14%!important;display:block!important;
+ height:85%!important;min-height:0!important;min-width:0!important;
+ padding:0!important;border:0!important;border-radius:0!important;box-shadow:none!important;
+ background:var(--cm-png-button) center/contain no-repeat!important;
+ color:transparent!important;font-size:0!important;
 }
+#cm-arsenal-modal .cm-arsenal-pagination button:disabled{opacity:.4!important}
 #cm-arsenal-modal .cm-arsenal-page-count{
- font:900 clamp(15px,1.25vw,20px)/1 Georgia,serif!important;color:#ffe6a6!important;
+ font:900 clamp(12px,1vw,19px)/1 Georgia,serif!important;color:#fff0bc!important;
 }
 #cm-arsenal-modal .cm-arsenal-detail{
- display:flex!important;flex-direction:column!important;min-width:0!important;min-height:0!important;
- padding:0 1px 0 clamp(9px,1vw,17px)!important;gap:clamp(3px,.65vh,8px)!important;
- overflow:hidden!important;
+ display:flex!important;flex-direction:column!important;gap:1.3%!important;
+ min-height:0!important;min-width:0!important;
+ padding:0 0 0 3%!important;margin:0!important;overflow:hidden!important;
+ border-left:2px solid #a67a34!important;
 }
 #cm-arsenal-modal .cm-arsenal-detail-top{
- display:flex!important;flex:0 0 clamp(35px,5.3vh,56px)!important;min-height:0!important;
- align-items:center!important;justify-content:space-around!important;gap:8px!important;
- padding:5px 9px!important;border:2px solid #c68e3b!important;
- background:linear-gradient(#164269,#07162e)!important;border-radius:7px!important;
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ flex:0 0 10%!important;min-height:0!important;position:relative!important;
+ padding:0 6%!important;margin:0!important;gap:8px!important;
+ background:linear-gradient(180deg,#183c5d,#061c37)!important;
+ border:2px solid #e3b55e!important;border-radius:7px!important;
 }
 #cm-arsenal-modal .cm-arsenal-item-name{
- margin:0!important;font:900 clamp(17px,1.75vw,27px)/1.08 Georgia,serif!important;
- white-space:nowrap!important;color:#fff1c3!important;text-shadow:0 2px 4px #000!important;
+ margin:0!important;color:#ffefc1!important;
+ font:900 clamp(14px,1.8vw,30px)/1.1 Georgia,serif!important;
+ text-align:center!important;text-shadow:0 2px 3px #000!important;
 }
 #cm-arsenal-modal .cm-arsenal-rarity{
- flex:none!important;font-size:clamp(9px,.75vw,12px)!important;
+ position:absolute!important;left:50%!important;top:78%!important;transform:translateX(-50%)!important;
+ padding:3px 16px!important;
+ background:linear-gradient(#cccfd4,#596575)!important;
+ border:1px solid #deb968!important;border-radius:5px!important;
+ color:#fff4d0!important;font:900 clamp(9px,.8vw,13px)/1 Nunito,Arial,sans-serif!important;
+ white-space:nowrap!important;z-index:2!important;
 }
 #cm-arsenal-modal .cm-arsenal-stage{
- display:block!important;position:relative!important;
- flex:1 1 auto!important;min-height:110px!important;max-height:none!important;
- border:2px solid #dbad57!important;border-radius:7px!important;
- background:
- url('assets/ui/arsenal-ui-detail-frame.svg') center/100% 100% no-repeat,
- url('assets/v2/backgrounds/castle.webp') center/cover!important;
+ position:relative!important;display:block!important;
+ flex:1 1 auto!important;min-height:0!important;max-height:none!important;
+ margin:1% 0 0!important;padding:0!important;
  overflow:hidden!important;
+ border:4px ridge #c9a156!important;border-radius:8px!important;
+ background:url('assets/v2/backgrounds/castle.webp') center/cover no-repeat!important;
+ box-shadow:inset 0 0 16px #0009!important;
 }
+#cm-arsenal-modal .cm-arsenal-stage::after{
+ content:""!important;position:absolute!important;bottom:8%!important;left:14%!important;
+ right:14%!important;height:14%!important;border-radius:50%!important;
+ border:2px solid #73cfff99!important;box-shadow:0 0 20px #41c7ff88!important;
+ z-index:1!important;pointer-events:none!important;
+}
+#cm-arsenal-modal .cm-arsenal-stage-rune{display:none!important}
 #cm-arsenal-modal .cm-arsenal-model{
- position:absolute!important;inset:0!important;width:100%!important;height:100%!important;
- background:transparent!important;z-index:2!important;
+ position:absolute!important;inset:0!important;z-index:2!important;
+ width:100%!important;height:100%!important;background:transparent!important;
+ --poster-color:transparent;
 }
-#cm-arsenal-modal .cm-arsenal-description{display:none!important}
+#cm-arsenal-modal .cm-arsenal-model-placeholder{
+ position:absolute!important;inset:20%!important;opacity:.2!important;z-index:1!important;
+}
+#cm-arsenal-modal .cm-arsenal-loading{
+ position:absolute!important;bottom:3%!important;left:2%!important;z-index:3!important;
+ max-width:45%!important;font:800 clamp(8px,.68vw,11px)/1.1 Nunito,Arial,sans-serif!important;
+ color:#fff1cb!important;text-shadow:0 2px 2px #000!important;
+}
+#cm-arsenal-modal .cm-arsenal-model-controls{
+ position:absolute!important;right:1%!important;bottom:2%!important;z-index:5!important;
+ display:flex!important;gap:3px!important;
+}
+#cm-arsenal-modal .cm-arsenal-model-controls button{
+ width:clamp(22px,2.5vw,37px)!important;min-width:0!important;
+ height:clamp(22px,2.5vw,37px)!important;
+ padding:0!important;background:#071d40f0!important;border:1px solid #d7b366!important;
+ border-radius:7px!important;color:#fff2be!important;
+ font:900 clamp(15px,1.5vw,24px)/1 Arial,sans-serif!important;
+}
+#cm-arsenal-modal .cm-arsenal-description{
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ flex:0 0 8%!important;min-height:0!important;
+ padding:1% 3%!important;margin:0!important;
+ background:url('assets/ui/arsenal-barra-descricao.png') center/100% 100% no-repeat!important;
+ border:0!important;border-radius:0!important;
+ color:#f7f3e4!important;font:800 clamp(9px,.9vw,14px)/1.15 Nunito,Arial,sans-serif!important;
+ text-align:center!important;
+}
 #cm-arsenal-modal .cm-arsenal-stats{
- display:grid!important;flex:0 0 clamp(52px,8vh,77px)!important;min-height:0!important;
- grid-template-columns:repeat(3,minmax(0,1fr))!important;
- grid-template-rows:1fr!important;gap:0!important;
- padding:4px!important;border:1px solid #d5a659!important;border-radius:6px!important;
- background:#04172f!important;
+ display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;
+ grid-template-rows:1fr!important;gap:1%!important;
+ flex:0 0 13%!important;min-height:0!important;
+ margin:0!important;padding:0!important;background:none!important;border:0!important;
 }
-#cm-arsenal-modal.cm-art-stats .cm-arsenal-stat{
- display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;
- gap:3px!important;min-width:0!important;min-height:0!important;height:100%!important;
- border:0!important;border-right:1px solid #ba904a!important;
- border-radius:0!important;box-shadow:none!important;
- background:transparent!important;padding:2px 5px!important;
+#cm-arsenal-modal .cm-arsenal-stat{
+ min-height:0!important;min-width:0!important;
+ display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:5%!important;
+ padding:4% 2%!important;margin:0!important;
+ background:url('assets/ui/arsenal-moldura-estatistica.png') center/100% 100% no-repeat!important;
+ border:0!important;border-radius:0!important;box-shadow:none!important;
 }
-#cm-arsenal-modal.cm-art-stats .cm-arsenal-stat:last-child{border-right:0!important}
 #cm-arsenal-modal .cm-arsenal-stat span{
- font:900 clamp(9px,.8vw,12px)/1.1 Nunito,Arial,sans-serif!important;color:#e6edf7!important;
+ font:900 clamp(8px,.75vw,12px)/1.1 Nunito,Arial,sans-serif!important;
+ color:#f3deac!important;text-align:center!important;
 }
 #cm-arsenal-modal .cm-arsenal-stat strong{
- font:900 clamp(13px,1.1vw,18px)/1.1 Nunito,Arial,sans-serif!important;color:#fff2ba!important;
+ font:900 clamp(11px,1.02vw,17px)/1.1 Nunito,Arial,sans-serif!important;
+ color:#fff3c9!important;text-align:center!important;
 }
 #cm-arsenal-modal .cm-arsenal-ability{
- display:flex!important;flex:0 0 clamp(24px,4.1vh,37px)!important;min-height:0!important;
- align-items:center!important;justify-content:center!important;gap:8px!important;
- padding:2px 8px!important;
-}
-#cm-arsenal-modal.cm-art-description .cm-arsenal-ability{
+ display:flex!important;flex:0 0 6%!important;min-height:0!important;
+ align-items:center!important;justify-content:center!important;gap:2%!important;
+ padding:0 2%!important;margin:0!important;
+ color:#fff0bc!important;
  background:url('assets/ui/arsenal-barra-descricao.png') center/100% 100% no-repeat!important;
+ border:0!important;
 }
-#cm-arsenal-modal .cm-arsenal-ability strong{font-size:clamp(11px,.95vw,14px)!important}
-#cm-arsenal-modal .cm-arsenal-ability span{font-size:clamp(11px,.95vw,14px)!important}
+#cm-arsenal-modal .cm-arsenal-ability strong{
+ font:900 clamp(10px,1vw,16px)/1 Georgia,serif!important;
+}
+#cm-arsenal-modal .cm-arsenal-ability span{
+ font:900 clamp(10px,.95vw,16px)/1 Nunito,Arial,sans-serif!important;color:#68d9e7!important;
+}
 #cm-arsenal-modal .cm-arsenal-action-row{
- flex:0 0 clamp(44px,6.4vh,63px)!important;min-height:0!important;
- display:flex!important;align-items:center!important;gap:8px!important;
+ display:flex!important;flex:0 0 10%!important;min-height:0!important;
+ align-items:center!important;justify-content:center!important;gap:2%!important;
+ margin:0!important;padding:0!important;
 }
 #cm-arsenal-modal .cm-arsenal-unlock{
- flex:1 1 auto!important;max-width:48%!important;min-width:0!important;
- font:900 clamp(9px,.79vw,12px)/1.1 Nunito,Arial,sans-serif!important;
+ display:flex!important;align-items:center!important;justify-content:flex-start!important;
+ flex:0 1 30%!important;min-width:0!important;max-width:30%!important;
+ font:900 clamp(8px,.69vw,11px)/1.1 Nunito,Arial,sans-serif!important;
+ color:#ffe3a3!important;
 }
-#cm-arsenal-modal .cm-arsenal-equip,
-#cm-arsenal-modal .cm-arsenal-equip.cm-arsenal-png-button[data-state="ready"]{
- flex:0 0 min(52%,300px)!important;
- min-width:0!important;max-width:none!important;height:100%!important;min-height:0!important;
- padding:0!important;
- background-image:url('assets/ui/arsenal-botao-equipar.png')!important;
- background-position:center!important;background-repeat:no-repeat!important;
- background-size:contain!important;box-shadow:none!important;border:0!important;
+#cm-arsenal-modal .cm-arsenal-equip{
+ display:flex!important;flex:0 0 65%!important;
+ justify-content:center!important;align-items:center!important;
+ width:65%!important;max-width:65%!important;height:100%!important;
+ min-height:0!important;margin:0!important;padding:0!important;
+ border:0!important;border-radius:0!important;box-shadow:none!important;
+ background:url('assets/ui/arsenal-botao-equipar.png') center/100% 100% no-repeat!important;
+ color:#fff1c0!important;font:900 clamp(11px,1.2vw,21px)/1 Georgia,serif!important;
+ text-shadow:0 2px 3px #061c14!important;
 }
+#cm-arsenal-modal .cm-arsenal-equip[data-state="equipped"],
 #cm-arsenal-modal .cm-arsenal-equip[data-state="locked"],
-#cm-arsenal-modal .cm-arsenal-equip[data-state="equipped"]{
- background:url('assets/ui/arsenal-botao-equipar.png') center/contain no-repeat!important;
- filter:grayscale(.65) brightness(.75)!important;
- font-size:clamp(12px,1vw,16px)!important;
+#cm-arsenal-modal .cm-arsenal-equip:disabled{
+ background:url('assets/ui/arsenal-botao-equipar.png') center/100% 100% no-repeat!important;
+ filter:grayscale(.6) brightness(.68)!important;
+ opacity:1!important;
 }
 #cm-arsenal-modal .cm-arsenal-foot{display:none!important}
-@media(max-width:950px){
+@media(max-width:850px){
+ #cm-arsenal-modal{align-items:start!important}
+ #cm-arsenal-modal .cm-arsenal-shell{width:min(98vw,850px)!important;aspect-ratio:auto!important;height:auto!important;min-height:600px!important}
+ #cm-arsenal-modal .cm-arsenal-core{position:relative!important;min-height:600px!important}
+ #cm-arsenal-modal .cm-arsenal-header{top:0!important;height:90px!important}
  #cm-arsenal-modal .cm-arsenal-layout{
-  grid-template-columns:minmax(120px,17%) minmax(0,40%) minmax(0,43%)!important;
+  position:relative!important;left:auto!important;right:auto!important;
+  top:auto!important;bottom:auto!important;
+  padding:115px 4% 32px!important;
+  display:flex!important;flex-direction:column!important;gap:12px!important;overflow:visible!important;
  }
- #cm-arsenal-modal.cm-art-card .cm-arsenal-card-name{font-size:10px!important}
-}
-@media(max-width:780px){
- #cm-arsenal-modal .cm-arsenal-shell{height:98dvh!important}
- #cm-arsenal-modal .cm-arsenal-core{overflow:auto!important}
- #cm-arsenal-modal .cm-arsenal-layout{
-  display:flex!important;flex-direction:column!important;overflow:visible!important;gap:8px!important;
- }
- #cm-arsenal-modal .cm-arsenal-header{flex:0 0 75px!important;height:75px!important}
- #cm-arsenal-modal .cm-arsenal-categories{flex-direction:row!important;flex-wrap:wrap!important}
- #cm-arsenal-modal .cm-arsenal-categories button{flex:1 1 23%!important;min-width:85px!important}
+ #cm-arsenal-modal .cm-arsenal-sidebar{min-height:65px!important}
+ #cm-arsenal-modal .cm-arsenal-categories{flex-direction:row!important;flex:0 0 auto!important;gap:8px!important}
+ #cm-arsenal-modal .cm-arsenal-categories button{flex:1 1 22%!important;min-height:48px!important;height:48px!important}
  #cm-arsenal-modal .cm-arsenal-progress{display:none!important}
- #cm-arsenal-modal .cm-arsenal-collection{min-height:430px!important;border:0!important}
- #cm-arsenal-modal .cm-arsenal-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;grid-template-rows:repeat(2,180px)!important}
- #cm-arsenal-modal .cm-arsenal-detail{min-height:480px!important}
- #cm-arsenal-modal .cm-arsenal-stage{min-height:310px!important}
+ #cm-arsenal-modal .cm-arsenal-collection{min-height:490px!important}
+ #cm-arsenal-modal .cm-arsenal-grid{grid-template-rows:repeat(2,190px)!important}
+ #cm-arsenal-modal .cm-arsenal-pagination{min-height:40px!important}
+ #cm-arsenal-modal .cm-arsenal-detail{min-height:550px!important;border-left:0!important;padding:0!important}
+ #cm-arsenal-modal .cm-arsenal-stage{min-height:320px!important}
 }
-
-
-/* ARSENAL EM TELA CHEIA V2 — substitui somente proporções da camada do arsenal. */
-#cm-arsenal-modal{
- position:fixed!important;inset:0!important;width:100vw!important;height:100dvh!important;
- margin:0!important;padding:0!important;overflow:hidden!important;place-items:stretch!important;
- background:#06152e!important;
-}
-#cm-arsenal-modal .cm-arsenal-shell,
-#cm-arsenal-modal.cm-art-frame .cm-arsenal-shell{
- width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;
- min-width:0!important;min-height:0!important;
- padding:clamp(12px,1.4vw,25px)!important;margin:0!important;
- background-size:100% 100%!important;
-}
-#cm-arsenal-modal .cm-arsenal-core{
- overflow:visible!important;padding:0 clamp(5px,.6vw,12px) clamp(5px,.6vh,10px)!important;
-}
-#cm-arsenal-modal .cm-arsenal-header,
-#cm-arsenal-modal.cm-art-title .cm-arsenal-header{
- flex:0 0 clamp(105px,17dvh,155px)!important;
- height:clamp(105px,17dvh,155px)!important;
- min-height:0!important;max-height:none!important;
- background-size:auto clamp(190px,24dvh,260px)!important;
- background-position:center 55%!important;
- overflow:visible!important;
-}
-#cm-arsenal-modal .cm-arsenal-close{right:clamp(6px,1vw,16px)!important;top:clamp(17px,3vh,29px)!important}
-#cm-arsenal-modal .cm-arsenal-layout{
- grid-template-columns:minmax(150px,17%) minmax(0,41%) minmax(0,42%)!important;
- gap:0!important;
- padding:0 clamp(7px,.9vw,16px) clamp(6px,1vh,12px)!important;
-}
-#cm-arsenal-modal .cm-arsenal-sidebar{gap:clamp(6px,1vh,12px)!important}
-#cm-arsenal-modal .cm-arsenal-categories{
- gap:clamp(8px,1.35vh,16px)!important;
-}
-#cm-arsenal-modal .cm-arsenal-categories button,
-#cm-arsenal-modal .cm-arsenal-categories button.cm-arsenal-png-button{
- flex:0 0 clamp(52px,8vh,75px)!important;height:clamp(52px,8vh,75px)!important;
- min-height:0!important;
-}
-#cm-arsenal-modal.cm-art-progress .cm-arsenal-progress{
- margin:clamp(14px,3vh,30px) auto auto!important;
- max-width:min(100%,225px)!important;
- width:min(100%,225px)!important;
-}
-#cm-arsenal-modal.cm-art-card .cm-arsenal-card-name{
- top:67%!important;height:10%!important;font-size:clamp(12px,1vw,17px)!important;
-}
-#cm-arsenal-modal.cm-art-card .cm-arsenal-card-status{
- top:84%!important;height:9%!important;font-size:clamp(10px,.84vw,14px)!important;
-}
-#cm-arsenal-modal.cm-art-card .cm-arsenal-thumb{
- top:15%!important;height:50%!important;
-}
-#cm-arsenal-modal.cm-art-card .cm-arsenal-thumb-image{
- transform:none!important;width:100%!important;height:100%!important;object-fit:contain!important;
-}
-#cm-arsenal-modal .cm-arsenal-detail-top{
- flex:0 0 clamp(46px,6dvh,67px)!important;
-}
-#cm-arsenal-modal .cm-arsenal-stage{min-height:165px!important}
-#cm-arsenal-modal .cm-arsenal-stats{
- flex:0 0 clamp(66px,9vh,91px)!important;
-}
-#cm-arsenal-modal .cm-arsenal-stat-icon{
- display:block!important;flex:0 0 auto!important;
- font:900 clamp(20px,2.1vw,32px)/1 Georgia,serif!important;
- color:#ffd46b!important;text-shadow:0 2px 3px #000!important;
-}
-#cm-arsenal-modal .cm-arsenal-stat-label{
- font-size:clamp(10px,.85vw,13px)!important;
-}
-#cm-arsenal-modal .cm-arsenal-stats .cm-arsenal-stat{
- gap:2px!important;
-}
-#cm-arsenal-modal .cm-arsenal-action-row{
- flex:0 0 clamp(55px,7.2vh,76px)!important;
-}
-@media (max-height:700px) and (min-width:781px){
- #cm-arsenal-modal .cm-arsenal-header,
- #cm-arsenal-modal.cm-art-title .cm-arsenal-header{
-  flex-basis:95px!important;height:95px!important;background-size:auto 180px!important;
- }
- #cm-arsenal-modal .cm-arsenal-categories button,
- #cm-arsenal-modal .cm-arsenal-categories button.cm-arsenal-png-button{
-  flex-basis:42px!important;height:42px!important;
- }
- #cm-arsenal-modal .cm-arsenal-stats{flex-basis:58px!important}
- #cm-arsenal-modal .cm-arsenal-stat-icon{font-size:19px!important}
-}
-@media (max-width:780px){
- #cm-arsenal-modal .cm-arsenal-shell{overflow:auto!important}
- #cm-arsenal-modal .cm-arsenal-core{min-height:100%!important;height:auto!important}
- #cm-arsenal-modal .cm-arsenal-layout{display:flex!important;flex-direction:column!important;overflow:visible!important}
- #cm-arsenal-modal .cm-arsenal-header{flex-basis:96px!important;height:96px!important}
- #cm-arsenal-modal .cm-arsenal-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-template-rows:repeat(3,190px)!important}
-}
-
-
-/* INVENTÁRIO — revisão de alinhamento baseada nas coordenadas reais dos PNGs.
-   Placa 1350x430: exibir INTEIRA, sem cortar o brasão superior.
-   Carta 700x874: faixa do nome 62%-73%; faixa azul de status 78%-86%.
-   Mantém a grade 3x2 e os modelos GLB originais. */
-@media(min-width:781px){
- #cm-arsenal-modal .cm-arsenal-header,
- #cm-arsenal-modal.cm-art-title .cm-arsenal-header{
-  flex:0 0 clamp(133px,19dvh,180px)!important;
-  height:clamp(133px,19dvh,180px)!important;
-  min-height:0!important;max-height:none!important;
-  background-size:auto 100%!important;
-  background-position:center center!important;
-  background-repeat:no-repeat!important;
-  overflow:visible!important;
- }
- #cm-arsenal-modal .cm-arsenal-close{
-  top:clamp(12px,2.2dvh,25px)!important;
-  right:clamp(3px,.85vw,16px)!important;
- }
- #cm-arsenal-modal .cm-arsenal-collection-heading{
-  flex-basis:clamp(24px,3.5dvh,37px)!important;
- }
- #cm-arsenal-modal .cm-arsenal-grid{
-  column-gap:clamp(2px,.55vw,9px)!important;
-  row-gap:clamp(2px,.55dvh,8px)!important;
- }
- #cm-arsenal-modal.cm-art-card .cm-arsenal-card{
-  background-size:140% 100%!important;
-  overflow:hidden!important;
- }
- #cm-arsenal-modal.cm-art-card .cm-arsenal-card-level{
-  top:4%!important;height:8%!important;
- }
- #cm-arsenal-modal.cm-art-card .cm-arsenal-thumb{
-  top:13%!important;left:9%!important;
-  width:82%!important;height:47%!important;
-  overflow:hidden!important;
- }
- #cm-arsenal-modal.cm-art-card .cm-arsenal-thumb-image{
-  width:100%!important;height:100%!important;
-  object-fit:contain!important;object-position:center!important;
-  transform:scale(1.15)!important;
- }
- #cm-arsenal-modal.cm-art-card .cm-arsenal-card-name{
-  top:63.7%!important;left:8%!important;
-  width:84%!important;height:8.1%!important;
-  padding:0 3px!important;min-height:0!important;
-  font:900 clamp(11px,.91vw,15px)/1.06 Georgia,serif!important;
-  white-space:normal!important;overflow-wrap:normal!important;
-  text-wrap:balance!important;
-  display:flex!important;align-items:center!important;justify-content:center!important;
- }
- #cm-arsenal-modal.cm-art-card .cm-arsenal-card-status{
-  top:79.3%!important;left:9%!important;width:82%!important;
-  height:6.8%!important;min-height:0!important;padding:0 2px!important;
-  white-space:nowrap!important;
-  font:900 clamp(9px,.72vw,12px)/1 Nunito,Arial,sans-serif!important;
-  display:flex!important;align-items:center!important;justify-content:center!important;
- }
- #cm-arsenal-modal .cm-arsenal-pagination{
-  flex-basis:clamp(34px,5dvh,48px)!important;
-  min-height:0!important;
- }
- #cm-arsenal-modal .cm-arsenal-detail{
-  padding-bottom:clamp(10px,2vh,20px)!important;
- }
- #cm-arsenal-modal .cm-arsenal-action-row{
-  flex:0 0 clamp(46px,6dvh,63px)!important;
-  min-height:0!important;
- }
-}
-@media(min-width:781px) and (max-height:700px){
- #cm-arsenal-modal .cm-arsenal-header,
- #cm-arsenal-modal.cm-art-title .cm-arsenal-header{
-  flex-basis:125px!important;height:125px!important;background-size:auto 100%!important;
- }
- #cm-arsenal-modal .cm-arsenal-grid{row-gap:3px!important}
- #cm-arsenal-modal.cm-art-card .cm-arsenal-card-name{font-size:10px!important}
- #cm-arsenal-modal.cm-art-card .cm-arsenal-card-status{font-size:9px!important}
-}
-
-
-/* FINALIZAÇÃO DO ARSENAL — progresso, botão e emblemas de atributos.
-   Sem alterações na grade, nas molduras das cartas ou nas miniaturas. */
-#cm-arsenal-modal.cm-art-progress .cm-arsenal-progress{
- overflow:hidden!important;
-}
-#cm-arsenal-modal.cm-art-progress .cm-arsenal-wins,
-#cm-arsenal-modal.cm-art-progress .cm-arsenal-level{
- position:absolute!important;display:flex!important;
- align-items:center!important;justify-content:center!important;
- text-align:center!important;margin:0!important;padding:0!important;
- color:#fff2ba!important;text-shadow:0 2px 3px #000d!important;
- letter-spacing:-.02em!important;white-space:nowrap!important;
-}
-#cm-arsenal-modal.cm-art-progress .cm-arsenal-wins{
- top:31%!important;left:54%!important;width:34%!important;height:12%!important;
- font:900 clamp(18px,1.65vw,27px)/1 Georgia,serif!important;
-}
-#cm-arsenal-modal.cm-art-progress .cm-arsenal-level{
- top:62%!important;left:49%!important;width:43%!important;height:12%!important;
- font:900 clamp(16px,1.52vw,24px)/1 Georgia,serif!important;
-}
-#cm-arsenal-modal.cm-art-progress .cm-arsenal-progress>span{
- position:absolute!important;display:block!important;margin:0!important;padding:0!important;
- color:#e7efff!important;
- font:800 clamp(8px,.65vw,11px)/1.08 Nunito,Arial,sans-serif!important;
- text-align:center!important;white-space:normal!important;
- text-shadow:0 1px 2px #000b!important;
-}
-#cm-arsenal-modal.cm-art-progress .cm-arsenal-progress>span:nth-of-type(1){
- top:44%!important;left:47%!important;width:46%!important;height:11%!important;
-}
-#cm-arsenal-modal.cm-art-progress .cm-arsenal-progress>span:nth-of-type(2){
- top:75%!important;left:46%!important;width:49%!important;height:11%!important;
-}
-/* Texto da ação é único: o PNG antigo já tinha escrita gravada, então
-   não deve ficar sob uma segunda legenda dinâmica. */
-#cm-arsenal-modal .cm-arsenal-action-row{
- display:flex!important;align-items:center!important;justify-content:space-between!important;
- gap:clamp(8px,.9vw,15px)!important;min-width:0!important;
- padding:1px 8px 4px!important;margin:0!important;
-}
-#cm-arsenal-modal .cm-arsenal-unlock{
- flex:1 1 auto!important;max-width:none!important;min-width:0!important;
- font:900 clamp(10px,.78vw,13px)/1.15 Nunito,Arial,sans-serif!important;
- color:#ffe0a0!important;text-align:left!important;white-space:normal!important;
-}
-#cm-arsenal-modal .cm-arsenal-equip,
-#cm-arsenal-modal .cm-arsenal-equip.cm-arsenal-png-button,
-#cm-arsenal-modal .cm-arsenal-equip[data-state="ready"],
-#cm-arsenal-modal .cm-arsenal-equip[data-state="locked"],
-#cm-arsenal-modal .cm-arsenal-equip[data-state="equipped"],
-#cm-arsenal-modal .cm-arsenal-equip[data-state="linked"]{
- flex:0 0 clamp(165px,16vw,248px)!important;
- width:clamp(165px,16vw,248px)!important;max-width:48%!important;
- height:clamp(37px,5.3dvh,51px)!important;min-height:0!important;
- display:flex!important;align-items:center!important;justify-content:center!important;
- background-image:none!important;
- background:linear-gradient(180deg,#1aa757 0%,#08764a 58%,#064630 100%)!important;
- border:2px solid #e8b85b!important;border-radius:9px!important;
- padding:4px 8px!important;margin:0!important;
- color:#fff2c2!important;font:900 clamp(12px,1vw,17px)/1.05 Georgia,serif!important;
- text-shadow:0 2px 3px #00271c!important;
- box-shadow:inset 0 0 0 1px #faeab462,0 3px 6px #0008!important;
- filter:none!important;opacity:1!important;white-space:nowrap!important;
-}
-#cm-arsenal-modal .cm-arsenal-equip[data-state="locked"],
-#cm-arsenal-modal .cm-arsenal-equip[data-state="linked"]{
- background:linear-gradient(180deg,#535c70,#333c50 60%,#202838)!important;
- color:#fff3d4!important;border-color:#bba16b!important;opacity:.94!important;
-}
-#cm-arsenal-modal .cm-arsenal-equip[data-state="equipped"]{
- background:linear-gradient(180deg,#176c52,#10533f 60%,#073c35)!important;
- color:#e9ffe8!important;
-}
-#cm-arsenal-modal .cm-arsenal-equip:disabled{cursor:default!important}
-#cm-arsenal-modal .cm-arsenal-detail{padding-bottom:clamp(16px,2.7dvh,27px)!important}
-#cm-arsenal-modal .cm-arsenal-stat-icon{
- display:block!important;height:auto!important;
- font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif!important;
- font-size:clamp(19px,1.65vw,27px)!important;font-weight:normal!important;
- line-height:1!important;color:initial!important;
- text-shadow:none!important;filter:none!important;
-}
-#cm-arsenal-modal .cm-arsenal-stat-label{
- color:#f6e4b5!important;font:900 clamp(10px,.85vw,13px)/1.1 Nunito,Arial,sans-serif!important;
-}
-@media(max-width:1000px){
- #cm-arsenal-modal .cm-arsenal-equip,
- #cm-arsenal-modal .cm-arsenal-equip.cm-arsenal-png-button{
-  flex-basis:clamp(128px,17vw,185px)!important;
-  width:clamp(128px,17vw,185px)!important;
-  font-size:12px!important;
- }
- #cm-arsenal-modal .cm-arsenal-unlock{font-size:10px!important}
-}
-
-
-/* Prioridade maior que a regra legada de PNG Equipar ativo. */
-#cm-arsenal-modal .cm-arsenal-equip.cm-arsenal-png-button[data-state="ready"],
-#cm-arsenal-modal .cm-arsenal-equip.cm-arsenal-png-button[data-state="locked"],
-#cm-arsenal-modal .cm-arsenal-equip.cm-arsenal-png-button[data-state="equipped"],
-#cm-arsenal-modal .cm-arsenal-equip.cm-arsenal-png-button[data-state="linked"]{
- background-image:none!important;
- background-position:initial!important;background-size:auto!important;
-}
-
-
-/* AJUSTE PONTUAL 2026-11-11 — NÃO diminuir a tipografia do progresso.
-   O troféu e a estrela ficam à esquerda; valor e legenda ficam juntos
-   à direita, dentro da área azul de cada quadro, sem tocar na borda. */
-@media (min-width:781px) {
- #cm-arsenal-modal.cm-art-progress .cm-arsenal-progress{
-  overflow:visible!important;
- }
- #cm-arsenal-modal.cm-art-progress .cm-arsenal-wins,
- #cm-arsenal-modal.cm-art-progress .cm-arsenal-level{
-  position:absolute!important;left:50%!important;width:44%!important;
-  margin:0!important;padding:0!important;
-  display:flex!important;align-items:center!important;justify-content:center!important;
-  white-space:nowrap!important;text-align:center!important;
-  font-family:Georgia,serif!important;
-  font-size:clamp(25px,1.9vw,33px)!important;
-  font-weight:900!important;line-height:1!important;
-  text-shadow:0 2px 4px #000c!important;
- }
- #cm-arsenal-modal.cm-art-progress .cm-arsenal-wins{
-  top:27.5%!important;height:13.5%!important;
- }
- #cm-arsenal-modal.cm-art-progress .cm-arsenal-level{
-  top:55.5%!important;height:13.8%!important;
-  font-size:clamp(24px,1.8vw,31px)!important;
-  letter-spacing:-.045em!important;
- }
- #cm-arsenal-modal.cm-art-progress .cm-arsenal-progress>span{
-  position:absolute!important;left:49%!important;width:47%!important;
-  display:flex!important;align-items:center!important;justify-content:center!important;
-  margin:0!important;padding:0 1px!important;
-  font:800 clamp(11px,.77vw,13px)/1.02 Nunito,Arial,sans-serif!important;
-  color:#f2f7ff!important;text-align:center!important;
-  white-space:normal!important;overflow-wrap:normal!important;
- }
- #cm-arsenal-modal.cm-art-progress .cm-arsenal-progress>span:nth-of-type(1){
-  top:40.8%!important;height:9%!important;
- }
- #cm-arsenal-modal.cm-art-progress .cm-arsenal-progress>span:nth-of-type(2){
-  top:69.5%!important;height:9.2%!important;
- }
- /* O GLB do Arco de Treino é assimétrico: recentralizar somente sua
-    miniatura estática, sem afetar os outros arcos nem o viewer 3D. */
- #cm-arsenal-modal.cm-art-card .cm-arsenal-card[data-id="classico"] .cm-arsenal-thumb-image{
-  transform:translateX(-9%) scale(1.15)!important;
-  transform-origin:center!important;
- }
-}
-
-
-/* Ajuste fino medido sobre o PNG original (700 × 887).
-   As duas janelas úteis da arte ficam entre x≈45–88%, y≈29–51% e 54–76%.
-   Nenhuma legenda pode invadir a moldura dourada ou a janela vizinha. */
-#cm-arsenal-modal.cm-art-progress .cm-arsenal-progress{
- box-sizing:border-box!important;isolation:isolate!important;
- flex-shrink:0!important;overflow:visible!important;
-}
-#cm-arsenal-modal.cm-art-progress .cm-arsenal-wins,
-#cm-arsenal-modal.cm-art-progress .cm-arsenal-level{
- position:absolute!important;z-index:2!important;
- display:flex!important;align-items:center!important;justify-content:center!important;
- left:46%!important;width:42%!important;height:9%!important;
- margin:0!important;padding:0!important;min-height:0!important;
- color:#fff3c6!important;
- font:900 clamp(15px,1.55vw,26px)/1 Georgia,serif!important;
- white-space:nowrap!important;letter-spacing:0!important;
- text-shadow:0 2px 3px #000!important;
-}
-#cm-arsenal-modal.cm-art-progress .cm-arsenal-wins{top:32.6%!important}
-#cm-arsenal-modal.cm-art-progress .cm-arsenal-level{top:58.8%!important}
-#cm-arsenal-modal.cm-art-progress .cm-arsenal-progress>span{
- position:absolute!important;z-index:2!important;
- left:44%!important;width:47%!important;height:9%!important;
- margin:0!important;padding:0 1px!important;min-height:0!important;
- display:flex!important;align-items:center!important;justify-content:center!important;
- color:#e9f0ff!important;text-align:center!important;
- font:800 clamp(8px,.66vw,10px)/1.08 Nunito,Arial,sans-serif!important;
- white-space:normal!important;overflow-wrap:normal!important;
- text-shadow:0 1px 2px #000!important;
-}
-#cm-arsenal-modal.cm-art-progress .cm-arsenal-progress>span:nth-of-type(1){top:42%!important}
-#cm-arsenal-modal.cm-art-progress .cm-arsenal-progress>span:nth-of-type(2){top:68.4%!important}
-
-
-/* PROGRESSO V7 — medidas da arte real de 504×598 pixels.
-   Separador em x=219; campos de texto em x=229..430.
-   Primeira janela y=180..314; segunda y=340..472.
-   O texto ocupa somente a coluna direita de cada janela. */
-#cm-arsenal-modal.cm-art-progress .cm-arsenal-progress{
- width:min(100%,205px)!important;
- max-width:205px!important;
- height:auto!important;
- aspect-ratio:504/598!important;
- position:relative!important;
- background-image:url('assets/ui/arsenal-painel-progresso.png')!important;
- background-position:center!important;
- background-size:100% 100%!important;
- background-repeat:no-repeat!important;
- isolation:isolate!important;
- overflow:hidden!important;
-}
-#cm-arsenal-modal.cm-art-progress .cm-arsenal-wins,
-#cm-arsenal-modal.cm-art-progress .cm-arsenal-level{
- position:absolute!important;
- left:45.4%!important;width:40.1%!important;
- display:flex!important;align-items:center!important;justify-content:center!important;
- height:7.8%!important;min-height:0!important;
- margin:0!important;padding:0!important;
- font:900 clamp(17px,1.6vw,25px)/1 Georgia,serif!important;
- color:#fff0ba!important;text-shadow:0 2px 3px #000!important;
- letter-spacing:0!important;white-space:nowrap!important;
-}
-#cm-arsenal-modal.cm-art-progress .cm-arsenal-wins{top:33.2%!important}
-#cm-arsenal-modal.cm-art-progress .cm-arsenal-level{top:60.1%!important}
-#cm-arsenal-modal.cm-art-progress .cm-arsenal-progress>span{
- position:absolute!important;
- left:45%!important;width:41%!important;
- height:8.3%!important;min-height:0!important;
- display:flex!important;align-items:flex-start!important;justify-content:center!important;
- margin:0!important;padding:0!important;
- color:#f4f5ff!important;
- font:800 clamp(8px,.77vw,11px)/1.05 Nunito,Arial,sans-serif!important;
- text-align:center!important;
- white-space:normal!important;overflow-wrap:normal!important;
- text-shadow:0 1px 3px #000!important;
-}
-#cm-arsenal-modal.cm-art-progress .cm-arsenal-progress>span:nth-of-type(1){top:41.7%!important}
-#cm-arsenal-modal.cm-art-progress .cm-arsenal-progress>span:nth-of-type(2){top:68.5%!important}
