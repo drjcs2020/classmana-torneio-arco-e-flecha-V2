@@ -84,7 +84,7 @@ export function mountEquipmentInventory({selected='classico',onSelect=()=>{}}={}
  grid.parentElement.append(pagination);
  useButtonArtwork(prevPage,'05_pagina_anterior.png');
  useButtonArtwork(nextPage,'06_pagina_proxima.png');
- let currentPage=0;const itemsPerPage=6;
+ let currentPage=0;const itemsPerPage=4;
  function updatePagination(total){
   const pageCount=Math.max(1,Math.ceil(total/itemsPerPage));
   currentPage=Math.min(currentPage,pageCount-1);
@@ -210,8 +210,9 @@ export function mountEquipmentInventory({selected='classico',onSelect=()=>{}}={}
   equipButton.dataset.state=isArrow?'linked':!unlocked(item)?'locked':isEquipped?'equipped':'ready';
   const wind=item.wind==null?'—':item.wind===1?'Normal':(item.wind<1?'-':'+')+Math.abs(Math.round((item.wind-1)*100))+'%';
   const margin=item.ring==null?'—':((1/item.ring-1)>=0?'+':'')+Math.round((1/item.ring-1)*100)+'%';
-  const stats=isArrow?[['TIPO','Flecha 3D'],['USO','Automático'],['DISTÂNCIAS','10–150 m'],['CUSTO','Vinculada ao arco']]:
-   [['MARGEM DE ACERTO',margin],['DESVIO DO VENTO',wind],['PONTOS',item.bonus?'+'+item.bonus:'Padrão'],['DISTÂNCIAS','10–150 m'],['CUSTO PARA LIBERAR',item.requiredWins?item.requiredWins+' vitórias':'Grátis'],['FLECHA',item.arrowName]];
+  // Informações essenciais agrupadas num único quadro, sem repetir descrição.
+  const stats=isArrow?[['TIPO','Flecha 3D'],['USO','Automático'],['ACESSO','Livre']]:
+   [['ACERTO',margin],['VENTO',wind],['PONTOS',item.bonus?'+'+item.bonus:'Padrão']];
   q('.cm-arsenal-stats').replaceChildren(...stats.map(([k,v])=>{const cell=make('div','cm-arsenal-stat');cell.append(make('span','',k),make('strong','',v));return cell}));
   zoom=75;spin=0;orbit();viewer.setAttribute('orientation',item.previewOrientation||'0deg 0deg 0deg');
   viewer.setAttribute('alt','Modelo tridimensional: '+item.name+'. Arraste para girar.');
