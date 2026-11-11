@@ -110,7 +110,7 @@ export function mountEquipmentInventory({selected='classico',onSelect=()=>{}}={}
  modal.append(thumbViewer);
  // A fotografia da arma é sempre gerada do GLB real, nunca de outra arte.
  // Remover transparência da captura melhora a centralização SEM exigir clique.
- async function normalizedThumbnail(dataUri){
+ async function normalizedThumbnail(dataUri,item){
   const img=new Image();img.src=dataUri;
   await (img.decode?img.decode():new Promise((res,rej)=>{img.onload=res;img.onerror=rej}));
   const w=img.naturalWidth,h=img.naturalHeight;
@@ -127,14 +127,20 @@ export function mountEquipmentInventory({selected='classico',onSelect=()=>{}}={}
    }
   }
   if(right<left||bottom<top)return dataUri;
-  const pad=Math.max(8,Math.round(Math.max(right-left,bottom-top)*.1));
+  const pad=Math.max(5,Math.round(Math.max(right-left,bottom-top)*.055));
   const x=Math.max(0,left-pad),y=Math.max(0,top-pad);
   const cw=Math.min(w-x,right-left+1+pad*2),ch=Math.min(h-y,bottom-top+1+pad*2);
+  // Arcos vistos quase de perfil ficam como uma linha. Inclinar a fotografia
+  // do próprio GLB no cartão, sem modificar sua orientação na visualização 3D.
+  const slender=ch>cw*1.75;
+  const angle=slender?(item?.level%2===0?Math.PI/5:-Math.PI/5):0;
+  const rw=Math.abs(cw*Math.cos(angle))+Math.abs(ch*Math.sin(angle));
+  const rh=Math.abs(ch*Math.cos(angle))+Math.abs(cw*Math.sin(angle));
   const out=document.createElement('canvas');out.width=384;out.height=384;
   const outCtx=out.getContext('2d');if(!outCtx)return dataUri;
-  const scale=Math.min(out.width*.90/cw,out.height*.90/ch);
-  const dw=cw*scale,dh=ch*scale;
-  outCtx.drawImage(src,x,y,cw,ch,(384-dw)/2,(384-dh)/2,dw,dh);
+  const scale=Math.min(342/rw,342/rh);
+  outCtx.translate(192,192);outCtx.rotate(angle);
+  outCtx.drawImage(src,x,y,cw,ch,-cw*scale/2,-ch*scale/2,cw*scale,ch*scale);
   return out.toDataURL('image/png');
  }
  function updateThumb(id){
@@ -168,7 +174,7 @@ export function mountEquipmentInventory({selected='classico',onSelect=()=>{}}={}
          try{
           const png=thumbViewer.toDataURL('image/png');
           if(typeof png!=='string'||!png.startsWith('data:image/'))throw Error('Captura indisponível');
-          const thumb=await normalizedThumbnail(png);
+          const thumb=await normalizedThumbnail(png,item);
           snapshots.set(item.id,thumb);updateThumb(item.id);cleanup();resolve();
          }catch(err){cleanup();reject(err)}
         }));
