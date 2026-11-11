@@ -36,6 +36,50 @@ export function mountEquipmentInventory({selected='classico',onSelect=()=>{}}={}
  const grid=q('.cm-arsenal-grid'),viewer=q('.cm-arsenal-model'),placeholder=q('.cm-arsenal-model-placeholder');
  const equipButton=q('.cm-arsenal-equip'),loading=q('.cm-arsenal-loading'),stage=q('.cm-arsenal-stage');
  const categories=[...modal.querySelectorAll('[data-category]')];
+ // Botões com imagens fornecidas; se PNG faltar, manter o botão original funcional.
+ const categoryArtwork={Arco:'01_categoria_arcos.png',Besta:'02_categoria_bestas.png',Flecha:'03_categoria_flechas.png'};
+ const imageRoot='assets/ui/arsenal-buttons/';
+ function useButtonArtwork(element,filename){
+  if(!element)return;
+  const img=new Image();
+  img.onload=()=>{
+   if(!element.isConnected)return;
+   element.style.setProperty('--cm-png-button','url("'+imageRoot+filename+'")');
+   element.classList.add('cm-arsenal-png-button');
+  };
+  img.src=imageRoot+filename;
+ }
+ for(const button of categories){
+   button.setAttribute('aria-label',button.textContent.trim());
+   useButtonArtwork(button,categoryArtwork[button.dataset.category]);
+ }
+ useButtonArtwork(q('.cm-arsenal-close'),'08_fechar.png');
+ // Miras ainda não têm modelos registrados no catálogo; não inventar miras.
+ const sights=make('button','');sights.type='button';
+ sights.textContent='◎ MIRAS';sights.disabled=true;sights.title='Miras ainda não cadastradas';
+ sights.setAttribute('aria-label','Miras ainda não cadastradas');
+ q('.cm-arsenal-categories').append(sights);
+ useButtonArtwork(sights,'04_categoria_miras.png');
+ const pagination=make('nav','cm-arsenal-pagination');
+ pagination.setAttribute('aria-label','Páginas das armas');
+ const prevPage=make('button','cm-arsenal-page-prev','◀');prevPage.type='button';prevPage.setAttribute('aria-label','Página anterior');
+ const pageLabel=make('span','cm-arsenal-page-count','1 / 1');
+ const nextPage=make('button','cm-arsenal-page-next','▶');nextPage.type='button';nextPage.setAttribute('aria-label','Próxima página');
+ pagination.append(prevPage,pageLabel,nextPage);
+ grid.parentElement.append(pagination);
+ useButtonArtwork(prevPage,'05_pagina_anterior.png');
+ useButtonArtwork(nextPage,'06_pagina_proxima.png');
+ let currentPage=0;const itemsPerPage=6;
+ function updatePagination(total){
+  const pageCount=Math.max(1,Math.ceil(total/itemsPerPage));
+  currentPage=Math.min(currentPage,pageCount-1);
+  pagination.hidden=total<=itemsPerPage;
+  prevPage.disabled=currentPage===0;nextPage.disabled=currentPage>=pageCount-1;
+  pageLabel.textContent=(currentPage+1)+' / '+pageCount;
+ }
+ prevPage.addEventListener('click',()=>{currentPage=Math.max(0,currentPage-1);renderCards()});
+ nextPage.addEventListener('click',()=>{currentPage++;renderCards()});
+ useButtonArtwork(equipButton,'07_equipar.png');
  let equipped=GEAR_BY_ID[selected]?selected:'classico',preview=equipped,category='Arco',wins=0,confirmed=false;
  let zoom=75,spin=0,requestId=0,previousFocus=null;
  // Miniaturas SEM desenhos inventados: fotografias renderizadas dos GLBs reais.
@@ -120,8 +164,9 @@ export function mountEquipmentInventory({selected='classico',onSelect=()=>{}}={}
  function renderCards(){
   const items=ALL.filter(item=>item.type===category);
   q('.cm-arsenal-count').textContent=items.length+' '+(items.length===1?'ITEM':'ITENS');
+  updatePagination(items.length);
   grid.replaceChildren();
-  for(const item of items){
+  for(const item of items.slice(currentPage*itemsPerPage,(currentPage+1)*itemsPerPage)){
    const card=make('button','cm-arsenal-card');card.type='button';card.dataset.id=item.id;
    card.dataset.rarity=item.rarity.toLowerCase();card.dataset.selected=String(item.id===preview);
    card.dataset.locked=String(!unlocked(item));card.setAttribute('role','listitem');
@@ -163,7 +208,7 @@ export function mountEquipmentInventory({selected='classico',onSelect=()=>{}}={}
   });
  }
  function setCategory(next){
-  category=next;for(const b of categories)b.setAttribute('aria-pressed',String(b.dataset.category===category));
+  category=next;currentPage=0;for(const b of categories)b.setAttribute('aria-pressed',String(b.dataset.category===category));
   if(BY_ID[preview]?.type!==category)preview=ALL.find(x=>x.type===category).id;
   renderCards();showItem(preview);queueThumbnails(ALL.filter(item=>item.type===category));
  }
@@ -181,7 +226,7 @@ export function mountEquipmentInventory({selected='classico',onSelect=()=>{}}={}
  viewer.addEventListener('error',()=>{stage.dataset.ready='false';loading.textContent='NÃO FOI POSSÍVEL CARREGAR O MODELO 3D'});
  function open(){
   previousFocus=document.activeElement;modal.hidden=false;document.body.classList.add('cm-arsenal-opened');
-  const current=GEAR_BY_ID[equipped]||GEAR[0];category=current.type;preview=current.id;
+  const current=GEAR_BY_ID[equipped]||GEAR[0];category=current.type;preview=current.id;currentPage=0;
   for(const b of categories)b.setAttribute('aria-pressed',String(b.dataset.category===category));
   renderCards();showItem(preview);queueThumbnails(ALL.filter(item=>item.type===category));q('.cm-arsenal-close').focus();
  }
