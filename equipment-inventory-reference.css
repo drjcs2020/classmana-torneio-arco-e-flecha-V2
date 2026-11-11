@@ -746,6 +746,7 @@
   color:#f0f5ff!important;text-align:center!important;
   white-space:normal!important;overflow-wrap:normal!important;
   text-shadow:0 1px 2px #000!important;
+  display:none!important;
  }
  #cm-arsenal-modal.cm-art-progress .cm-arsenal-progress>span:nth-of-type(1){top:43.3%!important}
  #cm-arsenal-modal.cm-art-progress .cm-arsenal-progress>span:nth-of-type(2){top:70.2%!important}
