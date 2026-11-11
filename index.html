@@ -183,17 +183,40 @@ html.cm-v2-resume-pending body[data-page="lobby"]::after{
    <button type="button" id="cm-open-challenges" class="cm-session-button">🔔 Meus desafios <span id="cm-quick-challenges-count">—</span></button>
    <button type="button" id="cm-end-session" class="cm-session-button cm-session-exit" hidden>🚪 Encerrar sessão</button>
  </div>
- <section class="cm-duel-screen" id="duel-options" aria-label="Página 2 — Escolha do desafio">
-   <img class="cm-duel-title" src="assets/ui/titles/titulo-escolha-desafio-novo.png" alt="Escolha o Desafio">
-   <p class="cm-duel-guidance">Escolha como deseja jogar: treinar, enfrentar o robô ou desafiar um colega.</p>
-   <div class="cm-duel-modes">
-     <button type="button" class="cm-duel-mode" data-play-mode="bot" aria-label="Contra robô, com três dificuldades"><img src="assets/ui/buttons/botao-contra-robo.png" alt=""><span>Contra Robô</span></button>
-     <button type="button" class="cm-duel-mode" data-play-mode="practice" aria-label="Treino livre, sem pontos oficiais"><img src="assets/ui/buttons/botao-treino-livre.png" alt=""><span>Treino Livre</span></button>
-     <button type="button" class="cm-duel-mode" data-play-mode="challenge_same" aria-label="Desafiar um aluno da mesma turma"><img src="assets/ui/buttons/botao-desafiar-aluno.png" alt=""><span>Colega da Mesma Turma</span></button>
-     <button type="button" class="cm-duel-mode" data-play-mode="challenge_team" aria-label="Desafio de equipes da mesma turma ou interclasses"><img src="assets/ui/buttons/botao-desafiar-equipe.png" alt=""><span>Entre Equipes</span></button>
-     <button type="button" class="cm-duel-mode" data-play-mode="challenge" aria-label="Desafiar um aluno de outra turma"><img src="assets/ui/hud/botao-iniciar-duelo.png" alt=""><span>Duelo Interclasses</span></button>
-     <button type="button" id="cm-ranking-choice" class="cm-duel-mode cm-ranking-choice" aria-label="Abrir ranking do torneio"><span aria-hidden="true" class="cm-ranking-emblem">🏆</span><span class="cm-ranking-label">RANKING</span></button>
-   </div>
+ <section class="cm-duel-screen cm-challenge-approved" id="duel-options" aria-label="Página 2 — Escolha do desafio">
+  <img class="cm-duel-title" src="assets/ui/titles/titulo-escolha-desafio-novo.png" alt="Escolha o Desafio">
+  <div class="cm-duel-modes">
+    <section class="cm-house-duel-panel" aria-label="Principal: duelo entre as três casas">
+      <img class="cm-house-duel-ribbon" src="assets/ui/titles/titulo-duelo-entre-casas-novo.png" alt="Duelo entre Casas">
+      <div class="cm-house-duel-mascots" aria-hidden="true">
+        <div class="cm-house-mascot cm-house-mascot-a"><img src="assets/kingdoms/aguia-castelo-mascote.webp" alt=""><img class="cm-house-mascot-crest" src="assets/ui/crests/brasao-aguia-dourada.png" alt=""></div>
+        <div class="cm-house-mascot cm-house-mascot-b"><img src="assets/kingdoms/leao-castelo-mascote.webp" alt=""><img class="cm-house-mascot-crest" src="assets/ui/crests/brasao-leao-de-fogo.png" alt=""></div>
+        <div class="cm-house-mascot cm-house-mascot-c"><img src="assets/kingdoms/dragao-castelo-mascote.webp" alt=""><img class="cm-house-mascot-crest" src="assets/ui/crests/brasao-dragao-esmeralda.png" alt=""></div>
+      </div>
+      <button type="button" class="cm-house-start" data-play-mode="challenge_team" aria-label="Iniciar Duelo entre Casas, modalidade de equipes"><img src="assets/ui/hud/botao-iniciar-duelo.png" alt="INICIAR DUELO"></button>
+    </section>
+    <section class="cm-challenge-secondary cm-challenge-robot" aria-label="Treinar contra o robô">
+      <div class="cm-challenge-secondary-heading"><span aria-hidden="true">🎯</span><strong>CONTRA ROBÔ</strong><small>Treino de habilidade</small></div>
+      <div class="cm-robot-levels" role="group" aria-label="Escolha a dificuldade do robô">
+        <button type="button" data-play-mode="bot" data-bot-difficulty="easy" aria-label="Contra Robô: Fácil"><img src="assets/ui/buttons/botao-dificuldade-facil.png" alt="Fácil"></button>
+        <button type="button" data-play-mode="bot" data-bot-difficulty="medium" aria-label="Contra Robô: Médio"><img src="assets/ui/buttons/botao-dificuldade-medio.png" alt="Médio"></button>
+        <button type="button" data-play-mode="bot" data-bot-difficulty="hard" aria-label="Contra Robô: Difícil"><img src="assets/ui/buttons/botao-dificuldade-dificil.png" alt="Difícil"></button>
+      </div>
+    </section>
+    <section class="cm-challenge-secondary cm-challenge-students" aria-label="Desafiar aluno">
+      <h3>DESAFIAR ALUNO</h3>
+      <div class="cm-challenge-archers" aria-hidden="true">
+        <img src="assets/ui/characters/arqueira-aguia-dourada.png" alt="">
+        <img src="assets/ui/characters/arqueira-leao-de-fogo.png" alt="">
+        <img src="assets/ui/characters/arqueira-dragao-de-esmeralda.png" alt="">
+      </div>
+      <div class="cm-challenge-student-actions">
+        <button type="button" data-play-mode="challenge_same" aria-label="Desafiar um colega da mesma turma">Mesma turma</button>
+        <button type="button" data-play-mode="challenge" aria-label="Desafiar um aluno de outra turma">Outra turma</button>
+      </div>
+    </section>
+  </div>
+  <button type="button" id="cm-ranking-choice" class="cm-ranking-choice cm-challenge-ranking" aria-label="Abrir ranking do torneio"><span aria-hidden="true">🏆</span><span>RANKING</span></button>
  </section>
  <div class="setup" id="setup">
   <div class="online-account" id="online-account">
