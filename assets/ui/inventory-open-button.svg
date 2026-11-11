@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="120" viewBox="0 0 720 120" role="img" aria-labelledby="title">
+<title id="title">Clique para abrir o arsenal</title>
+<defs>
+ <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#ffecaa"/><stop offset=".2" stop-color="#f9bb36"/><stop offset=".46" stop-color="#a95a0e"/><stop offset=".75" stop-color="#ffe58b"/><stop offset="1" stop-color="#91400b"/></linearGradient>
+ <linearGradient id="blue" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#205bb1"/><stop offset=".3" stop-color="#11418b"/><stop offset=".7" stop-color="#071e56"/><stop offset="1" stop-color="#030d30"/></linearGradient>
+ <filter id="shadow" x="-10%" y="-30%" width="120%" height="170%"><feGaussianBlur in="SourceAlpha" stdDeviation="5"/><feOffset dy="5"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+ <filter id="glow"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000b"/></filter>
+</defs>
+<g filter="url(#shadow)">
+ <path d="M43 9 H677 L710 38 V81 L678 111 H42 L10 81 V38Z" fill="url(#gold)" stroke="#7b3609" stroke-width="6"/>
+ <path d="M51 21 H669 L696 44 V76 L671 99 H49 L24 76 V44Z" fill="url(#blue)" stroke="#f9d57c" stroke-width="3"/>
+ <path d="M58 30 H662 M58 89 H662" stroke="#61a8ed" stroke-opacity=".62" stroke-width="2"/>
+ <path d="M39 60 l16 -16 16 16 -16 16Z M681 60 l-16 -16 -16 16 16 16Z" fill="url(#gold)" stroke="#5a2d0a" stroke-width="2"/>
+ <path d="M53 60 h10 M657 60 h10" stroke="#fff2be" stroke-width="2"/>
+ <g font-family="Georgia,serif" font-weight="bold" text-anchor="middle" filter="url(#glow)">
+  <text x="360" y="68" font-size="34" fill="#fff1c1" letter-spacing="1">CLIQUE PARA ABRIR O ARSENAL</text>
+ </g>
+ <path d="M357 5 L369 17 L357 29 L345 17Z M357 91 L369 103 L357 115 L345 103Z" fill="#34b9ee" stroke="#ffe59c" stroke-width="4"/>
+</g>
+</svg>
