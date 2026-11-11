@@ -322,12 +322,12 @@ body[data-page="arena"] #view-arena #finish.cm-v21-result .finish-actions{flex:0
 .cm-vs-overlay[data-mode="bot"] .cm-vs-fighter[data-house] .cm-vs-fighter-info strong{
  top:74%!important;height:8%!important;
  left:10%!important;width:80%!important;max-width:80%!important;
- font-size:clamp(13px,1.48vw,19px)!important;
+ font-size:clamp(15px,1.7vw,22px)!important;
  white-space:nowrap!important;
 }
 .cm-vs-overlay .cm-vs-fighter[data-house] .cm-vs-fighter-info small,
 .cm-vs-overlay[data-mode="bot"] .cm-vs-fighter[data-house] .cm-vs-fighter-info small{
- top:80%!important;height:10%!important;
+ top:calc(80% + 8px)!important;height:10%!important;
  left:5%!important;width:90%!important;max-width:90%!important;
  white-space:nowrap!important;overflow:hidden!important;text-overflow:clip!important;
  font-size:clamp(10px,.98vw,12px)!important;
@@ -365,7 +365,7 @@ body[data-page="arena"] #view-arena #finish.cm-v21-result .finish-actions{flex:0
  }
  .cm-vs-overlay .cm-vs-fighter[data-house] .cm-vs-fighter-info strong,
  .cm-vs-overlay[data-mode="bot"] .cm-vs-fighter[data-house] .cm-vs-fighter-info strong{
-  font-size:clamp(9px,2.3vw,13px)!important;
+  font-size:clamp(11px,2.65vw,15px)!important;
  }
  .cm-vs-overlay .cm-vs-fighter[data-house] .cm-vs-fighter-info small,
  .cm-vs-overlay[data-mode="bot"] .cm-vs-fighter[data-house] .cm-vs-fighter-info small{
