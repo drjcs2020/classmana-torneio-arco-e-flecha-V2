@@ -717,6 +717,7 @@
   background:url('assets/ui/arsenal-painel-progresso.png') center/100% 100% no-repeat!important;
   border:0!important;box-shadow:none!important;
   isolation:isolate!important;overflow:hidden!important;
+  transform:translate(8px,-8px)!important;
  }
  #cm-arsenal-modal.cm-art-progress .cm-arsenal-progress p{
   position:absolute!important;width:1px!important;height:1px!important;
@@ -729,13 +730,14 @@
   display:flex!important;align-items:center!important;justify-content:center!important;
   left:47%!important;width:42%!important;height:9%!important;min-height:0!important;
   margin:0!important;padding:0!important;
-  font:900 clamp(16px,1.28vw,22px)/1 Georgia,serif!important;
+  font:900 14px/1 Georgia,serif!important;
   letter-spacing:0!important;white-space:nowrap!important;
   color:#fff3c5!important;text-align:center!important;text-shadow:0 2px 3px #000!important;
  }
  #cm-arsenal-modal.cm-art-progress .cm-arsenal-wins{top:32.2%!important}
  #cm-arsenal-modal.cm-art-progress .cm-arsenal-level{top:59.1%!important}
  #cm-arsenal-modal.cm-art-progress .cm-arsenal-progress>span{
+  display:none!important;
   position:absolute!important;z-index:2!important;
   display:flex!important;align-items:center!important;justify-content:center!important;
   left:44%!important;width:48%!important;height:8%!important;min-height:0!important;
