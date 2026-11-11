@@ -594,3 +594,52 @@
  background-image:none!important;
  background-position:initial!important;background-size:auto!important;
 }
+
+
+/* AJUSTE PONTUAL 2026-11-11 — NÃO diminuir a tipografia do progresso.
+   O troféu e a estrela ficam à esquerda; valor e legenda ficam juntos
+   à direita, dentro da área azul de cada quadro, sem tocar na borda. */
+@media (min-width:781px) {
+ #cm-arsenal-modal.cm-art-progress .cm-arsenal-progress{
+  overflow:visible!important;
+ }
+ #cm-arsenal-modal.cm-art-progress .cm-arsenal-wins,
+ #cm-arsenal-modal.cm-art-progress .cm-arsenal-level{
+  position:absolute!important;left:50%!important;width:44%!important;
+  margin:0!important;padding:0!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  white-space:nowrap!important;text-align:center!important;
+  font-family:Georgia,serif!important;
+  font-size:clamp(25px,1.9vw,33px)!important;
+  font-weight:900!important;line-height:1!important;
+  text-shadow:0 2px 4px #000c!important;
+ }
+ #cm-arsenal-modal.cm-art-progress .cm-arsenal-wins{
+  top:27.5%!important;height:13.5%!important;
+ }
+ #cm-arsenal-modal.cm-art-progress .cm-arsenal-level{
+  top:55.5%!important;height:13.8%!important;
+  font-size:clamp(24px,1.8vw,31px)!important;
+  letter-spacing:-.045em!important;
+ }
+ #cm-arsenal-modal.cm-art-progress .cm-arsenal-progress>span{
+  position:absolute!important;left:49%!important;width:47%!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  margin:0!important;padding:0 1px!important;
+  font:800 clamp(11px,.77vw,13px)/1.02 Nunito,Arial,sans-serif!important;
+  color:#f2f7ff!important;text-align:center!important;
+  white-space:normal!important;overflow-wrap:normal!important;
+ }
+ #cm-arsenal-modal.cm-art-progress .cm-arsenal-progress>span:nth-of-type(1){
+  top:40.8%!important;height:9%!important;
+ }
+ #cm-arsenal-modal.cm-art-progress .cm-arsenal-progress>span:nth-of-type(2){
+  top:69.5%!important;height:9.2%!important;
+ }
+ /* O GLB do Arco de Treino é assimétrico: recentralizar somente sua
+    miniatura estática, sem afetar os outros arcos nem o viewer 3D. */
+ #cm-arsenal-modal.cm-art-card .cm-arsenal-card[data-id="classico"] .cm-arsenal-thumb-image{
+  transform:translateX(-9%) scale(1.15)!important;
+  transform-origin:center!important;
+ }
+}
