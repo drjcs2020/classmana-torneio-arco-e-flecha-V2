@@ -69,12 +69,6 @@ export function mountEquipmentInventory({selected='classico',onSelect=()=>{}}={}
    useButtonArtwork(button,categoryArtwork[button.dataset.category]);
  }
  useButtonArtwork(q('.cm-arsenal-close'),'arsenal-botao-fechar.png');
- // Miras ainda não têm modelos registrados no catálogo; não inventar miras.
- const sights=make('button','');sights.type='button';
- sights.textContent='◎ MIRAS';sights.disabled=true;sights.title='Miras ainda não cadastradas';
- sights.setAttribute('aria-label','Miras ainda não cadastradas');
- q('.cm-arsenal-categories').append(sights);
- useButtonArtwork(sights,'04_categoria_miras.png');
  const pagination=make('nav','cm-arsenal-pagination');
  pagination.setAttribute('aria-label','Páginas das armas');
  const prevPage=make('button','cm-arsenal-page-prev','◀');prevPage.type='button';prevPage.setAttribute('aria-label','Página anterior');
@@ -114,6 +108,35 @@ export function mountEquipmentInventory({selected='classico',onSelect=()=>{}}={}
  thumbViewer.setAttribute('aria-hidden','true');
  thumbViewer.style.cssText='position:fixed;width:224px;height:224px;left:0;top:0;z-index:-1;opacity:.01;pointer-events:none;contain:layout style;';
  modal.append(thumbViewer);
+ // A fotografia da arma é sempre gerada do GLB real, nunca de outra arte.
+ // Remover transparência da captura melhora a centralização SEM exigir clique.
+ async function normalizedThumbnail(dataUri){
+  const img=new Image();img.src=dataUri;
+  await (img.decode?img.decode():new Promise((res,rej)=>{img.onload=res;img.onerror=rej}));
+  const w=img.naturalWidth,h=img.naturalHeight;
+  if(!w||!h)return dataUri;
+  const src=document.createElement('canvas');src.width=w;src.height=h;
+  const ctx=src.getContext('2d',{willReadFrequently:true});if(!ctx)return dataUri;
+  ctx.drawImage(img,0,0);
+  const pix=ctx.getImageData(0,0,w,h).data;
+  let left=w,top=h,right=-1,bottom=-1;
+  for(let y=0;y<h;y++)for(let x=0;x<w;x++){
+   if(pix[(y*w+x)*4+3]>35){
+    if(x<left)left=x;if(x>right)right=x;
+    if(y<top)top=y;if(y>bottom)bottom=y;
+   }
+  }
+  if(right<left||bottom<top)return dataUri;
+  const pad=Math.max(8,Math.round(Math.max(right-left,bottom-top)*.1));
+  const x=Math.max(0,left-pad),y=Math.max(0,top-pad);
+  const cw=Math.min(w-x,right-left+1+pad*2),ch=Math.min(h-y,bottom-top+1+pad*2);
+  const out=document.createElement('canvas');out.width=384;out.height=384;
+  const outCtx=out.getContext('2d');if(!outCtx)return dataUri;
+  const scale=Math.min(out.width*.90/cw,out.height*.90/ch);
+  const dw=cw*scale,dh=ch*scale;
+  outCtx.drawImage(src,x,y,cw,ch,(384-dw)/2,(384-dh)/2,dw,dh);
+  return out.toDataURL('image/png');
+ }
  function updateThumb(id){
    const frame=grid.querySelector('[data-id="'+id+'"] .cm-arsenal-thumb');
    if(!frame)return;
@@ -141,12 +164,12 @@ export function mountEquipmentInventory({selected='classico',onSelect=()=>{}}={}
        const cleanup=()=>{clearTimeout(timeout);thumbViewer.removeEventListener('load',onLoad);thumbViewer.removeEventListener('error',onError)};
        const onError=()=>{cleanup();reject(new Error('Modelo 3D indisponível ou captura expirada'))};
        const onLoad=()=>{
-        requestAnimationFrame(()=>requestAnimationFrame(()=>{
+        requestAnimationFrame(()=>requestAnimationFrame(async()=>{
          try{
           const png=thumbViewer.toDataURL('image/png');
-          cleanup();
           if(typeof png!=='string'||!png.startsWith('data:image/'))throw Error('Captura indisponível');
-          snapshots.set(item.id,png);updateThumb(item.id);resolve();
+          const thumb=await normalizedThumbnail(png);
+          snapshots.set(item.id,thumb);updateThumb(item.id);cleanup();resolve();
          }catch(err){cleanup();reject(err)}
         }));
        };
@@ -213,7 +236,12 @@ export function mountEquipmentInventory({selected='classico',onSelect=()=>{}}={}
   // Informações essenciais agrupadas num único quadro, sem repetir descrição.
   const stats=isArrow?[['TIPO','Flecha 3D'],['USO','Automático'],['ACESSO','Livre']]:
    [['ACERTO',margin],['VENTO',wind],['PONTOS',item.bonus?'+'+item.bonus:'Padrão']];
-  q('.cm-arsenal-stats').replaceChildren(...stats.map(([k,v])=>{const cell=make('div','cm-arsenal-stat');cell.append(make('span','',k),make('strong','',v));return cell}));
+  q('.cm-arsenal-stats').replaceChildren(...stats.map(([k,v],index)=>{
+   const cell=make('div','cm-arsenal-stat');
+   const icon=make('span','cm-arsenal-stat-icon',isArrow?['➶','◎','✦'][index]:['◎','≋','✦'][index]);
+   icon.setAttribute('aria-hidden','true');
+   cell.append(icon,make('span','cm-arsenal-stat-label',k),make('strong','',v));return cell;
+  }));
   zoom=75;spin=0;orbit();viewer.setAttribute('orientation',item.previewOrientation||'0deg 0deg 0deg');
   viewer.setAttribute('alt','Modelo tridimensional: '+item.name+'. Arraste para girar.');
   viewer.removeAttribute('src');stage.dataset.ready='false';
@@ -229,15 +257,8 @@ export function mountEquipmentInventory({selected='classico',onSelect=()=>{}}={}
   renderCards();showItem(preview);queueThumbnails(ALL.filter(item=>item.type===category));
  }
  viewer.addEventListener('load',()=>{
-  if(modal.hidden)return;stage.dataset.ready='true';loading.textContent='ARRASTE A ARMA PARA GIRAR';
-  const id=preview;
-  requestAnimationFrame(()=>requestAnimationFrame(()=>{
-   if(preview!==id||typeof viewer.toDataURL!=='function')return;
-   try{const data=viewer.toDataURL('image/png');if(typeof data==='string'&&data.startsWith('data:image/')){
-    snapshots.set(id,data);const thumb=grid.querySelector('[data-id="'+id+'"] .cm-arsenal-thumb');
-    if(thumb){const img=make('img','cm-arsenal-thumb-image');img.src=data;img.alt='';thumb.replaceChildren(img)}
-   }}catch{/* Captura opcional; a visualização 3D continua funcionando. */}
-  }));
+  if(modal.hidden)return;
+  stage.dataset.ready='true';loading.textContent='ARRASTE A ARMA PARA GIRAR';
  });
  viewer.addEventListener('error',()=>{stage.dataset.ready='false';loading.textContent='NÃO FOI POSSÍVEL CARREGAR O MODELO 3D'});
  function open(){
