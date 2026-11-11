@@ -978,3 +978,129 @@ body[data-page="lobby"] #view-inicio[data-step="heroi"] .studio-bows.cm-inventor
  #cm-arsenal-modal .cm-arsenal-action-row{flex-basis:45px!important;min-height:45px!important}
  #cm-arsenal-modal .cm-arsenal-equip{max-width:190px!important;min-height:44px!important;height:44px!important}
 }
+
+
+/* ARSENAL V6 — reestruturação solicitada: 2×2, cartões grandes, visualizador prioritário.
+   Não altera cenários externos, modelos 3D, regras de vitória nem interação. */
+@media(min-width:781px){
+ #cm-arsenal-modal .cm-arsenal-shell{width:min(98vw,1490px)!important;height:min(96dvh,920px)!important}
+ #cm-arsenal-modal .cm-arsenal-header{
+  height:69px!important;min-height:69px!important;max-height:69px!important;flex:0 0 69px!important;margin:0 0 2px!important
+ }
+ #cm-arsenal-modal.cm-art-title .cm-arsenal-header{
+  background-size:auto 132px!important;background-position:center center!important
+ }
+ #cm-arsenal-modal .cm-arsenal-close{top:12px!important}
+ #cm-arsenal-modal .cm-arsenal-layout{
+  grid-template-columns:minmax(125px,155px) minmax(0,0.98fr) minmax(0,1.16fr)!important;
+  gap:9px!important;padding:2px 4px 4px!important
+ }
+ #cm-arsenal-modal .cm-arsenal-sidebar{padding:4px 0!important;gap:5px!important}
+ #cm-arsenal-modal .cm-arsenal-categories{gap:4px!important}
+ #cm-arsenal-modal .cm-arsenal-categories button{
+  min-height:40px!important;height:40px!important;flex:0 0 40px!important
+ }
+ #cm-arsenal-modal.cm-art-progress .cm-arsenal-progress{
+  max-width:145px!important;aspect-ratio:700/887!important;margin-top:auto!important
+ }
+ #cm-arsenal-modal .cm-arsenal-help{display:none!important}
+ #cm-arsenal-modal .cm-arsenal-collection{
+  padding:0 6px 0 0!important;gap:3px!important;min-height:0!important
+ }
+ #cm-arsenal-modal .cm-arsenal-collection-heading{
+  min-height:26px!important;flex:0 0 26px!important
+ }
+ #cm-arsenal-modal .cm-arsenal-grid{
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  grid-template-rows:repeat(2,minmax(0,1fr))!important;
+  grid-auto-rows:minmax(0,1fr)!important;
+  gap:4px 4px!important;padding:1px!important;
+  justify-items:center!important;align-items:stretch!important;
+  overflow:hidden!important
+ }
+ #cm-arsenal-modal.cm-art-card .cm-arsenal-card{
+  width:min(100%,220px)!important;max-width:220px!important;
+  height:100%!important;min-height:0!important;
+  background-size:contain!important;background-position:center!important
+ }
+ #cm-arsenal-modal.cm-art-card .cm-arsenal-card-level{
+  top:4%!important;height:9%!important;font:900 clamp(12px,1vw,16px)/1 Georgia,serif!important
+ }
+ #cm-arsenal-modal.cm-art-card .cm-arsenal-thumb{
+  top:14%!important;left:11%!important;width:78%!important;height:52%!important;
+  max-height:none!important;min-height:0!important;
+ }
+ #cm-arsenal-modal.cm-art-card .cm-arsenal-thumb-image{
+  transform:scale(1.5)!important;object-fit:contain!important;
+  filter:drop-shadow(0 2px 4px #000b)
+ }
+ #cm-arsenal-modal.cm-art-card .cm-arsenal-card-name{
+  top:67%!important;left:8%!important;width:84%!important;height:10%!important;
+  font:900 clamp(12px,1.13vw,17px)/1.08 Georgia,serif!important;
+  color:#fff3cf!important;text-shadow:0 2px 4px #000!important
+ }
+ #cm-arsenal-modal.cm-art-card .cm-arsenal-card-status{
+  top:83%!important;left:7%!important;width:86%!important;height:10%!important;
+  font:900 clamp(10px,.88vw,13px)/1.1 Nunito,Arial,sans-serif!important
+ }
+ #cm-arsenal-modal .cm-arsenal-pagination{
+  flex:0 0 34px!important;min-height:34px!important;gap:14px!important
+ }
+ #cm-arsenal-modal .cm-arsenal-pagination button{
+  min-height:32px!important;height:32px!important;min-width:60px!important;width:60px!important
+ }
+ #cm-arsenal-modal .cm-arsenal-detail{
+  gap:5px!important;min-height:0!important
+ }
+ #cm-arsenal-modal .cm-arsenal-detail-top{
+  flex:0 0 40px!important;min-height:40px!important
+ }
+ #cm-arsenal-modal .cm-arsenal-stage{
+  flex:1 1 auto!important;min-height:220px!important;max-height:none!important
+ }
+ #cm-arsenal-modal .cm-arsenal-description{display:none!important}
+ #cm-arsenal-modal .cm-arsenal-stats{
+  flex:0 0 62px!important;min-height:62px!important;
+  display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  grid-template-rows:1fr!important;gap:6px!important;
+  padding:3px!important;background:#071b37!important;
+  border:1px solid #aa782d!important;border-radius:8px!important
+ }
+ #cm-arsenal-modal.cm-art-stats .cm-arsenal-stat{
+  min-height:0!important;height:100%!important;
+  border:0!important;border-right:1px solid #a47432!important;
+  background:none!important;padding:6px 2px!important;
+  display:flex!important;flex-direction:column!important;
+  align-items:center!important;justify-content:center!important;gap:4px!important;
+ }
+ #cm-arsenal-modal.cm-art-stats .cm-arsenal-stat:last-child{border-right:0!important}
+ #cm-arsenal-modal .cm-arsenal-stat span{
+  font:900 clamp(10px,.85vw,12px)/1.1 Nunito,Arial,sans-serif!important
+ }
+ #cm-arsenal-modal .cm-arsenal-stat strong{
+  font:900 clamp(14px,1.12vw,18px)/1.1 Nunito,Arial,sans-serif!important
+ }
+ #cm-arsenal-modal .cm-arsenal-ability{
+  flex:0 0 30px!important;min-height:30px!important;display:flex!important;
+  align-items:center!important;justify-content:center!important;gap:10px!important
+ }
+ #cm-arsenal-modal .cm-arsenal-action-row{
+  flex:0 0 48px!important;min-height:48px!important
+ }
+ #cm-arsenal-modal .cm-arsenal-equip{
+  min-height:44px!important;height:44px!important;max-width:220px!important
+ }
+}
+@media(min-width:781px) and (max-height:720px){
+ #cm-arsenal-modal .cm-arsenal-header{
+  min-height:56px!important;max-height:56px!important;height:56px!important;flex-basis:56px!important
+ }
+ #cm-arsenal-modal.cm-art-title .cm-arsenal-header{background-size:auto 109px!important}
+ #cm-arsenal-modal .cm-arsenal-categories button{height:36px!important;min-height:36px!important;flex-basis:36px!important}
+ #cm-arsenal-modal.cm-art-progress .cm-arsenal-progress{max-width:125px!important}
+ #cm-arsenal-modal .cm-arsenal-stage{min-height:170px!important}
+ #cm-arsenal-modal .cm-arsenal-stats{flex-basis:50px!important;min-height:50px!important}
+ #cm-arsenal-modal .cm-arsenal-ability{flex-basis:25px!important;min-height:25px!important}
+ #cm-arsenal-modal .cm-arsenal-action-row{flex-basis:40px!important;min-height:40px!important}
+ #cm-arsenal-modal .cm-arsenal-pagination{flex-basis:29px!important;min-height:29px!important}
+}
