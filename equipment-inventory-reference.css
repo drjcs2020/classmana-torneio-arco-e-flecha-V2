@@ -584,3 +584,13 @@
  }
  #cm-arsenal-modal .cm-arsenal-unlock{font-size:10px!important}
 }
+
+
+/* Prioridade maior que a regra legada de PNG Equipar ativo. */
+#cm-arsenal-modal .cm-arsenal-equip.cm-arsenal-png-button[data-state="ready"],
+#cm-arsenal-modal .cm-arsenal-equip.cm-arsenal-png-button[data-state="locked"],
+#cm-arsenal-modal .cm-arsenal-equip.cm-arsenal-png-button[data-state="equipped"],
+#cm-arsenal-modal .cm-arsenal-equip.cm-arsenal-png-button[data-state="linked"]{
+ background-image:none!important;
+ background-position:initial!important;background-size:auto!important;
+}
