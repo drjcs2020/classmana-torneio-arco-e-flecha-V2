@@ -710,3 +710,98 @@ body[data-page="lobby"] #view-inicio[data-step="heroi"] .studio-bows.cm-inventor
  #cm-arsenal-modal .cm-arsenal-stage{flex:0 0 235px!important;min-height:235px!important}
  #cm-arsenal-modal .cm-arsenal-foot{display:none!important}
 }
+
+
+/* ClassMana — renderização das ARTES PNG originais, sem substituição por SVG improvisado.
+   Classes cm-art-* só são aplicadas depois do onload bem-sucedido da respectiva imagem. */
+#cm-arsenal-modal.cm-art-frame .cm-arsenal-shell{
+ padding:clamp(8px,.9vw,14px)!important;
+ background:
+  url('assets/ui/arsenal-moldura-principal.png') center / 100% 100% no-repeat!important;
+ border-radius:0!important;filter:drop-shadow(0 12px 20px #0009)!important;
+}
+#cm-arsenal-modal.cm-art-frame .cm-arsenal-core{
+ border:0!important;border-radius:0!important;
+ background:transparent!important;
+ padding:clamp(13px,1.5vw,23px)!important;
+}
+#cm-arsenal-modal.cm-art-title .cm-arsenal-header{
+ background:url('assets/ui/arsenal-placa-titulo.png') center / 100% 100% no-repeat!important;
+ border:0!important;box-shadow:none!important;
+}
+#cm-arsenal-modal.cm-art-title .cm-arsenal-header>div{
+ /* Texto já impresso na arte; preservar no DOM apenas para acessibilidade. */
+ position:absolute!important;width:1px!important;height:1px!important;
+ overflow:hidden!important;clip-path:inset(50%)!important;
+ white-space:nowrap!important;
+}
+#cm-arsenal-modal.cm-art-card .cm-arsenal-card,
+#cm-arsenal-modal.cm-art-card .cm-arsenal-card[data-selected="true"]{
+ position:relative!important;
+ background:url('assets/ui/arsenal-moldura-carta.png') center/100% 100% no-repeat!important;
+ padding:0!important;gap:0!important;overflow:visible!important;
+}
+#cm-arsenal-modal.cm-art-card .cm-arsenal-card-level{
+ position:absolute!important;top:1%!important;left:15%!important;width:70%!important;
+ height:10%!important;min-height:0!important;display:flex!important;
+ align-items:center!important;justify-content:center!important;z-index:2!important;
+ font-size:clamp(10px,.85vw,13px)!important;
+}
+#cm-arsenal-modal.cm-art-card .cm-arsenal-thumb{
+ position:absolute!important;top:12%!important;left:9%!important;width:82%!important;
+ height:53%!important;max-height:none!important;min-height:0!important;
+ display:grid!important;place-items:center!important;z-index:1!important;
+ overflow:hidden!important;
+}
+#cm-arsenal-modal.cm-art-card .cm-arsenal-card-name{
+ position:absolute!important;top:66%!important;left:4%!important;width:92%!important;
+ height:11%!important;min-height:0!important;display:flex!important;
+ align-items:center!important;justify-content:center!important;
+ font-size:clamp(9px,.95vw,14px)!important;line-height:1.08!important;
+ z-index:2!important;
+}
+#cm-arsenal-modal.cm-art-card .cm-arsenal-card-status{
+ position:absolute!important;top:84%!important;left:5%!important;width:90%!important;
+ height:9%!important;min-height:0!important;display:flex!important;
+ align-items:center!important;justify-content:center!important;
+ font-size:clamp(9px,.75vw,12px)!important;z-index:2!important;
+}
+#cm-arsenal-modal.cm-art-progress .cm-arsenal-progress{
+ position:relative!important;min-height:184px!important;
+ background:url('assets/ui/arsenal-painel-progresso.png') center/100% 100% no-repeat!important;
+ padding:0!important;display:block!important;
+}
+#cm-arsenal-modal.cm-art-progress .cm-arsenal-progress p{
+ position:absolute!important;width:1px!important;height:1px!important;
+ overflow:hidden!important;clip-path:inset(50%)!important;
+}
+#cm-arsenal-modal.cm-art-progress .cm-arsenal-wins,
+#cm-arsenal-modal.cm-art-progress .cm-arsenal-level{
+ position:absolute!important;left:47%!important;width:48%!important;
+ display:block!important;text-align:center!important;
+ font-size:clamp(18px,1.75vw,27px)!important;line-height:1!important;
+}
+#cm-arsenal-modal.cm-art-progress .cm-arsenal-wins{top:31%!important}
+#cm-arsenal-modal.cm-art-progress .cm-arsenal-level{top:63%!important}
+#cm-arsenal-modal.cm-art-progress .cm-arsenal-progress>span{
+ position:absolute!important;left:43%!important;width:55%!important;
+ font-size:clamp(9px,.85vw,12px)!important;line-height:1!important;
+ text-align:center!important;
+}
+#cm-arsenal-modal.cm-art-progress .cm-arsenal-progress>span:nth-of-type(1){top:47%!important}
+#cm-arsenal-modal.cm-art-progress .cm-arsenal-progress>span:nth-of-type(2){top:79%!important}
+#cm-arsenal-modal.cm-art-stats .cm-arsenal-stat{
+ background:url('assets/ui/arsenal-moldura-estatistica.png') center/100% 100% no-repeat!important;
+ border:0!important;border-radius:0!important;
+ padding:6px 5px!important;box-shadow:none!important;
+}
+#cm-arsenal-modal.cm-art-description .cm-arsenal-description,
+#cm-arsenal-modal.cm-art-description .cm-arsenal-ability{
+ background:url('assets/ui/arsenal-barra-descricao.png') center/100% 100% no-repeat!important;
+ border:0!important;border-radius:0!important;
+ padding:5px 12px!important;
+}
+@media(max-height:730px) and (min-width:781px){
+ #cm-arsenal-modal.cm-art-progress .cm-arsenal-progress{min-height:132px!important}
+ #cm-arsenal-modal.cm-art-frame .cm-arsenal-core{padding:11px!important}
+}
