@@ -23,13 +23,17 @@ export function mountEquipmentInventory({selected='classico',onSelect=()=>{}}={}
  host.replaceChildren();host.className='studio-bows cm-inventory-entry';
  // Duas artes independentes: painel decorativo e botão funcional.
  const art=make('img','cm-inventory-panel-art');
- art.src='assets/ui/inventory-ornate-panel.svg';art.alt='INVENTÁRIO DE ARMAS — Arcos, Bestas e Flechas';
+ art.src='assets/ui/classmana_escudo_inventario.png';
+ art.onerror=()=>{art.onerror=null;art.src='assets/ui/inventory-ornate-panel.svg'};
+ art.alt='INVENTÁRIO DE ARMAS — Arcos, Bestas e Flechas';
  art.decoding='async';art.draggable=false;
  const openButton=make('button','cm-inventory-launch');openButton.type='button';
  openButton.setAttribute('aria-label','Clique para abrir o arsenal');
  openButton.setAttribute('aria-haspopup','dialog');openButton.setAttribute('aria-controls','cm-arsenal-modal');
  const buttonArt=make('img','cm-inventory-open-art');
- buttonArt.src='assets/ui/inventory-open-button.svg';buttonArt.alt='';buttonArt.draggable=false;
+ buttonArt.src='assets/ui/classmana_botao_abrir_arsenal.png';
+ buttonArt.onerror=()=>{buttonArt.onerror=null;buttonArt.src='assets/ui/inventory-open-button.svg'};
+ buttonArt.alt='';buttonArt.draggable=false;
  openButton.append(buttonArt);
  const summary=make('div','cm-inventory-equipped');summary.setAttribute('aria-live','polite');
  host.append(art,openButton,summary);
