@@ -768,7 +768,7 @@
  #cm-arsenal-modal .cm-arsenal-section-label{margin-top:7px!important}
 }
 
-/* Botões EQUIPADA e BLOQUEADA — mesma geometria, fundo verde, texto branco.
+/* Botões EQUIPADA (verde) e BLOQUEADA (vermelho) — mesma geometria, texto branco.
    Sobrescreve estilos de PNG e estados anteriores sem alterar EQUIPAR/VINCULADA. */
 #cm-arsenal-modal .cm-arsenal-action-row button.cm-arsenal-equip[data-state="equipped"],
 #cm-arsenal-modal .cm-arsenal-action-row button.cm-arsenal-equip[data-state="locked"],
@@ -796,4 +796,22 @@
  filter:none!important;
  opacity:1!important;
  text-shadow:0 1px 2px #002819!important;
+}
+
+/* Cores de estado finais: uma regra específica por estado, sem PNG azul. */
+#cm-arsenal-modal .cm-arsenal-action-row button.cm-arsenal-equip[data-state="equipped"],
+#cm-arsenal-modal .cm-arsenal-action-row button.cm-arsenal-equip.cm-arsenal-png-button[data-state="equipped"]{
+ background:#147a46!important;
+ background-image:linear-gradient(180deg,#24a75c 0%,#137e48 55%,#095632 100%)!important;
+ background-color:#147a46!important;
+ color:#fff!important;
+ -webkit-text-fill-color:#fff!important;
+}
+#cm-arsenal-modal .cm-arsenal-action-row button.cm-arsenal-equip[data-state="locked"],
+#cm-arsenal-modal .cm-arsenal-action-row button.cm-arsenal-equip.cm-arsenal-png-button[data-state="locked"]{
+ background:#a32929!important;
+ background-image:linear-gradient(180deg,#d84848 0%,#a9272d 55%,#6e151c 100%)!important;
+ background-color:#a32929!important;
+ color:#fff!important;
+ -webkit-text-fill-color:#fff!important;
 }
