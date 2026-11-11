@@ -37,11 +37,11 @@ const teacher = createTeacherAdmin({db,players,known,teamMembership,fail});
 function publicDuel(d){return {id:d.id,creator:known.get(d.creator),recipient:known.get(d.recipient),kind:d.kind,level:d.level,created:d.created,status:d.status,creatorShots:d.creator_shots?JSON.parse(d.creator_shots):[],recipientShots:d.recipient_shots?JSON.parse(d.recipient_shots):[],creatorScore:d.creator_score,recipientScore:d.recipient_score,rules:11}}
 // Mesmas regras do catálogo do jogo; o servidor valida cada disparo.
 const serverBows=Object.freeze({
- classico:{ring:1,bonus:0,requiredWins:0},real:{ring:1.12,bonus:1,requiredWins:2},
- vento:{ring:1,bonus:0,requiredWins:5},lendario:{ring:1.22,bonus:2,requiredWins:15},
- besta_leve:{ring:.94,bonus:0,requiredWins:9},besta_real:{ring:1.08,bonus:1,requiredWins:24},
- recurvo:{ring:1.05,bonus:0,requiredWins:32},explorador:{ring:1.1,bonus:1,requiredWins:42},
- aloy:{ring:1.16,bonus:2,requiredWins:55}
+ classico:{ring:1,bonus:0,requiredWins:0},real:{ring:1.12,bonus:1,requiredWins:1},
+ vento:{ring:1,bonus:0,requiredWins:2},lendario:{ring:1.22,bonus:2,requiredWins:4},
+ besta_leve:{ring:.94,bonus:0,requiredWins:10},besta_real:{ring:1.08,bonus:1,requiredWins:12},
+ recurvo:{ring:1.05,bonus:0,requiredWins:8},explorador:{ring:1.1,bonus:1,requiredWins:16},
+ aloy:{ring:1.16,bonus:2,requiredWins:32}
 });
 function shotsOf(shots,officialWins=0){
  if(!Array.isArray(shots)||shots.length!==5)fail('Exatamente cinco flechas são necessárias');
