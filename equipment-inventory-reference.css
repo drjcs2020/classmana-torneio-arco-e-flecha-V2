@@ -6,8 +6,8 @@
  */
 #cm-arsenal-modal{
  position:fixed!important;inset:0!important;z-index:999999!important;
- display:grid!important;place-items:center!important;overflow:auto!important;
- box-sizing:border-box!important;padding:5px!important;
+ display:grid!important;place-items:end center!important;overflow:auto!important;
+ box-sizing:border-box!important;padding:5px 5px 2dvh!important;
  background:rgba(1,10,25,.34)!important;color:#fff0c4!important;
  font-family:Nunito,Arial,sans-serif!important;
 }
@@ -17,7 +17,7 @@
 #cm-arsenal-modal button:focus-visible{outline:2px solid #83e4ff!important;outline-offset:2px!important}
 #cm-arsenal-modal .cm-arsenal-shell{
  position:relative!important;display:block!important;
- width:min(96vw,calc(88dvh * 2.02),1650px)!important;
+ width:min(96vw,calc(84dvh * 2.02),1650px)!important;
  height:auto!important;aspect-ratio:2.02!important;
  min-height:0!important;max-height:unset!important;
  margin:0!important;padding:0!important;
@@ -362,15 +362,16 @@
  min-height:0!important;margin:0!important;padding:0!important;
  border:0!important;border-radius:0!important;box-shadow:none!important;
  background:url('assets/ui/arsenal-botao-equipar.png') center/100% 100% no-repeat!important;
- color:#fff1c0!important;font:900 clamp(11px,1.2vw,21px)/1 Georgia,serif!important;
+ color:transparent!important;font:0/1 Georgia,serif!important;
  text-shadow:0 2px 3px #061c14!important;
 }
 #cm-arsenal-modal .cm-arsenal-equip[data-state="equipped"],
 #cm-arsenal-modal .cm-arsenal-equip[data-state="locked"],
 #cm-arsenal-modal .cm-arsenal-equip:disabled{
- background:url('assets/ui/arsenal-botao-equipar.png') center/100% 100% no-repeat!important;
- filter:grayscale(.6) brightness(.68)!important;
- opacity:1!important;
+ background:linear-gradient(180deg,#283f56,#0b1e35)!important;
+ border:2px solid #be9a52!important;border-radius:8px!important;
+ filter:none!important;opacity:1!important;
+ color:#fff1cb!important;font:900 clamp(11px,1.12vw,19px)/1.1 Georgia,serif!important;
 }
 #cm-arsenal-modal .cm-arsenal-foot{display:none!important}
 @media(max-width:850px){
