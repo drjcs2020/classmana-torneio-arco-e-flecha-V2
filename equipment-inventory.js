@@ -35,6 +35,21 @@ export function mountEquipmentInventory({selected='classico',onSelect=()=>{}}={}
  const q=s=>modal.querySelector(s);
  const grid=q('.cm-arsenal-grid'),viewer=q('.cm-arsenal-model'),placeholder=q('.cm-arsenal-model-placeholder');
  const equipButton=q('.cm-arsenal-equip'),loading=q('.cm-arsenal-loading'),stage=q('.cm-arsenal-stage');
+ // Artes PNG originais do inventário: ativar individualmente somente após carregar.
+ // Impede painéis vazios e mantém textos acessíveis até a imagem estar disponível.
+ const artFiles={
+  'cm-art-frame':'arsenal-moldura-principal.png',
+  'cm-art-title':'arsenal-placa-titulo.png',
+  'cm-art-card':'arsenal-moldura-carta.png',
+  'cm-art-progress':'arsenal-painel-progresso.png',
+  'cm-art-stats':'arsenal-moldura-estatistica.png',
+  'cm-art-description':'arsenal-barra-descricao.png'
+ };
+ for(const [className,file] of Object.entries(artFiles)){
+  const image=new Image();
+  image.onload=()=>{if(modal.isConnected)modal.classList.add(className)};
+  image.src='assets/ui/'+file;
+ }
  const categories=[...modal.querySelectorAll('[data-category]')];
  // Botões com imagens fornecidas; se PNG faltar, manter o botão original funcional.
  const categoryArtwork={Arco:'01_categoria_arcos.png',Besta:'02_categoria_bestas.png',Flecha:'03_categoria_flechas.png'};
