@@ -3,7 +3,7 @@ import {GEAR,GEAR_BY_ID,getGearLevel,isGearUnlocked} from './equipment-catalog.j
 import {mountEquipmentInventory} from './equipment-inventory.js?v=arsenal-fullscreen-20261111';
 import {CIRCUITS,LEVELS,targetMotion,obstacleBlocks,distanceDifficulty,flightSeconds} from './arena-difficulty.js?v=3';
 import {arenaAudio} from './arena-audio.js?v=lobbydefault49';
-import {cinematics} from './classmana-cinematics.js?v=20261110-match-result-layout';
+import {cinematics} from './classmana-cinematics.js?v=embers-visible-20261111';
 import {initAtmosphere} from './arena-atmosphere.js?v=no-crowd15';
 import {online} from './online-client.js?v=api10';
 import {mountSpriteHUD} from './sprite-hud.js?v=1';
