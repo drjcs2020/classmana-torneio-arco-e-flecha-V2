@@ -235,7 +235,7 @@ export function mountEquipmentInventory({selected='classico',onSelect=()=>{}}={}
   q('.cm-arsenal-unlock').textContent=progressText(item);
   const isArrow=item.type==='Flecha',isEquipped=item.id===equipped,canEquip=unlocked(item)&&!isEquipped&&!isArrow;
   equipButton.disabled=!canEquip;
-  equipButton.textContent=isArrow?'➶ VINCULADA À ARMA':!unlocked(item)?'🔒 BLOQUEADA':isEquipped?'✓ EQUIPADA':'✓ EQUIPAR ARMA';
+  equipButton.textContent=isArrow?'VINCULADA À ARMA':!unlocked(item)?'🔒 BLOQUEADA':isEquipped?'✓ EQUIPADA':'✓ EQUIPAR';
   equipButton.dataset.state=isArrow?'linked':!unlocked(item)?'locked':isEquipped?'equipped':'ready';
   const wind=item.wind==null?'—':item.wind===1?'Normal':(item.wind<1?'-':'+')+Math.abs(Math.round((item.wind-1)*100))+'%';
   const margin=item.ring==null?'—':((1/item.ring-1)>=0?'+':'')+Math.round((1/item.ring-1)*100)+'%';
@@ -244,7 +244,7 @@ export function mountEquipmentInventory({selected='classico',onSelect=()=>{}}={}
    [['ACERTO',margin],['VENTO',wind],['PONTOS',item.bonus?'+'+item.bonus:'Padrão']];
   q('.cm-arsenal-stats').replaceChildren(...stats.map(([k,v],index)=>{
    const cell=make('div','cm-arsenal-stat');
-   const icon=make('span','cm-arsenal-stat-icon',isArrow?['➶','◎','✦'][index]:['◎','≋','✦'][index]);
+   const icon=make('span','cm-arsenal-stat-icon',isArrow?['🏹','⚙️','✨'][index]:['🎯','💨','⭐'][index]);
    icon.setAttribute('aria-hidden','true');
    cell.append(icon,make('span','cm-arsenal-stat-label',k),make('strong','',v));return cell;
   }));
