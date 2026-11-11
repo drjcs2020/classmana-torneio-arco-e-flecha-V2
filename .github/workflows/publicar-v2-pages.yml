@@ -35,6 +35,22 @@ jobs:
             --exclude='/rebuild/' \
             --exclude='*.sqlite' --exclude='*.sqlite-shm' --exclude='*.sqlite-wal' \
             ./ _site/
+          # As artes oficiais foram enviadas como ZIP em assets/ui.
+          # Extrair para o site publicado sem exigir reenvio de cada PNG.
+          if [ -f assets/ui/ClassMana_Artes_Finais_Inventario.zip ]; then
+            unzip -oq assets/ui/ClassMana_Artes_Finais_Inventario.zip -d _site
+          fi
+          for asset in \
+            arsenal-barra-descricao.png \
+            arsenal-botao-equipar.png \
+            arsenal-botao-fechar.png \
+            arsenal-moldura-carta.png \
+            arsenal-moldura-estatistica.png \
+            arsenal-moldura-principal.png \
+            arsenal-painel-progresso.png \
+            arsenal-placa-titulo.png; do
+            test -s "_site/assets/ui/$asset" || { echo "Arte ausente: $asset"; exit 1; }
+          done
           test -s _site/index.html
           test -s _site/arena.html
           test -s _site/game-v3.js
