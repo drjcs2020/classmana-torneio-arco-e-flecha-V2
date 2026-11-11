@@ -405,3 +405,85 @@
  #cm-arsenal-modal .cm-arsenal-header{flex-basis:96px!important;height:96px!important}
  #cm-arsenal-modal .cm-arsenal-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-template-rows:repeat(3,190px)!important}
 }
+
+
+/* INVENTÁRIO — revisão de alinhamento baseada nas coordenadas reais dos PNGs.
+   Placa 1350x430: exibir INTEIRA, sem cortar o brasão superior.
+   Carta 700x874: faixa do nome 62%-73%; faixa azul de status 78%-86%.
+   Mantém a grade 3x2 e os modelos GLB originais. */
+@media(min-width:781px){
+ #cm-arsenal-modal .cm-arsenal-header,
+ #cm-arsenal-modal.cm-art-title .cm-arsenal-header{
+  flex:0 0 clamp(133px,19dvh,180px)!important;
+  height:clamp(133px,19dvh,180px)!important;
+  min-height:0!important;max-height:none!important;
+  background-size:auto 100%!important;
+  background-position:center center!important;
+  background-repeat:no-repeat!important;
+  overflow:visible!important;
+ }
+ #cm-arsenal-modal .cm-arsenal-close{
+  top:clamp(12px,2.2dvh,25px)!important;
+  right:clamp(3px,.85vw,16px)!important;
+ }
+ #cm-arsenal-modal .cm-arsenal-collection-heading{
+  flex-basis:clamp(24px,3.5dvh,37px)!important;
+ }
+ #cm-arsenal-modal .cm-arsenal-grid{
+  column-gap:clamp(2px,.55vw,9px)!important;
+  row-gap:clamp(2px,.55dvh,8px)!important;
+ }
+ #cm-arsenal-modal.cm-art-card .cm-arsenal-card{
+  background-size:140% 100%!important;
+  overflow:hidden!important;
+ }
+ #cm-arsenal-modal.cm-art-card .cm-arsenal-card-level{
+  top:4%!important;height:8%!important;
+ }
+ #cm-arsenal-modal.cm-art-card .cm-arsenal-thumb{
+  top:13%!important;left:9%!important;
+  width:82%!important;height:47%!important;
+  overflow:hidden!important;
+ }
+ #cm-arsenal-modal.cm-art-card .cm-arsenal-thumb-image{
+  width:100%!important;height:100%!important;
+  object-fit:contain!important;object-position:center!important;
+  transform:scale(1.15)!important;
+ }
+ #cm-arsenal-modal.cm-art-card .cm-arsenal-card-name{
+  top:63.7%!important;left:8%!important;
+  width:84%!important;height:8.1%!important;
+  padding:0 3px!important;min-height:0!important;
+  font:900 clamp(11px,.91vw,15px)/1.06 Georgia,serif!important;
+  white-space:normal!important;overflow-wrap:normal!important;
+  text-wrap:balance!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+ }
+ #cm-arsenal-modal.cm-art-card .cm-arsenal-card-status{
+  top:79.3%!important;left:9%!important;width:82%!important;
+  height:6.8%!important;min-height:0!important;padding:0 2px!important;
+  white-space:nowrap!important;
+  font:900 clamp(9px,.72vw,12px)/1 Nunito,Arial,sans-serif!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+ }
+ #cm-arsenal-modal .cm-arsenal-pagination{
+  flex-basis:clamp(34px,5dvh,48px)!important;
+  min-height:0!important;
+ }
+ #cm-arsenal-modal .cm-arsenal-detail{
+  padding-bottom:clamp(10px,2vh,20px)!important;
+ }
+ #cm-arsenal-modal .cm-arsenal-action-row{
+  flex:0 0 clamp(46px,6dvh,63px)!important;
+  min-height:0!important;
+ }
+}
+@media(min-width:781px) and (max-height:700px){
+ #cm-arsenal-modal .cm-arsenal-header,
+ #cm-arsenal-modal.cm-art-title .cm-arsenal-header{
+  flex-basis:125px!important;height:125px!important;background-size:auto 100%!important;
+ }
+ #cm-arsenal-modal .cm-arsenal-grid{row-gap:3px!important}
+ #cm-arsenal-modal.cm-art-card .cm-arsenal-card-name{font-size:10px!important}
+ #cm-arsenal-modal.cm-art-card .cm-arsenal-card-status{font-size:9px!important}
+}
