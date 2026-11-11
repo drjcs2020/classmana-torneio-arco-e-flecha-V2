@@ -194,3 +194,78 @@ body[data-page="arena"] #view-arena #finish.cm-v21-result .finish-actions{flex:0
  .cm-vs-overlay .cm-vs-fighter[data-house] .cm-vs-grade{font-size:clamp(8px,1.8vw,10px)!important}
  .cm-vs-overlay .cm-vs-fighter[data-house] .cm-vs-house-name{font-size:clamp(9px,2vw,11px)!important}
 }
+
+
+/* Padrao visual da tela de resultado aplicado às telas de ABERTURA.
+   Mantém VS e botões próprios da abertura; não introduz placar nem vencedor. */
+@media (min-width:761px){
+ .cm-vs-overlay .cm-vs-shell,
+ .cm-vs-overlay[data-mode="bot"] .cm-vs-shell{
+   width:min(98vw,1040px)!important;
+   gap:clamp(3px,.55dvh,6px)!important;
+ }
+ .cm-vs-overlay .cm-vs-fighters,
+ .cm-vs-overlay[data-mode="bot"] .cm-vs-fighters{
+   width:min(100%,970px)!important;
+   grid-template-columns:minmax(0,1fr) clamp(105px,12vw,145px) minmax(0,1fr)!important;
+ }
+ .cm-vs-overlay .cm-vs-fighter[data-house],
+ .cm-vs-overlay[data-mode="bot"] .cm-vs-fighter[data-house]{
+   width:min(31vw,calc((100dvh - 190px)*.75),330px)!important;
+   height:auto!important;
+   aspect-ratio:2/3!important;
+   max-width:330px!important;
+   min-width:0!important;min-height:0!important;
+   transform:none!important;animation:none!important;
+ }
+ .cm-vs-overlay .cm-vs-fighters>.cm-vs-mark,
+ .cm-vs-overlay[data-mode="bot"] .cm-vs-fighters>.cm-vs-mark{
+   width:clamp(100px,11vw,135px)!important;
+   height:clamp(110px,12vw,145px)!important;
+   transform:none!important;
+ }
+}
+.cm-vs-overlay .cm-vs-fighter[data-house] .cm-combat-portrait,
+.cm-vs-overlay[data-mode="bot"] .cm-vs-fighter[data-house] .cm-combat-portrait{
+ top:18.5%!important;left:17%!important;
+ width:66%!important;height:49%!important;
+}
+.cm-vs-overlay .cm-vs-fighter[data-house] .cm-combat-portrait img,
+.cm-vs-overlay[data-mode="bot"] .cm-vs-fighter[data-house] .cm-combat-portrait img{
+ transform:scale(1.12)!important;
+ transform-origin:50% 27%!important;
+}
+.cm-vs-overlay .cm-vs-fighter.cm-vs-facing-left .cm-combat-portrait img,
+.cm-vs-overlay[data-mode="bot"] .cm-vs-fighter.cm-vs-facing-left .cm-combat-portrait img{
+ transform:scaleX(-1) scale(1.12)!important;
+ transform-origin:50% 27%!important;
+}
+.cm-vs-overlay .cm-vs-fighter[data-house] .cm-vs-fighter-info strong,
+.cm-vs-overlay[data-mode="bot"] .cm-vs-fighter[data-house] .cm-vs-fighter-info strong{
+ top:75.4%!important;left:9.5%!important;
+ width:81%!important;max-width:81%!important;height:7%!important;
+ padding:0 2px!important;white-space:nowrap!important;
+ font:900 clamp(13px,1.48vw,21px)/1.08 'Cinzel',Georgia,serif!important;
+}
+.cm-vs-overlay .cm-vs-fighter[data-house] .cm-vs-fighter-info small,
+.cm-vs-overlay[data-mode="bot"] .cm-vs-fighter[data-house] .cm-vs-fighter-info small{
+ top:87.3%!important;left:8%!important;
+ width:84%!important;max-width:84%!important;height:6%!important;
+ display:flex!important;flex-direction:row!important;
+ align-items:center!important;justify-content:center!important;
+ white-space:nowrap!important;overflow:visible!important;
+ font:900 clamp(9px,.91vw,12px)/1.08 'Nunito',Arial,sans-serif!important;
+ letter-spacing:0!important;
+}
+@media(max-width:760px){
+ .cm-vs-overlay .cm-vs-fighter[data-house],
+ .cm-vs-overlay[data-mode="bot"] .cm-vs-fighter[data-house]{
+   width:min(40vw,calc((100dvh - 195px)*.70),230px)!important;
+   height:auto!important;aspect-ratio:2/3!important;
+   transform:none!important;animation:none!important;
+ }
+ .cm-vs-overlay .cm-vs-fighter[data-house] .cm-vs-fighter-info small,
+ .cm-vs-overlay[data-mode="bot"] .cm-vs-fighter[data-house] .cm-vs-fighter-info small{
+   font-size:clamp(7px,1.5vw,10px)!important;
+ }
+}
