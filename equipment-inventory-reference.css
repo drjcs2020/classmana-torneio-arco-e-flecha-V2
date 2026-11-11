@@ -768,18 +768,28 @@
  #cm-arsenal-modal .cm-arsenal-section-label{margin-top:7px!important}
 }
 
-/* Botão EQUIPADA: afastar da borda direita da moldura sem alterar os outros estados. */
-#cm-arsenal-modal .cm-arsenal-action-row .cm-arsenal-equip[data-state="equipped"],
-#cm-arsenal-modal .cm-arsenal-action-row .cm-arsenal-equip.cm-arsenal-png-button[data-state="equipped"]{
+/* Botões EQUIPADA e BLOQUEADA — mesma geometria, fundo verde, texto branco.
+   Sobrescreve estilos de PNG e estados anteriores sem alterar EQUIPAR/VINCULADA. */
+#cm-arsenal-modal .cm-arsenal-action-row button.cm-arsenal-equip[data-state="equipped"],
+#cm-arsenal-modal .cm-arsenal-action-row button.cm-arsenal-equip[data-state="locked"],
+#cm-arsenal-modal .cm-arsenal-action-row button.cm-arsenal-equip.cm-arsenal-png-button[data-state="equipped"],
+#cm-arsenal-modal .cm-arsenal-action-row button.cm-arsenal-equip.cm-arsenal-png-button[data-state="locked"]{
  position:relative!important;
- left:-38px!important; /* manter deslocamento horizontal anterior */
+ left:-57px!important; /* aproximadamente 1,5 cm para a esquerda */
+ top:-8px!important; /* aproximadamente 2 mm para cima */
  flex:0 0 clamp(127px,calc(16vw - 38px),210px)!important;
  width:clamp(127px,calc(16vw - 38px),210px)!important;
  max-width:calc(48% - 38px)!important;
  box-sizing:border-box!important;
- background:linear-gradient(180deg,#218d56 0%,#0e6844 54%,#08412f 100%)!important;
- background-image:none!important;
+ appearance:none!important;
+ background:#147a46!important;
+ background-image:linear-gradient(180deg,#24a75c 0%,#137e48 55%,#095632 100%)!important;
+ background-color:#147a46!important;
+ background-position:center!important;
+ background-repeat:no-repeat!important;
+ background-size:cover!important;
  color:#ffffff!important;
+ -webkit-text-fill-color:#ffffff!important;
  border:2px solid #ffd978!important;
  border-radius:9px!important;
  box-shadow:inset 0 0 0 1px #fff0ae80,0 0 0 1px #8d531d,0 0 12px #dca64370,0 3px 6px #0009!important;
