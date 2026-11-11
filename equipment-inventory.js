@@ -1,4 +1,4 @@
-import {GEAR,GEAR_BY_ID,modelSource,getGearLevel,isGearUnlocked} from './equipment-catalog.js?v=win-progress-20261110';
+import {GEAR,GEAR_BY_ID,modelSource,getGearLevel,isGearUnlocked} from './equipment-catalog.js?v=win-progress-linear-20261110';
 // Inventário isolado: somente um modelo 3D por vez. Nenhum GLB no painel do herói.
 const ARROWS=[
  {id:'arrow-standard',name:'Flecha Clássica',type:'Flecha',rarity:'Comum',model:'arrow-standard.glb',desc:'Flecha padrão do Arco de Treino e da Besta Leve.',ability:'Disparo equilibrado'},
