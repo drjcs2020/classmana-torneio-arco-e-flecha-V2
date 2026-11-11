@@ -38,7 +38,7 @@
  width:66%!important;height:23%!important;
  display:block!important;margin:0!important;padding:0!important;
  min-height:0!important;max-height:none!important;flex:none!important;
- background:url('assets/ui/arsenal-placa-titulo.png') center/contain no-repeat!important;
+ background:url('assets/ui/arsenal-placa-titulo.png') center 68%/100% auto no-repeat!important;
  box-shadow:none!important;border:0!important;border-radius:0!important;overflow:visible!important;
  z-index:4!important;
 }
