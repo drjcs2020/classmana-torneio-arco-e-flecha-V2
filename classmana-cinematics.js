@@ -42,11 +42,11 @@ function emberLayer(host,house,count=16){
   const edge=Math.pow(rng(i*7+21+side*113),3);
   const x=side===0?2+48*edge:98-48*edge;
   dot.style.setProperty('--ember-x',x.toFixed(1)+'%');
-  dot.style.setProperty('--ember-size',(home?3.1+5.6*v+1.3*(1-edge):2.2+4.5*v).toFixed(1)+'px');
-  dot.style.setProperty('--ember-duration',(4.6+6.5*rng(i+31)).toFixed(2)+'s');
+  dot.style.setProperty('--ember-size',(home?4.4+8.7*v+2.2*(1-edge):2.8+6.5*v).toFixed(1)+'px');
+  dot.style.setProperty('--ember-duration',(3.4+5.4*rng(i+31)).toFixed(2)+'s');
   dot.style.setProperty('--ember-delay',(-9*rng(i+46)).toFixed(2)+'s');
   dot.style.setProperty('--ember-drift',(-72+144*rng(i+64)).toFixed(0)+'px');
-  dot.style.setProperty('--ember-opacity',(home?.16+.43*(1-edge):.32+.27*v).toFixed(2));
+  dot.style.setProperty('--ember-opacity',(home?.23+.76*(1-edge):.65+.35*v).toFixed(2));
   layer.append(dot);
  }
  host.prepend(layer);
