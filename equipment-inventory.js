@@ -7,16 +7,6 @@ const ARROWS=[
 ];
 const ALL=[...GEAR,...ARROWS],BY_ID=Object.fromEntries(ALL.map(x=>[x.id,x]));
 const make=(tag,cls,value)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(value!==undefined)e.textContent=value;return e};
-const MINI_COLORS={classico:'#c9945b',real:'#f2c86e',vento:'#7dddf1',lendario:'#ffce58',recurvo:'#d1d8ec',explorador:'#a7d983',aloy:'#ef7361',besta_leve:'#bca27b',besta_real:'#f8d27a','arrow-standard':'#c6a57a','arrow-precision':'#8adfff','arrow-power':'#f2bd59'};
-function mini(item){
- const c=MINI_COLORS[item.id]||'#e9c477';
- if(item.type==='Flecha')return '<svg viewBox="0 0 160 100" aria-hidden="true"><path d="M19 80 138 16" stroke="'+c+'" stroke-width="5" stroke-linecap="round"/><path d="m127 12 22-4-10 22-5-12Z" fill="#ffe5a2"/><path d="m19 80-12-2 8-15 9 12Z" fill="'+c+'"/></svg>';
- if(item.type==='Besta')return '<svg viewBox="0 0 160 100" aria-hidden="true"><path d="'+(item.id==='besta_real'?'M13 38Q80 -3 147 38':'M25 39Q80 12 135 39')+'" fill="none" stroke="'+c+'" stroke-width="10" stroke-linecap="round"/><path d="M23 39Q80 59 137 39" fill="none" stroke="#f4e7bc" stroke-width="2"/><path d="M79 13v78" stroke="#c2d4e3" stroke-width="9" stroke-linecap="round"/><path d="M79 46 56 84" stroke="'+c+'" stroke-width="10" stroke-linecap="round"/></svg>';
- const shapes={classico:'M20 76Q80 6 140 76',real:'M13 76Q40 14 62 29Q80 43 98 29Q120 14 147 76',vento:'M18 79Q43 12 65 25Q80 35 95 25Q117 12 142 79',lendario:'M12 78Q37 -5 64 24Q80 41 96 24Q123 -5 148 78',recurvo:'M22 80Q42 28 60 20Q80 48 100 20Q118 28 138 80',explorador:'M18 79Q46 1 75 26Q84 30 93 26Q122 1 142 79',aloy:'M14 79Q36 7 65 28Q80 37 95 28Q124 7 146 79'};
- const p=shapes[item.id]||shapes.classico;
- const gem=['real','lendario','aloy'].includes(item.id)?'<path d="m80 33 7 8-7 8-7-8Z" fill="#76dcff" stroke="#ffe5a2" stroke-width="2"/>':'';
- return '<svg viewBox="0 0 160 100" aria-hidden="true"><path d="'+p+'" fill="none" stroke="#3c241b" stroke-width="13" stroke-linecap="round"/><path d="'+p+'" fill="none" stroke="'+c+'" stroke-width="8" stroke-linecap="round"/><path d="M20 76H140" stroke="#f6e7c4" stroke-width="2"/><path d="M80 26V82" stroke="'+c+'" stroke-width="6" stroke-linecap="round"/>'+gem+'</svg>';
-}
 export function mountEquipmentInventory({selected='classico',onSelect=()=>{}}={}){
  const host=document.querySelector('.studio-bows');
  if(!host)return {select:()=>{},setProgress:()=>{},get value(){return 'classico'}};
@@ -48,7 +38,71 @@ export function mountEquipmentInventory({selected='classico',onSelect=()=>{}}={}
  const categories=[...modal.querySelectorAll('[data-category]')];
  let equipped=GEAR_BY_ID[selected]?selected:'classico',preview=equipped,category='Arco',wins=0,confirmed=false;
  let zoom=75,spin=0,requestId=0,previousFocus=null;
+ // Miniaturas SEM desenhos inventados: fotografias renderizadas dos GLBs reais.
  const snapshots=new Map();
+ const thumbFailed=new Set();
+ let thumbQueue=[],thumbBusy=false,thumbGeneration=0;
+ const thumbViewer=document.createElement('model-viewer');
+ thumbViewer.className='cm-arsenal-snapshot-renderer';
+ thumbViewer.setAttribute('interaction-prompt','none');
+ thumbViewer.setAttribute('environment-image','neutral');
+ thumbViewer.setAttribute('shadow-intensity','0');
+ thumbViewer.setAttribute('camera-target','auto auto auto');
+ thumbViewer.setAttribute('camera-orbit','0deg 90deg 85%');
+ thumbViewer.setAttribute('field-of-view','24deg');
+ thumbViewer.setAttribute('loading','eager');
+ thumbViewer.setAttribute('reveal','auto');
+ thumbViewer.setAttribute('aria-hidden','true');
+ thumbViewer.style.cssText='position:fixed;width:224px;height:224px;left:0;top:0;z-index:-1;opacity:.01;pointer-events:none;contain:layout style;';
+ modal.append(thumbViewer);
+ function updateThumb(id){
+   const frame=grid.querySelector('[data-id="'+id+'"] .cm-arsenal-thumb');
+   if(!frame)return;
+   const uri=snapshots.get(id);
+   if(uri){const img=make('img','cm-arsenal-thumb-image');img.alt='';img.src=uri;frame.replaceChildren(img)}
+   else frame.textContent=thumbFailed.has(id)?'PRÉVIA INDISPONÍVEL':'CARREGANDO 3D…';
+ }
+ function queueThumbnails(items){
+   const generation=++thumbGeneration;
+   thumbQueue=items.filter(item=>!snapshots.has(item.id)&&!thumbFailed.has(item.id));
+   if(!thumbBusy)void nextThumbnail(generation);
+ }
+ async function nextThumbnail(generation){
+   if(thumbBusy)return;
+   thumbBusy=true;
+   try{
+    while(!modal.hidden&&thumbQueue.length){
+     const item=thumbQueue.shift();
+     if(!item||snapshots.has(item.id)||thumbFailed.has(item.id))continue;
+     try{
+      const src=await modelSource(item.model);
+      if(modal.hidden)break;
+      await new Promise((resolve,reject)=>{
+       const cleanup=()=>{thumbViewer.removeEventListener('load',onLoad);thumbViewer.removeEventListener('error',onError)};
+       const onError=()=>{cleanup();reject(new Error('Modelo 3D indisponível'))};
+       const onLoad=()=>{
+        requestAnimationFrame(()=>requestAnimationFrame(()=>{
+         try{
+          const png=thumbViewer.toDataURL('image/png');
+          cleanup();
+          if(typeof png!=='string'||!png.startsWith('data:image/'))throw Error('Captura indisponível');
+          snapshots.set(item.id,png);updateThumb(item.id);resolve();
+         }catch(err){cleanup();reject(err)}
+        }));
+       };
+       thumbViewer.addEventListener('load',onLoad,{once:true});
+       thumbViewer.addEventListener('error',onError,{once:true});
+       thumbViewer.setAttribute('orientation',item.previewOrientation||'0deg 0deg 0deg');
+       thumbViewer.removeAttribute('src');
+       thumbViewer.setAttribute('src',src);
+      });
+     }catch(err){thumbFailed.add(item.id);updateThumb(item.id);console.warn('[ClassMana] Miniatura 3D:',item.model,err)}
+    }
+   }finally{
+    thumbBusy=false;
+    if(!modal.hidden&&thumbQueue.length)void nextThumbnail(thumbGeneration);
+   }
+ }
  const unlocked=item=>item.type==='Flecha'||item.requiredWins===0||(confirmed&&isGearUnlocked(item,wins));
  function progressText(item){
   if(item.type==='Flecha')return 'VINCULADA À ARMA';
@@ -72,8 +126,9 @@ export function mountEquipmentInventory({selected='classico',onSelect=()=>{}}={}
    card.dataset.locked=String(!unlocked(item));card.setAttribute('role','listitem');
    card.setAttribute('aria-label',item.name+' · '+progressText(item));
    const thumb=make('span','cm-arsenal-thumb');
-   if(snapshots.has(item.id)){const img=make('img','cm-arsenal-thumb-image');img.src=snapshots.get(item.id);img.alt='';thumb.append(img)}
-   else thumb.innerHTML=mini(item);
+   const saved=snapshots.get(item.id);
+   if(saved){const img=make('img','cm-arsenal-thumb-image');img.src=saved;img.alt='';thumb.append(img)}
+   else thumb.textContent=thumbFailed.has(item.id)?'PRÉVIA INDISPONÍVEL':'CARREGANDO 3D…';
    const lvl=make('span','cm-arsenal-card-level',item.type==='Flecha'?'FLECHA':'NV. '+item.level);
    const name=make('strong','cm-arsenal-card-name',item.name);
    const status=make('span','cm-arsenal-card-status',item.type==='Flecha'?'ACESSÓRIO':item.id===equipped?'✓ EQUIPADA':unlocked(item)?'DISPONÍVEL':'🔒 '+item.requiredWins+' VITÓRIAS');
@@ -100,7 +155,7 @@ export function mountEquipmentInventory({selected='classico',onSelect=()=>{}}={}
   zoom=75;spin=0;orbit();viewer.setAttribute('orientation',item.previewOrientation||'0deg 0deg 0deg');
   viewer.setAttribute('alt','Modelo tridimensional: '+item.name+'. Arraste para girar.');
   viewer.removeAttribute('src');stage.dataset.ready='false';
-  placeholder.innerHTML=mini(item);loading.textContent='CARREGANDO MODELO 3D…';
+  placeholder.textContent='CARREGANDO O MODELO ORIGINAL…';loading.textContent='CARREGANDO MODELO 3D…';
   if(modal.hidden)return;
   modelSource(item.model).then(url=>{if(!modal.hidden&&token===requestId)viewer.setAttribute('src',url)}).catch(err=>{
    if(token!==requestId)return;loading.textContent='MODELO INDISPONÍVEL · CONSULTE A FICHA';console.warn('[ClassMana] Inventário:',item.model,err)
@@ -109,7 +164,7 @@ export function mountEquipmentInventory({selected='classico',onSelect=()=>{}}={}
  function setCategory(next){
   category=next;for(const b of categories)b.setAttribute('aria-pressed',String(b.dataset.category===category));
   if(BY_ID[preview]?.type!==category)preview=ALL.find(x=>x.type===category).id;
-  renderCards();showItem(preview);
+  renderCards();showItem(preview);queueThumbnails(ALL.filter(item=>item.type===category));
  }
  viewer.addEventListener('load',()=>{
   if(modal.hidden)return;stage.dataset.ready='true';loading.textContent='ARRASTE A ARMA PARA GIRAR';
@@ -127,9 +182,9 @@ export function mountEquipmentInventory({selected='classico',onSelect=()=>{}}={}
   previousFocus=document.activeElement;modal.hidden=false;document.body.classList.add('cm-arsenal-opened');
   const current=GEAR_BY_ID[equipped]||GEAR[0];category=current.type;preview=current.id;
   for(const b of categories)b.setAttribute('aria-pressed',String(b.dataset.category===category));
-  renderCards();showItem(preview);q('.cm-arsenal-close').focus();
+  renderCards();showItem(preview);queueThumbnails(ALL.filter(item=>item.type===category));q('.cm-arsenal-close').focus();
  }
- function close(){requestId++;modal.hidden=true;document.body.classList.remove('cm-arsenal-opened');viewer.removeAttribute('src');previousFocus?.focus?.()}
+ function close(){requestId++;thumbQueue=[];thumbGeneration++;modal.hidden=true;document.body.classList.remove('cm-arsenal-opened');viewer.removeAttribute('src');thumbViewer.removeAttribute('src');previousFocus?.focus?.()}
  openButton.addEventListener('click',open);q('.cm-arsenal-close').addEventListener('click',close);
  modal.addEventListener('click',e=>{if(e.target===modal)close()});
  modal.addEventListener('keydown',e=>{
