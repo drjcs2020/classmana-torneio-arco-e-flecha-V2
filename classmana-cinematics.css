@@ -200,3 +200,21 @@
  .cm-vs-shell{gap:6px!important}
  .cm-vs-sub{margin:0!important}
 }
+
+
+/* ClassMana 2026-11-11: brasas visíveis em todas as resoluções.
+   Quando reduzir movimento estiver ativo, mostrar partículas estáticas,
+   sem animação, em vez de ocultar completamente os efeitos. */
+@media(prefers-reduced-motion:reduce){
+ #view-inicio > .cm-ambient-embers,
+ #stage > .cm-ambient-embers,
+ #cm-v2-home > .cm-ambient-embers{
+  display:block!important;visibility:visible!important;
+ }
+ .cm-ambient-embers .cm-ember,
+ .cm-vs-overlay .cm-ember{
+  animation:none!important;opacity:.7!important;transform:none!important;
+  top:var(--ember-static-y,auto)!important;
+  bottom:var(--ember-static-bottom,15%)!important;
+ }
+}
