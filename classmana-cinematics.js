@@ -126,14 +126,7 @@ function versus(config){
   // Apenas o retrato do adversário é espelhado: textos e moldura intactos.
   rivalCard.classList.add('cm-vs-facing-left');
   fighters.append(ownCard,versusSign,rivalCard);
-  // Turma menor, nome da Casa preservado: etiquetas independentes.
-  for(const label of fighters.querySelectorAll('.cm-vs-fighter-info small')){
-   const [grade,...houseParts]=label.textContent.split(' · ');
-   label.replaceChildren(
-    node('span','cm-vs-grade',grade),
-    node('span','cm-vs-house-name',houseParts.join(' · '))
-   );
-  }
+  // Igual ao resultado: turma e Casa em uma única plaqueta, sem quebra forçada.
  const actions=node('div','cm-vs-actions');
  const start=node('button','cm-vs-start','▶ INICIAR DUELO');
  start.id='cm-vs-start';start.type='button';
