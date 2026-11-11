@@ -84,7 +84,7 @@ export function mountEquipmentInventory({selected='classico',onSelect=()=>{}}={}
  grid.parentElement.append(pagination);
  useButtonArtwork(prevPage,'05_pagina_anterior.png');
  useButtonArtwork(nextPage,'06_pagina_proxima.png');
- let currentPage=0;const itemsPerPage=4;
+ let currentPage=0;const itemsPerPage=6;
  function updatePagination(total){
   const pageCount=Math.max(1,Math.ceil(total/itemsPerPage));
   currentPage=Math.min(currentPage,pageCount-1);
@@ -107,8 +107,8 @@ export function mountEquipmentInventory({selected='classico',onSelect=()=>{}}={}
  thumbViewer.setAttribute('environment-image','neutral');
  thumbViewer.setAttribute('shadow-intensity','0');
  thumbViewer.setAttribute('camera-target','auto auto auto');
- thumbViewer.setAttribute('camera-orbit','42deg 76deg 72%');
- thumbViewer.setAttribute('field-of-view','22deg');
+ thumbViewer.setAttribute('camera-orbit','50deg 75deg 54%');
+ thumbViewer.setAttribute('field-of-view','18deg');
  thumbViewer.setAttribute('loading','eager');
  thumbViewer.setAttribute('reveal','auto');
  thumbViewer.setAttribute('aria-hidden','true');
