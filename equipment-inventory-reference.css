@@ -738,7 +738,7 @@
   color:#fff3c5!important;text-align:center!important;text-shadow:0 2px 3px #000!important;
  }
  #cm-arsenal-modal.cm-art-progress .cm-arsenal-wins{top:35%!important}
- #cm-arsenal-modal.cm-art-progress .cm-arsenal-level{top:55.5%!important}
+ #cm-arsenal-modal.cm-art-progress .cm-arsenal-level{top:55.5%!important;transform:translateY(-17px)!important}
  #cm-arsenal-modal.cm-art-progress .cm-arsenal-progress>span{
   display:none!important;
   position:absolute!important;z-index:2!important;
