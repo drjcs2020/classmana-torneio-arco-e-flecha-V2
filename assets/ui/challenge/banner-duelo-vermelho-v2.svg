@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 176" role="img" aria-label="Duelo entre Casas">
+<defs><linearGradient id="border" x2="0" y2="1"><stop stop-color="#fff3af"/><stop offset=".23" stop-color="#f9c135"/><stop offset=".48" stop-color="#8f450a"/><stop offset=".70" stop-color="#ffd66b"/><stop offset="1" stop-color="#bd6416"/></linearGradient><linearGradient id="red" x2="0" y2="1"><stop stop-color="#49070f"/><stop offset=".48" stop-color="#9f1121"/><stop offset="1" stop-color="#330914"/></linearGradient><linearGradient id="letters" x2="0" y2="1"><stop stop-color="#fff9d4"/><stop offset=".35" stop-color="#ffe4a3"/><stop offset=".6" stop-color="#eaa83b"/><stop offset="1" stop-color="#9e521b"/></linearGradient><radialGradient id="glow"><stop stop-color="#fff7ba"/><stop offset="1" stop-color="#fdc41e" stop-opacity="0"/></radialGradient></defs>
+<path d="M62 24H1138L1190 88L1138 153H62L10 88Z" fill="#4b100c" stroke="#b16d18" stroke-width="13"/>
+<path d="M62 17H1138L1193 88L1138 159H62L7 88Z" fill="url(#border)" stroke="#ffeb97" stroke-width="4"/>
+<path d="M74 29H1126L1175 88L1126 146H74L26 88Z" fill="url(#red)" stroke="#8b3b13" stroke-width="7"/>
+<path d="M90 40H1110" stroke="#ffe493" stroke-width="3"/><path d="M90 137H1110" stroke="#e4a444" stroke-width="4"/>
+<g transform="translate(126 86)"><circle r="43" fill="#d58b17" stroke="#fff3af" stroke-width="5"/><circle r="34" fill="#fff9df"/><circle r="27" fill="#176fc4"/><circle r="19" fill="#fffbeb"/><circle r="12" fill="#d51f37"/><circle r="6" fill="#fee037"/><path d="M-35 -45L-6 -9" stroke="#ffd5a3" stroke-width="9"/><path d="M-38 -54L-46 -35L-30 -43Z" fill="#f13f2a"/></g>
+<g transform="translate(1074 86)"><circle r="43" fill="#d58b17" stroke="#fff3af" stroke-width="5"/><circle r="34" fill="#fff9df"/><circle r="27" fill="#176fc4"/><circle r="19" fill="#fffbeb"/><circle r="12" fill="#d51f37"/><circle r="6" fill="#fee037"/></g>
+<path d="M240 20q-38-14-39-19q4 38 47 47q-45-2-60 28q34-11 66-7" fill="#c98017" stroke="#fbe08c" stroke-width="4"/>
+<path d="M960 20q38-14 39-19q-4 38-47 47q45-2 60 28q-34-11-66-7" fill="#c98017" stroke="#fbe08c" stroke-width="4"/>
+<path d="M600 9L622 30L600 50L578 30Z" fill="#e6bd49" stroke="#fff5c6" stroke-width="3"/><path d="M600 14L616 30L600 45L584 30Z" fill="#12b8ff"/>
+<text x="600" y="114" text-anchor="middle" font-family="Georgia,serif" font-size="70" font-weight="900" letter-spacing="2" stroke="#321108" stroke-width="6" paint-order="stroke fill" fill="url(#letters)">DUELO ENTRE CASAS</text>
+</svg>
