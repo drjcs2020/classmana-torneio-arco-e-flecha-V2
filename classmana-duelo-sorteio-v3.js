@@ -2,7 +2,7 @@
 (function(){
 'use strict';
 var BASE='assets/ui/';
-var H={A:['Águia Dourada','aguia','assets/ui/crests/brasao-aguia-dourada.png'],B:['Leão de Fogo','leao','assets/ui/crests/brasao-leao-de-fogo.png'],C:['Dragão de Esmeralda','dragao','assets/ui/crests/brasao-dragao-esmeralda.png']};
+var H={A:['Águia Dourada','aguia','assets/ui/crests/brasao-aguia-dourada.png?v=20261112-oficial'],B:['Leão de Fogo','leao','assets/ui/crests/brasao-leao-de-fogo.png?v=20261112-oficial'],C:['Dragão de Esmeralda','dragao','assets/ui/crests/brasao-dragao-esmeralda.png?v=20261112-oficial']};
 var R=window.CLASSMANA_ROSTER||{},modal=null,home='',enemy='',picked=null,busy=false,ready=false,audio,drawLocked=false;
 function el(id){return document.getElementById(id)}
 function label(h){return '4º '+h+' · '+H[h][0]}
