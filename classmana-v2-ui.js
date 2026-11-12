@@ -54,18 +54,13 @@ function mount(){
   const action=button.dataset.v2Action;
   if(action==='jogar'&&!openActive('heroi')){delete document.body.dataset.v2Entry;enter();}
   if(action==='desafios'){
-   // Atalho para a MESMA caixa de entrada do botão "Meus desafios".
-   // Sem passar por escolha de arqueiro, inventário ou duelo.
-   const sessionId=window.classmanaGetActiveStudentId?.()||'';
-   if(!sessionId){
-    // Uma identidade é necessária para consultar desafios; nunca forçar herói/equipamento.
-    if(!openActive('perfil'))enter();
-    document.getElementById('cm-v2-session-notice')?.replaceChildren(document.createTextNode('Selecione seu nome para consultar Meus desafios.'));
-    document.getElementById('cm-v2-session-notice')?.removeAttribute('hidden');
-    return;
+   // Reutiliza a caixa real de Meus desafios e o login existente.
+   // Nunca percorre as telas de arqueiro, armas ou escolha de duelo.
+   if(typeof window.classmanaOpenChallengeInboxShortcut==='function'){
+    void window.classmanaOpenChallengeInboxShortcut();
+   }else{
+    document.getElementById('cm-open-challenges')?.click();
    }
-   delete document.body.dataset.v2Entry;
-   document.getElementById('cm-open-challenges')?.click();
   }
   if(action==='ranking')document.querySelector('[data-view="ranking"]')?.click();
   if(action==='regras')document.querySelector('[data-view="regras"]')?.click();
