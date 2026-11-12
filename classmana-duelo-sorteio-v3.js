@@ -77,8 +77,9 @@ function make(){
  el('cm-draw-roll').onclick=draw;
  el('cm-draw-confirm').onclick=confirmMatch;
 }
-function close(){if(busy)return;modal?.remove();modal=null;enemy='';picked=null;document.body.style.removeProperty('overflow')}
+function close(){if(busy)return;window.classmanaRouletteAudio?.stop();modal?.remove();modal=null;enemy='';picked=null;document.body.style.removeProperty('overflow')}
 function open(){
+ window.classmanaRouletteAudio?.stop();
  home=current();if(!rosterId(home))return false;
  if(modal)modal.remove();
  make();busy=false;enemy='';picked=null;drawLocked=false;document.body.style.overflow='hidden';
@@ -119,6 +120,7 @@ function selectHouse(h){
  el('cm-draw-roll').disabled=!R[h]?.length;el('cm-draw-roll').classList.remove('reroll');el('cm-draw-roll').textContent='SORTEAR ADVERSÁRIO';
 }
 function finishDraw(student,restored){
+ window.classmanaRouletteAudio?.stop();
  picked=student;drawLocked=true;busy=false;
  el('cm-draw-tube').classList.remove('spinning','has-reel');el('cm-draw-tube').classList.add('finished');
  el('cm-draw-spin-img').style.visibility='visible';
@@ -151,11 +153,12 @@ async function draw(){
  busy=true;var selected=pool[selectedIndex(pool.length)];
  el('cm-draw-roll').disabled=true;el('cm-draw-result').classList.remove('visible');
  el('cm-draw-tube').classList.add('spinning');t('cm-draw-right-name','SORTEANDO...');
+ window.classmanaRouletteAudio?.start();
  var steps=[60,65,72,80,90,105,125,150,180,220,275,345,450,590,700],sex='m';
  for(var wait of steps){
   sex=sex==='m'?'f':'m';
   portrait(el('cm-draw-right-img'),enemy,sex);
-  el('cm-draw-reel-track').style.animationDuration=Math.max(.24,wait/300)+'s';bleep();
+  el('cm-draw-reel-track').style.animationDuration=Math.max(.24,wait/300)+'s';
   await new Promise(function(resolve){setTimeout(resolve,wait)});
  }
  finishDraw(selected,false);
