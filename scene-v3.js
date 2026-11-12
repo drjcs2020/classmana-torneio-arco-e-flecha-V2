@@ -492,6 +492,42 @@ export function initScene(canvas, getSettings) {
     model.setLocalPosition(-center.x,-center.y,-center.z);
     return true;
   }
+  // O disco móvel mantém os materiais originais do GLB, mas recebe um
+  // reforço emissivo suave para não perder as cores com o tone mapping ACES.
+  // Não modifica as luzes da arena, as molduras nem os demais modelos.
+  function brightenMobileDisc(model){
+    const clones=new Map();
+    for(const component of model.findComponents('render')){
+      for(const instance of component.meshInstances||[]){
+        const original=instance.material;
+        if(!original||typeof original.clone!=='function')continue;
+        let adjusted=clones.get(original);
+        if(!adjusted){
+          adjusted=original.clone();
+          const base=original.diffuse;
+          if(original.diffuseMap){
+            // Repete a textura RGB original como emissão, preservando os anéis.
+            adjusted.emissiveMap=original.diffuseMap;
+            adjusted.emissiveMapUv=original.diffuseMapUv;
+            adjusted.emissiveMapChannel='rgb';
+            adjusted.emissive=new pc.Color(.48,.48,.48);
+          }else if(base){
+            // Materiais sem textura: realça a cor já gravada no GLB.
+            adjusted.emissive=new pc.Color(
+              Math.min(1,base.r*.48),
+              Math.min(1,base.g*.48),
+              Math.min(1,base.b*.48)
+            );
+          }
+          adjusted.emissiveIntensity=1;
+          adjusted.update();
+          clones.set(original,adjusted);
+        }
+        instance.material=adjusted;
+      }
+    }
+    parent.dataset.targetLighting=clones.size?'enhanced':'original';
+  }
   function loadTargetModel(){
     if(!targetRoot||!targetVisual)return;
     const holder=targetRoot,file=activeTargetFile();
@@ -516,6 +552,7 @@ export function initScene(canvas, getSettings) {
           parent.dataset.targetModel='competition-rings';
           return;
         }
+        brightenMobileDisc(model);
       }else{
         model.setLocalScale(t.scale,t.scale,t.scale);
         model.setLocalEulerAngles(...t.rot);
