@@ -21,7 +21,7 @@ const sql={
   putSession:db.prepare("INSERT OR REPLACE INTO sessions(hash,player,expires) VALUES(?,?,?)"),
   duel:db.prepare("SELECT * FROM duels WHERE id=?"),
   inbox:db.prepare("SELECT * FROM duels WHERE creator=? OR recipient=? ORDER BY created DESC LIMIT 200"),
-  activePair:db.prepare("SELECT * FROM duels WHERE creator=? AND recipient=? AND kind=? AND level=? AND status IN ('CRIADOR_JOGANDO','PENDENTE','ACEITO') AND created>=? ORDER BY created DESC LIMIT 1"),
+  activePair:db.prepare("SELECT * FROM duels WHERE creator=? AND recipient=? AND kind=? AND level=? AND status='CRIADOR_JOGANDO' AND creator_shots IS NULL AND created>=? ORDER BY created DESC LIMIT 1"),
   insert:db.prepare("INSERT INTO duels(id,creator,recipient,kind,level,created,status) VALUES(?,?,?,?,?,?,?)"),
   updateState:db.prepare("UPDATE duels SET status=? WHERE id=?"),
   creator:db.prepare("UPDATE duels SET creator_shots=?,creator_score=?,status='PENDENTE' WHERE id=?"),
