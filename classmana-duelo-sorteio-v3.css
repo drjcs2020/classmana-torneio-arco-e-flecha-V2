@@ -118,3 +118,50 @@
  #cm-draw-modal .cm-draw-result.visible{grid-template-columns:1fr 120px}
  #cm-draw-modal .cm-draw-caption{white-space:normal;text-align:center}
 }
+
+/* Rodapé final: banner artístico + botão Continuar. Sem nome duplicado ou aviso técnico. */
+#cm-draw-modal .cm-draw-panel{grid-template-rows:minmax(48px,15%) minmax(0,1fr) minmax(65px,15%); }
+#cm-draw-modal .cm-draw-result,#cm-draw-modal .cm-draw-result.visible{
+  grid-template-columns:minmax(0,1fr) minmax(185px,30%);
+  grid-template-rows:1fr;
+  gap:12px;
+  padding:4px 14px;
+  align-items:center;
+}
+#cm-draw-modal .cm-draw-result h3{
+  grid-column:1;
+  grid-row:1;
+  min-width:0;
+  margin:0;
+}
+#cm-draw-modal .cm-draw-result h3 img{max-width:100%;width:100%;height:100%;object-fit:contain}
+#cm-draw-modal #cm-draw-confirm{
+  grid-column:2;
+  grid-row:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:43px;
+  height:100%;
+  width:100%;
+  border:3px solid #f5cc56;
+  border-radius:12px;
+  background:linear-gradient(180deg,#1eae39 0%,#08771e 54%,#014c15 100%);
+  box-shadow:inset 0 2px 0 #afffa9,0 3px 0 #643906,0 0 10px #ffc62988;
+  color:#fff8dc;
+  text-shadow:0 2px 2px #00350d,1px 1px #663809;
+  font-size:clamp(15px,1.8vw,26px);
+  font-weight:900;
+  line-height:1;
+  cursor:pointer;
+}
+#cm-draw-modal #cm-draw-confirm:hover{filter:brightness(1.12)}
+#cm-draw-modal #cm-draw-confirm:focus-visible{outline:3px solid #fff;outline-offset:2px}
+@media(max-width:950px){
+  #cm-draw-modal .cm-draw-panel{grid-template-rows:minmax(45px,14%) minmax(0,1fr) minmax(60px,15%)}
+  #cm-draw-modal .cm-draw-result.visible{grid-template-columns:minmax(0,1fr) minmax(140px,29%)}
+}
+@media(max-width:540px){
+  #cm-draw-modal .cm-draw-result.visible{grid-template-columns:minmax(0,1fr) minmax(92px,30%);gap:4px;padding:2px}
+  #cm-draw-modal #cm-draw-confirm{min-height:30px;font-size:12px;border-width:2px}
+}
