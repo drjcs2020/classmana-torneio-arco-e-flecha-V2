@@ -13,6 +13,7 @@ bgm.addEventListener('loadedmetadata',()=>{
 });
 addEventListener('pagehide',()=>{
  try{if(Number.isFinite(bgm.currentTime))sessionStorage.setItem(AUDIO_TIME_KEY,String(bgm.currentTime));}catch{}
+ window.classmanaRouletteAudio?.stop();
 });
 // O som começa ligado a cada nova abertura do jogo. O botão permite silenciar
 // durante a partida, sem herdar o 'off' deixado por um aluno anterior.
@@ -26,6 +27,23 @@ if(enabled){
  });
 }
 const clips={};
+// O MP3 da roleta só toca enquanto o carrossel está em movimento.
+// Ele compartilha a preferência de som com a música e todos os efeitos.
+const rouletteClip=new Audio('assets/sounds/leom2024-roleta-267662.mp3');
+rouletteClip.preload='auto';
+rouletteClip.loop=true;
+rouletteClip.volume=.28;
+function stopRoulette(){
+ rouletteClip.pause();
+ try{rouletteClip.currentTime=0}catch{}
+}
+function startRoulette(){
+ stopRoulette();
+ if(!enabled||document.hidden)return;
+ rouletteClip.play().catch(()=>{});
+}
+window.classmanaRouletteAudio={start:startRoulette,stop:stopRoulette};
+
 function soundClip(name){
  if(!enabled)return;
  try{
@@ -121,7 +139,7 @@ export const arenaAudio={
  setActive(value){active=!!value;ambience();musicLevel()},
  toggle(){
   enabled=!enabled;
-  if(!enabled){clearInterval(timer);timer=null;bgm.pause();unlocked=false;for(const clip of Object.values(clips)){clip.pause();clip.currentTime=0;}if(bus&&ctx)bus.gain.setTargetAtTime(0,ctx.currentTime,.03);musicLevel();}
+  if(!enabled){stopRoulette();clearInterval(timer);timer=null;bgm.pause();unlocked=false;for(const clip of Object.values(clips)){clip.pause();clip.currentTime=0;}if(bus&&ctx)bus.gain.setTargetAtTime(0,ctx.currentTime,.03);musicLevel();}
   else{init();if(bus&&ctx)bus.gain.setTargetAtTime(.52,ctx.currentTime,.05);ambience();unlockMusic();musicLevel()}
   return enabled;
  },
@@ -171,4 +189,4 @@ export const arenaAudio={
   }catch(error){console.warn('[ClassMana] Falha ao emitir efeito sonoro:',error)}
  }
 };
-document.addEventListener('visibilitychange',()=>{if(document.hidden){clearInterval(timer);timer=null;bgm.pause()}else{ambience();if(unlocked&&enabled)bgm.play().catch(()=>{})}musicLevel()});
+document.addEventListener('visibilitychange',()=>{if(document.hidden){stopRoulette();clearInterval(timer);timer=null;bgm.pause()}else{ambience();if(unlocked&&enabled)bgm.play().catch(()=>{})}musicLevel()});
