@@ -1007,6 +1007,33 @@ async function openInbox(){
  $('inbox-status').textContent='⏳ Consultando convites recebidos...';
  try{await refreshInbox();cmMarkNoticesRead()}catch(e){$('inbox-status').textContent='⚠️ Falha ao carregar desafios: '+e.message}
 }
+
+// Acesso direto à caixa de desafios a partir da tela inicial.
+// A identificação é necessária, mas a escolha de arqueiro/equipamento NÃO é.
+let cmInboxShortcutPending=false;
+async function cmOpenChallengeInboxShortcut(){
+ const candidate=[identifiedPlayerId,cmStoredLobbyStudent(),cmSessionId(),online.user?.id]
+  .find(id=>/^[ABC][0-9]{2}$/.test(id||'')&&choices(id[0]).some(p=>p.id===id));
+ if(!candidate){
+  cmInboxShortcutPending=true;
+  document.body.classList.remove('cm-v2-home-mode');
+  document.body.classList.add('cm-v2-onboarding');
+  setLobbyStep('reino');
+  toast('Selecione sua casa e seu nome para consultar Meus desafios.');
+  return;
+ }
+ cmInboxShortcutPending=false;
+ if(identifiedPlayerId&&identifiedPlayerId!==candidate){
+  toast('Encerre a sessão anterior antes de trocar de aluno.');return;
+ }
+ identifiedPlayerId=candidate;
+ if(cmSessionId()!==candidate)cmSaveStudent(candidate);
+ selectHouse(candidate[0]);fillPlayer(candidate);
+ $('player').value=candidate;$('player').disabled=true;
+ try{await openInbox()}catch(error){toast('Não foi possível consultar desafios: '+error.message)}
+}
+window.classmanaOpenChallengeInboxShortcut=cmOpenChallengeInboxShortcut;
+
 async function onInboxAction(e){
  const button=e.target.closest('button[data-action]');if(!button||onlineLoading)return;
  const ch=onlineInbox.find(x=>x.id===button.dataset.id);if(!ch)return;
@@ -1121,7 +1148,11 @@ $('cm-confirm-identity')?.addEventListener('click',()=>{
  loadPlayerEquipment(id);
  $('player').value=id;fillPlayer(id);fillRivals();
  $('player').disabled=true;
- setLobbyStep('heroi');
+ if(cmInboxShortcutPending){
+  void cmOpenChallengeInboxShortcut();
+ }else{
+  setLobbyStep('heroi');
+ }
 });
 
 $('confirm-archer').addEventListener('click',()=>{
