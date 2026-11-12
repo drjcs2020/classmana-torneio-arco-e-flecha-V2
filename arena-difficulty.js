@@ -21,6 +21,16 @@ export function targetMotion(level,index,seconds){
  if(level==='lendario')return {x:2.60*Math.sin(t*1.61+index*1.11),y:.36*Math.sin(t*.83+index*1.14)};
  return {x:0,y:0};
 }
+/** Duas cópias do mesmo disco 3D, cada qual com colisão independente.
+ * Coordenadas em raios do alvo original. Discos: 70% do raio e faixas separadas.
+ * Ambos movem-se somente em X, em direções opostas, sem se cruzar.
+ * Somente usado no treino médio local contra o robô (o servidor online é intocado).
+ */
+export function mediumTwinTargets(seconds){
+ const t=cap(Number(seconds)||0,0,120);
+ const wave=.18*Math.sin(t*1.14);
+ return [{id:0,x:-1.22+wave,y:0,r:.70},{id:1,x:1.22-wave,y:0,r:.70}];
+}
 /** Mesmo tempo aproximado de voo adotado no servidor e na cena PlayCanvas. */
 export function flightSeconds(distance,power){
  return .43+.42*Math.pow(Math.max(10,distance)/80,.56)+.13*(1-power);
