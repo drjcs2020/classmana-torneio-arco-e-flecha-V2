@@ -17,7 +17,7 @@
 #cm-draw-modal .cm-draw-house[data-h="B"]{background:linear-gradient(105deg,#6c1215,#af2421)}#cm-draw-modal .cm-draw-house[data-h="C"]{background:linear-gradient(105deg,#053a23,#057944)}
 #cm-draw-modal .cm-draw-house img{height:69px;width:69px;object-fit:contain}
 #cm-draw-modal .cm-draw-house[disabled]{filter:grayscale(.7)}#cm-draw-modal .cm-draw-house.chosen{outline:3px solid #fff5b8;box-shadow:0 0 22px #ffd56b}
-#cm-draw-modal .cm-draw-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1.65fr) minmax(0,1.1fr);gap:13px;align-items:stretch;min-height:clamp(320px,42vh,450px)}
+#cm-draw-modal .cm-draw-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1.45fr) minmax(190px,.9fr) minmax(0,1.1fr);gap:13px;align-items:stretch;min-height:clamp(320px,42vh,450px)}
 #cm-draw-modal .cm-draw-portrait{border:4px ridge #eeca6e;border-radius:15px;position:relative;overflow:hidden;background:radial-gradient(circle at center,#257acc,#091735);min-height:310px}
 #cm-draw-modal .cm-draw-portrait[data-h="B"]{background:radial-gradient(circle at center,#b64222,#310d1b)}#cm-draw-modal .cm-draw-portrait[data-h="C"]{background:radial-gradient(circle at center,#19885a,#04251b)}
 #cm-draw-modal .cm-draw-portrait>img{display:block;position:absolute;inset:0 0 64px;width:100%;height:calc(100% - 64px);object-fit:contain;object-position:center bottom;filter:drop-shadow(0 4px 6px #0008)}
