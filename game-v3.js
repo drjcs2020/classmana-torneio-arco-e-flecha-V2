@@ -494,7 +494,7 @@ async function startMatch(accepted=null){
   // Cinematic VS runs before the API creates a challenge. Cancel never leaves a ghost invite.
   // A tela de sorteio já apresentou o confronto e o aluno já confirmou.
   // Não exigir uma segunda confirmação VS após CONTINUAR.
-  if(!drawHandoff){
+  if(!drawHandoff&&!fromInbox){
    const versusAccepted=await cinematics.versus({
     player:nameOf(userId),house:userId[0],gender:archerGender(),
     rival:byId(rivalId),rivalHouse:rivalId?.[0],
@@ -540,7 +540,7 @@ async function startMatch(accepted=null){
  if(online.user&&isDuel(mode)){userId=online.user.id;selectHouse(userId[0]);$('player').value=userId;}
  match={house:userId==='guest'?house:userId[0],playerId:userId,player:nameOf(userId),mode,difficulty:$('difficulty').value,
   rivalId,gender:drawHandoff?.gender||archerGender(),rivalGender:drawHandoff?.rivalGender||'m',
-  scores:[],running:true,locked:false,bow:equipment.bow,wind:0,distance:10,level:challenge?.level||levelForMatch(mode,drawHandoff),shift:0,freezeTime:null,stageStartedAt:performance.now(),incoming:null,
+  scores:[],running:true,locked:false,bow:equipment.bow,wind:0,distance:10,level:challenge?.kind==='entre_equipes'&&challenge?.creator?.house!==challenge?.recipient?.house?'iniciante':challenge?.level||levelForMatch(mode,drawHandoff),shift:0,freezeTime:null,stageStartedAt:performance.now(),incoming:null,
   online:challenge,onlineShots:[],onlineReplay:challenge?.recipient.id===userId?challenge.creatorShots:[],
   onlineReplayPoints:0,seed:Math.floor(rand(100000,999999))};
  if(mode==='bot'){
