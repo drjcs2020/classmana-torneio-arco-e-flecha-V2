@@ -45,8 +45,9 @@ const serverBows=Object.freeze({
 });
 function mediumTwinTargets(seconds){
  const t=Math.max(0,Math.min(120,Number(seconds)||0));
- const wave=.18*Math.sin(t*1.14);
- return [{x:-1.22+wave,y:0,r:.70},{x:1.22-wave,y:0,r:.70}];
+ // Mesma trajetória do cliente; a validação online usa os mesmos centros e raios.
+ const wave=.85*Math.sin(t*1.75);
+ return [{x:-1.65+wave,y:0,r:.70},{x:1.65-wave,y:0,r:.70}];
 }
 function shotFlight(distance,power){return .43+.42*Math.pow(Math.max(10,distance)/80,.56)+.13*(1-power);}
 const MEDIUM_DISTANCES=[20,45,75,110,150];
