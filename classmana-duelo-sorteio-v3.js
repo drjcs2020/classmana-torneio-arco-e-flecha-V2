@@ -170,23 +170,43 @@ function configure(){
   if([...field.options].some(function(o){return o.value===picked.id})){found=true;break}
  }
  if(!found)return false;
- field.value=picked.id;level.value='avancado';level.dispatchEvent(new Event('change',{bubbles:true}));
+ field.value=picked.id;level.value='iniciante';level.dispatchEvent(new Event('change',{bubbles:true}));
  return true;
 }
 function confirmMatch(){
- if(!picked||busy)return;
+ if(!picked||busy||!drawLocked)return;
  if(!configure()){t('cm-draw-state','Adversário não encontrado na lista válida da partida.');return}
- var overlay=el('cm-draw-transition');overlay.classList.add('active');
  var arena=el('start-game');
- if(!arena){overlay.classList.remove('active');return}
- var observer=new MutationObserver(function(){
-  if(document.body.dataset.page==='arena'){observer.disconnect();busy=false;close()}
- });
- observer.observe(document.body,{attributes:true,attributeFilter:['data-page']});
- overlay.onclick=function(){if(!busy){overlay.classList.remove('active');observer.disconnect()}};
+ if(!arena){t('cm-draw-state','Não foi possível localizar a partida.');return}
+ // Transmitir a escolha imutável ao módulo do jogo, evitando outro VS e outro seletor.
+ window.classmanaDrawHandoff={
+  playerId:home,rivalId:picked.id,gender:gender(home),rivalGender:gender(picked.id),
+  level:'iniciante',mode:'challenge_team'
+ };
+ var overlay=el('cm-draw-transition');
+ overlay.querySelector('p').textContent='⚔ PREPARANDO A PARTIDA... ⚔';
+ overlay.classList.add('active');
+ var completed=false;
+ function cleanup(){
+  window.removeEventListener('classmana:duel-launch-failed',failed);
+  window.removeEventListener('classmana:duel-launching',launching);
+  clearTimeout(safetyTimer);
+ }
+ function launching(){completed=true;cleanup();}
+ function failed(){
+  if(completed)return;
+  cleanup();overlay.classList.remove('active');
+  window.classmanaDrawHandoff=null;
+  t('cm-draw-state','Não foi possível iniciar a partida. Verifique a conexão e tente continuar novamente.');
+ }
+ window.addEventListener('classmana:duel-launch-failed',failed,{once:true});
+ window.addEventListener('classmana:duel-launching',launching,{once:true});
+ // Uma falha de conexão nunca deixa uma tela intransponível.
+ var safetyTimer=setTimeout(function(){if(!completed)failed()},18000);
+ overlay.onclick=function(){if(!completed){failed()}};
  requestAnimationFrame(function(){arena.click()});
- setTimeout(function(){observer.disconnect();if(modal?.isConnected&&document.body.dataset.page!=='arena')overlay.querySelector('p').textContent='Se a conexão falhar, clique para voltar ao confronto.'},12000);
 }
+
 var check=new Image();
 check.onload=function(){ready=true;window.classmanaDueloSorteioReady=true;if(new URLSearchParams(location.search).has('duelo_preview'))open()};
 check.onerror=function(){ready=false;window.classmanaDueloSorteioReady=false};
