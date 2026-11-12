@@ -51,7 +51,7 @@ function make(){
  '<span class="cm-draw-muted" id="cm-draw-state" aria-live="polite">Selecione uma casa rival.</span></div>',
  '<div class="cm-draw-portrait" id="cm-draw-right"><img id="cm-draw-right-img" alt="Adversário"><div class="cm-draw-label"><strong id="cm-draw-right-name">CASA RIVAL</strong><small id="cm-draw-right-house"></small></div></div>',
  '<div class="cm-draw-list"><h3 id="cm-draw-list-head">ALUNOS DA CASA RIVAL</h3><div class="cm-draw-list-items" id="cm-draw-list-items"></div></div></div>',
- '<div class="cm-draw-result" id="cm-draw-result"><h3><img src="assets/ui/banner-adversario-escolhido.png" alt="ADVERSÁRIO ESCOLHIDO!"></h3>',
+ '<div class="cm-draw-result" id="cm-draw-result">',
  '<button type="button" id="cm-draw-confirm" class="cm-draw-action">CONTINUAR</button></div>',
  '</section>',
  '<div id="cm-draw-transition" class="cm-draw-transition"><p>⚔ PREPARANDO A PARTIDA... ⚔</p></div></div>'
@@ -89,7 +89,7 @@ function selectHouse(h){
  el('cm-draw-right-img').onerror=null;el('cm-draw-right-img').src=H[h][2];
  el('cm-draw-spin-img').onerror=null;el('cm-draw-spin-img').src=H[h][2];
  t('cm-draw-right-name','CASA RIVAL');t('cm-draw-right-house',label(h));
- t('cm-draw-list-head','ALUNOS DO '+label(h).toUpperCase());t('cm-draw-state','Pronto para sortear.');
+ t('cm-draw-list-head','ALUNOS DO '+label(h).toUpperCase());el('cm-draw-state').classList.remove('is-result-art');t('cm-draw-state','Pronto para sortear.');
  var holder=el('cm-draw-list-items');holder.replaceChildren();
  list(h).forEach(function(p){
   var row=document.createElement('div');row.className='cm-draw-list-item';row.dataset.studentId=p.id;
@@ -105,7 +105,12 @@ function finishDraw(student,restored){
  portrait(el('cm-draw-spin-img'),enemy,actual);
  portrait(el('cm-draw-right-img'),enemy,actual);
  t('cm-draw-right-name',picked.name);t('cm-draw-right-house',label(enemy));
- t('cm-draw-state','CONFRONTO DEFINIDO');
+ var state=el('cm-draw-state'),banner=document.createElement('img');
+ banner.src=BASE+'banner-adversario-escolhido.png';
+ banner.alt='ADVERSÁRIO ESCOLHIDO!';
+ banner.className='cm-draw-status-art';
+ state.replaceChildren(banner);
+ state.classList.add('is-result-art');
  document.querySelectorAll('#cm-draw-houses button').forEach(function(b){b.disabled=true});
  document.querySelectorAll('.cm-draw-list-item').forEach(function(row){
   var winner=row.dataset.studentId===picked.id;row.classList.toggle('active',winner);
