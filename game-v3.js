@@ -641,6 +641,8 @@ async function fire(power){
  $('stage').classList.remove('firing');
  if(match!==currentMatch||!currentMatch.running)return;
  scene?.impact?.({x:ix/w,y:iy/h,score,blocked});
+ // Som fisico do contato da flecha, independente dos aplausos.
+ if(score>0&&!blocked)arenaAudio.play('impact');
  match.scores.push(score);$('hud-score').textContent=match.scores.reduce((a,b)=>a+b,0);
  try{if(document.body.dataset.page==='arena')sessionStorage.setItem('cm_active_archery_match_v2',JSON.stringify(match))}catch{}
  showHit(score,ix/w,iy/h,blocked);
