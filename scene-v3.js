@@ -285,7 +285,7 @@ export function initScene(canvas, getSettings) {
     else targetRoot.setPosition(grounded);
     if(targetStand)targetStand.enabled=!moving;
     parent.dataset.targetStand=moving?'suspended':'standing';
-    if(movingRail)movingRail.enabled=moving;
+    if(movingRail)movingRail.enabled=setting.level==='lendario';
   }
   function buildWorld(){
     const metals={wood:material('#634124',{rough:.8}),woodlight:material('#a2703f',{rough:.8}),rope:material('#d5ae64',{rough:.89}),iron:material('#1d2329',{metal:.73,rough:.31}),silver:material('#c8d2d7',{metal:.82,rough:.19}),red:material('#da332d'),white:material('#f4f2e7')};
@@ -429,7 +429,7 @@ export function initScene(canvas, getSettings) {
     if(!app||destroyed)return;
     if(modelAssets[path]){callback(null,modelAssets[path]);return;}
     if(!modelLoads[path]){
-      modelLoads[path]=modelSource(path.split('/').pop())
+      modelLoads[path]=(path.startsWith('models3d/equipment/')?modelSource(path.split('/').pop()):Promise.resolve(path))
         .then(url=>new Promise((resolve,reject)=>{
           if(!app||destroyed)return reject(Error('Cena encerrada'));
           app.assets.loadFromUrlAndFilename(url,path.split('/').pop().replace(/\.gz$/i,''),'container',(err,asset)=>{
@@ -454,8 +454,43 @@ export function initScene(canvas, getSettings) {
   function activeTargetFile(){
     const q=getSettings()||{},level=q.level||'iniciante';
     if(level==='lendario')return 'target-suspended.glb';
-    if(level==='avancado')return 'target-light.glb';
+    if(level==='avancado')return 'models3d/alvo_suspenso_sem_cavalete.glb';
     return (q.index||0)>=3?'target-alt.glb':'target-stand.glb';
+  }
+  // O disco pode ter sido exportado deitado: medir eixos da malha para deixá-lo em pé.
+  function calibrateMobileDisc(model,holder){
+    function bounds(){
+      const min=[Infinity,Infinity,Infinity],max=[-Infinity,-Infinity,-Infinity];
+      let count=0;
+      model.syncHierarchy();
+      for(const comp of model.findComponents('render')){
+        for(const inst of comp.meshInstances||[]){
+          const box=inst.aabb;if(!box)continue;
+          const c=box.center,h=box.halfExtents;
+          const lo=[c.x-h.x,c.y-h.y,c.z-h.z],hi=[c.x+h.x,c.y+h.y,c.z+h.z];
+          for(let i=0;i<3;i++){min[i]=Math.min(min[i],lo[i]);max[i]=Math.max(max[i],hi[i]);}
+          count++;
+        }
+      }
+      return count?{size:max.map((v,i)=>v-min[i]),center:min.map((v,i)=>(v+max[i])/2)}:null;
+    }
+    model.setLocalPosition(0,0,0);
+    model.setLocalScale(1,1,1);
+    model.setLocalEulerAngles(0,0,0);
+    let b=bounds();if(!b)return false;
+    const thin=b.size.indexOf(Math.min(...b.size));
+    if(thin===1)model.setLocalEulerAngles(90,0,0);
+    else if(thin===0)model.setLocalEulerAngles(0,-90,0);
+    b=bounds();if(!b)return false;
+    const worldScale=holder.getLocalScale().x||1;
+    const diameter=Math.max(b.size[0],b.size[1])/worldScale;
+    if(!Number.isFinite(diameter)||diameter<.001)return false;
+    const factor=2.68/diameter;
+    model.setLocalScale(factor,factor,factor);
+    b=bounds();if(!b)return false;
+    const center=holder.worldToLocal(new pc.Vec3(...b.center));
+    model.setLocalPosition(-center.x,-center.y,-center.z);
+    return true;
   }
   function loadTargetModel(){
     if(!targetRoot||!targetVisual)return;
@@ -470,13 +505,23 @@ export function initScene(canvas, getSettings) {
       parent.dataset.targetModel='competition-rings';
       return;
     }
-    loadModel('models3d/equipment/'+file,(err,res)=>{
+    loadModel(file.startsWith('models3d/')?file:'models3d/equipment/'+file,(err,res)=>{
       if(err||holder!==targetRoot||targetModelKey!==file)return;
       const t=targetSpecs[file],container=new pc.Entity('Alvo 3D '+file),model=res.instantiateRenderEntity();
-      model.setLocalScale(t.scale,t.scale,t.scale);
-      model.setLocalEulerAngles(...t.rot);
-      model.setLocalPosition(...t.pos);
-      container.addChild(model);holder.addChild(container);holder.__model3d=container;
+      container.addChild(model);holder.addChild(container);
+      if(file==='models3d/alvo_suspenso_sem_cavalete.glb'){
+        if(!calibrateMobileDisc(model,holder)){
+          container.destroy();
+          parent.dataset.glbTarget='procedural';
+          parent.dataset.targetModel='competition-rings';
+          return;
+        }
+      }else{
+        model.setLocalScale(t.scale,t.scale,t.scale);
+        model.setLocalEulerAngles(...t.rot);
+        model.setLocalPosition(...t.pos);
+      }
+      holder.__model3d=container;
       targetVisual.enabled=false;
       parent.dataset.glbTarget='ready';parent.dataset.targetModel=file;
     });
