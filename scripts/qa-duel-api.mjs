@@ -15,11 +15,11 @@ async function read(action){
 }
 try{
  const ping=await read('ping');
- assert.equal(Number(ping.api),10,'Expected ClassMana protocol v10');
+ assert.equal(Number(ping.api),12,'Expected ClassMana protocol v12');
  const ranking=await read('ranking');
  assert(Number.isInteger(ranking.games)&&ranking.games>=0,'Invalid completed duels count');
  for(const field of ['classes','teams','players'])assert(Array.isArray(ranking[field]),'Missing '+field+' ranking');
  assert.equal(ranking.classes.length,3,'Ranking must list 3 classes');
  assert(ranking.teams.every(t=>typeof t.name==='string'&&t.name.length>0),'Team label absent');
- console.log('✅ API v10 online, '+ranking.games+' completed duels, '+ranking.teams.length+' teams.');
+ console.log('✅ API v12 online, '+ranking.games+' completed duels, '+ranking.teams.length+' teams.');
 }finally{clearTimeout(timeout)}
