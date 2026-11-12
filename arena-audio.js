@@ -44,13 +44,27 @@ function startRoulette(){
 }
 window.classmanaRouletteAudio={start:startRoulette,stop:stopRoulette};
 
-function soundClip(name){
- if(!enabled)return;
+// MP3s de efeitos são carregados uma vez por página. Falhas são visíveis no console.
+const EFFECT_FILES={
+ impact:'dennish18-arrow-wood-impact-146418',
+ boo:'freesound_community-boo-6377'
+};
+function soundClip(name,fallback=''){
+ if(!enabled||document.hidden)return Promise.resolve(false);
  try{
   const audio=clips[name]||(clips[name]=new Audio('assets/sounds/'+name+'.mp3'));
-  audio.pause();audio.currentTime=0;audio.volume=name==='vvqne-applause-383901'?.34:name==='driken5482-applause-cheer-236786'?.27:name==='freesound_community-boo-6377'?.32:.18;
-  audio.play().catch(()=>{});
- }catch{}
+  audio.preload='auto';
+  audio.pause();
+  try{audio.currentTime=0}catch{}
+  audio.volume=name==='vvqne-applause-383901'?.34:name==='driken5482-applause-cheer-236786'?.27:name==='freesound_community-boo-6377'?.38:name==='dennish18-arrow-wood-impact-146418'?.52:.18;
+  return audio.play().then(()=>true).catch(error=>{
+   console.warn('[ClassMana] MP3 de efeito não reproduzido:',name,error?.message||error);
+   return fallback?soundClip(fallback):false;
+  });
+ }catch(error){
+  console.warn('[ClassMana] Erro ao carregar efeito:',name,error);
+  return fallback?soundClip(fallback):Promise.resolve(false);
+ }
 }
 const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
 function init(){
@@ -158,7 +172,7 @@ export const arenaAudio={
    if(effect==='fly'){noise(.35,.055,3400);tone(760,360,.24,.018,'sine');}
    // Impacto fisico da flecha na madeira, separado dos aplausos.
    if(effect==='impact'){
-    soundClip('acerto');
+    soundClip(EFFECT_FILES.impact,'acerto');
     noise(.11,.13,620);
     tone(165,72,.14,.095,'triangle');
    }
@@ -175,7 +189,7 @@ export const arenaAudio={
    }
    if(effect==='boo'){
     // Vaia real enviada pelo professor, somente ao errar o disco (0 pontos).
-    soundClip('freesound_community-boo-6377');
+    soundClip(EFFECT_FILES.boo,'erro');
    }
    if(effect==='block'){
     noise(.23,.12,1400);tone(710,240,.32,.075,'triangle');tone(1180,650,.20,.035,'sine',.035);
