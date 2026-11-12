@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ClassMana | Prévia — Duelo entre Casas</title>
+<style>
+:root{--gold:#ffcc54;--cream:#fff2cb;--navy:#061d42}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Georgia,'Times New Roman',serif;color:var(--cream)}
+body{background:#08254b url('assets/v2/backgrounds/duel.webp') center/cover fixed no-repeat}
+body:before{content:'';position:fixed;inset:0;background:linear-gradient(90deg,#06133365,#081c2a10,#06133365);pointer-events:none}
+button{font:inherit;cursor:pointer}button:disabled{cursor:not-allowed}
+.stage{position:relative;min-height:100vh;padding:9px max(18px,3vw) 23px;max-width:1800px;margin:auto;display:flex;flex-direction:column;align-items:center}
+.corner{position:absolute;top:20px;z-index:3;padding:9px 20px;border:3px ridge var(--gold);background:linear-gradient(#9e1e09,#610c08);color:#fff0bc;box-shadow:0 4px 10px #000;border-radius:12px;font-weight:bold}.back{left:20px}.inbox{right:20px;background:linear-gradient(#684126,#22170e)}
+.logo{display:block;width:clamp(240px,29vw,430px);height:clamp(85px,13vh,125px);object-fit:contain;filter:drop-shadow(0 4px 5px #000)}
+.heading{text-align:center;width:min(900px,84%);margin:-2px auto 4px}
+.heading img{display:block;width:min(740px,100%);max-height:75px;object-fit:contain;margin:auto}
+.heading p{margin:0 auto;background:linear-gradient(#09366c,#061835);padding:4px 18px 7px;border:2px solid #ffd05c;border-radius:4px;max-width:580px;font-size:clamp(13px,1.7vw,21px);font-weight:bold;text-shadow:0 2px 3px #000}
+.board{width:min(1450px,96%);background:linear-gradient(#061a3fda,#0a2145ed);border:3px ridge #ffe2a0;border-radius:24px;padding:12px 15px;box-shadow:0 0 0 3px #744a13,0 9px 35px #000a;display:flex;flex-direction:column;gap:10px}
+.section-title{text-align:center;font-size:clamp(18px,2.1vw,29px);font-weight:bold;text-shadow:1px 3px 2px #2d0804;margin:0}
+.houses{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.house{display:flex;align-items:center;justify-content:center;gap:10px;min-height:86px;padding:7px 10px;border:3px ridge #eac565;border-radius:12px;background:linear-gradient(110deg,#061b44,#164b85);color:#fff4ce;text-shadow:0 2px 3px #000;font-size:clamp(13px,1.65vw,25px);font-weight:bold}
+.house img{height:74px;width:74px;object-fit:contain}.house[data-house=B]{background:linear-gradient(100deg,#500919,#9c1c1b)}.house[data-house=C]{background:linear-gradient(100deg,#06361d,#027d45)}.house.selected{outline:3px solid #fff1a1;box-shadow:0 0 20px #ffbf51}.house.own{opacity:.55;filter:grayscale(.5)}
+.fight{display:grid;grid-template-columns:minmax(0,1fr) minmax(160px,.43fr) minmax(0,1fr);align-items:stretch;gap:8px;min-height:clamp(255px,44vh,455px)}
+.fighter{position:relative;isolation:isolate;overflow:hidden;border:5px ridge #ffe097;border-radius:18px 18px 24px 24px;background:radial-gradient(ellipse at 50% 64%,#1d7fd7,#08153b 78%);box-shadow:inset 0 0 0 2px #d8a335,0 0 15px #00193e}
+.fighter.enemy{background:radial-gradient(ellipse at 50% 62%,#f05517,#40030c 78%)}
+.fighter[data-house=C]{background:radial-gradient(ellipse at 50% 60%,#128543,#003a29 78%)}.fighter[data-house=B]{background:radial-gradient(ellipse at 50% 60%,#bb3b15,#380915 78%)}
+.fighter .art{position:absolute;inset:0 0 53px;display:flex;align-items:end;justify-content:center;overflow:hidden}
+.fighter .art img{width:100%;height:100%;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 0 10px #0008)}
+.fighter.enemy .art img{transform:scaleX(-1)}
+.fighter .ribbon{position:absolute;bottom:0;left:0;right:0;min-height:55px;background:linear-gradient(#0b3777,#061736);border-top:3px ridge #ffd068;text-align:center;padding:5px 3px}
+.fighter.enemy .ribbon{background:linear-gradient(#a62b18,#3b0817)}
+.ribbon strong{display:block;font-size:clamp(15px,1.9vw,28px);text-shadow:1px 3px 2px #000}.ribbon small{display:block;font-size:clamp(11px,1.15vw,16px)}
+.middle{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:15px}
+.middle img{width:100%;max-height:180px;object-fit:contain;filter:drop-shadow(0 0 9px #e6a631)}
+.tournament{font:bold 16px Georgia,serif;background:#081e43df;border:2px solid #e0ae50;padding:9px;text-align:center;border-radius:12px;max-width:100%}
+.action{padding:14px 20px;background:linear-gradient(#12ba45,#006f27 55%,#024e27);border:5px ridge #f3cb53;border-radius:14px;box-shadow:0 5px 10px #0009,0 0 10px #fff28e4d;color:#fff2c1;font:bold clamp(16px,2.3vw,31px) Georgia,serif;text-shadow:1px 3px 2px #003311;max-width:100%}
+.action:disabled{opacity:.5}.subtext{text-align:center;font-size:clamp(13px,1.3vw,18px);font-weight:bold;text-shadow:0 2px 4px #000;padding:3px}
+.result{display:none;text-align:center;border:3px ridge var(--gold);padding:12px;border-radius:17px;background:linear-gradient(90deg,#40131cf5,#12345bf5);width:100%}
+.result.show{display:block}.result h2{margin:2px 0 7px;font-size:clamp(23px,3vw,43px);color:#fff1b9}.result p{margin:4px 0;font-size:clamp(17px,2.2vw,30px)}
+.badge-label{font-size:12px;font-weight:bold;color:#fff4bf;background:#062246e8;border:1px solid #f1c65a;padding:7px 11px;border-radius:12px}
+#rouletteScreen{display:none}body[data-phase=draw] #pickScreen{display:none}body[data-phase=draw] #rouletteScreen{display:flex}
+#rouletteScreen{flex-direction:column;gap:12px}
+#rouletteScreen .fight{min-height:clamp(300px,47vh,480px)}
+#rouletteScreen .fighter{max-width:100%}
+.reveal{visibility:hidden}body[data-revealed=true] .reveal{visibility:visible}
+.rolling{animation:flash .25s ease-in-out infinite alternate}@keyframes flash{from{filter:brightness(1)}to{filter:brightness(1.3)}}
+.note{max-width:1000px;text-align:center;font:12px/1.4 system-ui,sans-serif;background:#011b2ac9;border-radius:10px;margin-top:10px;padding:7px 10px}
+@media(max-width:760px){.stage{padding-top:70px}.logo{height:80px}.heading{width:95%}.house{flex-direction:column;gap:2px;min-height:78px;padding:5px}.house img{width:47px;height:47px}.house span{font-size:11px}.fight{grid-template-columns:1fr 110px 1fr;min-height:310px}.fighter .art{bottom:60px}.middle{gap:6px}.middle img{max-height:100px}.action{font-size:16px;padding:9px 5px}.tournament{font-size:11px}.ribbon strong{font-size:14px}.ribbon small{font-size:10px}.corner{top:8px;padding:6px;font-size:12px}.house img{flex:none}}
+</style>
+</head>
+<body data-phase="pick" data-revealed="false">
+<main class="stage">
+<button class="corner back" type="button" id="back">⬅ VOLTAR</button><button class="corner inbox" type="button" id="myChallenges">🔔 Meus desafios</button>
+<img class="logo" src="assets/ui/challenge/logo-classmana-torneio.png" alt="ClassMana Torneio das Três Casas">
+<div class="heading"><img src="assets/ui/challenge/banner-duelo-entre-casas.png" alt="Duelo entre Casas"><p id="subtitle">Escolha a casa rival e sorteie o adversário</p></div>
+<section class="board" id="pickScreen" aria-label="Escolher a casa adversária">
+<h2 class="section-title">ESCOLHA A CASA ADVERSÁRIA</h2>
+<div class="houses" id="houses">
+<button type="button" class="house" data-house="A"><img src="assets/ui/crests/brasao-aguia-dourada.png" alt=""><span>4º A · ÁGUIA DOURADA</span></button>
+<button type="button" class="house" data-house="B"><img src="assets/ui/crests/brasao-leao-de-fogo.png" alt=""><span>4º B · LEÃO DE FOGO</span></button>
+<button type="button" class="house" data-house="C"><img src="assets/ui/crests/brasao-dragao-esmeralda.png" alt=""><span>4º C · DRAGÃO DE ESMERALDA</span></button>
+</div>
+<div class="fight">
+<div class="fighter" id="leftPick"><div class="art"><img id="leftHero" src="" alt="Desafiante"></div><div class="ribbon"><strong id="leftName"></strong><small id="leftHouse"></small></div></div>
+<div class="middle"><img src="assets/v2/frames/versus.webp" alt="VS"><span class="badge-label">MODO TORNEIO</span><button class="action" type="button" id="drawButton" disabled>✦ SORTEAR ADVERSÁRIO ✦</button></div>
+<div class="fighter enemy" id="rightPick"><div class="art"><img id="rightHero" src="" alt="Casa rival"></div><div class="ribbon"><strong>CASA RIVAL</strong><small id="rightHouse">Escolha um brasão acima</small></div></div>
+</div><p class="subtext">A casa do desafiante fica bloqueada. Dificuldade padrão para ambos.</p>
+</section>
+<section class="board" id="rouletteScreen" aria-label="Sorteio animado">
+<h2 class="section-title" id="drawTitle">SORTEIO DO ADVERSÁRIO</h2>
+<div class="fight">
+<div class="fighter" id="leftDraw"><div class="art"><img id="leftDrawHero" src="" alt="Desafiante"></div><div class="ribbon"><strong id="leftDrawName"></strong><small id="leftDrawHouse"></small></div></div>
+<div class="middle"><img src="assets/v2/frames/versus.webp" alt="VS"><span class="badge-label" id="drawStatus" aria-live="polite">ALTERNANDO ARQUEIROS...</span></div>
+<div class="fighter enemy" id="rightDraw"><div class="art"><img id="rightDrawHero" src="" alt="Arqueiro ou arqueira rival"></div><div class="ribbon"><strong id="drawEnemyName">???</strong><small id="drawEnemyHouse"></small></div></div>
+</div>
+<div class="result" id="result"><h2>✦ ADVERSÁRIO ESCOLHIDO! ✦</h2><p id="selectedName"></p><button type="button" class="action" id="confirm">CONFIRMAR CONFRONTO</button></div>
+<p class="subtext" id="drawHint">O retrato do adversário alterna entre masculino e feminino. Não há imagem de roleta.</p>
+</section>
+<p class="note">PRÉVIA VISUAL INDEPENDENTE — Não cria convites nem altera duelos oficiais. A associação entre o aluno sorteado e o arqueiro masculino/feminino precisa ser armazenada por aluno; nunca será deduzida do nome.</p>
+</main>
+<script src="roster.js?v=2"></script>
+<script>
+(()=>{
+const by=id=>document.getElementById(id);
+const homes={A:{title:'Águia Dourada',m:'aguia-m.webp',f:'aguia-f.webp'},B:{title:'Leão de Fogo',m:'leao-m.webp',f:'leao-f.webp'},C:{title:'Dragão de Esmeralda',m:'dragao-m.webp',f:'dragao-f.webp'}};
+const roster=window.CLASSMANA_ROSTER||{};
+const get=(id)=>id&&/^[ABC]\d{2}$/.test(id)?id:null;
+let stored='';try{stored=get(localStorage.getItem('cm_v2_lobby_student'))||get(sessionStorage.getItem('cm_active_student_v2'))||''}catch{}
+let own=stored?.[0]||'A',heroSex='m';
+try{heroSex=JSON.parse(localStorage.getItem('classmana-archer-skins-v2')||'{}')[own]==='f'?'f':'m'}catch{}
+const ownId=stored||'A13';const ownIndex=Number(ownId.substring(1))-1;const owner=(roster[own]||[])[ownIndex]||'Jogador da casa '+own;
+const hero=(house,sex)=>'assets/v2/heroes/'+homes[house][sex];
+let rival=null,running=false;
+by('leftHero').src=hero(own,heroSex);by('leftDrawHero').src=hero(own,heroSex);by('leftName').textContent=owner;by('leftDrawName').textContent=owner;
+by('leftHouse').textContent='4º '+own+' · '+homes[own].title;by('leftDrawHouse').textContent='4º '+own+' · '+homes[own].title;
+by('leftPick').dataset.house=own;by('leftDraw').dataset.house=own;
+const houseButtons=[...document.querySelectorAll('.house')];
+houseButtons.forEach(btn=>{
+ const h=btn.dataset.house;if(h===own){btn.disabled=true;btn.classList.add('own');btn.title='Sua própria casa não pode ser desafiada'}
+ btn.addEventListener('click',()=>{
+  if(h===own)return;rival=h;houseButtons.forEach(b=>b.classList.toggle('selected',b===btn));
+  by('rightPick').dataset.house=h;by('rightHero').src=hero(h,'m');by('rightHouse').textContent='4º '+h+' · '+homes[h].title;
+  by('drawButton').disabled=false;
+ });
+});
+let soundCtx;function tick(final=false){try{soundCtx??=new(window.AudioContext||window.webkitAudioContext)();const o=soundCtx.createOscillator(),gain=soundCtx.createGain();o.type='sine';o.frequency.value=final?880:520;gain.gain.value=.045;gain.gain.exponentialRampToValueAtTime(.001,soundCtx.currentTime+.07);o.connect(gain);gain.connect(soundCtx.destination);o.start();o.stop(soundCtx.currentTime+.08)}catch{}}
+const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+by('drawButton').addEventListener('click',async()=>{
+ if(!rival||running)return;
+ const pool=(roster[rival]||[]).map((name,index)=>({id:rival+String(index+1).padStart(2,'0'),name}));
+ if(!pool.length){by('drawHint').textContent='Nenhum aluno cadastrado na casa rival.';return}
+ running=true;
+ const chosen=pool[Math.floor(Math.random()*pool.length)];
+ document.body.dataset.phase='draw';document.body.dataset.revealed='false';
+ by('drawTitle').textContent='SORTEIO DO ADVERSÁRIO';by('drawStatus').textContent='SORTEANDO...';by('result').classList.remove('show');by('rightDraw').dataset.house=rival;
+ by('drawEnemyHouse').textContent='4º '+rival+' · '+homes[rival].title;by('drawEnemyName').textContent='???';
+ // Demonstração: alternância de artes. No jogo definitivo, o perfil oficial define a variante do aluno sorteado.
+ const storedSkins=JSON.parse(localStorage.getItem('classmana-student-archer-genders-v2')||'{}');
+ const selectedSex=storedSkins[chosen.id]==='f'?'f':storedSkins[chosen.id]==='m'?'m':null;
+ const delays=[75,80,85,95,105,115,130,150,175,210,245,290,350,430,540,650];
+ let sex='m';
+ for(const wait of delays){sex=sex==='m'?'f':'m';by('rightDrawHero').src=hero(rival,sex);tick();await sleep(wait)}
+ // Sem dado por aluno, a arte final é provisória; não atribuir gênero a partir do nome.
+ by('rightDrawHero').src=hero(rival,selectedSex||sex);
+ by('drawStatus').textContent='CONFRONTO DEFINIDO';by('drawEnemyName').textContent=chosen.name;
+ by('drawTitle').textContent='CONFRONTO DEFINIDO';
+ by('selectedName').textContent=chosen.name+' — 4º '+rival+' · '+homes[rival].title;
+ by('result').classList.add('show');document.body.dataset.revealed='true';tick(true);
+ by('drawHint').textContent=selectedSex?'Arqueiro de acordo com o perfil cadastrado.':'Prévia: vínculo masculino/feminino ainda não registrado para este aluno.';
+ running=false;
+});
+by('confirm').addEventListener('click',()=>{alert('Prévia visual: o envio do desafio será conectado somente após a aprovação desta tela.')});
+by('back').addEventListener('click',()=>{if(document.body.dataset.phase==='draw'){document.body.dataset.phase='pick';return}location.href='./'});
+by('myChallenges').addEventListener('click',()=>{location.href='./?inbox=1'});
+})();
+</script>
+</body></html>
