@@ -460,7 +460,7 @@ async function startMatch(accepted=null){
    rawHandoff.mode==='challenge_team'&&
    rawHandoff.playerId===$('player').value&&
    rawHandoff.rivalId===$('rival').value&&
-   /^[ABC]\\d{2}$/.test(rawHandoff.rivalId||'')&&
+   /^[ABC][0-9]{2}$/.test(rawHandoff.rivalId||'')&&
    rawHandoff.rivalId[0]!==rawHandoff.playerId[0]?rawHandoff:null;
  if(rawHandoff)window.classmanaDrawHandoff=null;
  const mode=fromInbox?duelMode(fromInbox.kind):$('mode').value;
@@ -537,7 +537,7 @@ async function startMatch(accepted=null){
  if(online.user&&isDuel(mode)){userId=online.user.id;selectHouse(userId[0]);$('player').value=userId;}
  match={house:userId==='guest'?house:userId[0],playerId:userId,player:nameOf(userId),mode,difficulty:$('difficulty').value,
   rivalId,gender:drawHandoff?.gender||archerGender(),rivalGender:drawHandoff?.rivalGender||'m',
-  scores:[],running:true,locked:false,bow:equipment.bow,wind:0,distance:10,level:challenge?.level||level||$('challenge-level').value,shift:0,freezeTime:null,stageStartedAt:performance.now(),incoming:null,
+  scores:[],running:true,locked:false,bow:equipment.bow,wind:0,distance:10,level:challenge?.level||(drawHandoff?'iniciante':$('challenge-level').value),shift:0,freezeTime:null,stageStartedAt:performance.now(),incoming:null,
   online:challenge,onlineShots:[],onlineReplay:challenge?.recipient.id===userId?challenge.creatorShots:[],
   onlineReplayPoints:0,seed:Math.floor(rand(100000,999999))};
  if(mode==='bot'){
