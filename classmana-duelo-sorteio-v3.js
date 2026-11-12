@@ -52,7 +52,7 @@ function make(){
  '<div class="cm-draw-portrait" id="cm-draw-right"><img id="cm-draw-right-img" alt="Adversário"><div class="cm-draw-label"><strong id="cm-draw-right-name">CASA RIVAL</strong><small id="cm-draw-right-house"></small></div></div>',
  '<div class="cm-draw-list"><h3 id="cm-draw-list-head">ALUNOS DA CASA RIVAL</h3><div class="cm-draw-list-items" id="cm-draw-list-items"></div></div></div>',
  '<div class="cm-draw-result" id="cm-draw-result">',
- '<button type="button" id="cm-draw-confirm" class="cm-draw-action">CONTINUAR</button></div>',
+ '<button type="button" id="cm-draw-confirm" class="cm-draw-action" disabled>CONTINUAR</button></div>',
  '</section>',
  '<div id="cm-draw-transition" class="cm-draw-transition"><p>⚔ PREPARANDO A PARTIDA... ⚔</p></div></div>'
  ].join('');
@@ -70,7 +70,10 @@ function open(){
  var h=home[0],people=R[h],id=Number(home.slice(1))-1;
  el('cm-draw-left').dataset.h=h;
  portrait(el('cm-draw-left-img'),h,gender(home)||store('classmana-archer-skins-v2')[h]||'m');
- t('cm-draw-left-name',people[id]);t('cm-draw-left-house',label(h));t('cm-draw-right-house','Selecione um brasão');
+ t('cm-draw-left-name',people[id]);t('cm-draw-left-house',label(h));t('cm-draw-right-house','Selecione uma casa rival');
+ el('cm-draw-right-img').removeAttribute('src');el('cm-draw-right-img').style.visibility='hidden';
+ el('cm-draw-spin-img').removeAttribute('src');el('cm-draw-spin-img').style.visibility='hidden';
+ el('cm-draw-confirm').disabled=true;
  var houses=el('cm-draw-houses');
  Object.keys(H).forEach(function(k){
   var btn=document.createElement('button');btn.type='button';btn.className='cm-draw-house';btn.dataset.h=k;btn.disabled=k===h;
@@ -84,10 +87,10 @@ function open(){
 function selectHouse(h){
  if(busy||drawLocked||h===home[0])return;enemy=h;picked=null;
  document.querySelectorAll('#cm-draw-houses button').forEach(function(b){b.classList.toggle('chosen',b.dataset.h===h)});
- el('cm-draw-result').classList.remove('visible');el('cm-draw-right').dataset.h=h;
+ el('cm-draw-result').classList.remove('visible');el('cm-draw-confirm').disabled=true;el('cm-draw-right').dataset.h=h;
  // Antes do sorteio, a casa rival é representada somente pelo brasão oficial.
- el('cm-draw-right-img').onerror=null;el('cm-draw-right-img').src=H[h][2];
- el('cm-draw-spin-img').onerror=null;el('cm-draw-spin-img').src=H[h][2];
+ el('cm-draw-right-img').onerror=null;el('cm-draw-right-img').style.visibility='visible';el('cm-draw-right-img').src=H[h][2];
+ el('cm-draw-spin-img').onerror=null;el('cm-draw-spin-img').style.visibility='visible';el('cm-draw-spin-img').src=H[h][2];
  t('cm-draw-right-name','CASA RIVAL');t('cm-draw-right-house',label(h));
  t('cm-draw-list-head','ALUNOS DO '+label(h).toUpperCase());el('cm-draw-state').classList.remove('is-result-art');t('cm-draw-state','Pronto para sortear.');
  var holder=el('cm-draw-list-items');holder.replaceChildren();
@@ -120,7 +123,7 @@ function finishDraw(student,restored){
    row.scrollIntoView({block:'nearest'});
   }
  });
- el('cm-draw-result').classList.add('visible');
+ el('cm-draw-result').classList.add('visible');el('cm-draw-confirm').disabled=false;
  el('cm-draw-roll').disabled=true;el('cm-draw-roll').textContent='SORTEIO CONCLUÍDO';
  if(!restored){rememberDraw();bleep(true)}
 }
