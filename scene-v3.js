@@ -463,7 +463,7 @@ export function initScene(canvas, getSettings) {
   function activeTargetFile(){
     const q=getSettings()||{},level=q.level||'iniciante';
     if(level==='lendario')return 'target-suspended.glb';
-    if(level==='avancado')return 'models3d/alvo_suspenso_sem_cavalete.glb';
+    if(level==='avancado')return 'medium-twin-procedural'; // dois discos coloridos nativos, sem terceiro GLB
     return (q.index||0)>=3?'target-alt.glb':'target-stand.glb';
   }
   // O disco pode ter sido exportado deitado: medir eixos da malha para deixá-lo em pé.
@@ -595,9 +595,12 @@ export function initScene(canvas, getSettings) {
     holder.__model3d?.destroy();holder.__model3d=null;targetVisual.enabled=true;
     // Alvo de 10–65 m: disco 3D procedural com anéis voltados ao jogador.
     // O GLB anterior estava exibindo a borda do disco, como um prato de lado.
-    if(file==='target-stand.glb'||file==='target-alt.glb'){
+    if(file==='target-stand.glb'||file==='target-alt.glb'||file==='medium-twin-procedural'){
+      // O modo médio deve usar SOMENTE os dois discos procedurais coloridos.
+      // Jamais instanciar o GLB central fosco em paralelo com a dupla móvel.
       parent.dataset.glbTarget='procedural';
-      parent.dataset.targetModel='competition-rings';
+      parent.dataset.targetModel=file==='medium-twin-procedural'?'medium-twin-rings':'competition-rings';
+      updateTwinDiscs();
       return;
     }
     loadModel(file.startsWith('models3d/')?file:'models3d/equipment/'+file,(err,res)=>{
