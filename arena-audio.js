@@ -48,7 +48,7 @@ function soundClip(name){
  if(!enabled)return;
  try{
   const audio=clips[name]||(clips[name]=new Audio('assets/sounds/'+name+'.mp3'));
-  audio.pause();audio.currentTime=0;audio.volume=name==='vvqne-applause-383901'?.34:name==='driken5482-applause-cheer-236786'?.27:.18;
+  audio.pause();audio.currentTime=0;audio.volume=name==='vvqne-applause-383901'?.34:name==='driken5482-applause-cheer-236786'?.27:name==='freesound_community-boo-6377'?.32:.18;
   audio.play().catch(()=>{});
  }catch{}
 }
@@ -174,8 +174,8 @@ export const arenaAudio={
     [500,580,650].forEach((f,i)=>tone(f,f*1.17,.29,.032,'sine',i*.13));
    }
    if(effect==='boo'){
-    soundClip('erro');
-    for(let i=0;i<4;i++)tone(165+i*15,90+i*7,.31,.040,'sawtooth',i*.11);
+    // Vaia real enviada pelo professor, somente ao errar o disco (0 pontos).
+    soundClip('freesound_community-boo-6377');
    }
    if(effect==='block'){
     noise(.23,.12,1400);tone(710,240,.32,.075,'triangle');tone(1180,650,.20,.035,'sine',.035);
