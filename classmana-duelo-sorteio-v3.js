@@ -26,8 +26,8 @@ function gender(id){
  return FEMALE_ROSTER[h]?.includes(name)?'f':'m';
 }
 function drawKey(){return 'classmana-duel-once-v3:'+home}
-function previousDraw(){try{var p=JSON.parse(sessionStorage.getItem(drawKey())||'null');return p&&p.enemy&&p.id?{enemy:p.enemy,student:list(p.enemy).find(function(x){return x.id===p.id})}:null}catch(e){return null}}
-function rememberDraw(){try{sessionStorage.setItem(drawKey(),JSON.stringify({enemy:enemy,id:picked.id}))}catch(e){}}
+function previousDraw(){try{var p=JSON.parse(sessionStorage.getItem(drawKey())||'null');return p&&p.enemy&&p.id&&p.timestamp&&Date.now()-p.timestamp<10*60*1000?{enemy:p.enemy,student:list(p.enemy).find(function(x){return x.id===p.id})}:null}catch(e){return null}}
+function rememberDraw(){try{sessionStorage.setItem(drawKey(),JSON.stringify({enemy:enemy,id:picked.id,timestamp:Date.now()}))}catch(e){}}
 function releaseDraw(){try{sessionStorage.removeItem(drawKey())}catch(e){}}
 
 function portrait(img,h,sex){var g=sex==='f'?'f':'m';img.onerror=function(){img.onerror=null;img.src='assets/v2/heroes/'+H[h][1]+'-'+g+'.webp'};img.src=BASE+'retrato-'+H[h][1]+'-'+g+'.png'}
