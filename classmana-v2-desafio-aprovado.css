@@ -161,3 +161,28 @@ body[data-page="lobby"] #view-inicio[data-step="desafio"] #duel-options button:f
  body[data-page="lobby"] #view-inicio[data-step="desafio"] #duel-options .cm-challenge-secondary{padding:4px 7px!important}
  body[data-page="lobby"] #view-inicio[data-step="desafio"] #duel-options .cm-challenge-ranking{right:0!important;top:0!important;font-size:10px!important}
 }
+
+
+/* Botões individuais das modalidades de desafio: cada imagem é seu próprio controle. */
+body[data-page="lobby"] #view-inicio[data-step="desafio"] #duel-options .cm-challenge-student-actions{
+ flex:0 0 clamp(39px,6vh,59px)!important;
+ gap:clamp(7px,1.1vw,16px)!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="desafio"] #duel-options .cm-challenge-student-actions button{
+ flex:1 1 0!important;display:block!important;width:100%!important;max-width:260px!important;
+ height:100%!important;min-height:0!important;padding:0!important;margin:0!important;
+ border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;
+ overflow:visible!important;cursor:pointer!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="desafio"] #duel-options .cm-challenge-student-actions button img{
+ display:block!important;object-fit:contain!important;width:100%!important;height:100%!important;
+ filter:drop-shadow(0 3px 5px #001b0ab0)!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="desafio"] #duel-options .cm-challenge-student-actions button:hover img,
+body[data-page="lobby"] #view-inicio[data-step="desafio"] #duel-options .cm-challenge-student-actions button:focus-visible img{
+ filter:brightness(1.12) drop-shadow(0 0 7px #f7d76b)!important;
+}
+/* As três casas não devem ter brasões sobrepostos às artes dos mascotes. */
+body[data-page="lobby"] #view-inicio[data-step="desafio"] #duel-options .cm-house-mascot-crest{
+ display:none!important;
+}
