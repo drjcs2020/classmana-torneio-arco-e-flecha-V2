@@ -554,7 +554,8 @@ async function startMatch(accepted=null){
    // a arena.html também precisa ter URL nova para ignorar HTML em cache.
    const visualFix=new URLSearchParams(location.search).get('visualFix');
    const cacheQuery=visualFix&&/^[a-zA-Z0-9_-]{1,48}$/.test(visualFix)
-     ?'?visualFix='+encodeURIComponent(visualFix):'';
+     ?'?visualFix='+encodeURIComponent(visualFix)
+     :drawHandoff?'?duelFlow=20261112-direct-v2':'';
    if(drawHandoff)window.dispatchEvent(new Event('classmana:duel-launching'));
    window.location.assign('./arena.html'+cacheQuery);
    navigatingToArena=true;
