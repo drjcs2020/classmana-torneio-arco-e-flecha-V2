@@ -14,7 +14,7 @@ const palettes = {
 const rgb = h => [1,3,5].map(i => parseInt(h.slice(i, i+2), 16) / 255);
 
 import {GEAR_BY_ID,modelSource} from './equipment-catalog.js?v=arsenal-5';
-import {mediumTwinTargets} from './arena-difficulty.js?v=20261112-wide-twins-v2';
+import {mediumTwinTargets} from './arena-difficulty.js?v=20261112-single-moving-v1';
 export function initScene(canvas, getSettings) {
   const parent=canvas.parentElement;
   let pc=null, app=null, gl=null, camera=null, bowRoot=null, bowVisualPivot=null, bowFallbackRoot=null, bowHandle=null, bowString=null, sightAnchor=null,
@@ -141,7 +141,7 @@ export function initScene(canvas, getSettings) {
         ctx.strokeStyle='#ab7e45';ctx.lineWidth=m.r*.045;ctx.beginPath();ctx.moveTo(m.x+sx*m.r*.37-2,m.y+m.r*.55);ctx.lineTo(x-2,m.y+m.r*1.84);ctx.stroke();
       }
     }
-    // Duas copias do mesmo disco, tambem no modo 2D de compatibilidade.
+    // Disco único móvel, também no modo 2D de compatibilidade.
     const setting=getSettings()||{};
     const discs=setting.dualTargets?mediumTwinTargets(setting.seconds)
       .map(d=>({x:m.x+d.x*m.r,y:m.y,r:m.r*d.r})):[m];
@@ -539,50 +539,21 @@ export function initScene(canvas, getSettings) {
     }
     parent.dataset.targetLighting=clones.size?'enhanced':'original';
   }
-  // Cada disco é uma entidade 3D independente, clonada da primeira malha.
-  // O movimento e as hitboxes usam a MESMA função mediumTwinTargets do motor de pontuação.
+  // Um único disco móvel no médio, usando a mesma trajetória da pontuação.
   function updateTwinDiscs(){
     if(!targetRoot||!targetVisual)return;
-    const setting=getSettings()||{},twins=!!setting.dualTargets;
+    const setting=getSettings()||{},moving=!!setting.dualTargets;
     const original=targetRoot.__model3d;
-    if(twins){
-      if(original&&dualDiscs.length!==2){
-        // O primeiro disco continua sendo a referência; o segundo é seu clone.
-        dualDiscs.forEach(d=>{if(d!==original)d.destroy();});
-        dualDiscs=[original,original.clone()];
-        targetRoot.addChild(dualDiscs[1]);
-      }
-      if(!original){
-        if(!dualProcedural){
-          dualProcedural=targetVisual.clone();
-          dualProcedural.name='Second procedural disk';
-          targetRoot.addChild(dualProcedural);
-          dualProcedural.findByName('Removable target ground stand')?.destroy();
-        }
-        const positions=mediumTwinTargets(setting.seconds);
-        [targetVisual,dualProcedural].forEach((disc,i)=>{
-          disc.enabled=true;disc.setLocalScale(.70,.70,.70);
-          disc.setLocalPosition(positions[i].x*1.34,0,0);
-        });
-      }else{
-        if(dualProcedural){dualProcedural.destroy();dualProcedural=null;}
-        targetVisual.enabled=false;
-        const positions=mediumTwinTargets(setting.seconds);
-        dualDiscs.forEach((disc,i)=>{
-          disc.enabled=true;disc.setLocalScale(.70,.70,.70);
-          disc.setLocalPosition(positions[i].x*1.34,0,0);
-        });
-      }
-      parent.dataset.targetCount='2';
-    }else{
-      if(dualProcedural){dualProcedural.destroy();dualProcedural=null;}
-      if(dualDiscs.length>1){dualDiscs[1].destroy();}
-      dualDiscs=[];
-      if(original){original.setLocalScale(1,1,1);original.setLocalPosition(0,0,0);}
-      targetVisual.setLocalScale(1,1,1);targetVisual.setLocalPosition(0,0,0);
-      targetVisual.enabled=!original;
-      parent.dataset.targetCount='1';
-    }
+    if(dualProcedural){dualProcedural.destroy();dualProcedural=null;}
+    if(dualDiscs.length>1)dualDiscs.slice(1).forEach(d=>d.destroy());
+    dualDiscs=[];
+    const disc=original||targetVisual;
+    const position=moving?mediumTwinTargets(setting.seconds)[0]:null;
+    disc.enabled=true;
+    disc.setLocalScale(moving?.70:1,moving?.70:1,moving?.70:1);
+    disc.setLocalPosition(position?position.x*1.34:0,0,0);
+    targetVisual.enabled=!original;
+    parent.dataset.targetCount='1';
   }
   function loadTargetModel(){
     if(!targetRoot||!targetVisual)return;
@@ -596,10 +567,10 @@ export function initScene(canvas, getSettings) {
     // Alvo de 10–65 m: disco 3D procedural com anéis voltados ao jogador.
     // O GLB anterior estava exibindo a borda do disco, como um prato de lado.
     if(file==='target-stand.glb'||file==='target-alt.glb'||file==='medium-twin-procedural'){
-      // O modo médio deve usar SOMENTE os dois discos procedurais coloridos.
+      // O modo médio usa SOMENTE um disco procedural colorido.
       // Jamais instanciar o GLB central fosco em paralelo com a dupla móvel.
       parent.dataset.glbTarget='procedural';
-      parent.dataset.targetModel=file==='medium-twin-procedural'?'medium-twin-rings':'competition-rings';
+      parent.dataset.targetModel=file==='medium-twin-procedural'?'medium-single-rings':'competition-rings';
       updateTwinDiscs();
       return;
     }
