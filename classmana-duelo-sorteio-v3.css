@@ -77,10 +77,10 @@
 #cm-draw-modal .cm-draw-label strong{font-size:clamp(12px,1.35vw,19px)}
 #cm-draw-modal .cm-draw-label small{font-size:clamp(10px,.95vw,14px)}
 #cm-draw-modal .cm-draw-center{height:100%;gap:2px;justify-content:space-evenly;overflow:hidden}
-#cm-draw-modal .cm-draw-center img.cm-draw-vs{max-height:18%;max-width:37%;min-height:0}
-#cm-draw-modal .cm-draw-spin-banner{width:95%;max-height:16%;min-height:0}
-#cm-draw-modal .cm-draw-tube{width:100%;max-width:100%;max-height:39%;aspect-ratio:3.1}
-#cm-draw-modal #cm-draw-roll:not(.reroll){height:19%;max-height:70px;min-height:28px;aspect-ratio:auto;width:90%;background-size:100% 100%}
+#cm-draw-modal .cm-draw-center img.cm-draw-vs{max-height:15%;max-width:40%;min-height:0}
+#cm-draw-modal .cm-draw-spin-banner{width:98%;max-height:13%;min-height:0}
+#cm-draw-modal .cm-draw-tube{width:100%;max-width:100%;max-height:46%;aspect-ratio:3.1}
+#cm-draw-modal #cm-draw-roll:not(.reroll){height:15%;max-height:62px;min-height:28px;aspect-ratio:auto;width:94%;background-size:100% 100%}
 #cm-draw-modal .cm-draw-muted{font-size:clamp(9px,.82vw,12px);line-height:1.1}
 #cm-draw-modal .cm-draw-list{height:100%;min-height:0;max-height:none;padding:3px;gap:3px;overflow:hidden}
 #cm-draw-modal .cm-draw-list h3{font-size:clamp(10px,.99vw,14px);margin:0;padding:5px 2px;line-height:1.05}
@@ -235,7 +235,7 @@
 #cm-draw-modal .cm-draw-grid{
   height:100%;
   min-height:0!important;
-  grid-template-columns:minmax(0,1.1fr) minmax(0,1.45fr) minmax(150px,.9fr) minmax(0,1.13fr);
+  grid-template-columns:minmax(0,1.04fr) minmax(0,1.7fr) minmax(0,.86fr) minmax(0,1.08fr);
   gap:7px;
 }
 #cm-draw-modal .cm-draw-portrait{min-height:0;max-height:100%}
@@ -257,9 +257,9 @@
   inset:0 0 54px;
   object-fit:contain;
 }
-#cm-draw-modal #cm-draw-left>img{transform:none}
+#cm-draw-modal #cm-draw-left>img{transform:scaleX(-1)}
 #cm-draw-modal #cm-draw-right>img{transform:none}
-#cm-draw-modal .cm-draw-center{height:100%;min-height:0}
+#cm-draw-modal .cm-draw-center{height:100%;min-height:0;justify-content:space-between;gap:3px;}
 #cm-draw-modal .cm-draw-list{height:100%;min-height:0;overflow:hidden}
 #cm-draw-modal .cm-draw-list-items{flex:1;min-height:0;overflow-y:auto}
 #cm-draw-modal .cm-draw-result,
@@ -300,7 +300,7 @@
 @media(max-width:950px){
  #cm-draw-modal .cm-draw-shell{grid-template-rows:30px 51px 23px minmax(0,1fr);padding:2px 6px 4px}
  #cm-draw-modal .cm-draw-panel{grid-template-rows:clamp(42px,11%,57px) minmax(0,1fr) clamp(38px,10%,48px);gap:3px;padding:4px}
- #cm-draw-modal .cm-draw-grid{grid-template-columns:minmax(0,1.1fr) minmax(0,1.4fr) minmax(110px,.88fr) minmax(0,1.12fr);gap:4px}
+ #cm-draw-modal .cm-draw-grid{grid-template-columns:minmax(0,1.04fr) minmax(0,1.66fr) minmax(0,.84fr) minmax(0,1.08fr);gap:4px}
  #cm-draw-modal .cm-draw-portrait .cm-draw-label{height:48px;min-height:48px}
  #cm-draw-modal .cm-draw-portrait>img{height:calc(100% - 48px);inset:0 0 48px}
  #cm-draw-modal .cm-draw-result.visible{grid-template-columns:minmax(0,1fr) minmax(110px,26%)}
@@ -397,3 +397,10 @@
 #cm-draw-modal #cm-draw-confirm:not(:disabled){opacity:1;filter:none}
 #cm-draw-modal #cm-draw-right-img:not([src]),
 #cm-draw-modal #cm-draw-spin-img:not([src]){visibility:hidden}
+
+/* Somente a imagem-base do carrossel é espelhada para colocar o emblema à direita.
+   Retrato alternado e moldura do seletor permanecem intactos. */
+#cm-draw-modal .cm-draw-tube>img:first-child{transform:scaleX(-1)}
+/* Brasões oficiais: sem desbotamento ou filtro cinza na casa própria. */
+#cm-draw-modal .cm-draw-house:disabled{opacity:1;filter:none}
+#cm-draw-modal .cm-draw-house img{height:94%;max-width:20%;width:auto;object-fit:contain;filter:none}
