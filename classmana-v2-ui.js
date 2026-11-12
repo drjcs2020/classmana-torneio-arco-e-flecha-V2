@@ -54,10 +54,18 @@ function mount(){
   const action=button.dataset.v2Action;
   if(action==='jogar'&&!openActive('heroi')){delete document.body.dataset.v2Entry;enter();}
   if(action==='desafios'){
-   // Restaura a rota própria do botão DESAFIOS: arte antiga de seleção de casa.
-   // A página nova de duelos permanece vinculada aos controles de JOGAR / Iniciar Duelo.
-   if(!openActive('reino'))enter();
-   document.body.dataset.v2Entry='challenges';
+   // Atalho para a MESMA caixa de entrada do botão "Meus desafios".
+   // Sem passar por escolha de arqueiro, inventário ou duelo.
+   const sessionId=window.classmanaGetActiveStudentId?.()||'';
+   if(!sessionId){
+    // Uma identidade é necessária para consultar desafios; nunca forçar herói/equipamento.
+    if(!openActive('perfil'))enter();
+    document.getElementById('cm-v2-session-notice')?.replaceChildren(document.createTextNode('Selecione seu nome para consultar Meus desafios.'));
+    document.getElementById('cm-v2-session-notice')?.removeAttribute('hidden');
+    return;
+   }
+   delete document.body.dataset.v2Entry;
+   document.getElementById('cm-open-challenges')?.click();
   }
   if(action==='ranking')document.querySelector('[data-view="ranking"]')?.click();
   if(action==='regras')document.querySelector('[data-view="regras"]')?.click();
