@@ -10,7 +10,21 @@ function rosterId(id){return /^[ABC]\d\d$/.test(id||'') && !!R[id[0]]?.[Number(i
 function current(){var a=[el('player')?.value,el('cm-quick-player')?.value,sessionStorage.getItem('cm_active_student_v2'),localStorage.getItem('cm_v2_lobby_student')];return a.find(rosterId)||''}
 function list(h){return (R[h]||[]).map(function(n,i){return {id:h+String(i+1).padStart(2,'0'),name:n}})}
 function store(k){try{return JSON.parse(localStorage.getItem(k)||'{}')||{}}catch(e){return {}}}
-function gender(id){return store('classmana-student-archer-genders-v2')[id]}
+/* Os nomes do elenco oficial são associados ao retrato feminino/masculino.
+   A identidade real do aluno não é inferida em geral: esta tabela é específica do elenco do torneio.
+   A escolha explícita de avatar pelo aluno continua tendo prioridade. */
+var FEMALE_ROSTER={
+ A:['Alice S.','Aline F.','Ana G.','Debora L.','Eloa B.','Isabela P.','Mayara M.','Sophia L.','Valentine T.'],
+ B:['Agatha S.','Ana S.','Ana C.','Dafini C.','Heloisa S.','Isabelly M.','Lais L.','Livia S.','Manuele C.','Maria V.','Maysa A.','Nathalia L.','Sofia G.'],
+ C:['Agatha C.','Alice O.','Ana M.','Angela C.','Emily B.','Ester A.','Isabella S.','Lavinia R.','Lavinia S.','Maria S.','Maria C.','Ralinne E.','Samantha S.','Sophia R.']
+};
+function gender(id){
+ var saved=store('classmana-student-archer-genders-v2')[id];
+ if(saved==='m'||saved==='f')return saved;
+ var h=id?.[0],idx=Number(id?.slice(1))-1,name=R[h]?.[idx];
+ if(!name)return 'm';
+ return FEMALE_ROSTER[h]?.includes(name)?'f':'m';
+}
 function drawKey(){return 'classmana-duel-once-v3:'+home}
 function previousDraw(){try{var p=JSON.parse(sessionStorage.getItem(drawKey())||'null');return p&&p.enemy&&p.id?{enemy:p.enemy,student:list(p.enemy).find(function(x){return x.id===p.id})}:null}catch(e){return null}}
 function rememberDraw(){try{sessionStorage.setItem(drawKey(),JSON.stringify({enemy:enemy,id:picked.id}))}catch(e){}}
@@ -88,15 +102,8 @@ function finishDraw(student,restored){
  picked=student;drawLocked=true;busy=false;
  el('cm-draw-tube').classList.remove('spinning');
  var actual=gender(picked.id);
- if(actual==='m'||actual==='f'){
-  portrait(el('cm-draw-spin-img'),enemy,actual);portrait(el('cm-draw-right-img'),enemy,actual);
-
- }else{
-  // Sem avatar salvo para o aluno: manter retrato de arquearia durante a revelação,
-  // sem deduzir o gênero pelo nome. O sexo do retrato não identifica o estudante.
-  portrait(el('cm-draw-spin-img'),enemy,'m');portrait(el('cm-draw-right-img'),enemy,'m');
-
- }
+ portrait(el('cm-draw-spin-img'),enemy,actual);
+ portrait(el('cm-draw-right-img'),enemy,actual);
  t('cm-draw-right-name',picked.name);t('cm-draw-right-house',label(enemy));
  t('cm-draw-state','CONFRONTO DEFINIDO');
  document.querySelectorAll('#cm-draw-houses button').forEach(function(b){b.disabled=true});
