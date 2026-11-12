@@ -257,7 +257,8 @@
   inset:0 0 54px;
   object-fit:contain;
 }
-#cm-draw-modal #cm-draw-right>img{transform:scaleX(-1)}
+#cm-draw-modal #cm-draw-left>img{transform:none}
+#cm-draw-modal #cm-draw-right>img{transform:none}
 #cm-draw-modal .cm-draw-center{height:100%;min-height:0}
 #cm-draw-modal .cm-draw-list{height:100%;min-height:0;overflow:hidden}
 #cm-draw-modal .cm-draw-list-items{flex:1;min-height:0;overflow-y:auto}
