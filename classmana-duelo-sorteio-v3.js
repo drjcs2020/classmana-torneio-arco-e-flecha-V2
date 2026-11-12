@@ -23,7 +23,6 @@ function make(){
  modal.innerHTML=[
  '<div class="cm-draw-shell"><div class="cm-draw-top">',
  '<button class="cm-draw-back" id="cm-draw-back" type="button">⬅ VOLTAR</button>',
- '<img class="cm-draw-logo" src="assets/ui/challenge/logo-classmana-torneio.png" alt="ClassMana">',
  '<button class="cm-draw-inbox" id="cm-draw-inbox" type="button">🔔 Meus desafios</button></div>',
  '<div class="cm-draw-heading"><img src="assets/ui/challenge/banner-duelo-entre-casas.png" alt="DUELO ENTRE CASAS"></div>',
  '<div class="cm-draw-caption">ESCOLHA A CASA E SORTEIE O ADVERSÁRIO</div>',
