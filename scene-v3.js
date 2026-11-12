@@ -492,8 +492,8 @@ export function initScene(canvas, getSettings) {
     model.setLocalPosition(-center.x,-center.y,-center.z);
     return true;
   }
-  // O disco móvel mantém os materiais originais do GLB, mas recebe um
-  // reforço emissivo suave para não perder as cores com o tone mapping ACES.
+  // Todos os discos importados usam clones dos materiais originais, com
+  // reforço emissivo moderado para manter cores legíveis sob tone mapping ACES.
   // Não modifica as luzes da arena, as molduras nem os demais modelos.
   function brightenMobileDisc(model){
     const clones=new Map();
@@ -510,16 +510,18 @@ export function initScene(canvas, getSettings) {
             adjusted.emissiveMap=original.diffuseMap;
             adjusted.emissiveMapUv=original.diffuseMapUv;
             adjusted.emissiveMapChannel='rgb';
-            adjusted.emissive=new pc.Color(.48,.48,.48);
+            adjusted.emissive=new pc.Color(.82,.82,.82);
           }else if(base){
             // Materiais sem textura: realça a cor já gravada no GLB.
             adjusted.emissive=new pc.Color(
-              Math.min(1,base.r*.48),
-              Math.min(1,base.g*.48),
-              Math.min(1,base.b*.48)
+              Math.min(1,base.r*.66),
+              Math.min(1,base.g*.66),
+              Math.min(1,base.b*.66)
             );
           }
-          adjusted.emissiveIntensity=1;
+          // Realça os anéis sem transformar o disco em uma superfície luminosa plana.
+          adjusted.emissiveIntensity=.95;
+          if('gloss' in adjusted) adjusted.gloss=Math.max(adjusted.gloss||0,38);
           adjusted.update();
           clones.set(original,adjusted);
         }
@@ -552,12 +554,13 @@ export function initScene(canvas, getSettings) {
           parent.dataset.targetModel='competition-rings';
           return;
         }
-        brightenMobileDisc(model);
       }else{
         model.setLocalScale(t.scale,t.scale,t.scale);
         model.setLocalEulerAngles(...t.rot);
         model.setLocalPosition(...t.pos);
       }
+      // Aplica a correção em todos os alvos GLB, inclusive o suspenso lendário.
+      brightenMobileDisc(model);
       holder.__model3d=container;
       targetVisual.enabled=false;
       parent.dataset.glbTarget='ready';parent.dataset.targetModel=file;
