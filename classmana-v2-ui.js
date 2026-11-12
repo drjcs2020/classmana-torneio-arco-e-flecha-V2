@@ -53,8 +53,10 @@ function mount(){
  document.querySelectorAll('[data-v2-action]').forEach(button=>button.addEventListener('click',guard(()=>{
   const action=button.dataset.v2Action;
   if(action==='jogar'&&!openActive('heroi')){delete document.body.dataset.v2Entry;enter();}
-  if(action==='desafios'&&!openActive('desafio')){
-   enter();
+  if(action==='desafios'){
+   // Restaura a rota própria do botão DESAFIOS: arte antiga de seleção de casa.
+   // A página nova de duelos permanece vinculada aos controles de JOGAR / Iniciar Duelo.
+   if(!openActive('reino'))enter();
    document.body.dataset.v2Entry='challenges';
   }
   if(action==='ranking')document.querySelector('[data-view="ranking"]')?.click();
