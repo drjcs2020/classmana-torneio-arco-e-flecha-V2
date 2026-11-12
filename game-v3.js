@@ -1,7 +1,7 @@
-import {initScene} from './scene-v3.js?v=20261112-single-moving-v1';
+import {initScene} from './scene-v3.js?v=20261112-score-rollback-v1';
 import {GEAR,GEAR_BY_ID,getGearLevel,isGearUnlocked} from './equipment-catalog.js?v=win-progress-linear-20261110';
 import {mountEquipmentInventory} from './equipment-inventory.js?v=arsenal-button-colors-20261111';
-import {CIRCUITS,LEVELS,targetMotion,mediumTwinTargets,obstacleBlocks,distanceDifficulty,flightSeconds} from './arena-difficulty.js?v=20261112-single-moving-v1';
+import {CIRCUITS,LEVELS,targetMotion,mediumTwinTargets,obstacleBlocks,distanceDifficulty,flightSeconds} from './arena-difficulty.js?v=20261112-score-rollback-v1';
 import {arenaAudio} from './arena-audio.js?v=20261112-arena-sfx-fixed-02';
 import {cinematics} from './classmana-cinematics.js?v=20261112-art-title-gender-v3';
 import {initAtmosphere} from './arena-atmosphere.js?v=no-crowd15';
@@ -418,7 +418,7 @@ function stageSeconds(){
 }
 function worldSettings(){
  const level=match?.level||'iniciante',index=match?.scores?.length||0,seconds=stageSeconds();
- const dualTargets=level==='avancado';
+ const dualTargets=false; // Rollback: alvo único e pontuação relativa ao alvo móvel
  const motion=dualTargets?{x:0,y:0}:targetMotion(level,index,seconds);
  const stage=$('stage'),w=stage?.clientWidth||1050,h=stage?.clientHeight||540;
  const distance=match?.distance||10,scale=clamp(Math.pow(30/Math.max(10,distance),.65),.31,1.75);
@@ -626,7 +626,7 @@ async function fire(power){
  const iy=sight.y*h+fall+rand(-.06,.06)*jitter;
  const impactDx=(ix-t.x)/t.r,impactDy=(iy-t.y)/t.r;
  const flight=flightSeconds(match.distance,power);
- const dualTargets=match.level==='avancado';
+ const dualTargets=false; // Rollback do recálculo por discos independentes
  const before=targetMotion(match.level,shotIndex,match.freezeTime);
  const after=targetMotion(match.level,shotIndex,match.freezeTime+flight);
  const rules=match.online?.rules??6;
@@ -679,7 +679,7 @@ async function fire(power){
   try{await Promise.race([scene?.fire?.({x:px,y:py,power:ghost.power||1}),new Promise(resolve=>setTimeout(resolve,1700))]);}
   catch(e){console.warn('Replay:',e)}
   if(match!==currentMatch||!currentMatch.running)return;
-  const replayTwins=match.level==='avancado'?mediumTwinTargets(
+  const replayTwins=false?mediumTwinTargets(
   (Number(ghost.time)||0)+flightSeconds((CIRCUITS.avancado||[])[shotIndex]||match.distance,ghost.power||1)
  ):null;
  const replayTarget=replayTwins&&ghost.score>0?
