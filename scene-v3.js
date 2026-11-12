@@ -14,7 +14,7 @@ const palettes = {
 const rgb = h => [1,3,5].map(i => parseInt(h.slice(i, i+2), 16) / 255);
 
 import {GEAR_BY_ID,modelSource} from './equipment-catalog.js?v=arsenal-5';
-import {mediumTwinTargets} from './arena-difficulty.js?v=medium-twin-global-20261112';
+import {mediumTwinTargets} from './arena-difficulty.js?v=20261112-wide-twins-v2';
 export function initScene(canvas, getSettings) {
   const parent=canvas.parentElement;
   let pc=null, app=null, gl=null, camera=null, bowRoot=null, bowVisualPivot=null, bowFallbackRoot=null, bowHandle=null, bowString=null, sightAnchor=null,
