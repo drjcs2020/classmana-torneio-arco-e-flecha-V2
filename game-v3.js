@@ -497,7 +497,7 @@ async function startMatch(accepted=null){
   if(!drawHandoff&&!fromInbox){
    const versusAccepted=await cinematics.versus({
     player:nameOf(userId),house:userId[0],gender:archerGender(),
-    rival:byId(rivalId),rivalHouse:rivalId?.[0],
+    rival:byId(rivalId),rivalHouse:rivalId?.[0],rivalId,
     sound:effect=>arenaAudio.play(effect)
    });
    if(!versusAccepted)return;
