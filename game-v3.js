@@ -1156,6 +1156,11 @@ $('cm-confirm-identity')?.addEventListener('click',()=>{
 });
 
 $('confirm-archer').addEventListener('click',()=>{
+ // Salvar a escolha de avatar por estudante, nao apenas por casa.
+ const cmAvatarStudent=$('player')?.value||identifiedPlayerId;
+ if(/^[ABC][0-9]{2}$/.test(cmAvatarStudent||'')){
+  try{const cmMap=JSON.parse(localStorage.getItem('classmana-student-archer-genders-v2')||'{}')||{};cmMap[cmAvatarStudent]=archerGender();localStorage.setItem('classmana-student-archer-genders-v2',JSON.stringify(cmMap))}catch{}
+ }
  if(equipment.bow!=='classico'&&(!gearProgress.confirmed||!isGearUnlocked(equipment.bow,gearProgress.wins))){toast('Arma ainda bloqueada; escolha um equipamento liberado.');return}
  setLobbyStep('desafio');
 });
