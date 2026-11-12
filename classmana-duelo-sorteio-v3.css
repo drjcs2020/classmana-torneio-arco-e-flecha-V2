@@ -369,3 +369,31 @@
   #cm-draw-modal #cm-draw-confirm{width:clamp(130px,23vw,220px);flex-basis:clamp(130px,23vw,220px);font-size:clamp(12px,1.6vw,16px)}
   #cm-draw-modal .cm-draw-center .cm-draw-muted.is-result-art{height:clamp(22px,5dvh,34px)}
 }
+
+
+/* Rodape sempre presente; somente a ação depende do sorteio. */
+#cm-draw-modal .cm-draw-result,
+#cm-draw-modal .cm-draw-result:not(.visible),
+#cm-draw-modal .cm-draw-result.visible{
+  display:flex!important;
+  visibility:visible!important;
+  pointer-events:auto;
+  justify-content:center;
+  align-items:center;
+  width:100%;
+}
+#cm-draw-modal #cm-draw-confirm{
+  display:flex!important;
+  visibility:visible!important;
+  opacity:1;
+  max-width:290px;
+  margin:0 auto;
+}
+#cm-draw-modal #cm-draw-confirm:disabled{
+  opacity:.58;
+  filter:saturate(.4);
+  cursor:not-allowed;
+}
+#cm-draw-modal #cm-draw-confirm:not(:disabled){opacity:1;filter:none}
+#cm-draw-modal #cm-draw-right-img:not([src]),
+#cm-draw-modal #cm-draw-spin-img:not([src]){visibility:hidden}
