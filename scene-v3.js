@@ -14,12 +14,13 @@ const palettes = {
 const rgb = h => [1,3,5].map(i => parseInt(h.slice(i, i+2), 16) / 255);
 
 import {GEAR_BY_ID,modelSource} from './equipment-catalog.js?v=arsenal-5';
+import {mediumTwinTargets} from './arena-difficulty.js?v=medium-twin-20261112';
 export function initScene(canvas, getSettings) {
   const parent=canvas.parentElement;
   let pc=null, app=null, gl=null, camera=null, bowRoot=null, bowVisualPivot=null, bowFallbackRoot=null, bowHandle=null, bowString=null, sightAnchor=null,
       arrowLoaded=null, targetRoot=null, impactMarks=[], currentHouse='A', ready=false, destroyed=false,
       aimX=.5, aimY=.46, power=.3, projectile=null, pendingShot=null, animT=0,
-      equipment={bow:'classico',arrow:'rubi'},terrainElement=null,ambientProps=[],backdropMode=false,targetStand=null,movingRail=null,targetVisual=null,modelAssets={},modelLoads={},targetModelKey='';
+      equipment={bow:'classico',arrow:'rubi'},terrainElement=null,ambientProps=[],backdropMode=false,targetStand=null,movingRail=null,targetVisual=null,dualDiscs=[],dualProcedural=null,modelAssets={},modelLoads={},targetModelKey='';
   // O fallback 2D não pode aparecer antes do PlayCanvas: antes ele causava a
   // troca perceptível de arte após alguns segundos.
   const ctx=canvas.getContext('2d', {alpha:true});
@@ -284,6 +285,7 @@ export function initScene(canvas, getSettings) {
       targetRoot.setLocalPosition(x,moving?suspendedY:(-.28+2.02*scale),targetZ);
     else targetRoot.setPosition(grounded);
     if(targetStand)targetStand.enabled=!moving;
+    updateTwinDiscs();
     parent.dataset.targetStand=moving?'suspended':'standing';
     if(movingRail)movingRail.enabled=setting.level==='lendario';
   }
@@ -530,11 +532,59 @@ export function initScene(canvas, getSettings) {
     }
     parent.dataset.targetLighting=clones.size?'enhanced':'original';
   }
+  // Cada disco é uma entidade 3D independente, clonada da primeira malha.
+  // O movimento e as hitboxes usam a MESMA função mediumTwinTargets do motor de pontuação.
+  function updateTwinDiscs(){
+    if(!targetRoot||!targetVisual)return;
+    const setting=getSettings()||{},twins=!!setting.dualTargets;
+    const original=targetRoot.__model3d;
+    if(twins){
+      if(original&&dualDiscs.length!==2){
+        // O primeiro disco continua sendo a referência; o segundo é seu clone.
+        dualDiscs.forEach(d=>{if(d!==original)d.destroy();});
+        dualDiscs=[original,original.clone()];
+        targetRoot.addChild(dualDiscs[1]);
+      }
+      if(!original){
+        if(!dualProcedural){
+          dualProcedural=targetVisual.clone();
+          dualProcedural.name='Second procedural disk';
+          targetRoot.addChild(dualProcedural);
+          dualProcedural.findByName('Removable target ground stand')?.destroy();
+        }
+        const positions=mediumTwinTargets(setting.seconds);
+        [targetVisual,dualProcedural].forEach((disc,i)=>{
+          disc.enabled=true;disc.setLocalScale(.70,.70,.70);
+          disc.setLocalPosition(positions[i].x*1.34,0,0);
+        });
+      }else{
+        if(dualProcedural){dualProcedural.destroy();dualProcedural=null;}
+        targetVisual.enabled=false;
+        const positions=mediumTwinTargets(setting.seconds);
+        dualDiscs.forEach((disc,i)=>{
+          disc.enabled=true;disc.setLocalScale(.70,.70,.70);
+          disc.setLocalPosition(positions[i].x*1.34,0,0);
+        });
+      }
+      parent.dataset.targetCount='2';
+    }else{
+      if(dualProcedural){dualProcedural.destroy();dualProcedural=null;}
+      if(dualDiscs.length>1){dualDiscs[1].destroy();}
+      dualDiscs=[];
+      if(original){original.setLocalScale(1,1,1);original.setLocalPosition(0,0,0);}
+      targetVisual.setLocalScale(1,1,1);targetVisual.setLocalPosition(0,0,0);
+      targetVisual.enabled=!original;
+      parent.dataset.targetCount='1';
+    }
+  }
   function loadTargetModel(){
     if(!targetRoot||!targetVisual)return;
     const holder=targetRoot,file=activeTargetFile();
     if(targetModelKey===file)return;
     targetModelKey=file;
+    if(dualDiscs.length>1)dualDiscs[1].destroy();
+    dualDiscs=[];
+    if(dualProcedural){dualProcedural.destroy();dualProcedural=null;}
     holder.__model3d?.destroy();holder.__model3d=null;targetVisual.enabled=true;
     // Alvo de 10–65 m: disco 3D procedural com anéis voltados ao jogador.
     // O GLB anterior estava exibindo a borda do disco, como um prato de lado.
@@ -563,6 +613,7 @@ export function initScene(canvas, getSettings) {
       brightenMobileDisc(model);
       holder.__model3d=container;
       targetVisual.enabled=false;
+      updateTwinDiscs();
       parent.dataset.glbTarget='ready';parent.dataset.targetModel=file;
     });
   }
