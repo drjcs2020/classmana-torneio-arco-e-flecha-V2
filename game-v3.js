@@ -1,7 +1,7 @@
-import {initScene} from './scene-v3.js?v=20261112-wide-twins-v2';
+import {initScene} from './scene-v3.js?v=20261112-single-moving-v1';
 import {GEAR,GEAR_BY_ID,getGearLevel,isGearUnlocked} from './equipment-catalog.js?v=win-progress-linear-20261110';
 import {mountEquipmentInventory} from './equipment-inventory.js?v=arsenal-button-colors-20261111';
-import {CIRCUITS,LEVELS,targetMotion,mediumTwinTargets,obstacleBlocks,distanceDifficulty,flightSeconds} from './arena-difficulty.js?v=20261112-wide-twins-v2';
+import {CIRCUITS,LEVELS,targetMotion,mediumTwinTargets,obstacleBlocks,distanceDifficulty,flightSeconds} from './arena-difficulty.js?v=20261112-single-moving-v1';
 import {arenaAudio} from './arena-audio.js?v=20261112-arena-sfx-fixed-02';
 import {cinematics} from './classmana-cinematics.js?v=20261112-art-title-gender-v3';
 import {initAtmosphere} from './arena-atmosphere.js?v=no-crowd15';
@@ -391,7 +391,7 @@ function uiHud(){if(!match)return;
  const title=$('range-trail-title'),info=$('range-mode'),badge=$('arena-mode-badge');
  const levelInfo=LEVELS[match.level]||LEVELS.iniciante;
  if(title)title.textContent=levelInfo.icon+' '+levelInfo.title;
- if(info)info.textContent=match.level==='avancado'?'Dois discos menores alternando na horizontal':levelInfo.feature;
+ if(info)info.textContent=match.level==='avancado'?'Um disco móvel percorrendo a arena na horizontal':levelInfo.feature;
  if(badge){badge.textContent=match.level==='iniciante'?'🎯 ALVO FIXO':match.level==='avancado'?'↔ ALVOS EM MOVIMENTO':'🛡️ ALVO MÓVEL + ESCUDOS';badge.dataset.level=match.level;}
  $('stage').dataset.level=match.level;
  if(progress&&progress.dataset.current!==key){
