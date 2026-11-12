@@ -1,7 +1,7 @@
 import {initScene} from './scene-v3.js?v=20261112-target-materials-fixed-02';
 import {GEAR,GEAR_BY_ID,getGearLevel,isGearUnlocked} from './equipment-catalog.js?v=win-progress-linear-20261110';
 import {mountEquipmentInventory} from './equipment-inventory.js?v=arsenal-button-colors-20261111';
-import {CIRCUITS,LEVELS,targetMotion,obstacleBlocks,distanceDifficulty,flightSeconds} from './arena-difficulty.js?v=3';
+import {CIRCUITS,LEVELS,targetMotion,mediumTwinTargets,obstacleBlocks,distanceDifficulty,flightSeconds} from './arena-difficulty.js?v=medium-twin-20261112';
 import {arenaAudio} from './arena-audio.js?v=20261112-arena-sfx-fixed-02';
 import {cinematics} from './classmana-cinematics.js?v=20261112-art-title-gender-v3';
 import {initAtmosphere} from './arena-atmosphere.js?v=no-crowd15';
@@ -390,8 +390,8 @@ function uiHud(){if(!match)return;
  const title=$('range-trail-title'),info=$('range-mode'),badge=$('arena-mode-badge');
  const levelInfo=LEVELS[match.level]||LEVELS.iniciante;
  if(title)title.textContent=levelInfo.icon+' '+levelInfo.title;
- if(info)info.textContent=levelInfo.feature;
- if(badge){badge.textContent=match.level==='iniciante'?'🎯 ALVO FIXO':match.level==='avancado'?'↔ ALVO EM MOVIMENTO':'🛡️ ALVO MÓVEL + ESCUDOS';badge.dataset.level=match.level;}
+ if(info)info.textContent=match.level==='avancado'&&match.mode==='bot'&&!match.online?'Dois discos menores em movimento horizontal alternado':levelInfo.feature;
+ if(badge){badge.textContent=match.level==='iniciante'?'🎯 ALVO FIXO':match.level==='avancado'?'↔ ALVOS EM MOVIMENTO':'🛡️ ALVO MÓVEL + ESCUDOS';badge.dataset.level=match.level;}
  $('stage').dataset.level=match.level;
  if(progress&&progress.dataset.current!==key){
    const distances=CIRCUITS[match.level]||CIRCUITS.iniciante;
@@ -417,13 +417,14 @@ function stageSeconds(){
 }
 function worldSettings(){
  const level=match?.level||'iniciante',index=match?.scores?.length||0,seconds=stageSeconds();
- const motion=targetMotion(level,index,seconds);
+ const dualTargets=level==='avancado'&&match?.mode==='bot'&&!match?.online;
+ const motion=dualTargets?{x:0,y:0}:targetMotion(level,index,seconds);
  const stage=$('stage'),w=stage?.clientWidth||1050,h=stage?.clientHeight||540;
  const distance=match?.distance||10,scale=clamp(Math.pow(30/Math.max(10,distance),.65),.31,1.75);
  const radius=Math.min(h*.105,w*.082)*scale,rules=match?.online?.rules??6;
  return {distance,shift:(match?.shift||0)+(rules>=5?motion.x*radius/w:0),
   verticalShift:rules>=5?motion.y*radius/h:0,
-  level,shotIndex:index,seconds,house:match?.house||house};
+  level,shotIndex:index,seconds,dualTargets,house:match?.house||house};
 }
 function ensureScene(){
  if(!scene)scene=initScene($('world'),worldSettings);
@@ -624,13 +625,21 @@ async function fire(power){
  const iy=sight.y*h+fall+rand(-.06,.06)*jitter;
  const impactDx=(ix-t.x)/t.r,impactDy=(iy-t.y)/t.r;
  const flight=flightSeconds(match.distance,power);
+ const dualTargets=match.level==='avancado'&&match.mode==='bot'&&!match.online;
  const before=targetMotion(match.level,shotIndex,match.freezeTime);
  const after=targetMotion(match.level,shotIndex,match.freezeTime+flight);
  const rules=match.online?.rules??6;
- const landingX=impactDx-(rules>=5?after.x-before.x:0);
- const landingY=impactDy-(rules>=5?after.y-before.y:0);
+ const landingX=impactDx-(dualTargets?0:rules>=5?after.x-before.x:0);
+ const landingY=impactDy-(dualTargets?0:rules>=5?after.y-before.y:0);
  const blocked=obstacleBlocks(match.level,shotIndex,match.freezeTime+flight,landingX,landingY);
- const norm=Math.hypot(landingX,landingY)*tuning.ring;
+ // Cada disco clonado possui um círculo de colisão próprio (70% do raio).
+ // A posição é avaliada quando a flecha chega, não quando foi disparada.
+ const twins=dualTargets?mediumTwinTargets(match.freezeTime+flight):null;
+ const candidate=twins?.map((disc,i)=>({
+  index:i,norm:Math.hypot((landingX-disc.x)/disc.r,(landingY-disc.y)/disc.r)*tuning.ring
+ })).sort((a,b)=>a.norm-b.norm)[0];
+ const norm=candidate?candidate.norm:Math.hypot(landingX,landingY)*tuning.ring;
+ const targetIndex=candidate&&norm<=1?candidate.index:null;
  const base=blocked||norm>1?0:Math.max(1,10-Math.floor(norm*10));
  const score=base>0?Math.min(10,base+tuning.bonus):0;
  if(currentMatch.online)currentMatch.onlineShots.push({dx:landingX,dy:landingY,impactDx:landingX,impactDy:landingY,blocked,power,time:match.freezeTime,bow:activeBow});
@@ -640,7 +649,7 @@ async function fire(power){
  catch(e){console.warn('Animação da flecha:',e)}
  $('stage').classList.remove('firing');
  if(match!==currentMatch||!currentMatch.running)return;
- scene?.impact?.({x:ix/w,y:iy/h,score,blocked});
+ scene?.impact?.({x:ix/w,y:iy/h,score,blocked,targetIndex});
  // Som fisico do contato da flecha, independente dos aplausos.
  if(score>0&&!blocked)arenaAudio.play('impact');
  match.scores.push(score);$('hud-score').textContent=match.scores.reduce((a,b)=>a+b,0);
