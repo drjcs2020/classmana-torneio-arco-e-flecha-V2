@@ -17,7 +17,7 @@ const cap=(x,a,b)=>Math.max(a,Math.min(b,x));
 /** Deslocamento medido EM RAIOS DO ALVO, independente do tamanho da tela. */
 export function targetMotion(level,index,seconds){
  const t=cap(Number(seconds)||0,0,120);
- if(level==='avancado')return {x:2.05*Math.sin(t*1.35+index*1.11),y:0};
+ if(level==='avancado')return {x:2.05*Math.sin(t*.65+index*1.11),y:0};
  if(level==='lendario')return {x:2.60*Math.sin(t*1.61+index*1.11),y:.36*Math.sin(t*.83+index*1.14)};
  return {x:0,y:0};
 }
@@ -26,7 +26,7 @@ export function targetMotion(level,index,seconds){
  */
 export function mediumTwinTargets(seconds){
  const t=cap(Number(seconds)||0,0,120);
- return [{id:0,x:2.05*Math.sin(t*1.75),y:0,r:.70}];
+ return [{id:0,x:2.05*Math.sin(t*.65),y:0,r:.70}];
 }
 /** Mesmo tempo aproximado de voo adotado no servidor e na cena PlayCanvas. */
 export function flightSeconds(distance,power){
