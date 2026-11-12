@@ -1,0 +1,52 @@
+/* ClassMana — duelo entre casas: tela principal do sorteio. Ativa quando assets/ui/duel-draw/moldura-seletor.png existir. */
+#cm-draw-modal{position:fixed;inset:0;z-index:100500;overflow:auto;background:#03152be8 url("assets/v2/backgrounds/duel.webp") center/cover fixed no-repeat;color:#fff0c8;font-family:Georgia,serif}
+#cm-draw-modal *{box-sizing:border-box}
+#cm-draw-modal .cm-draw-shell{min-height:100vh;width:min(1540px,100%);margin:auto;padding:10px 24px 28px;display:flex;flex-direction:column;align-items:center;gap:6px}
+#cm-draw-modal button{cursor:pointer;font:inherit}
+#cm-draw-modal button:disabled{cursor:not-allowed;opacity:.48}
+#cm-draw-modal .cm-draw-top{display:flex;align-items:center;justify-content:space-between;width:100%;gap:8px}
+#cm-draw-modal .cm-draw-back,#cm-draw-modal .cm-draw-inbox{border:3px ridge #ffdb75;background:linear-gradient(#9e260c,#5d0b0c);border-radius:12px;padding:10px 20px;color:#ffedb9;font-weight:900;box-shadow:0 4px 12px #0009}
+#cm-draw-modal .cm-draw-inbox{background:linear-gradient(#6d4524,#24140b)}
+#cm-draw-modal .cm-draw-logo{height:clamp(68px,12vh,115px);max-width:32vw;object-fit:contain;filter:drop-shadow(0 4px 3px #000)}
+#cm-draw-modal .cm-draw-heading{font-size:clamp(21px,3.2vw,44px);font-weight:900;text-shadow:0 3px 2px #4b0b08,0 0 8px #ecab4a;text-align:center;padding:5px 26px;border:4px ridge #ffbd56;border-radius:12px;background:linear-gradient(#0c3979,#021839)}
+#cm-draw-modal .cm-draw-caption{font-size:clamp(14px,1.5vw,20px);font-weight:700;text-align:center;background:linear-gradient(#092b5b,#06172c);padding:6px 25px;border:2px ridge #ffcd6a;margin-top:-5px}
+#cm-draw-modal .cm-draw-panel{width:100%;background:linear-gradient(180deg,#061938ef,#112849f2);border:4px ridge #e9c067;border-radius:22px;box-shadow:0 8px 25px #0009;padding:12px;display:grid;gap:12px}
+#cm-draw-modal .cm-draw-house-title{margin:0;text-align:center;font-size:clamp(18px,2vw,30px);color:#ffe7a3}
+#cm-draw-modal .cm-draw-houses{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}
+#cm-draw-modal .cm-draw-house{border:3px ridge #f9c756;border-radius:14px;background:linear-gradient(105deg,#0a2b58,#124e8d);display:flex;align-items:center;justify-content:center;gap:9px;padding:6px 10px;min-height:77px;color:#fff1cd;font-weight:900;font-size:clamp(12px,1.4vw,24px);text-shadow:1px 2px #000}
+#cm-draw-modal .cm-draw-house[data-h="B"]{background:linear-gradient(105deg,#6c1215,#af2421)}#cm-draw-modal .cm-draw-house[data-h="C"]{background:linear-gradient(105deg,#053a23,#057944)}
+#cm-draw-modal .cm-draw-house img{height:69px;width:69px;object-fit:contain}
+#cm-draw-modal .cm-draw-house[disabled]{filter:grayscale(.7)}#cm-draw-modal .cm-draw-house.chosen{outline:3px solid #fff5b8;box-shadow:0 0 22px #ffd56b}
+#cm-draw-modal .cm-draw-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1.65fr) minmax(0,1.1fr);gap:13px;align-items:stretch;min-height:clamp(320px,42vh,450px)}
+#cm-draw-modal .cm-draw-portrait{border:4px ridge #eeca6e;border-radius:15px;position:relative;overflow:hidden;background:radial-gradient(circle at center,#257acc,#091735);min-height:310px}
+#cm-draw-modal .cm-draw-portrait[data-h="B"]{background:radial-gradient(circle at center,#b64222,#310d1b)}#cm-draw-modal .cm-draw-portrait[data-h="C"]{background:radial-gradient(circle at center,#19885a,#04251b)}
+#cm-draw-modal .cm-draw-portrait>img{display:block;position:absolute;inset:0 0 64px;width:100%;height:calc(100% - 64px);object-fit:contain;object-position:center bottom;filter:drop-shadow(0 4px 6px #0008)}
+#cm-draw-modal .cm-draw-portrait .cm-draw-label{position:absolute;bottom:0;left:0;right:0;min-height:64px;text-align:center;padding:6px;background:linear-gradient(#16519d,#061c40);border-top:3px solid #f3bc52}
+#cm-draw-modal .cm-draw-portrait[data-h="B"] .cm-draw-label{background:linear-gradient(#a72d24,#450b14)}#cm-draw-modal .cm-draw-portrait[data-h="C"] .cm-draw-label{background:linear-gradient(#147c49,#053522)}
+#cm-draw-modal .cm-draw-label strong{display:block;font-size:clamp(15px,2vw,25px)}#cm-draw-modal .cm-draw-label small{display:block;font-size:clamp(11px,1vw,15px)}
+#cm-draw-modal .cm-draw-center{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;min-width:0}
+#cm-draw-modal .cm-draw-center img.cm-draw-vs{max-height:95px;max-width:52%;object-fit:contain}
+#cm-draw-modal .cm-draw-tube{width:100%;position:relative;max-width:580px;aspect-ratio:3.1;display:grid;place-items:center}
+#cm-draw-modal .cm-draw-tube>img{position:absolute;inset:0;width:100%;height:100%;object-fit:fill}
+#cm-draw-modal .cm-draw-tube .cm-draw-spin-face{width:35%;height:77%;object-fit:contain;z-index:1;filter:drop-shadow(0 1px 7px #000);transition:filter .1s}
+#cm-draw-modal .cm-draw-tube .cm-draw-select-frame{z-index:2;position:absolute;width:39%;height:110%;left:30.5%;top:-5%;object-fit:fill;pointer-events:none}
+#cm-draw-modal .cm-draw-tube.spinning .cm-draw-spin-face{filter:blur(2px) brightness(1.2)}
+#cm-draw-modal .cm-draw-spin-banner{width:92%;max-height:58px;object-fit:contain}
+#cm-draw-modal .cm-draw-action{border:4px ridge #ffd56f;border-radius:13px;padding:12px 20px;font-weight:900;font-size:clamp(15px,2vw,27px);color:#fff0bb;text-shadow:1px 3px #00401d;background:linear-gradient(#17bb44,#087b2d,#07441c);box-shadow:0 3px 8px #0008}
+#cm-draw-modal .cm-draw-list{border:3px ridge #f4c96e;border-radius:13px;background:linear-gradient(#10335d,#04152b);padding:7px;display:flex;flex-direction:column;gap:5px;max-height:450px;overflow:auto;min-width:0}
+#cm-draw-modal .cm-draw-list h3{margin:0;padding:10px 7px;background:linear-gradient(#9f2620,#4f0e14);text-align:center;font-size:clamp(12px,1.2vw,18px)}
+#cm-draw-modal .cm-draw-list-items{display:grid;gap:5px;overflow:auto;max-height:310px;padding:2px}
+#cm-draw-modal .cm-draw-list-item{font-size:clamp(12px,1.25vw,17px);padding:6px 8px;border:2px ridge #dba847;border-radius:8px;background:#08274c;display:flex;align-items:center;gap:6px;min-height:36px}
+#cm-draw-modal .cm-draw-list-item img{width:23px;height:24px;object-fit:contain}
+#cm-draw-modal .cm-draw-list-item.active{box-shadow:0 0 14px #ffcd42;background:linear-gradient(110deg,#784209,#bf8312);color:#fff8cf;font-weight:900}
+#cm-draw-modal .cm-draw-result{min-height:84px;display:none;border:4px ridge #f7cb74;border-radius:15px;background:linear-gradient(90deg,#570a18ee,#102c5fee);padding:10px;text-align:center}
+#cm-draw-modal .cm-draw-result.visible{display:grid;grid-template-columns:1fr auto;gap:6px;align-items:center}
+#cm-draw-modal .cm-draw-result h3{grid-column:1/-1;margin:0;font-size:clamp(18px,2.5vw,32px)}
+#cm-draw-modal .cm-draw-result-name{font-size:clamp(15px,2vw,25px);font-weight:900}
+#cm-draw-modal .cm-draw-muted{font:12px/1.4 system-ui,sans-serif;color:#ffe6a4;text-align:center;margin:0}
+#cm-draw-modal .cm-draw-transition{display:none;position:fixed;inset:0;z-index:5;background:#08152f url('assets/ui/duel-draw/tela-transicao-duelo.png') center/cover no-repeat;align-items:flex-end;justify-content:center;padding:50px}
+#cm-draw-modal .cm-draw-transition.active{display:flex;animation:cm-draw-zoom 5s ease-in-out infinite alternate}
+#cm-draw-modal .cm-draw-transition p{padding:15px 28px;background:#03152ddf;border:3px solid #f6cd70;border-radius:15px;font-size:clamp(15px,3vw,28px);font-weight:900;text-shadow:0 3px 4px #000}
+@keyframes cm-draw-zoom{from{background-size:100% auto}to{background-size:105% auto}}
+@media(max-width:950px){#cm-draw-modal .cm-draw-shell{padding:7px 8px 15px}#cm-draw-modal .cm-draw-grid{grid-template-columns:1fr 1.4fr 1fr;gap:4px;min-height:245px}#cm-draw-modal .cm-draw-portrait{min-height:230px}#cm-draw-modal .cm-draw-list{grid-column:1/-1;max-height:125px}#cm-draw-modal .cm-draw-list-items{grid-template-columns:repeat(3,1fr);max-height:75px}#cm-draw-modal .cm-draw-house img{height:43px;width:43px}#cm-draw-modal .cm-draw-house{min-height:53px}#cm-draw-modal .cm-draw-logo{height:64px}#cm-draw-modal .cm-draw-label strong{font-size:14px}#cm-draw-modal .cm-draw-center img.cm-draw-vs{max-height:60px}}
+@media(max-width:540px){#cm-draw-modal .cm-draw-grid{grid-template-columns:1fr 1fr}#cm-draw-modal .cm-draw-center{grid-column:1/-1;grid-row:2}#cm-draw-modal .cm-draw-list{grid-column:1/-1}#cm-draw-modal .cm-draw-portrait{min-height:210px}#cm-draw-modal .cm-draw-result.visible{grid-template-columns:1fr}#cm-draw-modal .cm-draw-house{flex-direction:column;font-size:11px}#cm-draw-modal .cm-draw-top button{font-size:12px;padding:5px}#cm-draw-modal .cm-draw-logo{height:55px}}
