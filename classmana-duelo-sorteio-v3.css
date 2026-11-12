@@ -1,4 +1,4 @@
-/* ClassMana — duelo entre casas: tela principal do sorteio. Ativa quando assets/ui/duel-draw/moldura-seletor.png existir. */
+/* ClassMana — duelo entre casas: tela principal do sorteio. Ativa quando assets/ui/moldura-seletor.png existir. */
 #cm-draw-modal{position:fixed;inset:0;z-index:100500;overflow:auto;background:#03152be8 url("assets/v2/backgrounds/duel.webp") center/cover fixed no-repeat;color:#fff0c8;font-family:Georgia,serif}
 #cm-draw-modal *{box-sizing:border-box}
 #cm-draw-modal .cm-draw-shell{min-height:100vh;width:min(1540px,100%);margin:auto;padding:10px 24px 28px;display:flex;flex-direction:column;align-items:center;gap:6px}
@@ -44,7 +44,7 @@
 #cm-draw-modal .cm-draw-result h3{grid-column:1/-1;margin:0;font-size:clamp(18px,2.5vw,32px)}
 #cm-draw-modal .cm-draw-result-name{font-size:clamp(15px,2vw,25px);font-weight:900}
 #cm-draw-modal .cm-draw-muted{font:12px/1.4 system-ui,sans-serif;color:#ffe6a4;text-align:center;margin:0}
-#cm-draw-modal .cm-draw-transition{display:none;position:fixed;inset:0;z-index:5;background:#08152f url('assets/ui/duel-draw/tela-transicao-duelo.png') center/cover no-repeat;align-items:flex-end;justify-content:center;padding:50px}
+#cm-draw-modal .cm-draw-transition{display:none;position:fixed;inset:0;z-index:5;background:#08152f url('assets/ui/tela-transicao-duelo.png') center/cover no-repeat;align-items:flex-end;justify-content:center;padding:50px}
 #cm-draw-modal .cm-draw-transition.active{display:flex;animation:cm-draw-zoom 5s ease-in-out infinite alternate}
 #cm-draw-modal .cm-draw-transition p{padding:15px 28px;background:#03152ddf;border:3px solid #f6cd70;border-radius:15px;font-size:clamp(15px,3vw,28px);font-weight:900;text-shadow:0 3px 4px #000}
 @keyframes cm-draw-zoom{from{background-size:100% auto}to{background-size:105% auto}}
@@ -52,5 +52,5 @@
 @media(max-width:540px){#cm-draw-modal .cm-draw-grid{grid-template-columns:1fr 1fr}#cm-draw-modal .cm-draw-center{grid-column:1/-1;grid-row:2}#cm-draw-modal .cm-draw-list{grid-column:1/-1}#cm-draw-modal .cm-draw-portrait{min-height:210px}#cm-draw-modal .cm-draw-result.visible{grid-template-columns:1fr}#cm-draw-modal .cm-draw-house{flex-direction:column;font-size:11px}#cm-draw-modal .cm-draw-top button{font-size:12px;padding:5px}#cm-draw-modal .cm-draw-logo{height:55px}}
 
 /* Botão de sorteio: imagem PNG independente do ZIP, sem roleta desenhada. */
-#cm-draw-modal #cm-draw-roll:not(.reroll){width:min(100%,440px);aspect-ratio:1240/236;padding:0;border:0;background:transparent url("assets/ui/duel-draw/botao-sortear-adversario.png") center/100% 100% no-repeat;box-shadow:none;color:transparent;text-shadow:none;font-size:0}
+#cm-draw-modal #cm-draw-roll:not(.reroll){width:min(100%,440px);aspect-ratio:1240/236;padding:0;border:0;background:transparent url("assets/ui/botao-sortear-adversario.png") center/100% 100% no-repeat;box-shadow:none;color:transparent;text-shadow:none;font-size:0}
 #cm-draw-modal #cm-draw-roll.reroll{width:min(100%,440px);font-size:clamp(14px,1.4vw,20px)}
