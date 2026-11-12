@@ -279,12 +279,12 @@ function fillRivals(){
  opposingTeamField.innerHTML=availableTeams.map(t=>`<option value="${t}">${t}</option>`).join('');
  if(availableTeams.includes(priorTeam))opposingTeamField.value=priorTeam;
  const old=$('rival').value;
- let pool=same?choices(house):teams?choices(enemyHouse).filter(p=>TEAMS[p.id]===opposingTeamField.value):choices(enemyHouse);
+ let pool=same?choices(house):teams&&scope!=='other'?choices(enemyHouse).filter(p=>TEAMS[p.id]===opposingTeamField.value):choices(enemyHouse);
  pool=pool.filter(p=>p.id!==myId);
  $('rival').innerHTML=pool.map(p=>`<option value="${p.id}">${p.name} · ${H[p.id[0]].grade}</option>`).join('');
  if(pool.some(p=>p.id===old))$('rival').value=old;
  const lbl=$('rival-label');
- lbl.firstChild.textContent=teams?'4 · Representante da equipe adversária':same?'4 · Colega da mesma turma':'4 · Adversário de outra turma';
+ lbl.firstChild.textContent=teams&&scope==='other'?'4 · Aluno sorteado da casa rival':teams?'4 · Representante da equipe adversária':same?'4 · Colega da mesma turma':'4 · Adversário de outra turma';
  lbl.querySelector('small').textContent='Selecione o nome do colega; não há senha de desafio.';
 }
 
@@ -449,6 +449,9 @@ function changeTarget(){
  match.stageStartedAt=performance.now();match.freezeTime=null;
  scene?.setTargetShift(match.shift);uiHud();
 }
+function levelForMatch(mode,drawHandoff){
+ return drawHandoff||mode==='challenge_team'&&$('team-scope').value==='other'?'iniciante':$('challenge-level').value;
+}
 async function startMatch(accepted=null){
  if(onlineLoading||startMatchPending)return;
  startMatchPending=true;
@@ -499,7 +502,7 @@ async function startMatch(accepted=null){
    });
    if(!versusAccepted)return;
   }
-  const requestedAt=Date.now(),kind=duelKind(mode),level=drawHandoff?'iniciante':$('challenge-level').value;
+  const requestedAt=Date.now(),kind=duelKind(mode),level=mode==='challenge_team'&&$('team-scope').value==='other'?'iniciante':$('challenge-level').value;
   try{
    onlineLoading=true;
    $('start-game').disabled=true;
@@ -537,7 +540,7 @@ async function startMatch(accepted=null){
  if(online.user&&isDuel(mode)){userId=online.user.id;selectHouse(userId[0]);$('player').value=userId;}
  match={house:userId==='guest'?house:userId[0],playerId:userId,player:nameOf(userId),mode,difficulty:$('difficulty').value,
   rivalId,gender:drawHandoff?.gender||archerGender(),rivalGender:drawHandoff?.rivalGender||'m',
-  scores:[],running:true,locked:false,bow:equipment.bow,wind:0,distance:10,level:challenge?.level||(drawHandoff?'iniciante':$('challenge-level').value),shift:0,freezeTime:null,stageStartedAt:performance.now(),incoming:null,
+  scores:[],running:true,locked:false,bow:equipment.bow,wind:0,distance:10,level:challenge?.level||levelForMatch(mode,drawHandoff),shift:0,freezeTime:null,stageStartedAt:performance.now(),incoming:null,
   online:challenge,onlineShots:[],onlineReplay:challenge?.recipient.id===userId?challenge.creatorShots:[],
   onlineReplayPoints:0,seed:Math.floor(rand(100000,999999))};
  if(mode==='bot'){
