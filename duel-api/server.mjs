@@ -34,7 +34,7 @@ function fail(message,status=400){const error=Error(message);error.status=status
 function auth(request){const token=(request.headers.authorization||'').replace(/^Bearer\s+/i,'');const row=token&&sql.session.get(sha(token));return row&&row.expires>Date.now()?known.get(row.player):null}
 function requirePlayer(request){return auth(request)||fail('Selecione um perfil antes de entrar no duelo.',401)}
 const teacher = createTeacherAdmin({db,players,known,teamMembership,fail});
-function publicDuel(d){return {id:d.id,creator:known.get(d.creator),recipient:known.get(d.recipient),kind:d.kind,level:d.level,created:d.created,status:d.status,creatorShots:d.creator_shots?JSON.parse(d.creator_shots):[],recipientShots:d.recipient_shots?JSON.parse(d.recipient_shots):[],creatorScore:d.creator_score,recipientScore:d.recipient_score,rules:11}}
+function publicDuel(d){return {id:d.id,creator:known.get(d.creator),recipient:known.get(d.recipient),kind:d.kind,level:d.level,created:d.created,status:d.status,creatorShots:d.creator_shots?JSON.parse(d.creator_shots):[],recipientShots:d.recipient_shots?JSON.parse(d.recipient_shots):[],creatorScore:d.creator_score,recipientScore:d.recipient_score,rules:12}}
 // Mesmas regras do catálogo do jogo; o servidor valida cada disparo.
 const serverBows=Object.freeze({
  classico:{ring:1,bonus:0,requiredWins:0},real:{ring:1.12,bonus:1,requiredWins:1},
@@ -58,10 +58,13 @@ function shotsOf(shots,officialWins=0){
   if(![dx,dy,power,time].every(Number.isFinite)||Math.abs(dx)>100||Math.abs(dy)>100||
      power<0||power>1||time<0||time>7200||!rules)fail('Flecha inválida');
   if(officialWins<rules.requiredWins)fail('Equipamento bloqueado: vitórias oficiais insuficientes',403);
-  const blocked=s.blocked===true,n=Math.hypot(dx,dy)*rules.ring;
-  const points=blocked||n>1?0:Math.max(1,10-Math.floor(n*10));
+  // No duelo, a arena usa exatamente a mesma pontuação já apurada no modo robô.
+  // Não refazer o cálculo geométrico aqui: isso substituía acertos válidos por valores diferentes.
+  const blocked=s.blocked===true,score=s.score;
+  if(!Number.isInteger(score)||score<0||score>10||blocked&&score!==0)
+    fail('Pontuação de flecha inválida. Atualize a arena antes de jogar.',409);
   return {dx,dy,impactDx:dx,impactDy:dy,blocked,power,time,bow,
-    score:points>0?Math.min(10,points+rules.bonus):0,number:i+1};
+    score,number:i+1};
  });
 }
 function leaderboard(){
@@ -90,7 +93,7 @@ function leaderboard(){
  return {games:data.length,classes,teams,players:all.filter(p=>p.plays>0).sort(rank)};
 }
 function route(request,action,data,query){
- if(action==='ping')return {api:10,persistent:true};
+ if(action==='ping')return {api:12,persistent:true};
  if(action==='roster')return {players};
  if(action==='login'){const id=String(data.id||'');if(!known.has(id))fail('Perfil desconhecido');const token=randomBytes(32).toString('hex');sql.putSession.run(sha(token),id,Date.now()+30*86400000);return {user:known.get(id),token}}
  if(action==='ranking')return leaderboard();
