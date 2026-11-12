@@ -6,6 +6,18 @@ const houses={
  C:{name:'DRAGÃO DE ESMERALDA',short:'4º C',color:'#80e9aa'}
 };
 const getHouse=id=>houses[id]?id:'A';
+// Sexo dos avatares conforme elenco cadastrado; o que o aluno escolheu tem prioridade.
+const femaleRoster={
+ A:['Alice S.','Aline F.','Ana G.','Debora L.','Eloa B.','Isabela P.','Mayara M.','Sophia L.','Valentine T.'],
+ B:['Agatha S.','Ana S.','Ana C.','Dafini C.','Heloisa S.','Isabelly M.','Lais L.','Livia S.','Manuele C.','Maria V.','Maysa A.','Nathalia L.','Sofia G.'],
+ C:['Agatha C.','Alice O.','Ana M.','Angela C.','Emily B.','Ester A.','Isabella S.','Lavinia R.','Lavinia S.','Maria S.','Maria C.','Ralinne E.','Samantha S.','Sophia R.']
+};
+function genderFromRoster(id){
+ if(!/^[ABC][0-9]{2}$/.test(id||''))return 'm';
+ try{const stored=JSON.parse(localStorage.getItem('classmana-student-archer-genders-v2')||'{}');if(['m','f'].includes(stored?.[id]))return stored[id]}catch{}
+ const name=window.CLASSMANA_ROSTER?.[id[0]]?.[Number(id.slice(1))-1];
+ return femaleRoster[id[0]].includes(name)?'f':'m';
+}
 // Artes oficiais fornecidas para a V2: escudo e moldura de cada Casa.
 const crest=house=>'assets/v2/crests/'+({A:'aguia',B:'leao',C:'dragao'}[getHouse(house)])+'.webp';
 const portrait=(house,gender='m')=>{
@@ -104,7 +116,7 @@ function versus(config){
  // The actual challenge must already be validated/created by the existing API.
  if(activeDialog)return Promise.resolve(false);
  const own={name:config.player,house:config.house,gender:config.gender};
- const rival={name:config.rival,house:config.rivalHouse,gender:config.rivalGender};
+ const rival={name:config.rival,house:config.rivalHouse,gender:config.rivalGender||genderFromRoster(config.rivalId)};
  const outer=node('div','cm-vs-overlay');
  outer.id='cm-vs-overlay';
  outer.setAttribute('role','dialog');
@@ -119,8 +131,22 @@ function versus(config){
  leftCrest.src=crest(own.house);rightCrest.src=crest(rival.house);
  leftCrest.alt='Escudo '+houses[getHouse(own.house)].name;
  rightCrest.alt='Escudo '+houses[getHouse(rival.house)].name;
- const title=node('h2','cm-vs-title',config.mode==='bot'?'DESAFIO DE TREINO':'DUELO ENTRE ARQUEIROS');
+ const title=node('h2','cm-vs-title',config.mode==='bot'?'DESAFIO DE TREINO':'DUELO ENTRE CASAS');
  title.id='cm-vs-title';
+ if(config.mode!=='bot'){
+   // Arte oficial já usada no seletor; não desenhar outro título via CSS.
+   const art=node('img','cm-vs-title-art');
+   art.src='assets/ui/challenge/banner-duelo-entre-casas.png';
+   art.alt='DUELO ENTRE CASAS';
+   title.textContent='';
+   title.append(art);
+   title.style.setProperty('background','none','important');
+   title.style.setProperty('border','0','important');
+   title.style.setProperty('box-shadow','none','important');
+   title.style.setProperty('padding','0','important');
+   title.style.setProperty('font-size','0','important');
+   art.style.cssText='display:block;width:100%;height:auto;max-height:clamp(74px,15vh,143px);object-fit:contain;margin:auto';
+ }
  const sub=node('p','cm-vs-sub','🏹 CINCO FLECHAS • MAIOR PONTUAÇÃO VENCE');
  const fighters=node('div','cm-vs-fighters');
  const versusSign=node('div','cm-vs-mark','VS');
