@@ -160,18 +160,16 @@ async function draw(){
 }
 
 function configure(){
- var mode=el('mode'),scope=el('team-scope'),house=el('opponent-house'),team=el('opponent-team'),field=el('rival'),level=el('challenge-level');
- if(!mode||!scope||!house||!team||!field||!level||!picked)return false;
- mode.value='challenge_team';scope.value='other';mode.dispatchEvent(new Event('change',{bubbles:true}));
+ var mode=el('mode'),scope=el('team-scope'),house=el('opponent-house'),field=el('rival'),level=el('challenge-level');
+ if(!mode||!scope||!house||!field||!level||!picked)return false;
+ // Neste modo, a escolha é por CASA: não filtrar por equipes internas.
+ mode.value='challenge_team';scope.value='other';
+ mode.dispatchEvent(new Event('change',{bubbles:true}));
  house.value=enemy;house.dispatchEvent(new Event('change',{bubbles:true}));
- var found=[...field.options].some(function(o){return o.value===picked.id});
- if(!found)for(var option of [...team.options]){
-  team.value=option.value;team.dispatchEvent(new Event('change',{bubbles:true}));
-  if([...field.options].some(function(o){return o.value===picked.id})){found=true;break}
- }
- if(!found)return false;
- field.value=picked.id;level.value='iniciante';level.dispatchEvent(new Event('change',{bubbles:true}));
- return true;
+ if(!Array.from(field.options).some(function(option){return option.value===picked.id}))return false;
+ field.value=picked.id;
+ level.value='iniciante';level.dispatchEvent(new Event('change',{bubbles:true}));
+ return field.value===picked.id;
 }
 function confirmMatch(){
  if(!picked||busy||!drawLocked)return;
