@@ -912,11 +912,19 @@ export function initScene(canvas, getSettings) {
       }
     }
   }
-  function impact({x=.5,y=.45,score=0}={}){
+  function impact({x=.5,y=.45,score=0,targetIndex=null}={}){
     if(!ready||!targetRoot||score<=0)return;
     const {w,h}=canvasSize(),m=getTargetMetrics(),ppu=m.r/1.34;
-    const lx=((x*w-m.x)/ppu),ly=-((y*h-m.y)/ppu);
-    const e=new pc.Entity('Embedded arrow at impact');targetRoot.addChild(e);e.setLocalPosition(lx,ly,.15);
+    const setting=getSettings()||{};
+    const clone=setting.dualTargets&&targetIndex!==null?
+      (dualDiscs[targetIndex]||(!targetRoot.__model3d?[targetVisual,dualProcedural][targetIndex]:null)):null;
+    // Fixar no próprio disco (eixo local) para que a flecha o acompanhe.
+    const discScale=clone?.getLocalScale().x||1;
+    const offsetX=clone?.getLocalPosition().x||0;
+    const lx=(((x*w-m.x)/ppu)-offsetX)/discScale;
+    const ly=(-((y*h-m.y)/ppu))/discScale;
+    const e=new pc.Entity('Embedded arrow at impact');
+    (clone||targetRoot).addChild(e);e.setLocalPosition(lx,ly,.15/discScale);
     const file=selectedArrow(),approved=modelAssets['models3d/equipment/'+file];
     if(approved){
       const mesh=approved.instantiateRenderEntity();mesh.name='Flecha GLB cravada';
@@ -924,10 +932,10 @@ export function initScene(canvas, getSettings) {
       // A flecha cravada mantém o MESMO comprimento e espessura em
       // unidades do mundo que a flecha disparada, em qualquer distância.
       const targetScale=Math.max(.001,targetRoot.getLocalScale().x);
-      calibrated.setLocalScale(calibrated.getLocalScale().clone().mulScalar(.60/targetScale));
+      calibrated.setLocalScale(calibrated.getLocalScale().clone().mulScalar(.60/(targetScale*discScale)));
       // Ponta 5 cm dentro da superfície frontal do disco.
       const worldArrowLength=1.40*1.02*.60;
-      calibrated.setLocalPosition(.08,-.05,(worldArrowLength-.05)/targetScale+.052-.15);
+      calibrated.setLocalPosition(.08,-.05,(worldArrowLength-.05)/(targetScale*discScale)+.052-.15/discScale);
       impactMarks.push(e);return;
     }
     const dark=material('#1b2228',{metal:.45,rough:.35}),red=material('#e33d31'),white=material('#eee7cf');
