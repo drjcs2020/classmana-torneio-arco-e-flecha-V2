@@ -1,7 +1,7 @@
-import {initScene} from './scene-v3.js?v=20261112-target-materials-fixed-02';
+import {initScene} from './scene-v3.js?v=20261112-twin-disc-global-v3';
 import {GEAR,GEAR_BY_ID,getGearLevel,isGearUnlocked} from './equipment-catalog.js?v=win-progress-linear-20261110';
 import {mountEquipmentInventory} from './equipment-inventory.js?v=arsenal-button-colors-20261111';
-import {CIRCUITS,LEVELS,targetMotion,mediumTwinTargets,obstacleBlocks,distanceDifficulty,flightSeconds} from './arena-difficulty.js?v=medium-twin-20261112';
+import {CIRCUITS,LEVELS,targetMotion,mediumTwinTargets,obstacleBlocks,distanceDifficulty,flightSeconds} from './arena-difficulty.js?v=medium-twin-global-20261112';
 import {arenaAudio} from './arena-audio.js?v=20261112-arena-sfx-fixed-02';
 import {cinematics} from './classmana-cinematics.js?v=20261112-art-title-gender-v3';
 import {initAtmosphere} from './arena-atmosphere.js?v=no-crowd15';
@@ -679,7 +679,13 @@ async function fire(power){
   try{await Promise.race([scene?.fire?.({x:px,y:py,power:ghost.power||1}),new Promise(resolve=>setTimeout(resolve,1700))]);}
   catch(e){console.warn('Replay:',e)}
   if(match!==currentMatch||!currentMatch.running)return;
-  scene?.impact?.({x:px,y:py,score:ghost.score});
+  const replayTwins=match.level==='avancado'?mediumTwinTargets(
+  (Number(ghost.time)||0)+flightSeconds((CIRCUITS.avancado||[])[shotIndex]||match.distance,ghost.power||1)
+ ):null;
+ const replayTarget=replayTwins&&ghost.score>0?
+  replayTwins.map((d,i)=>({i,n:Math.hypot((Number(ghost.dx)-d.x)/d.r,(Number(ghost.dy)-d.y)/d.r)}))
+   .sort((a,b)=>a.n-b.n)[0]?.i:null;
+ scene?.impact?.({x:px,y:py,score:ghost.score,targetIndex:replayTarget});
   match.onlineReplayPoints+=Number(ghost.score)||0;
   $('hud-rival').textContent=match.onlineReplayPoints;
   $('instruction').textContent='⚔️ '+opponentName+' • '+ghost.score+' PONTOS';
