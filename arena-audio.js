@@ -138,13 +138,18 @@ export const arenaAudio={
    if(effect==='draw'){tone(185,260,.34,.035,'triangle');noise(.23,.016,400);}
    if(effect==='release'){noise(.26,.16,2500);tone(410,150,.20,.07,'triangle');}
    if(effect==='fly'){noise(.35,.055,3400);tone(760,360,.24,.018,'sine');}
+   // Impacto fisico da flecha na madeira, separado dos aplausos.
+   if(effect==='impact'){
+    soundClip('acerto');
+    noise(.11,.13,620);
+    tone(165,72,.14,.095,'triangle');
+   }
    if(effect==='hit'){
-    soundClip('acerto');noise(.13,.15,340);tone(120,73,.18,.12,'triangle');
+    noise(.10,.06,450);tone(220,145,.11,.035,'triangle');
     if(score>=8){tone(520,780,.23,.07,'sine',.06);tone(660,990,.28,.05,'sine',.16);}
    }
    if(effect==='miss'){soundClip('erro');noise(.18,.08,650);tone(280,190,.15,.025,'sine');}
    if(effect==='applause'){
-    soundClip('acerto');
     for(let i=0;i<9;i++)noise(.075,.036+(i%3)*.007,1400,.02+i*.073);
     [500,580,650].forEach((f,i)=>tone(f,f*1.17,.29,.032,'sine',i*.13));
    }
