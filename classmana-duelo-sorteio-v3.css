@@ -404,3 +404,85 @@
 /* Brasões oficiais: sem desbotamento ou filtro cinza na casa própria. */
 #cm-draw-modal .cm-draw-house:disabled{opacity:1;filter:none}
 #cm-draw-modal .cm-draw-house img{height:94%;max-width:20%;width:auto;object-fit:contain;filter:none}
+
+/* Refinamento 13/11: duas molduras de retrato com largura idêntica. */
+#cm-draw-modal .cm-draw-grid{
+  grid-template-columns:minmax(0,1.07fr) minmax(0,1.58fr) minmax(0,1.07fr) minmax(0,1.08fr)!important;
+}
+#cm-draw-modal #cm-draw-left,
+#cm-draw-modal #cm-draw-right{width:100%;min-width:0;height:100%;}
+/* Apenas o desafiante à esquerda aponta para a direita;
+   apenas o adversário à direita aponta para a esquerda. */
+#cm-draw-modal #cm-draw-left-img{transform:scaleX(-1)!important;}
+#cm-draw-modal #cm-draw-right-img{transform:scaleX(-1)!important;}
+/* Brasões não podem ser espelhados: só as figuras dos arqueiros. */
+#cm-draw-modal #cm-draw-right[data-h] #cm-draw-right-img[src*="/crests/"]{transform:none!important;}
+
+/* Roda animada verdadeira: 12 retratos separados, repetidos em duas metades.
+   O tubo original fica no fundo e a moldura original permanece na frente. */
+#cm-draw-modal .cm-draw-tube{isolation:isolate;overflow:visible}
+#cm-draw-modal .cm-draw-tube .cm-draw-tube-art{
+  z-index:0;transform:scaleX(-1);
+}
+#cm-draw-modal .cm-draw-reel-window{
+  position:absolute;z-index:1;
+  inset:19% 18% 19% 16%;
+  overflow:hidden;
+  border-radius:7px;
+  background:linear-gradient(90deg,#09264eec,#275590df 40%,#12294ce9);
+  box-shadow:inset 0 0 17px #0c1c34;
+  display:none;
+}
+#cm-draw-modal .cm-draw-tube.has-reel .cm-draw-reel-window{display:block}
+#cm-draw-modal .cm-draw-reel-track{
+  height:100%;
+  display:flex;
+  align-items:center;
+  gap:0;
+  width:max-content;
+  will-change:transform;
+  animation:cm-draw-reel-flow 2.6s linear infinite;
+}
+#cm-draw-modal .cm-draw-reel-track img{
+  display:block;position:static;
+  width:clamp(52px,5vw,85px);
+  height:100%;flex:none;
+  object-fit:cover;object-position:center 30%;
+  filter:drop-shadow(0 1px 3px #000a);
+}
+@keyframes cm-draw-reel-flow{
+  from{transform:translateX(0)}
+  to{transform:translateX(-50%)}
+}
+#cm-draw-modal .cm-draw-tube.spinning .cm-draw-reel-track{filter:brightness(1.12)}
+#cm-draw-modal .cm-draw-tube .cm-draw-spin-face{
+  z-index:3;
+  left:32%;top:10%;width:36%;height:80%;
+  object-fit:contain;
+  pointer-events:none;
+}
+#cm-draw-modal .cm-draw-tube .cm-draw-select-frame{z-index:4;pointer-events:none}
+#cm-draw-modal .cm-draw-tube .cm-draw-mini-portrait{
+  z-index:5;
+  position:absolute;inset:auto 1% auto auto;
+  width:21%;height:83%;object-fit:contain;
+  filter:drop-shadow(0 2px 3px #000);
+  transform:none!important;pointer-events:none;
+}
+#cm-draw-modal .cm-draw-tube.finished .cm-draw-reel-window{display:none}
+#cm-draw-modal .cm-draw-tube.finished .cm-draw-spin-face{filter:none}
+
+/* A pequena linha azul residual pertence à área inferior da imagem do banner;
+   recortar apenas essa borda sem interferir no resto da interface. */
+#cm-draw-modal .cm-draw-muted.is-result-art{overflow:hidden!important;}
+#cm-draw-modal .cm-draw-status-art{
+  height:112%;max-height:none;
+  object-fit:contain;object-position:top center;
+  clip-path:inset(0 0 12% 0);
+}
+@media(max-width:950px){
+ #cm-draw-modal .cm-draw-grid{
+  grid-template-columns:minmax(0,1.07fr) minmax(0,1.58fr) minmax(0,1.07fr) minmax(0,1.08fr)!important;
+ }
+ #cm-draw-modal .cm-draw-reel-track img{width:clamp(34px,5vw,64px)}
+}
