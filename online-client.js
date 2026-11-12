@@ -1,5 +1,5 @@
 /** ClassMana - API do duelo via HTTP, sem portal Apps Script. */
-import { ONLINE_API_URL } from './online-config.js?v=api10';
+import { ONLINE_API_URL } from './online-config.js?v=api12';
 const KEY='classmana_duelo_api_token_v2';
 const rid=()=>crypto.randomUUID();
 class Online {
@@ -27,8 +27,8 @@ class Online {
  async connect(){
   if(!this.enabled){this.state='off';this.lastError='Configure a URL da API do duelo.';return false}
   this.state='connecting';
-  try{const ping=await this.get('ping');if(Number(ping.api)!==10)throw Error('Versão incompatível da API');
-   this.apiVersion=10;this.state='ready';this.lastError=null;
+  try{const ping=await this.get('ping');if(Number(ping.api)!==12)throw Error('Versão incompatível da API');
+   this.apiVersion=12;this.state='ready';this.lastError=null;
    if(this.token){try{this.user=(await this.get('me')).user}catch{this.token='';sessionStorage.removeItem(KEY)}}
    return true
   }catch(e){this.state='error';this.lastError=e.message;throw e}
