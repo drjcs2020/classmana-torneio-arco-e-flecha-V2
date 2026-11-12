@@ -14,7 +14,7 @@ const palettes = {
 const rgb = h => [1,3,5].map(i => parseInt(h.slice(i, i+2), 16) / 255);
 
 import {GEAR_BY_ID,modelSource} from './equipment-catalog.js?v=arsenal-5';
-import {mediumTwinTargets} from './arena-difficulty.js?v=20261112-single-moving-v1';
+import {mediumTwinTargets} from './arena-difficulty.js?v=20261112-score-rollback-v1';
 export function initScene(canvas, getSettings) {
   const parent=canvas.parentElement;
   let pc=null, app=null, gl=null, camera=null, bowRoot=null, bowVisualPivot=null, bowFallbackRoot=null, bowHandle=null, bowString=null, sightAnchor=null,
@@ -463,7 +463,7 @@ export function initScene(canvas, getSettings) {
   function activeTargetFile(){
     const q=getSettings()||{},level=q.level||'iniciante';
     if(level==='lendario')return 'target-suspended.glb';
-    if(level==='avancado')return 'medium-twin-procedural'; // dois discos coloridos nativos, sem terceiro GLB
+    if(level==='avancado')return 'medium-twin-procedural'; // disco único móvel, sem alvo fosco
     return (q.index||0)>=3?'target-alt.glb':'target-stand.glb';
   }
   // O disco pode ter sido exportado deitado: medir eixos da malha para deixá-lo em pé.
