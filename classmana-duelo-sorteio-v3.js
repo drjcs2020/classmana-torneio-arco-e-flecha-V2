@@ -30,6 +30,17 @@ function previousDraw(){try{var p=JSON.parse(sessionStorage.getItem(drawKey())||
 function rememberDraw(){try{sessionStorage.setItem(drawKey(),JSON.stringify({enemy:enemy,id:picked.id}))}catch(e){}}
 function portrait(img,h,sex){var g=sex==='f'?'f':'m';img.onerror=function(){img.onerror=null;img.src='assets/v2/heroes/'+H[h][1]+'-'+g+'.webp'};img.src=BASE+'retrato-'+H[h][1]+'-'+g+'.png'}
 function t(id,value){el(id).textContent=value}
+function loadReel(h){
+ var track=el('cm-draw-reel-track');track.replaceChildren();
+ // Doze retratos individuais: a animação move as imagens, não a ilustração do tubo.
+ for(var i=0;i<12;i++){
+  var item=document.createElement('img');item.alt='';portrait(item,h,i%2?'f':'m');track.append(item);
+ }
+ el('cm-draw-tube').classList.add('has-reel');
+ el('cm-draw-tube').classList.remove('finished','spinning');
+ track.style.animationDuration='2.6s';
+}
+
 function bleep(end){try{audio=audio||new (window.AudioContext||window.webkitAudioContext)();var osc=audio.createOscillator(),gain=audio.createGain();osc.frequency.value=end?850:430;gain.gain.setValueAtTime(.03,audio.currentTime);gain.gain.exponentialRampToValueAtTime(.001,audio.currentTime+.08);osc.connect(gain);gain.connect(audio.destination);osc.start();osc.stop(audio.currentTime+.085)}catch(e){}}
 function selectedIndex(n){if(window.crypto&&window.crypto.getRandomValues){var a=new Uint32Array(1),m=Math.floor(4294967296/n)*n;do{window.crypto.getRandomValues(a)}while(a[0]>=m);return a[0]%n}return Math.floor(Math.random()*n)}
 function make(){
@@ -45,7 +56,10 @@ function make(){
  '<div class="cm-draw-portrait" id="cm-draw-left"><img id="cm-draw-left-img" alt="Desafiante"><div class="cm-draw-label"><strong id="cm-draw-left-name"></strong><small id="cm-draw-left-house"></small></div></div>',
  '<div class="cm-draw-center"><img class="cm-draw-vs" src="assets/v2/frames/versus.webp" alt="VS">',
  '<img class="cm-draw-spin-banner" src="assets/ui/banner-sorteio.png" alt="Sorteio do Adversário">',
- '<div class="cm-draw-tube" id="cm-draw-tube"><img src="assets/ui/carrossel-tubo.png" alt=""><img id="cm-draw-spin-img" class="cm-draw-spin-face" alt="Retrato alternado">',
+ '<div class="cm-draw-tube" id="cm-draw-tube"><img class="cm-draw-tube-art" src="assets/ui/carrossel-tubo.png" alt="">',
+ '<div class="cm-draw-reel-window" aria-hidden="true"><div class="cm-draw-reel-track" id="cm-draw-reel-track"></div></div>',
+ '<img id="cm-draw-spin-img" class="cm-draw-spin-face" alt="Retrato selecionado">',
+ '<img id="cm-draw-mini-img" class="cm-draw-mini-portrait" alt="">',
  '<img class="cm-draw-select-frame" src="assets/ui/moldura-seletor.png" alt=""></div>',
  '<button id="cm-draw-roll" class="cm-draw-action" type="button" disabled>SORTEAR ADVERSÁRIO</button>',
  '<span class="cm-draw-muted" id="cm-draw-state" aria-live="polite">Selecione uma casa rival.</span></div>',
@@ -73,6 +87,8 @@ function open(){
  t('cm-draw-left-name',people[id]);t('cm-draw-left-house',label(h));t('cm-draw-right-house','Selecione uma casa rival');
  el('cm-draw-right-img').removeAttribute('src');el('cm-draw-right-img').style.visibility='hidden';
  el('cm-draw-spin-img').removeAttribute('src');el('cm-draw-spin-img').style.visibility='hidden';
+ el('cm-draw-mini-img').removeAttribute('src');el('cm-draw-mini-img').style.visibility='hidden';
+ el('cm-draw-reel-track').replaceChildren();el('cm-draw-tube').classList.remove('has-reel','finished','spinning');
  el('cm-draw-confirm').disabled=true;
  var houses=el('cm-draw-houses');
  Object.keys(H).forEach(function(k){
@@ -90,7 +106,9 @@ function selectHouse(h){
  el('cm-draw-result').classList.remove('visible');el('cm-draw-confirm').disabled=true;el('cm-draw-right').dataset.h=h;
  // Antes do sorteio, a casa rival é representada somente pelo brasão oficial.
  el('cm-draw-right-img').onerror=null;el('cm-draw-right-img').style.visibility='visible';el('cm-draw-right-img').src=H[h][2];
- el('cm-draw-spin-img').onerror=null;el('cm-draw-spin-img').style.visibility='visible';el('cm-draw-spin-img').src=H[h][2];
+ // A miniatura fica à direita, inteira e sem ser espelhada.
+ el('cm-draw-mini-img').style.visibility='visible';portrait(el('cm-draw-mini-img'),h,'m');
+ el('cm-draw-spin-img').style.visibility='hidden';loadReel(h);
  t('cm-draw-right-name','CASA RIVAL');t('cm-draw-right-house',label(h));
  t('cm-draw-list-head','ALUNOS DO '+label(h).toUpperCase());el('cm-draw-state').classList.remove('is-result-art');t('cm-draw-state','Pronto para sortear.');
  var holder=el('cm-draw-list-items');holder.replaceChildren();
@@ -103,9 +121,11 @@ function selectHouse(h){
 }
 function finishDraw(student,restored){
  picked=student;drawLocked=true;busy=false;
- el('cm-draw-tube').classList.remove('spinning');
+ el('cm-draw-tube').classList.remove('spinning','has-reel');el('cm-draw-tube').classList.add('finished');
+ el('cm-draw-spin-img').style.visibility='visible';
  var actual=gender(picked.id);
  portrait(el('cm-draw-spin-img'),enemy,actual);
+ portrait(el('cm-draw-mini-img'),enemy,actual);
  portrait(el('cm-draw-right-img'),enemy,actual);
  t('cm-draw-right-name',picked.name);t('cm-draw-right-house',label(enemy));
  var state=el('cm-draw-state'),banner=document.createElement('img');
@@ -136,7 +156,8 @@ async function draw(){
  var steps=[60,65,72,80,90,105,125,150,180,220,275,345,450,590,700],sex='m';
  for(var wait of steps){
   sex=sex==='m'?'f':'m';
-  portrait(el('cm-draw-spin-img'),enemy,sex);portrait(el('cm-draw-right-img'),enemy,sex);bleep();
+  portrait(el('cm-draw-mini-img'),enemy,sex);portrait(el('cm-draw-right-img'),enemy,sex);
+  el('cm-draw-reel-track').style.animationDuration=Math.max(.24,wait/300)+'s';bleep();
   await new Promise(function(resolve){setTimeout(resolve,wait)});
  }
  finishDraw(selected,false);
