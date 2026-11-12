@@ -38,9 +38,9 @@ function make(){
  '<span class="cm-draw-muted" id="cm-draw-state" aria-live="polite">Selecione uma casa rival.</span></div>',
  '<div class="cm-draw-portrait" id="cm-draw-right"><img id="cm-draw-right-img" alt="Adversário"><div class="cm-draw-label"><strong id="cm-draw-right-name">CASA RIVAL</strong><small id="cm-draw-right-house"></small></div></div>',
  '<div class="cm-draw-list"><h3 id="cm-draw-list-head">ALUNOS DA CASA RIVAL</h3><div class="cm-draw-list-items" id="cm-draw-list-items"></div></div></div>',
- '<div class="cm-draw-result" id="cm-draw-result"><h3><img src="assets/ui/banner-adversario-escolhido.png" alt="ADVERSÁRIO ESCOLHIDO!"></h3><span class="cm-draw-result-name" id="cm-draw-picked"></span>',
- '<button type="button" id="cm-draw-confirm" class="cm-draw-action">CONFIRMAR</button></div>',
- '<p class="cm-draw-muted" id="cm-draw-note">MODO TORNEIO · dificuldade média padrão.</p></section>',
+ '<div class="cm-draw-result" id="cm-draw-result"><h3><img src="assets/ui/banner-adversario-escolhido.png" alt="ADVERSÁRIO ESCOLHIDO!"></h3>',
+ '<button type="button" id="cm-draw-confirm" class="cm-draw-action">CONTINUAR</button></div>',
+ '</section>',
  '<div id="cm-draw-transition" class="cm-draw-transition"><p>⚔ PREPARANDO A PARTIDA... ⚔</p></div></div>'
  ].join('');
  document.body.append(modal);
@@ -91,15 +91,15 @@ function finishDraw(student,restored){
  var actual=gender(picked.id);
  if(actual==='m'||actual==='f'){
   portrait(el('cm-draw-spin-img'),enemy,actual);portrait(el('cm-draw-right-img'),enemy,actual);
-  t('cm-draw-note','Adversário definido. Confirme para preparar o duelo.');
+
  }else{
   // Sem avatar salvo para o aluno: manter retrato de arquearia durante a revelação,
   // sem deduzir o gênero pelo nome. O sexo do retrato não identifica o estudante.
   portrait(el('cm-draw-spin-img'),enemy,'m');portrait(el('cm-draw-right-img'),enemy,'m');
-  t('cm-draw-note','Adversário definido; avatar individual não informado. Retrato ilustrativo da casa.');
+
  }
  t('cm-draw-right-name',picked.name);t('cm-draw-right-house',label(enemy));
- t('cm-draw-picked',picked.name+' — '+label(enemy));t('cm-draw-state','CONFRONTO DEFINIDO');
+ t('cm-draw-state','CONFRONTO DEFINIDO');
  document.querySelectorAll('#cm-draw-houses button').forEach(function(b){b.disabled=true});
  document.querySelectorAll('.cm-draw-list-item').forEach(function(row){
   var winner=row.dataset.studentId===picked.id;row.classList.toggle('active',winner);
