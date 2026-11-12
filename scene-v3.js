@@ -141,14 +141,21 @@ export function initScene(canvas, getSettings) {
         ctx.strokeStyle='#ab7e45';ctx.lineWidth=m.r*.045;ctx.beginPath();ctx.moveTo(m.x+sx*m.r*.37-2,m.y+m.r*.55);ctx.lineTo(x-2,m.y+m.r*1.84);ctx.stroke();
       }
     }
-    // Straw/woven rim with a ten-ring competition target.
-    const shadow=ctx.createRadialGradient(m.x-m.r*.18,m.y-m.r*.18,m.r*.15,m.x,m.y,m.r*1.17);
-    shadow.addColorStop(0,'#d5b46c');shadow.addColorStop(.83,'#95622e');shadow.addColorStop(1,'#553c23');
-    ctx.fillStyle=shadow;ctx.beginPath();ctx.arc(m.x,m.y,m.r*1.14,0,Math.PI*2);ctx.fill();
+    // Duas copias do mesmo disco, tambem no modo 2D de compatibilidade.
+    const setting=getSettings()||{};
+    const discs=setting.dualTargets?mediumTwinTargets(setting.seconds)
+      .map(d=>({x:m.x+d.x*m.r,y:m.y,r:m.r*d.r})):[m];
     const colors=['#f5f2e3','#191d22','#f5f4e8','#171a20','#168fcb','#1b82b8','#e64033','#cc2d28','#ffcb3c','#ffdd62'];
-    colors.forEach((c,i)=>{ctx.beginPath();ctx.arc(m.x,m.y,m.r*(1-i*.097),0,Math.PI*2);ctx.fillStyle=c;ctx.fill();ctx.strokeStyle='rgba(33,28,25,.32)';ctx.lineWidth=.9;ctx.stroke();});
-    ctx.beginPath();ctx.arc(m.x,m.y,m.r*.07,0,Math.PI*2);ctx.strokeStyle='#9d682b';ctx.lineWidth=1.4;ctx.stroke();
-    ctx.save();ctx.translate(m.x,m.y);for(let i=0;i<64;i++){const a=i*Math.PI*2/64;ctx.strokeStyle=i%3?'rgba(255,212,114,.43)':'rgba(81,46,17,.46)';ctx.lineWidth=i%2?2.2:1.3;ctx.beginPath();ctx.moveTo(Math.cos(a)*m.r*1.03,Math.sin(a)*m.r*1.03);ctx.lineTo(Math.cos(a+.055)*m.r*1.13,Math.sin(a+.055)*m.r*1.13);ctx.stroke();}ctx.restore();
+    for(const disc of discs){
+      const shadow=ctx.createRadialGradient(disc.x-disc.r*.18,disc.y-disc.r*.18,disc.r*.15,disc.x,disc.y,disc.r*1.17);
+      shadow.addColorStop(0,'#d5b46c');shadow.addColorStop(.83,'#95622e');shadow.addColorStop(1,'#553c23');
+      ctx.fillStyle=shadow;ctx.beginPath();ctx.arc(disc.x,disc.y,disc.r*1.14,0,Math.PI*2);ctx.fill();
+      colors.forEach((c,i)=>{ctx.beginPath();ctx.arc(disc.x,disc.y,disc.r*(1-i*.097),0,Math.PI*2);ctx.fillStyle=c;ctx.fill();ctx.strokeStyle='rgba(33,28,25,.32)';ctx.lineWidth=.9;ctx.stroke();});
+      ctx.beginPath();ctx.arc(disc.x,disc.y,disc.r*.07,0,Math.PI*2);ctx.strokeStyle='#9d682b';ctx.lineWidth=1.4;ctx.stroke();
+      ctx.save();ctx.translate(disc.x,disc.y);
+      for(let i=0;i<64;i++){const angle=i*Math.PI*2/64;ctx.strokeStyle=i%3?'rgba(255,212,114,.43)':'rgba(81,46,17,.46)';ctx.lineWidth=i%2?2.2:1.3;ctx.beginPath();ctx.moveTo(Math.cos(angle)*disc.r*1.03,Math.sin(angle)*disc.r*1.03);ctx.lineTo(Math.cos(angle+.055)*disc.r*1.13,Math.sin(angle+.055)*disc.r*1.13);ctx.stroke();}
+      ctx.restore();
+    }
     // Modern recurve bow with metallic grooves, not a wooden longbow.
     const {bx,by,size,sightX,sightY}=fallbackSightGeometry();
     const bladeTop={x:bx-12,y:by-size*.58},bladeBottom={x:bx-10,y:by+size*.58};
