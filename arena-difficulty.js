@@ -28,8 +28,10 @@ export function targetMotion(level,index,seconds){
  */
 export function mediumTwinTargets(seconds){
  const t=cap(Number(seconds)||0,0,120);
- const wave=.18*Math.sin(t*1.14);
- return [{id:0,x:-1.22+wave,y:0,r:.70},{id:1,x:1.22-wave,y:0,r:.70}];
+ // Cada disco percorre 1,7 raios horizontalmente, cerca de 4,7x o percurso anterior.
+ // A separação mínima entre centros é 1,6 raio; os discos de raio .70 nunca se tocam.
+ const wave=.85*Math.sin(t*1.75);
+ return [{id:0,x:-1.65+wave,y:0,r:.70},{id:1,x:1.65-wave,y:0,r:.70}];
 }
 /** Mesmo tempo aproximado de voo adotado no servidor e na cena PlayCanvas. */
 export function flightSeconds(distance,power){
