@@ -5,7 +5,7 @@ import {CIRCUITS,LEVELS,targetMotion,mediumTwinTargets,obstacleBlocks,distanceDi
 import {arenaAudio} from './arena-audio.js?v=20261112-arena-sfx-fixed-02';
 import {cinematics} from './classmana-cinematics.js?v=20261112-art-title-gender-v3';
 import {initAtmosphere} from './arena-atmosphere.js?v=no-crowd15';
-import {online} from './online-client.js?v=api10';
+import {online} from './online-client.js?v=api12';
 import {mountSpriteHUD} from './sprite-hud.js?v=1';
 const $=id=>document.getElementById(id);
 function cmResetResultPresentation(){
@@ -643,7 +643,7 @@ async function fire(power){
  const targetIndex=candidate&&norm<=1?candidate.index:null;
  const base=blocked||norm>1?0:Math.max(1,10-Math.floor(norm*10));
  const score=base>0?Math.min(10,base+tuning.bonus):0;
- if(currentMatch.online)currentMatch.onlineShots.push({dx:landingX,dy:landingY,impactDx:landingX,impactDy:landingY,blocked,power,time:match.freezeTime,bow:activeBow});
+ if(currentMatch.online)currentMatch.onlineShots.push({dx:landingX,dy:landingY,impactDx:landingX,impactDy:landingY,blocked,power,time:match.freezeTime,bow:activeBow,score});
  // Keep launch time intact until collision and server validation are calculated.
  match.freezeTime=null; // The target keeps moving while the arrow flies.
  $('stage').classList.add('firing');arenaAudio.play('fly');
@@ -743,9 +743,21 @@ async function finishMatch(){
       shots:current.playerId===state.creator.id?state.creatorShots:state.recipientShots,challenge:state};
    }
    if(match!==current)return;
+   const localScores=[...current.scores];
+   const localTotal=localScores.reduce((sum,points)=>sum+points,0);
+   const serverShots=response.shots||[];
+   const serverTotal=Number(response.score);
+   if(serverShots.length!==localScores.length||
+      !Number.isInteger(serverTotal)||
+      serverTotal!==localTotal||
+      serverShots.some((shot,i)=>Number(shot.score)!==localScores[i])){
+     throw Error('Pontuação do duelo divergente. Arena: '+localTotal+
+       ' pontos; servidor: '+(Number.isFinite(serverTotal)?serverTotal:'sem total')+
+       '. O resultado não será apresentado como correto.');
+   }
    current.running=false;current.locked=true;current.onlineSaveFailed=false;
-   const ch=response.challenge,total=Number(response.score)||0;
-   current.scores=(response.shots||[]).map(x=>Number(x.score)||0);
+   const ch=response.challenge,total=localTotal;
+   current.scores=localScores;
    const isCreator=current.playerId===ch.creator.id;
    const rival=isCreator?ch.recipientScore:ch.creatorScore;
    let title,desc;
