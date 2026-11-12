@@ -30,7 +30,7 @@ function soundClip(name){
  if(!enabled)return;
  try{
   const audio=clips[name]||(clips[name]=new Audio('assets/sounds/'+name+'.mp3'));
-  audio.pause();audio.currentTime=0;audio.volume=name==='vitoria'?.25:.18;
+  audio.pause();audio.currentTime=0;audio.volume=name==='vvqne-applause-383901'?.34:name==='driken5482-applause-cheer-236786'?.27:.18;
   audio.play().catch(()=>{});
  }catch{}
 }
@@ -150,6 +150,8 @@ export const arenaAudio={
    }
    if(effect==='miss'){soundClip('erro');noise(.18,.08,650);tone(280,190,.15,.025,'sine');}
    if(effect==='applause'){
+    // Primeiro MP3 enviado: reação da torcida aos acertos de 8 a 10 pontos.
+    soundClip('driken5482-applause-cheer-236786');
     for(let i=0;i<9;i++)noise(.075,.036+(i%3)*.007,1400,.02+i*.073);
     [500,580,650].forEach((f,i)=>tone(f,f*1.17,.29,.032,'sine',i*.13));
    }
@@ -160,7 +162,11 @@ export const arenaAudio={
    if(effect==='block'){
     noise(.23,.12,1400);tone(710,240,.32,.075,'triangle');tone(1180,650,.20,.035,'sine',.035);
    }
-   if(effect==='victory'){soundClip('vitoria');[523,659,784,1047].forEach((n,i)=>tone(n,n*1.03,.31,.065,'triangle',i*.12));}
+   if(effect==='victory'){
+    // Segundo MP3 enviado: aplausos na vitória confirmada.
+    soundClip('vvqne-applause-383901');
+    [523,659,784,1047].forEach((n,i)=>tone(n,n*1.03,.31,.065,'triangle',i*.12));
+   }
    if(effect==='defeat'){[293.66,261.63,220,164.81].forEach((n,i)=>tone(n,n*.94,.36,.045,'triangle',i*.18));}
   }catch(error){console.warn('[ClassMana] Falha ao emitir efeito sonoro:',error)}
  }
