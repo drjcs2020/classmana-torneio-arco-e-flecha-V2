@@ -733,14 +733,29 @@ async function finishMatch(){
   $('finish-results').classList.remove('cm-score-grid');$('finish-results').textContent='🏹 5 / 5 FLECHAS';
   try{
    let response;
+   const shotScores=current.onlineShots.map(shot=>Number(shot.score));
+   if(shotScores.length!==5||
+      shotScores.some((score,i)=>!Number.isInteger(score)||score!==current.scores[i])){
+     throw Error('As cinco flechas da arena não correspondem aos dados enviados. Resultado preservado para verificação.');
+   }
    try{response=await online.submit(match.online.id,match.onlineShots);}
    catch(err){
-    // If the server recorded the request but the connection dropped, read it back.
-    const state=await online.challenge(match.online.id);
-    const saved=current.playerId===state.creator.id?state.status==='PENDENTE'||state.status==='CONCLUIDO':state.status==='CONCLUIDO';
-    if(!saved)throw err;
-    response={score:current.playerId===state.creator.id?state.creatorScore:state.recipientScore,
-      shots:current.playerId===state.creator.id?state.creatorShots:state.recipientShots,challenge:state};
+    // Só recuperar um envio anterior se ele contiver exatamente estas cinco flechas.
+    // Nunca usar a pontuação de uma disputa antiga como resultado desta partida.
+    let state;
+    try{state=await online.challenge(match.online.id)}catch{throw err}
+    const isCreator=current.playerId===state.creator.id;
+    const savedShots=isCreator?state.creatorShots:state.recipientShots;
+    const savedScore=Number(isCreator?state.creatorScore:state.recipientScore);
+    const matches=Array.isArray(savedShots)&&savedShots.length===current.onlineShots.length&&
+      savedShots.every((shot,i)=>Number(shot.score)===shotScores[i]&&
+        Math.abs(Number(shot.dx)-Number(current.onlineShots[i].dx))<1e-8&&
+        Math.abs(Number(shot.dy)-Number(current.onlineShots[i].dy))<1e-8);
+    if(!matches||!Number.isInteger(savedScore)){
+      throw Error('Falha ao registrar esta partida: '+err.message+
+        '. O resultado antigo do servidor não será reutilizado.');
+    }
+    response={score:savedScore,shots:savedShots,challenge:state};
    }
    if(match!==current)return;
    const localScores=[...current.scores];
@@ -784,7 +799,8 @@ async function finishMatch(){
    if(match!==current)return;current.onlineSaveFailed=true;current.running=true;
    $('finish-title').textContent='⚠️ RESULTADO AINDA NÃO CONFIRMADO';
    $('finish-desc').textContent='O servidor não confirmou a gravação: '+error.message;
-   $('finish-results').classList.remove('cm-score-grid');$('finish-results').textContent='Suas cinco flechas permanecem nesta partida.';
+   $('finish-results').classList.remove('cm-score-grid');
+   $('finish-results').textContent='Pontos na arena: '+current.scores.reduce((sum,n)=>sum+n,0)+'. As cinco flechas permanecem nesta partida.';
    $('share-help').textContent='Tente salvar novamente antes de sair da arena.';
    $('share-result').classList.remove('hidden');$('share-result').classList.add('cm-retry');$('share-result').textContent='🔄 TENTAR SALVAR NO PLACAR';
   }
