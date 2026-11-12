@@ -49,7 +49,7 @@ function mediumTwinTargets(seconds){
 }
 function shotFlight(distance,power){return .43+.42*Math.pow(Math.max(10,distance)/80,.56)+.13*(1-power);}
 const MEDIUM_DISTANCES=[20,45,75,110,150];
-function shotsOf(shots,officialWins=0,duel=null){
+function shotsOf(shots,officialWins=0){
  if(!Array.isArray(shots)||shots.length!==5)fail('Exatamente cinco flechas são necessárias');
  return shots.map((s,i)=>{
   if(!s||typeof s!=='object')fail('Dados inválidos');
@@ -58,12 +58,7 @@ function shotsOf(shots,officialWins=0,duel=null){
   if(![dx,dy,power,time].every(Number.isFinite)||Math.abs(dx)>100||Math.abs(dy)>100||
      power<0||power>1||time<0||time>7200||!rules)fail('Flecha inválida');
   if(officialWins<rules.requiredWins)fail('Equipamento bloqueado: vitórias oficiais insuficientes',403);
-  const blocked=s.blocked===true;
-  const twins=duel?.level==='avancado'&&duel?.kind!=='entre_equipes'
-    ?mediumTwinTargets(time+shotFlight(MEDIUM_DISTANCES[i],power)):null;
-  const closest=twins?.map(d=>Math.hypot((dx-d.x)/d.r,(dy-d.y)/d.r)*rules.ring)
-    .reduce((a,b)=>Math.min(a,b),Infinity);
-  const n=twins?closest:Math.hypot(dx,dy)*rules.ring;
+  const blocked=s.blocked===true,n=Math.hypot(dx,dy)*rules.ring;
   const points=blocked||n>1?0:Math.max(1,10-Math.floor(n*10));
   return {dx,dy,impactDx:dx,impactDy:dy,blocked,power,time,bow,
     score:points>0?Math.min(10,points+rules.bonus):0,number:i+1};
@@ -107,7 +102,7 @@ function route(request,action,data,query){
  if(action==='challenge'){const to=String(data.to||''),kind=String(data.kind||'');if(!known.has(to)||to===player.id)fail('Adversário inválido');if(!['mesma_turma','entre_equipes','interclasses'].includes(kind))fail('Modo inválido');if(kind==='mesma_turma'&&to[0]!==player.house)fail('Escolha aluno da mesma turma');if(kind==='interclasses'&&to[0]===player.house)fail('Escolha outra turma');const level=kind==='entre_equipes'?'iniciante':'avancado';const existing=sql.activePair.get(player.id,to,kind,level,new Date(Date.now()-24*3600000).toISOString());if(existing)return {challenge:publicDuel(existing),reused:true};const id=randomUUID();sql.insert.run(id,player.id,to,kind,level,new Date().toISOString(),'CRIADOR_JOGANDO');return {challenge:publicDuel(sql.duel.get(id))}}
  if(action==='answer'){const d=sql.duel.get(String(data.id||''));if(!d||d.recipient!==player.id)fail('Convite não encontrado',404);if(d.status!=='PENDENTE')fail('Convite não está pendente',409);if(!['accept','decline'].includes(data.decision))fail('Resposta inválida');sql.updateState.run(data.decision==='accept'?'ACEITO':'RECUSADO',d.id);return {challenge:publicDuel(sql.duel.get(d.id))}}
  if(action==='submit'){const d=sql.duel.get(String(data.id||''));if(!d||(d.creator!==player.id&&d.recipient!==player.id))fail('Duelo não encontrado',404);const first=d.creator===player.id;if(first?(d.status!=='CRIADOR_JOGANDO'||d.creator_shots):(d.status!=='ACEITO'||d.recipient_shots))fail('Esta rodada não pode ser registrada novamente',409);const officialWins=db.prepare("SELECT COUNT(*) AS n FROM duels WHERE status='CONCLUIDO' AND ((creator=? AND creator_score>recipient_score) OR (recipient=? AND recipient_score>creator_score))").get(player.id,player.id).n;
- const shots=shotsOf(data.shots,officialWins,d),score=shots.reduce((a,x)=>a+x.score,0);(first?sql.creator:sql.recipient).run(JSON.stringify(shots),score,d.id);return {score,shots,challenge:publicDuel(sql.duel.get(d.id))}}
+ const shots=shotsOf(data.shots,officialWins),score=shots.reduce((a,x)=>a+x.score,0);(first?sql.creator:sql.recipient).run(JSON.stringify(shots),score,d.id);return {score,shots,challenge:publicDuel(sql.duel.get(d.id))}}
  fail('Ação desconhecida',404);
 }
 const allow=(process.env.ALLOWED_ORIGINS||'https://drjcs2020.github.io,http://localhost:8000,http://127.0.0.1:8000').split(',');
