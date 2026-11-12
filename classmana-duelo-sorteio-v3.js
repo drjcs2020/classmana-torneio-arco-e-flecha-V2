@@ -77,7 +77,7 @@ function selectHouse(h){
   var icon=document.createElement('img');icon.src=BASE+'icone-aluno.png';icon.alt='';
   var name=document.createElement('span');name.textContent=p.name;row.append(icon,name);holder.append(row);
  });
- el('cm-draw-roll').disabled=!R[h]?.length;el('cm-draw-roll').textContent='SORTEAR ADVERSÁRIO';
+ el('cm-draw-roll').disabled=!R[h]?.length;el('cm-draw-roll').classList.remove('reroll');el('cm-draw-roll').textContent='SORTEAR ADVERSÁRIO';
 }
 async function draw(){
  if(!enemy||busy)return;var pool=list(enemy);if(!pool.length)return;
@@ -105,7 +105,7 @@ async function draw(){
   var winner=row.dataset.studentId===picked.id;row.classList.toggle('active',winner);
   if(winner){var icon=document.createElement('img');icon.alt='Escolhido';icon.src=BASE+'icone-confirmado.png';row.append(icon);row.scrollIntoView({block:'nearest'})}
  });
- el('cm-draw-result').classList.add('visible');el('cm-draw-roll').disabled=false;el('cm-draw-roll').textContent='SORTear NOVAMENTE'.toUpperCase();bleep(true);busy=false;
+ el('cm-draw-result').classList.add('visible');el('cm-draw-roll').disabled=false;el('cm-draw-roll').textContent='SORTEAR NOVAMENTE';el('cm-draw-roll').classList.add('reroll');bleep(true);busy=false;
 }
 function configure(){
  var mode=el('mode'),scope=el('team-scope'),house=el('opponent-house'),team=el('opponent-team'),field=el('rival'),level=el('challenge-level');
