@@ -1,4 +1,4 @@
-import {initScene} from './scene-v3.js?v=20261112-disc-mobile-standing-v1';
+import {initScene} from './scene-v3.js?v=20261112-disc-lighting-v2';
 import {GEAR,GEAR_BY_ID,getGearLevel,isGearUnlocked} from './equipment-catalog.js?v=win-progress-linear-20261110';
 import {mountEquipmentInventory} from './equipment-inventory.js?v=arsenal-button-colors-20261111';
 import {CIRCUITS,LEVELS,targetMotion,obstacleBlocks,distanceDifficulty,flightSeconds} from './arena-difficulty.js?v=3';
