@@ -243,7 +243,8 @@ function cmShowActiveSession(){
 }
 function drawCourse(){
  const el=$('lobby-course');if(!el)return;
- const level=$('challenge-level')?.value||'iniciante';
+ const mode=$('mode')?.value||'practice';
+ const level=mode==='challenge_team'?'iniciante':isDuel(mode)?'avancado':$('challenge-level')?.value||'iniciante';
  const path=CIRCUITS[level]||CIRCUITS.iniciante;
  el.innerHTML='<svg class="course-route" viewBox="0 0 900 90" preserveAspectRatio="none" aria-hidden="true"><path d="M36 67 C 140 67 148 18 260 30 S 445 79 515 52 S 705 10 860 50" fill="none" stroke="#764f27" stroke-width="15" stroke-linecap="round"/><path d="M36 67 C 140 67 148 18 260 30 S 445 79 515 52 S 705 10 860 50" fill="none" stroke="#fbe8b0" stroke-width="10" stroke-linecap="round"/></svg>'+
   path.map((d,i)=>'<span class="course-node '+(i===0?'chosen':'')+'">'+(i===4?'🏆':'🎯')+' <b>'+d+'m</b></span>').join('');
@@ -390,7 +391,7 @@ function uiHud(){if(!match)return;
  const title=$('range-trail-title'),info=$('range-mode'),badge=$('arena-mode-badge');
  const levelInfo=LEVELS[match.level]||LEVELS.iniciante;
  if(title)title.textContent=levelInfo.icon+' '+levelInfo.title;
- if(info)info.textContent=match.level==='avancado'&&match.mode==='bot'&&!match.online?'Dois discos menores em movimento horizontal alternado':levelInfo.feature;
+ if(info)info.textContent=match.level==='avancado'?'Dois discos menores alternando na horizontal':levelInfo.feature;
  if(badge){badge.textContent=match.level==='iniciante'?'🎯 ALVO FIXO':match.level==='avancado'?'↔ ALVOS EM MOVIMENTO':'🛡️ ALVO MÓVEL + ESCUDOS';badge.dataset.level=match.level;}
  $('stage').dataset.level=match.level;
  if(progress&&progress.dataset.current!==key){
@@ -417,7 +418,7 @@ function stageSeconds(){
 }
 function worldSettings(){
  const level=match?.level||'iniciante',index=match?.scores?.length||0,seconds=stageSeconds();
- const dualTargets=level==='avancado'&&match?.mode==='bot'&&!match?.online;
+ const dualTargets=level==='avancado';
  const motion=dualTargets?{x:0,y:0}:targetMotion(level,index,seconds);
  const stage=$('stage'),w=stage?.clientWidth||1050,h=stage?.clientHeight||540;
  const distance=match?.distance||10,scale=clamp(Math.pow(30/Math.max(10,distance),.65),.31,1.75);
@@ -503,7 +504,7 @@ async function startMatch(accepted=null){
    });
    if(!versusAccepted)return;
   }
-  const requestedAt=Date.now(),kind=duelKind(mode),level=mode==='challenge_team'&&$('team-scope').value==='other'?'iniciante':$('challenge-level').value;
+  const requestedAt=Date.now(),kind=duelKind(mode),level=mode==='challenge_team'?'iniciante':'avancado';
   try{
    onlineLoading=true;
    $('start-game').disabled=true;
@@ -541,7 +542,7 @@ async function startMatch(accepted=null){
  if(online.user&&isDuel(mode)){userId=online.user.id;selectHouse(userId[0]);$('player').value=userId;}
  match={house:userId==='guest'?house:userId[0],playerId:userId,player:nameOf(userId),mode,difficulty:$('difficulty').value,
   rivalId,gender:drawHandoff?.gender||archerGender(),rivalGender:drawHandoff?.rivalGender||'m',
-  scores:[],running:true,locked:false,bow:equipment.bow,wind:0,distance:10,level:challenge?.kind==='entre_equipes'&&challenge?.creator?.house!==challenge?.recipient?.house?'iniciante':challenge?.level||levelForMatch(mode,drawHandoff),shift:0,freezeTime:null,stageStartedAt:performance.now(),incoming:null,
+  scores:[],running:true,locked:false,bow:equipment.bow,wind:0,distance:10,level:challenge?.level||(mode==='challenge_team'?'iniciante':isDuel(mode)?'avancado':levelForMatch(mode,drawHandoff)),shift:0,freezeTime:null,stageStartedAt:performance.now(),incoming:null,
   online:challenge,onlineShots:[],onlineReplay:challenge?.recipient.id===userId?challenge.creatorShots:[],
   onlineReplayPoints:0,seed:Math.floor(rand(100000,999999))};
  if(mode==='bot'){
@@ -625,7 +626,7 @@ async function fire(power){
  const iy=sight.y*h+fall+rand(-.06,.06)*jitter;
  const impactDx=(ix-t.x)/t.r,impactDy=(iy-t.y)/t.r;
  const flight=flightSeconds(match.distance,power);
- const dualTargets=match.level==='avancado'&&match.mode==='bot'&&!match.online;
+ const dualTargets=match.level==='avancado';
  const before=targetMotion(match.level,shotIndex,match.freezeTime);
  const after=targetMotion(match.level,shotIndex,match.freezeTime+flight);
  const rules=match.online?.rules??6;
@@ -643,6 +644,7 @@ async function fire(power){
  const base=blocked||norm>1?0:Math.max(1,10-Math.floor(norm*10));
  const score=base>0?Math.min(10,base+tuning.bonus):0;
  if(currentMatch.online)currentMatch.onlineShots.push({dx:landingX,dy:landingY,impactDx:landingX,impactDy:landingY,blocked,power,time:match.freezeTime,bow:activeBow});
+ // Keep launch time intact until collision and server validation are calculated.
  match.freezeTime=null; // The target keeps moving while the arrow flies.
  $('stage').classList.add('firing');arenaAudio.play('fly');
  try{await Promise.race([scene?.fire?.({x:ix/w,y:iy/h,power}),new Promise(resolve=>setTimeout(resolve,1700))]);}
