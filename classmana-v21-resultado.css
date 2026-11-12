@@ -469,3 +469,31 @@ body[data-page="arena"] #view-arena #finish.cm-v21-result .cm-v21-total{
   width:min(36vw,470px)!important;height:auto!important;aspect-ratio:363 / 53!important;
  }
 }
+
+/* Desafio enviado: título oficial fornecido, nunca texto estilizado ou a faixa antiga.
+   Restrito ao duelo online ainda sem pontuação adversária. */
+body[data-page="arena"] #view-arena #finish.cm-v21-result[data-cm-result-mode="duel"][data-cm-result-outcome="pending"] .cm-v21-head #finish-title{
+  display:block!important;
+  box-sizing:border-box!important;
+  width:min(82vw,680px)!important;
+  max-width:100%!important;
+  height:clamp(72px,14dvh,145px)!important;
+  min-height:0!important;
+  max-height:none!important;
+  aspect-ratio:auto!important;
+  margin:0 auto!important;
+  padding:0!important;
+  background-image:url('assets/ui/titles/titulo-desafio-enviado.png?v=20261112-oficial')!important;
+  background-position:center!important;
+  background-size:contain!important;
+  background-repeat:no-repeat!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  outline:0!important;
+  font-size:0!important;
+  line-height:0!important;
+  color:transparent!important;
+  text-shadow:none!important;
+  overflow:hidden!important;
+}
