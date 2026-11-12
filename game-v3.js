@@ -455,6 +455,14 @@ async function startMatch(accepted=null){
  let navigatingToArena=false;
  try{
  const fromInbox=accepted&&typeof accepted.id==='string'?accepted:null;
+ const rawHandoff=window.classmanaDrawHandoff;
+ const drawHandoff=!fromInbox&&rawHandoff&&
+   rawHandoff.mode==='challenge_team'&&
+   rawHandoff.playerId===$('player').value&&
+   rawHandoff.rivalId===$('rival').value&&
+   /^[ABC]\\d{2}$/.test(rawHandoff.rivalId||'')&&
+   rawHandoff.rivalId[0]!==rawHandoff.playerId[0]?rawHandoff:null;
+ if(rawHandoff)window.classmanaDrawHandoff=null;
  const mode=fromInbox?duelMode(fromInbox.kind):$('mode').value;
  if(identifiedPlayerId&&online.user&&identifiedPlayerId!==online.user.id){toast('Sessão inconsistente. Encerre e entre novamente.');return}
  let userId=$('player').value,rivalId=fromInbox?(fromInbox.creator.id===online.user?.id?fromInbox.recipient.id:fromInbox.creator.id):$('rival').value,challenge=null;
@@ -481,13 +489,17 @@ async function startMatch(accepted=null){
    }
   }else if(fromInbox.recipient.id!==userId&&fromInbox.creator.id!==userId){toast('Esse desafio não pertence à sua conta.');return;}
   // Cinematic VS runs before the API creates a challenge. Cancel never leaves a ghost invite.
-  const versusAccepted=await cinematics.versus({
-   player:nameOf(userId),house:userId[0],gender:archerGender(),
-   rival:byId(rivalId),rivalHouse:rivalId?.[0],
-   sound:effect=>arenaAudio.play(effect)
-  });
-  if(!versusAccepted)return;
-  const requestedAt=Date.now(),kind=duelKind(mode),level=$('challenge-level').value;
+  // A tela de sorteio já apresentou o confronto e o aluno já confirmou.
+  // Não exigir uma segunda confirmação VS após CONTINUAR.
+  if(!drawHandoff){
+   const versusAccepted=await cinematics.versus({
+    player:nameOf(userId),house:userId[0],gender:archerGender(),
+    rival:byId(rivalId),rivalHouse:rivalId?.[0],
+    sound:effect=>arenaAudio.play(effect)
+   });
+   if(!versusAccepted)return;
+  }
+  const requestedAt=Date.now(),kind=duelKind(mode),level=drawHandoff?'iniciante':$('challenge-level').value;
   try{
    onlineLoading=true;
    $('start-game').disabled=true;
@@ -524,7 +536,8 @@ async function startMatch(accepted=null){
  if(match?.running){match.running=false;match.locked=false;holding=false;$('stage').classList.remove('aiming','firing');scene?.setPower(0);}
  if(online.user&&isDuel(mode)){userId=online.user.id;selectHouse(userId[0]);$('player').value=userId;}
  match={house:userId==='guest'?house:userId[0],playerId:userId,player:nameOf(userId),mode,difficulty:$('difficulty').value,
-  rivalId,scores:[],running:true,locked:false,bow:equipment.bow,wind:0,distance:10,level:challenge?.level||$('challenge-level').value,shift:0,freezeTime:null,stageStartedAt:performance.now(),incoming:null,
+  rivalId,gender:drawHandoff?.gender||archerGender(),rivalGender:drawHandoff?.rivalGender||'m',
+  scores:[],running:true,locked:false,bow:equipment.bow,wind:0,distance:10,level:challenge?.level||level||$('challenge-level').value,shift:0,freezeTime:null,stageStartedAt:performance.now(),incoming:null,
   online:challenge,onlineShots:[],onlineReplay:challenge?.recipient.id===userId?challenge.creatorShots:[],
   onlineReplayPoints:0,seed:Math.floor(rand(100000,999999))};
  if(mode==='bot'){
@@ -542,16 +555,23 @@ async function startMatch(accepted=null){
    const visualFix=new URLSearchParams(location.search).get('visualFix');
    const cacheQuery=visualFix&&/^[a-zA-Z0-9_-]{1,48}$/.test(visualFix)
      ?'?visualFix='+encodeURIComponent(visualFix):'';
+   if(drawHandoff)window.dispatchEvent(new Event('classmana:duel-launching'));
    window.location.assign('./arena.html'+cacheQuery);
    navigatingToArena=true;
    return;
   }catch(error){console.warn('Navegação entre páginas indisponível:',error)}
  }
  openView('arena');refreshArcher();ensureScene();changeTarget();updateReticle();uiHud();
+ }catch(error){
+  console.error('Erro ao iniciar duelo:',error);
+  toast('Não foi possível abrir o duelo: '+(error?.message||'erro desconhecido'));
  }finally{
  startMatchPending=false;
- // Só soltar a sobreposição se a abertura da arena não foi iniciada.
- if(!navigatingToArena)cinematics.dismissVersusTransition();
+ // Falha da API ou validação: liberar a tela de preparação para nova tentativa.
+ if(!navigatingToArena){
+  if(drawHandoff)window.dispatchEvent(new Event('classmana:duel-launch-failed'));
+  cinematics.dismissVersusTransition();
+ }
 }
 }
 
@@ -1332,6 +1352,7 @@ function restoreArena(){
   return;
  }
  match=saved;
+ if(saved.gender==='m'||saved.gender==='f')selectedSkins[saved.house]=saved.gender;
  identifiedPlayerId=saved.playerId||online.user?.id||cmSessionId();
  equipment={bow:GEAR_BY_ID[saved.bow]?saved.bow:'classico',arrow:'rubi'};
  match.stageStartedAt=performance.now();match.freezeTime=null;match.locked=false;
