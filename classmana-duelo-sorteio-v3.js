@@ -1,7 +1,7 @@
-/* Duelo entre Casas V3 — pronto para o ZIP em assets/ui/duel-draw/. */
+/* Duelo entre Casas V3 — pronto para o ZIP em assets/ui/. */
 (function(){
 'use strict';
-var BASE='assets/ui/duel-draw/';
+var BASE='assets/ui/';
 var H={A:['Águia Dourada','aguia','assets/ui/crests/brasao-aguia-dourada.png'],B:['Leão de Fogo','leao','assets/ui/crests/brasao-leao-de-fogo.png'],C:['Dragão de Esmeralda','dragao','assets/ui/crests/brasao-dragao-esmeralda.png']};
 var R=window.CLASSMANA_ROSTER||{},modal=null,home='',enemy='',picked=null,busy=false,ready=false,audio;
 function el(id){return document.getElementById(id)}
@@ -28,9 +28,9 @@ function make(){
  '<div class="cm-draw-houses" id="cm-draw-houses"></div><div class="cm-draw-grid">',
  '<div class="cm-draw-portrait" id="cm-draw-left"><img id="cm-draw-left-img" alt="Desafiante"><div class="cm-draw-label"><strong id="cm-draw-left-name"></strong><small id="cm-draw-left-house"></small></div></div>',
  '<div class="cm-draw-center"><img class="cm-draw-vs" src="assets/v2/frames/versus.webp" alt="VS">',
- '<img class="cm-draw-spin-banner" src="assets/ui/duel-draw/banner-sorteio.png" alt="Sorteio do Adversário">',
- '<div class="cm-draw-tube" id="cm-draw-tube"><img src="assets/ui/duel-draw/carrossel-tubo.png" alt=""><img id="cm-draw-spin-img" class="cm-draw-spin-face" alt="Retrato alternado">',
- '<img class="cm-draw-select-frame" src="assets/ui/duel-draw/moldura-seletor.png" alt=""></div>',
+ '<img class="cm-draw-spin-banner" src="assets/ui/banner-sorteio.png" alt="Sorteio do Adversário">',
+ '<div class="cm-draw-tube" id="cm-draw-tube"><img src="assets/ui/carrossel-tubo.png" alt=""><img id="cm-draw-spin-img" class="cm-draw-spin-face" alt="Retrato alternado">',
+ '<img class="cm-draw-select-frame" src="assets/ui/moldura-seletor.png" alt=""></div>',
  '<button id="cm-draw-roll" class="cm-draw-action" type="button" disabled>SORTEAR ADVERSÁRIO</button>',
  '<span class="cm-draw-muted" id="cm-draw-state" aria-live="polite">Selecione uma casa rival.</span></div>',
  '<div class="cm-draw-portrait" id="cm-draw-right"><img id="cm-draw-right-img" alt="Adversário"><div class="cm-draw-label"><strong id="cm-draw-right-name">CASA RIVAL</strong><small id="cm-draw-right-house"></small></div></div>',
