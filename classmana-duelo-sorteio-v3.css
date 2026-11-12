@@ -414,7 +414,7 @@
 /* Apenas o desafiante à esquerda aponta para a direita;
    apenas o adversário à direita aponta para a esquerda. */
 #cm-draw-modal #cm-draw-left-img{transform:none!important;}
-#cm-draw-modal #cm-draw-right-img{transform:none!important;}
+#cm-draw-modal #cm-draw-right-img{transform:scaleX(-1)!important;}
 /* Brasões não podem ser espelhados: só as figuras dos arqueiros. */
 #cm-draw-modal #cm-draw-right[data-h] #cm-draw-right-img[src*="/crests/"]{transform:none!important;}
 
@@ -485,4 +485,19 @@
   grid-template-columns:minmax(0,1.07fr) minmax(0,1.58fr) minmax(0,1.07fr) minmax(0,1.08fr)!important;
  }
  #cm-draw-modal .cm-draw-reel-track img{width:clamp(34px,5vw,64px)}
+}
+
+/* O avatar vencedor nasce no CENTRO da moldura, nunca na lateral do tubo. */
+#cm-draw-modal .cm-draw-tube .cm-draw-mini-portrait{display:none!important}
+#cm-draw-modal .cm-draw-tube:not(.finished) .cm-draw-spin-face{visibility:hidden!important;opacity:0}
+#cm-draw-modal .cm-draw-tube.finished .cm-draw-spin-face{
+ visibility:visible!important;
+ opacity:1;
+ transform-origin:center center;
+ animation:cm-draw-winner-reveal .65s cubic-bezier(.12,.8,.3,1) both;
+}
+@keyframes cm-draw-winner-reveal{
+ from{opacity:0;transform:scale(.35);filter:brightness(1.8)}
+ 70%{opacity:1;transform:scale(1.12)}
+ to{opacity:1;transform:scale(1);filter:none}
 }
