@@ -81,7 +81,8 @@ export function initAtmosphere(stage,read){
   // Arte oficial fornecida pelo professor: somente visual.
   // A colisão segue obstacleAt/obstacleBlocks, sem alteração da pontuação.
   if(!shieldArt.complete||shieldArt.naturalWidth===0)return;
-  const width=r*.75,height=r*1.42;
+  // Nunca distorcer o brasão: usar as dimensões reais da arte transparente.
+  const width=r*1.12,height=width*shieldArt.naturalHeight/shieldArt.naturalWidth;
   ctx.save();
   ctx.translate(x,y);
   ctx.rotate(Math.sin(t*2)*.10);
