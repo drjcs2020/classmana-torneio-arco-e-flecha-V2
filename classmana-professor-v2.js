@@ -4,6 +4,24 @@ const $=id=>document.getElementById(id);
 const dialog=$('cm-teacher-dialog'),trigger=$('cm-teacher-toggle');
 if(dialog&&trigger){
  let teacherToken='';
+ let managedStudents=[];
+ function manageSelect(){
+  const house=$('cm-teacher-manage-house').value,select=$('cm-teacher-manage-student'),old=select.value;
+  const students=managedStudents.filter(p=>p.house===house).sort((a,b)=>a.name.localeCompare(b.name,'pt-BR'));
+  select.replaceChildren();
+  const blank=document.createElement('option');blank.value='';blank.textContent='Escolha um aluno';select.append(blank);
+  for(const student of students){const option=document.createElement('option');option.value=student.id;option.textContent=student.name+' · '+student.id;select.append(option)}
+  if(students.some(p=>p.id===old))select.value=old;
+  $('cm-teacher-manage-name').value=managedStudents.find(p=>p.id===select.value)?.name||'';
+  $('cm-teacher-manage-note').textContent=select.value
+    ?'Código permanente '+select.value+' · Histórico de duelos preservado'
+    :students.length+' alunos disponíveis nesta turma.';
+ }
+ async function refreshStudents(){
+  const response=await request('teacherStudents');
+  managedStudents=response.students||[];
+  manageSelect();
+ }
  const notify=(message,isError=false)=>{
   const el=$('cm-teacher-status');el.textContent=message;el.dataset.error=String(isError);
  };
@@ -38,6 +56,7 @@ if(dialog&&trigger){
   const blank=document.createElement('option');blank.value='';blank.textContent='Sem equipe definida';sel.append(blank);
   for(const name of data.teams||[]){const o=document.createElement('option');o.value=name;o.textContent=name;sel.append(o)}
   sel.value=selected;
+  await refreshStudents();
  }
  function closePanel(){dialog.close();teacherToken='';$('cm-teacher-change-form').reset();showAuthenticated(false);notify('Entre com a senha do professor.');}
  trigger.addEventListener('click',()=>{
@@ -85,6 +104,44 @@ if(dialog&&trigger){
    window.dispatchEvent(new CustomEvent('classmana:v2-roster-updated',{detail:{student:result.student}}));
    await refresh();
    notify('✓ '+result.student.name+' cadastrado em 4º '+house+' ('+result.student.id+'). Disponível para jogar.');
+  }catch(error){notify(error.message,true)}
+  finally{loading(false)}
+ });
+ $('cm-teacher-manage-house').addEventListener('change',manageSelect);
+ $('cm-teacher-manage-student').addEventListener('change',()=>{
+   const id=$('cm-teacher-manage-student').value;
+   $('cm-teacher-manage-name').value=managedStudents.find(p=>p.id===id)?.name||'';
+   $('cm-teacher-manage-note').textContent=id?'Código permanente: '+id+' · Os duelos serão preservados.':'Selecione um aluno.';
+ });
+ $('cm-teacher-manage-form').addEventListener('submit',async event=>{
+  event.preventDefault();
+  const id=$('cm-teacher-manage-student').value;
+  const name=$('cm-teacher-manage-name').value.trim();
+  if(!id){notify('Selecione o aluno que deseja alterar.',true);return}
+  if(name.length<3){notify('Digite um nome válido.',true);return}
+  loading(true);notify('Salvando correção do aluno…');
+  try{
+   const result=await request('teacherRenameStudent',{id,name});
+   await refresh();
+   $('cm-teacher-manage-house').value=id[0];manageSelect();$('cm-teacher-manage-student').value=id;
+   $('cm-teacher-manage-name').value=result.student.name;
+   window.dispatchEvent(new CustomEvent('classmana:v2-roster-updated',{detail:{student:result.student,operation:'rename'}}));
+   notify('✓ Nome alterado para '+result.student.name+'. Código '+id+' e histórico de duelos preservados.');
+  }catch(error){notify(error.message,true)}
+  finally{loading(false)}
+ });
+ $('cm-teacher-delete-student').addEventListener('click',async()=>{
+  const id=$('cm-teacher-manage-student').value,person=managedStudents.find(p=>p.id===id);
+  if(!person){notify('Selecione o aluno que deseja excluir.',true);return}
+  if(!window.confirm('Excluir '+person.name+' ('+id+') da lista de participantes da V2?\\n\\nO aluno não poderá acessar novos duelos. Os resultados anteriores serão preservados.'))return;
+  const confirmCode=window.prompt('Para confirmar a exclusão de '+person.name+', digite o código '+id+':');
+  if(confirmCode!==id){notify('Exclusão cancelada: o código não foi confirmado.',true);return}
+  loading(true);notify('Desativando cadastro do aluno…');
+  try{
+   await request('teacherDeleteStudent',{id,confirmation:confirmCode});
+   await refresh();$('cm-teacher-manage-house').value=id[0];manageSelect();
+   window.dispatchEvent(new CustomEvent('classmana:v2-roster-updated',{detail:{id,operation:'delete'}}));
+   notify('✓ '+person.name+' foi retirado da lista. O histórico e o código '+id+' foram preservados.');
   }catch(error){notify(error.message,true)}
   finally{loading(false)}
  });
