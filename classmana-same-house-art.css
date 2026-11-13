@@ -1017,3 +1017,54 @@ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-d
  font:800 clamp(10px,1vw,13px)/1.15 Nunito,sans-serif!important;
  color:#f2f2ea!important;white-space:nowrap!important;
 }
+
+
+/* v18 — quadro para telas de notebook 16" e monitores 19–21".
+   Modo interturmas apenas; preservar mesma turma e a mecânica de tiro. */
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel.cm-interclass-duel .cm-same-player-plate:not([hidden]){
+  transform:translateX(calc(38px - min(11vw,180px)))!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel.cm-interclass-duel .cm-same-house-duel:not([hidden]){
+  margin-top:clamp(81px,calc(13vh - 19px),131px)!important;
+}
+/* O banner continua separado do quadro, preservando seu vão visual. */
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel.cm-interclass-duel #start-game{
+  margin:10px auto 18px!important;
+}
+/* Imagem definitiva com transparência e proporção original, sem letras CSS. */
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel.cm-interclass-duel #cm-interclass-hard-badge:not([hidden]){
+  box-sizing:border-box!important;display:block!important;flex:none!important;
+  width:min(270px,75%)!important;max-width:270px!important;
+  min-height:0!important;height:auto!important;max-height:none!important;
+  padding:0!important;margin:0 auto!important;
+  border:0!important;border-radius:0!important;
+  background:transparent!important;box-shadow:none!important;
+  object-fit:contain!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel #cm-interclass-hard-badge[hidden]{
+  display:none!important;
+}
+@media(max-width:950px){
+ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel.cm-interclass-duel .cm-same-player-plate:not([hidden]){
+  transform:translateX(calc(30px - min(5vw,55px)))!important;
+ }
+}
+@media(max-height:740px) and (min-width:701px){
+ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel.cm-interclass-duel .cm-same-house-duel:not([hidden]){
+  margin-top:71px!important;
+ }
+}
+@media(max-width:700px){
+ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel.cm-interclass-duel .cm-same-player-plate:not([hidden]){
+  transform:none!important;
+ }
+ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel.cm-interclass-duel .cm-same-house-duel:not([hidden]){
+  margin-top:65px!important;
+ }
+ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel.cm-interclass-duel #cm-interclass-hard-badge:not([hidden]){
+  width:min(245px,75%)!important;
+ }
+ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel.cm-interclass-duel #start-game{
+  margin:8px auto 16px!important;
+ }
+}
