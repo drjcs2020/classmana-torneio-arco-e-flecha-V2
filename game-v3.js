@@ -808,7 +808,7 @@ async function fire(power){
  showHit(score,ix/w,iy/h,blocked);
  cinematics.impactSparkle($('stage'),ix/w,iy/h,score,match.house);
  if(blocked){arenaAudio.play('block');toast('🛡️ O ESCUDO DEFENDEU O ALVO!');}
- else if(score>=8){arenaAudio.play('applause');toast(score===10?'🎯 ACERTO PERFEITO! +10 pontos':'👏 A TORCIDA VIBROU!');}
+ else if(score===10){arenaAudio.play('applause',score);toast('🎯 ACERTO PERFEITO! +10 pontos');}
  else if(score===0){arenaAudio.play('boo');toast('📣 A TORCIDA REAGIU! Tente novamente.');}
  else arenaAudio.play('hit',score);
  // The challenger already completed these five shots. Reproduce them one at a time,
