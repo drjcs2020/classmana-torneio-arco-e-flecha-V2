@@ -1,0 +1,253 @@
+
+/* ClassMana Ranking V3 — complementa artes aprovadas, sem alterar a arena. */
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign.active{
+  background:url("assets/v2/backgrounds/ranking.webp") center center / cover no-repeat!important;
+  padding:clamp(5px,1.2vh,12px) clamp(12px,1.5vw,25px) clamp(6px,1vh,10px)!important;
+  gap:clamp(5px,.8vh,10px)!important;
+  min-height:0!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign.active::before,
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign.active::after{
+  background:none!important;box-shadow:none!important;pointer-events:none!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-main-heading{
+  width:min(1030px,87vw)!important;max-width:1030px!important;
+  flex:none!important;min-height:0!important;margin:0 auto!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-banner{
+  width:100%!important;max-height:clamp(100px,24vh,214px)!important;
+  object-fit:contain!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign #ranking-tabs{
+  order:0!important;display:flex!important;gap:20px!important;
+  height:clamp(62px,9vh,84px)!important;min-height:clamp(62px,9vh,84px)!important;
+  margin:-2px 0 0!important;align-items:center!important;justify-content:center!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign #ranking-tabs button{
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  width:clamp(220px,24vw,350px)!important;
+  height:clamp(59px,8.6vh,82px)!important;
+  min-height:0!important;max-height:none!important;
+  border:0!important;background:none!important;box-shadow:none!important;
+  padding:0!important;filter:none!important;overflow:visible!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign #ranking-tabs button .cm-rank-tab-art{
+  object-fit:contain!important;display:block!important;
+  width:100%!important;height:100%!important;max-height:none!important;
+  filter:drop-shadow(0 2px 5px #001429b0)!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign #ranking-tabs button:not(.active) .cm-rank-tab-art{
+  filter:brightness(.91) drop-shadow(0 2px 5px #0008)!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign #ranking-tabs button:focus-visible{
+  outline:3px solid #78eaff!important;outline-offset:2px!important;border-radius:15px!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .ranking-layout{
+  flex:1 1 auto!important;min-height:0!important;
+  width:min(1380px,97vw)!important;max-width:1380px!important;
+  margin:0 auto!important;overflow:hidden!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .ranking-panel{
+  box-sizing:border-box!important;height:100%!important;min-height:0!important;
+  padding:clamp(10px,1.5vh,16px) clamp(13px,1.9vw,26px) clamp(8px,1.3vh,14px)!important;
+  background:rgba(7,36,79,.64)!important;
+  border:3px solid #f2c45e!important;border-radius:22px!important;
+  box-shadow:inset 0 0 0 2px #b3823888,0 4px 12px #0005!important;
+  backdrop-filter:none!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .ranking-panel[hidden]{display:none!important}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .ranking-panel h2{
+  width:min(780px,75vw)!important;height:clamp(41px,6.4vh,67px)!important;
+  flex:0 0 auto!important;margin:0 auto clamp(5px,.8vh,8px)!important;
+  background:none!important;border:none!important;box-shadow:none!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .ranking-panel h2 img{
+  display:block!important;width:100%!important;height:100%!important;
+  max-height:none!important;object-fit:contain!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-scroll-hint{
+  display:none!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign #rank-players.cm-rank-scroll-region{
+  display:block!important;grid-template-columns:none!important;
+  width:100%!important;flex:1 1 auto!important;min-height:0!important;
+  overflow-y:scroll!important;overflow-x:hidden!important;
+  scrollbar-gutter:stable!important;
+  scrollbar-width:auto!important;scrollbar-color:#52deff #082750!important;
+  padding:0 8px 0 0!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign #rank-players::-webkit-scrollbar{
+  width:20px!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign #rank-players::-webkit-scrollbar-track{
+  background:linear-gradient(90deg,#082043,#0f4b83,#072046)!important;
+  border:2px solid #f0bf61!important;border-radius:16px!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign #rank-players::-webkit-scrollbar-thumb{
+  border:3px solid #d7f7ff!important;border-radius:16px!important;
+  background:linear-gradient(90deg,#0083bc,#58f1ff,#03a9da)!important;
+  box-shadow:0 0 6px #61efff!important;min-height:45px!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign #rank-players .cm-rank-row{
+  box-sizing:border-box!important;display:grid!important;
+  grid-template-columns:clamp(42px,5vw,60px) minmax(115px,24%) minmax(172px,1fr) minmax(185px,26%)!important;
+  align-items:center!important;gap:clamp(5px,.85vw,14px)!important;
+  width:100%!important;min-width:0!important;
+  min-height:clamp(36px,5.2vh,48px)!important;
+  padding:3px clamp(8px,1vw,14px)!important;
+  margin:0 0 clamp(3px,.6vh,6px)!important;
+  border:1px solid #3d86b8!important;border-radius:24px!important;
+  background:linear-gradient(180deg,rgba(10,40,84,.83),rgba(7,24,56,.83))!important;
+  box-shadow:inset 0 1px 2px #cdeeff40!important;
+  color:#fff0c7!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign #rank-players .cm-rank-row.cm-rank-gold{
+  border-color:#f5c63d!important;
+  background:linear-gradient(180deg,rgba(122,73,4,.9),rgba(58,37,10,.84))!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign #rank-players .cm-rank-row.cm-rank-silver{
+  border-color:#e2edfb!important;
+  background:linear-gradient(180deg,rgba(90,104,128,.88),rgba(36,54,83,.87))!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign #rank-players .cm-rank-row.cm-rank-bronze{
+  border-color:#dd9d60!important;
+  background:linear-gradient(180deg,rgba(128,72,32,.88),rgba(67,31,20,.86))!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-placement{
+  width:clamp(35px,4.4vh,50px)!important;height:clamp(35px,4.4vh,50px)!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-row .cm-rank-medal{
+  display:block!important;width:100%!important;height:100%!important;max-width:none!important;
+  max-height:none!important;object-fit:contain!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-row .cm-rank-place{
+  font:900 clamp(17px,2.4vh,23px)/1 Georgia,serif!important;text-align:center!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-name,
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-house-name,
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-score{
+  display:block!important;overflow:hidden!important;text-overflow:ellipsis!important;
+  white-space:nowrap!important;min-width:0!important;
+  font:800 clamp(13px,1.5vw,20px)/1.12 Georgia,serif!important;
+  color:#fff1d4!important;text-align:left!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-house-name{
+  border-left:1px solid #e0bd70aa!important;padding-left:clamp(8px,1.3vw,18px)!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-score{
+  text-align:center!important;border:1px solid #e6b95b!important;
+  border-radius:22px!important;padding:4px 8px!important;
+  background:rgba(5,22,48,.75)!important;color:#ffe7aa!important;
+  font-size:clamp(11px,1.2vw,17px)!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-top50{
+  display:block!important;object-fit:contain!important;
+  width:min(330px,42vw)!important;height:clamp(30px,4.4vh,46px)!important;
+  flex:0 0 auto!important;margin:clamp(2px,.7vh,8px) auto -8px!important;
+  position:relative!important;z-index:2!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-footer{
+  position:relative!important;width:min(1380px,97vw)!important;min-height:47px!important;
+  flex:0 0 auto!important;display:flex!important;align-items:center!important;justify-content:center!important;
+  margin:0 auto!important;padding:0!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign #rank-play{
+  box-sizing:border-box!important;display:block!important;position:relative!important;
+  width:clamp(165px,17vw,230px)!important;height:clamp(40px,6vh,58px)!important;
+  min-height:0!important;max-height:none!important;flex:none!important;
+  margin:0!important;padding:0!important;border:0!important;box-shadow:none!important;
+  background:transparent url("assets/ui/ranking-v2/elementos/botao_fechar_placar.png") center/contain no-repeat!important;
+  font-size:0!important;color:transparent!important;cursor:pointer!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign #rank-play:focus-visible{
+  outline:3px solid #6ef5ff!important;outline-offset:2px!important;border-radius:14px!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign #ranking-status{
+  box-sizing:border-box!important;position:absolute!important;right:0!important;bottom:0!important;
+  width:clamp(175px,23vw,280px)!important;min-height:30px!important;
+  padding:5px 9px!important;margin:0!important;border:0!important;
+  border-radius:0!important;box-shadow:none!important;
+  background:transparent url("assets/ui/ranking-v2/elementos/placa_status_duelos_dinamica_sem_numeros.png") center/100% 100% no-repeat!important;
+  color:#fce6ba!important;font:700 clamp(9px,.83vw,12px)/1.2 Nunito,sans-serif!important;
+  text-align:center!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-subtitle{
+  display:none!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-houses-grid{
+  display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:clamp(8px,1.4vw,18px)!important;flex:1 1 auto!important;
+  min-height:0!important;overflow-y:auto!important;overflow-x:hidden!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-house-card{
+  min-width:0!important;padding:clamp(8px,1vw,14px)!important;border-radius:20px!important;
+  background:linear-gradient(180deg,rgba(11,46,93,.83),rgba(4,25,61,.78))!important;
+  border:3px solid #eabf68!important;box-shadow:inset 0 0 0 1px #8caad458!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-house-card.cm-house-place-2{border-color:#c5d2e5!important}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-house-card.cm-house-place-3{border-color:#c88c5d!important}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-house-stat-grid{
+  display:flex!important;flex-direction:column!important;gap:1px!important;overflow:visible!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-house-stat{
+  display:grid!important;grid-template-columns:25px minmax(0,1fr) minmax(56px,29%)!important;
+  justify-items:stretch!important;align-items:center!important;
+  gap:clamp(3px,.5vw,8px)!important;min-height:clamp(26px,3.5vh,36px)!important;
+  padding:2px 6px!important;border:0!important;border-bottom:1px solid #c2e2ff40!important;
+  border-radius:0!important;background:rgba(5,24,51,.42)!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-house-stat img{
+  display:block!important;width:22px!important;height:22px!important;object-fit:contain!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-house-stat-label{
+  text-align:left!important;font:700 clamp(11px,1vw,15px)/1.15 Georgia,serif!important;
+  color:#e8f0ff!important;white-space:nowrap!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-house-stat b{
+  display:block!important;text-align:right!important;white-space:nowrap!important;
+  font:800 clamp(11px,1vw,15px)/1.15 Nunito,sans-serif!important;color:#ffdf92!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-house-top{
+  height:clamp(80px,18vh,164px)!important;flex:0 0 auto!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-house-card .cm-rank-medal{
+  width:clamp(46px,5vw,70px)!important;height:clamp(46px,5vw,70px)!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-house-total{
+  border:1px solid #d4a45e!important;border-radius:22px!important;
+  padding:6px 3px!important;margin-top:8px!important;
+  font:700 clamp(11px,1vw,15px)/1.2 Georgia,serif!important;
+  color:#ffe4a1!important;background:#08244aaa!important;
+}
+@media (max-height:740px) and (min-width:800px){
+  body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-main-heading{width:min(760px,82vw)!important}
+  body[data-page="lobby"] #view-ranking.cm-ranking-redesign #ranking-tabs{height:58px!important;min-height:58px!important}
+  body[data-page="lobby"] #view-ranking.cm-ranking-redesign #ranking-tabs button{height:57px!important;width:clamp(205px,25vw,285px)!important}
+  body[data-page="lobby"] #view-ranking.cm-ranking-redesign .ranking-panel h2{height:44px!important}
+  body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-house-top{height:80px!important}
+  body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-house-stat{min-height:24px!important}
+}
+@media (max-width:799px){
+  body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-main-heading{width:95vw!important}
+  body[data-page="lobby"] #view-ranking.cm-ranking-redesign #ranking-tabs{gap:5px!important;height:55px!important;min-height:55px!important}
+  body[data-page="lobby"] #view-ranking.cm-ranking-redesign #ranking-tabs button{width:clamp(135px,46vw,240px)!important;height:52px!important}
+  body[data-page="lobby"] #view-ranking.cm-ranking-redesign .ranking-layout{width:100%!important}
+  body[data-page="lobby"] #view-ranking.cm-ranking-redesign .ranking-panel{padding:8px!important}
+  body[data-page="lobby"] #view-ranking.cm-ranking-redesign #rank-players .cm-rank-row{
+    grid-template-columns:38px minmax(78px,.9fr) minmax(90px,1fr) minmax(100px,1.2fr)!important;
+    gap:3px!important;padding:3px 5px!important;
+  }
+  body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-row .cm-rank-name,
+  body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-row .cm-rank-house-name,
+  body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-row .cm-rank-score{font-size:11px!important}
+  body[data-page="lobby"] #view-ranking.cm-ranking-redesign #ranking-status{
+    position:static!important;width:100%!important;max-width:250px!important;font-size:10px!important;
+  }
+  body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-footer{
+    flex-wrap:wrap!important;gap:3px!important;
+  }
+  body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-houses-grid{
+    grid-template-columns:1fr!important;
+  }
+}
