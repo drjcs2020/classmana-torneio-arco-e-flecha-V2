@@ -53,7 +53,7 @@ html.cm-v2-resume-pending body[data-page="lobby"]::after{
 <link rel="stylesheet" href="classmana-duel-layout-unified.css?v=20261113-robo-prata-v18">
 <link rel="stylesheet" href="classmana-v2-desafio-aprovado.css?v=20261112-same-house-simple-v1">
 <link rel="stylesheet" href="classmana-desafio-artes-publicadas.css?v=20261113-botoes-proporcao-v16">
-<link rel="stylesheet" href="classmana-same-house-art.css?v=20261113-mesma-turma-layout-v17">
+<link rel="stylesheet" href="classmana-same-house-art.css?v=20261113-interclass-hard-shared-v2">
 <script type="module" src="https://cdnjs.cloudflare.com/ajax/libs/model-viewer/4.1.0/model-viewer.min.js"></script>
 <link rel="stylesheet" href="classmana-duelo-sorteio-v3.css?v=20261112-v16">
 </head>
@@ -267,7 +267,10 @@ html.cm-v2-resume-pending body[data-page="lobby"]::after{
           </button>
           <div id="cm-same-rivals-list" role="listbox" aria-label="Arqueiros disponíveis da mesma turma" hidden></div>
         </div>
-        <img class="cm-same-medium-art" src="assets/ui/challenge/same-house/selo-nivel-medio.webp" alt="Nível Médio — Alvo em Movimento">
+        <img id="cm-same-medium-art" class="cm-same-medium-art" src="assets/ui/challenge/same-house/selo-nivel-medio.webp" alt="Nível Médio — Alvo em Movimento">
+        <div id="cm-interclass-hard-badge" class="cm-interclass-hard-badge" hidden aria-label="Nível Difícil — Alvo móvel e escudos">
+          <strong>🛡️ Nível Difícil</strong><span>Alvo Móvel + Escudos</span>
+        </div>
         <span id="cm-same-house-description" class="cm-same-accessibility">Escolha um arqueiro da mesma turma. Nível médio, alvo horizontal em movimento.</span>
       </div>
       <img class="cm-same-bow-art" src="assets/ui/challenge/same-house/arco-e-aljava.webp" alt="" aria-hidden="true">
@@ -467,7 +470,7 @@ html.cm-v2-resume-pending body[data-page="lobby"]::after{
   <p id="cm-teacher-status" role="status" aria-live="polite">Entre com a senha do professor.</p>
 </dialog>
 <div id="toast" role="status" aria-live="polite"></div>
-<script src="roster.js?v=2"></script><script src="teams.js?v=1"></script><script type="module" src="game-v3.js?v=20261113-interclasses-hard-v1"></script>
+<script src="roster.js?v=2"></script><script src="teams.js?v=1"></script><script type="module" src="game-v3.js?v=20261113-interclass-hard-shared-v2"></script>
 <script type="module" src="wind-panel-restored.js?v=20261108hudfour01"></script>
 <script src="classmana-v2-ui.js?v=20261113-same-house-hide-legacy-v2" defer></script>
 <script src="classmana-v2-lobby-exato.js?v=arsenal-3" defer></script>
