@@ -462,8 +462,9 @@ export function initScene(canvas, getSettings) {
   };
   function activeTargetFile(){
     const q=getSettings()||{},level=q.level||'iniciante';
-    if(level==='lendario')return 'target-suspended.glb';
-    if(level==='avancado')return 'medium-twin-procedural'; // disco único móvel, sem alvo fosco
+    // O modelo suspenso GLB tem um painel opaco visto de frente.
+    // Para o difícil, usar o disco frontal sem placa, mantendo trilha lendária e escudo.
+    if(level==='lendario'||level==='avancado')return 'medium-twin-procedural';
     return (q.index||0)>=3?'target-alt.glb':'target-stand.glb';
   }
   // O disco pode ter sido exportado deitado: medir eixos da malha para deixá-lo em pé.
