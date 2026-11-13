@@ -1552,9 +1552,14 @@ document.querySelectorAll('[data-play-mode]').forEach(button=>{
     setLobbyStep('perfil');populateIdentityOptions();$('cm-identity-player')?.focus();
     toast('🏹 Escolha seu nome antes de iniciar o duelo.');return;
   }
-  // Os três botões de treino contra o robô continuam independentes.
+  // Treino contra o robô: o nível escolhido segue diretamente para a carta VS.
+  // Não alterar startMatch(), match.difficulty, a trilha ou o cálculo dos cinco disparos.
   if(chosen==='bot'&&['easy','medium','hard'].includes(button.dataset.botDifficulty||'')){
    $('difficulty').value=button.dataset.botDifficulty;
+   $('mode').value='bot';
+   updateMode();
+   void startMatch();
+   return;
   }
   $('mode').value=chosen;updateMode();
   setLobbyStep('partida');
