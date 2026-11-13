@@ -658,3 +658,35 @@ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel.cm
   font-size:clamp(10px,3.1vw,14px)!important;left:20%!important;right:12%!important;
  }
 }
+
+
+/* v13: fundo azul translúcido e Iniciar duelo centralizado sob o painel.
+   Somente a modalidade entre turmas é afetada. */
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel.cm-interclass-duel .cm-same-house-duel:not([hidden]){
+ background:linear-gradient(145deg,rgba(10,47,91,.72),rgba(3,23,54,.75))!important;
+ -webkit-backdrop-filter:blur(2px)!important;
+ backdrop-filter:blur(2px)!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel.cm-interclass-duel #start-game{
+ box-sizing:border-box!important;
+ display:block!important;
+ position:relative!important;
+ inset:auto!important;top:auto!important;left:auto!important;right:auto!important;bottom:auto!important;
+ transform:none!important;
+ float:none!important;clear:both!important;
+ align-self:center!important;
+ width:min(286px,70vw)!important;max-width:286px!important;
+ height:auto!important;min-height:0!important;max-height:none!important;
+ margin:12px auto 20px!important;padding:0!important;
+ z-index:1!important;
+ visibility:visible!important;
+ pointer-events:auto!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel.cm-interclass-duel.cm-same-rivals-open #start-game{
+ visibility:hidden!important;pointer-events:none!important;
+}
+@media(max-width:700px){
+ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel.cm-interclass-duel #start-game{
+  margin:12px auto 18px!important;width:min(286px,76vw)!important;
+ }
+}
