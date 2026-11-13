@@ -567,3 +567,39 @@ body[data-page="arena"] #view-arena #finish.cm-v21-result[data-cm-result-mode="b
   gap:clamp(8px,2vw,20px)!important;
  }
 }
+
+
+/* V21 — Resultado contra o robô, três dificuldades.
+   Conserva tamanho do placar e das molduras: desloca a carta esquerda
+   e melhora o enquadramento individual dos sprites, não da moldura. */
+@media(min-width:761px){
+ body[data-page="arena"] #view-arena #finish.cm-v21-result[data-cm-result-mode="bot"] .cm-v21-stage > .cm-v21-player:first-child{
+  transform:translateX(-34px) scale(1.06)!important;
+  transform-origin:center center!important;
+ }
+}
+/* Retrato do aluno: janela interior mais ampla, sem zoom que corta flecha/túnica. */
+body[data-page="arena"] #view-arena #finish.cm-v21-result[data-cm-result-mode="bot"] .cm-v21-stage > .cm-v21-player:first-child .cm-v21-crop{
+ left:10.5%!important;top:14.9%!important;
+ width:79%!important;height:55.5%!important;
+ overflow:hidden!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-v21-result[data-cm-result-mode="bot"] .cm-v21-stage > .cm-v21-player:first-child .cm-v21-crop img{
+ object-fit:contain!important;object-position:50% 50%!important;
+ transform:scale(1.09)!important;transform-origin:center center!important;
+}
+/* Robô cerca de 5% maior, com as pernas ocultas pela placa inferior original. */
+body[data-page="arena"] #view-arena #finish.cm-v21-result[data-cm-result-mode="bot"] .cm-v21-player.cm-v21-robot .cm-v21-crop{
+ top:14.5%!important;height:54.5%!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-v21-result[data-cm-result-mode="bot"] .cm-v21-player.cm-v21-robot .cm-v21-crop img{
+ transform:scale(1.19)!important;transform-origin:50% 42%!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-v21-result[data-cm-result-mode="bot"] .cm-v21-player.cm-v21-robot.cm-v21-facing-left .cm-v21-crop img{
+ transform:scaleX(-1) scale(1.19)!important;transform-origin:50% 42%!important;
+}
+@media(max-width:760px){
+ body[data-page="arena"] #view-arena #finish.cm-v21-result[data-cm-result-mode="bot"] .cm-v21-stage > .cm-v21-player:first-child{
+  transform:scale(1.06)!important;
+ }
+}
