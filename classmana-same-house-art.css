@@ -611,3 +611,21 @@ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-d
   font-size:clamp(12px,2.7vw,18px)!important;white-space:normal!important;
  }
 }
+
+
+/* Entre turmas: cobrir TODO o texto embutido na imagem original do seletor.
+   Preserva o ícone à esquerda e a seta à direita, sem duplicar "Se". */
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel.cm-interclass-duel #cm-same-open-rivals #cm-same-button-text,
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel.cm-interclass-duel #cm-same-open-rivals:not(.has-selection) #cm-same-button-text,
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel.cm-interclass-duel #cm-same-open-rivals.has-selection #cm-same-button-text{
+ display:flex!important;visibility:visible!important;align-items:center!important;
+ position:absolute!important;box-sizing:border-box!important;
+ left:18.1%!important;right:12.4%!important;top:26%!important;
+ width:auto!important;max-width:none!important;height:49%!important;
+ margin:0!important;padding:0 8px!important;
+ background:#fff1d7!important;border-radius:2px!important;
+ font:900 clamp(13px,1.35vw,18px)/1.1 Nunito,sans-serif!important;
+ color:#112f5d!important;white-space:nowrap!important;overflow:hidden!important;
+ text-overflow:ellipsis!important;text-align:left!important;
+ pointer-events:none!important;
+}
