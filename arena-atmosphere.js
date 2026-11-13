@@ -3,7 +3,7 @@
  * Birds, house pennants, embers and shield obstacles.
  * This layer is transparent, cannot intercept shots and never changes scoring.
  */
-import {obstacleAt,targetMotion} from './arena-difficulty.js?v=3';
+import {obstacleAt,targetMotion} from './arena-difficulty.js?v=20261113-hard-slower-v6';
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const rand=(seed)=>{const x=Math.sin(seed*127.1+3.11)*43758.5453;return x-Math.floor(x)};
 const THEMES={
