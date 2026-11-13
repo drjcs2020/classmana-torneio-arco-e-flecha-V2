@@ -18,7 +18,8 @@ const cap=(x,a,b)=>Math.max(a,Math.min(b,x));
 export function targetMotion(level,index,seconds){
  const t=cap(Number(seconds)||0,0,120);
  if(level==='avancado')return {x:2.05*Math.sin(t*.65+index*1.11),y:0};
- if(level==='lendario')return {x:2.60*Math.sin(t*1.61+index*1.11),y:.36*Math.sin(t*.83+index*1.14)};
+ // Difícil: alvo móvel e escudo, mas com ritmo de deslocamento menos agressivo.
+ if(level==='lendario')return {x:2.10*Math.sin(t*.88+index*1.11),y:.20*Math.sin(t*.54+index*1.14)};
  return {x:0,y:0};
 }
 /** Disco único do nível médio, em deslocamento horizontal contínuo.
