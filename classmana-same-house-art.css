@@ -487,3 +487,92 @@ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-d
  }
  body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-duel .cm-other-house-choice span{font-size:12px!important}
 }
+
+
+/* v9 — painel entre turmas: espaço ampliado à esquerda, apenas dois brasões rivais. */
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel.cm-interclass-duel{
+ width:min(1240px,calc(100vw - 16px))!important;
+ max-width:1240px!important;
+ margin-left:auto!important;margin-right:auto!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-duel .cm-same-house-duel:not([hidden]){
+ width:min(1210px,100%)!important;max-width:1210px!important;
+ margin-inline:auto!important;box-sizing:border-box!important;
+ padding-left:20px!important;padding-right:20px!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-duel .cm-same-stage{
+ display:grid!important;
+ grid-template-columns:minmax(360px,43%) minmax(0,44%) minmax(86px,13%)!important;
+ column-gap:0!important;justify-content:space-between!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-duel .cm-same-hero{
+ width:100%!important;height:238px!important;min-width:0!important;
+ flex:initial!important;align-self:center!important;
+ display:flex!important;justify-content:center!important;align-items:center!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-duel #cm-same-house-crest{
+ display:none!important;visibility:hidden!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-duel #cm-other-house-shields:not([hidden]){
+ display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+ column-gap:10px!important;align-items:center!important;justify-content:center!important;
+ width:100%!important;max-width:465px!important;height:234px!important;
+ min-height:0!important;margin:0 auto!important;padding:0!important;
+ flex:1 1 100%!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-duel #cm-other-house-shields > .cm-other-house-choice:not([hidden]){
+ box-sizing:border-box!important;display:flex!important;flex-direction:column!important;
+ align-items:center!important;justify-content:center!important;gap:0!important;
+ width:100%!important;min-width:0!important;max-width:none!important;
+ height:232px!important;margin:0!important;padding:5px 4px!important;
+ background:transparent!important;border:2px solid transparent!important;
+ border-radius:13px!important;box-shadow:none!important;
+ cursor:pointer!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-duel #cm-other-house-shields > .cm-other-house-choice[hidden]{
+ display:none!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-duel #cm-other-house-shields > .cm-other-house-choice img{
+ display:block!important;position:static!important;width:100%!important;
+ max-width:200px!important;min-width:0!important;height:186px!important;
+ max-height:186px!important;object-fit:contain!important;
+ filter:drop-shadow(0 6px 10px #0009)!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-duel #cm-other-house-shields > .cm-other-house-choice span{
+ display:block!important;position:static!important;margin:0!important;
+ color:#ffe2a1!important;font:900 16px Nunito,sans-serif!important;
+ text-shadow:0 2px 5px #000b!important;text-align:center!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-duel #cm-other-house-shields > .cm-other-house-choice[aria-pressed="true"]{
+ border-color:#f5c96f!important;
+ background:linear-gradient(165deg,#fff3bd2b,#0e3b6533)!important;
+ box-shadow:0 0 15px #e6c15e91,inset 0 0 0 1px #ffeab47d!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-duel #cm-other-house-shields > .cm-other-house-choice.cm-other-house-dim{
+ filter:brightness(.37) grayscale(.5)!important;opacity:.65!important;
+}
+@media(max-width:1000px){
+ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-duel .cm-same-stage{
+  grid-template-columns:minmax(260px,41%) minmax(0,46%) minmax(70px,13%)!important;
+ }
+ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-duel #cm-other-house-shields > .cm-other-house-choice img{
+  height:153px!important;max-height:153px!important;
+ }
+}
+@media(max-width:700px){
+ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-duel .cm-same-stage{
+  grid-template-columns:minmax(0,1fr)!important;height:auto!important;
+ }
+ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-duel .cm-same-hero{
+  height:175px!important;min-height:175px!important;
+ }
+ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-duel #cm-other-house-shields:not([hidden]){
+  max-width:440px!important;height:172px!important;
+ }
+ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-duel #cm-other-house-shields > .cm-other-house-choice:not([hidden]){
+  height:169px!important;
+ }
+ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-duel #cm-other-house-shields > .cm-other-house-choice img{
+  height:135px!important;max-height:135px!important;
+ }
+}
