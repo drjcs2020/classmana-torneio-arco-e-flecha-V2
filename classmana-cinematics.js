@@ -83,14 +83,22 @@ function setAmbientHouse(house){
   layer.dataset.house=getHouse(house);
  }
 }
-function fighter(person){
+function fighter(person,{robot=false}={}){
  const house=getHouse(person.house);
  const card=node('article','cm-vs-fighter');
  card.dataset.house=house;
+ if(robot)card.classList.add('cm-vs-robot');
  const img=node('img');
- img.alt='Retrato do rosto do arqueiro da Casa '+houses[house].name;
- img.src=portrait(house,person.gender);
- portraitFallback(img,house,person.gender);
+ if(robot){
+  // Retrato exclusivo do robô; nunca reutilizar a arqueira da Casa C.
+  // O espelhamento do adversário continua sendo aplicado pela classe cm-vs-facing-left.
+  img.alt='Robô arqueiro metálico com arco dourado e alvo no peito';
+  img.src='assets/ui/challenge/robo-arqueiro-v2.svg';
+ }else{
+  img.alt='Retrato do rosto do arqueiro da Casa '+houses[house].name;
+  img.src=portrait(house,person.gender);
+  portraitFallback(img,house,person.gender);
+ }
  img.decoding='async';
  const crop=node('div','cm-combat-portrait');crop.append(img);
  const info=node('div','cm-vs-fighter-info');
@@ -150,7 +158,7 @@ function versus(config){
  const sub=node('p','cm-vs-sub','🏹 CINCO FLECHAS • MAIOR PONTUAÇÃO VENCE');
  const fighters=node('div','cm-vs-fighters');
  const versusSign=node('div','cm-vs-mark','VS');
- const ownCard=fighter(own), rivalCard=fighter(rival);
+ const ownCard=fighter(own), rivalCard=fighter(rival,{robot:config.mode==='bot'});
   // Apenas o retrato do adversário é espelhado: textos e moldura intactos.
   rivalCard.classList.add('cm-vs-facing-left');
   fighters.append(ownCard,versusSign,rivalCard);
