@@ -993,36 +993,54 @@ function createLink(){if(!match)return;const total=match.scores.reduce((a,b)=>a+
 async function share(){const link=createLink();try{await navigator.clipboard.writeText(link);toast('Link copiado! Envie ao outro arqueiro.')}catch{window.prompt('Copie o link do desafio:',link)}}
 function processLink(){try{const h=location.hash;if(!h.startsWith('#duel='))return;const d=decode(h.slice(6));if(d.v!==2)return;if(d.complete){toast('Resultado compartilhado: '+d.a.score+' × '+d.b.score+' pontos.');location.hash='';return}if(typeof d.playerId!=='string'||typeof d.rivalId!=='string'||!H[d.house]||!H[d.rivalId[0]]||d.playerId===d.rivalId||!Number.isInteger(d.score)||d.score<0||d.score>50||!choices(d.house).some(x=>x.id===d.playerId)||!choices(d.rivalId[0]).some(x=>x.id===d.rivalId))return;incoming=d;selectHouse(d.rivalId[0]);$('player').value=d.rivalId;$('mode').value=d.house===d.rivalId[0]?'challenge_same':'challenge';updateMode();$('rival-label').classList.add('hidden');$('difficulty-label').classList.add('hidden');toast('⚔️ Desafio recebido de '+byId(d.playerId)+' — '+d.score+' pontos!');setLobbyStep('partida');}catch(e){console.warn('Desafio inválido',e)}}
 const htmlSafe=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function cmRankMode(){
+ const root=$('view-ranking');if(!root)return;
+ const mode=scoreTab==='classes'?'classes':'players';root.dataset.rankMode=mode;
+ if($('cm-panel-archers'))$('cm-panel-archers').hidden=mode!=='players';
+ if($('cm-panel-houses'))$('cm-panel-houses').hidden=mode!=='classes';
+ document.querySelectorAll('#ranking-tabs [data-rank]').forEach(btn=>{
+  const chosen=btn.dataset.rank===mode;
+  btn.classList.toggle('active',chosen);btn.setAttribute('aria-selected',String(chosen));btn.tabIndex=chosen?0:-1;
+ });
+}
 async function renderRanking(){
  const status=$('ranking-status'),classesHost=$('rank-houses'),playersHost=$('rank-players');
- if(!online.enabled){
-  status.textContent='⚠️ A API de ranking não está configurada.';
+ if(!status||!classesHost||!playersHost)return;cmRankMode();
+ if(!online.enabled){status.textContent='⚠️ A API de ranking não está configurada.';
   classesHost.innerHTML='<div class="empty">Placar indisponível.</div>';
-  playersHost.innerHTML='<div class="empty">Placar indisponível.</div>';return;
- }
+  playersHost.innerHTML='<div class="empty">Placar indisponível.</div>';return;}
  status.textContent='⏳ Consultando o ranking oficial do torneio...';
  try{
   const data=await online.ranking();
-  const matches=Number(data.games)||0;
-  const allClasses=Array.isArray(data.classes)?data.classes:[];
-  const allTeams=Array.isArray(data.teams)?data.teams:[];
-  const allPlayers=Array.isArray(data.players)?data.players:[];
+  const matches=Number(data.games)||0,allClasses=Array.isArray(data.classes)?data.classes:[],allPlayers=Array.isArray(data.players)?data.players:[];
   status.textContent='🏆 '+matches+' duelos concluídos · Atualizado às '+new Date().toLocaleTimeString('pt-BR');
-  const groupType=scoreTab==='teams'?'teams':'classes';
-  const groups=groupType==='teams'?allTeams:allClasses;
-  const houseLabel=groupType==='teams'?'🛡️ Classificação das Equipes':'🏰 Classificação das Turmas';
-  const groupHeading=classesHost.closest('.ranking-panel')?.querySelector('h2');
-  if(groupHeading)groupHeading.textContent=houseLabel;
-  const playerHeading=playersHost.closest('.ranking-panel')?.querySelector('h2');
-  if(playerHeading)playerHeading.textContent=scoreTab==='players'?'🏹 Ranking dos Arqueiros':'🏹 Arqueiros em Destaque';
-  classesHost.innerHTML=groups.map((row,i)=>`<div class="rankline">
-    <div><b>${['🥇','🥈','🥉'][i]||'🏹'} ${htmlSafe(groupType==='classes'?(H[row.name]?.name||row.name):row.name)}</b>
-    <small>${row.members||0} integrantes · ${row.plays||0} participações · ${row.total||0} pontos</small></div>
-    <span>${row.wins||0} vitórias</span></div>`).join('')||'<div class="empty">Nenhum registro para este grupo.</div>';
-  playersHost.innerHTML=allPlayers.slice(0,25).map((p,i)=>`<div class="rankline">
-    <div><b>${i+1}º · ${htmlSafe(p.name)}</b>
-    <small>${htmlSafe(H[p.house]?.grade||p.house)} · ${htmlSafe(p.team||'Sem equipe')} · ${p.plays||0} partidas</small></div>
-    <span>${p.wins||0} V · ${p.losses||0} D · ${p.total||0} pts</span></div>`).join('')||'<div class="empty">Ainda não há duelos concluídos.</div>';
+  const medals=['ouro','prata','bronze'];
+  const medalImg=i=>i<3?'<img class="cm-rank-medal" src="assets/ui/ranking-v2/medalha-'+medals[i]+'.webp" alt="'+(i+1)+'º lugar">':'<span class="cm-rank-place">'+(i+1)+'º</span>';
+  const num=v=>Math.max(0,Number(v)||0).toLocaleString('pt-BR');
+  playersHost.innerHTML=allPlayers.slice(0,50).map((p,i)=>{
+   const h=H[p.house]||{grade:'Turma não cadastrada',name:'Casa não cadastrada'};
+   return '<div class="cm-rank-row">'+medalImg(i)+
+    '<div class="cm-rank-person"><b>'+htmlSafe(p.name)+'</b><small>'+htmlSafe(h.grade)+' · '+htmlSafe(h.name)+'</small></div>'+
+    '<div class="cm-rank-results"><b>'+num(p.total)+' pts</b><small>'+num(p.wins)+' V · '+num(p.losses)+' D · '+num(p.draws)+' E · '+num(p.plays)+' duelos</small></div></div>';
+  }).join('')||'<div class="empty">Ainda não há duelos concluídos.</div>';
+  const crestByHouse={A:'aguia-dourada',B:'leao-de-fogo',C:'dragao-esmeralda'};
+  classesHost.innerHTML=allClasses.slice(0,3).map((row,i)=>{
+   const h=H[row.name],label=h?(h.grade+' · '+h.name):String(row.name);
+   const crest=crestByHouse[row.name];
+   const stats=[
+    ['🏆','Vitórias',num(row.wins)],['🎯','Pontos',num(row.total)],
+    ['⚔️','Duelos concluídos',num(row.plays)],['🤝','Empates',num(row.draws)],
+    ['🛡️','Derrotas',num(row.losses)],
+    ['✅','Convites aceitos',row.accepted==null?'—':num(row.accepted)],
+    ['❌','Convites recusados',row.refused==null?'—':num(row.refused)],
+    ['⏱️','Tempo de jogo','Não registrado']];
+   return '<article class="cm-rank-house-card">'+
+    '<div class="cm-house-top">'+medalImg(i)+
+    (crest?'<img class="cm-house-crest" src="assets/ui/crests/brasao-'+crest+'.png" alt="">':'')+'</div>'+
+    '<h3>'+htmlSafe(label)+'</h3><div class="cm-house-stat-grid">'+
+    stats.map(([icon,key,value])=>'<div class="cm-house-stat"><span aria-hidden="true">'+icon+'</span><small>'+key+'</small><b>'+value+'</b></div>').join('')+
+    '</div></article>';
+  }).join('')||'<div class="empty">Nenhum registro de turma disponível.</div>';
  }catch(err){
   status.textContent='⚠️ Falha ao consultar o ranking no servidor: '+err.message;
   classesHost.innerHTML='<div class="empty">Não foi possível atualizar a classificação.</div>';
@@ -1510,7 +1528,7 @@ $('cm-v2-home-exit')?.addEventListener('click',cmEndSession);
 $('cm-ranking-choice')?.addEventListener('click',()=>openView('ranking'));
 $('cm-open-challenges')?.addEventListener('click',()=>openInbox());
 document.querySelectorAll('[data-rank]').forEach(btn=>btn.addEventListener('click',()=>{
- scoreTab=btn.dataset.rank;document.querySelectorAll('[data-rank]').forEach(x=>x.classList.toggle('active',x===btn));renderRanking();
+ scoreTab=btn.dataset.rank==='classes'?'classes':'players';cmRankMode();renderRanking();
 }));
 function toggleArenaPause(){
  if(!match?.running||match.locked||view!=='arena')return;
