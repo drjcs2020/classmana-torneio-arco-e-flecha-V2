@@ -1001,6 +1001,15 @@ function cmRankMode(){
  document.querySelectorAll('#ranking-tabs [data-rank]').forEach(btn=>{
   const chosen=btn.dataset.rank===mode;
   btn.classList.toggle('active',chosen);btn.setAttribute('aria-selected',String(chosen));btn.tabIndex=chosen?0:-1;
+  const art=btn.querySelector('.cm-rank-tab-art');
+  if(art){
+   const type=btn.dataset.rank==='players'?'arqueiros':'turmas';
+   const filename=type==='arqueiros'
+    ?(chosen?'aba-arqueiros-ativa-recortado.webp':'aba-arqueiros-inativa.webp')
+    :(chosen?'aba-turmas-ativa.webp':'aba-turmas-inativa-recortado.webp');
+   const next='assets/ui/ranking-v2/'+filename;
+   if(art.getAttribute('src')!==next)art.setAttribute('src',next);
+  }
  });
 }
 async function renderRanking(){
