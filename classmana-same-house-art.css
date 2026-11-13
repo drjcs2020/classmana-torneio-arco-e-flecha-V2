@@ -990,3 +990,30 @@ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel:no
   margin:12px auto 20px!important;
  }
 }
+
+
+/* Dificuldade visual fiel à regra online: outra turma = difícil (alvo móvel + escudos).
+   Não reutilizar uma imagem de Nível Médio para anunciar desafio difícil. */
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-duel #cm-same-medium-art[hidden],
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel #cm-same-medium-art[hidden],
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel #cm-interclass-hard-badge[hidden]{
+ display:none!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-duel #cm-interclass-hard-badge:not([hidden]){
+ box-sizing:border-box!important;display:flex!important;flex-direction:column!important;
+ justify-content:center!important;align-items:center!important;gap:0!important;
+ width:min(249px,65%)!important;min-height:66px!important;margin:0 auto!important;
+ padding:5px 16px!important;
+ border:3px solid #eac067!important;border-radius:35px!important;
+ background:linear-gradient(145deg,#18355d,#071c43)!important;
+ color:#ffe19b!important;text-align:center!important;
+ box-shadow:inset 0 0 0 1px #ffeca86a,0 6px 10px #0009!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-duel #cm-interclass-hard-badge strong{
+ font:800 clamp(15px,1.35vw,19px)/1.2 Cinzel,Georgia,serif!important;
+ color:#ffe2a6!important;white-space:nowrap!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-duel #cm-interclass-hard-badge span{
+ font:800 clamp(10px,1vw,13px)/1.15 Nunito,sans-serif!important;
+ color:#f2f2ea!important;white-space:nowrap!important;
+}
