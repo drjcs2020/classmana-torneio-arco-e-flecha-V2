@@ -197,3 +197,110 @@ body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-scroll-region
  body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-house-stat-grid{gap:4px!important;}
  body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-house-stat{padding:4px 2px!important;}
 }
+
+/* V2 — reparação visual do ranking, especialmente notebooks de 16" e monitores 19–21".
+   Override restrito ao painel ranking, sem afetar a arena. */
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign.active{
+ padding:8px 24px 9px!important;gap:7px!important;
+ overflow-x:hidden!important;overflow-y:auto!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-main-heading{
+ flex:0 0 auto!important;width:min(870px,94vw)!important;max-width:870px!important;
+ height:auto!important;min-height:0!important;line-height:normal!important;
+ display:block!important;overflow:visible!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-banner{
+ display:block!important;width:100%!important;max-width:100%!important;
+ height:auto!important;max-height:none!important;object-fit:contain!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign #ranking-status{
+ width:min(920px,96vw)!important;max-width:920px!important;
+ min-height:27px!important;padding:4px 10px!important;margin:0!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign #ranking-tabs{
+ position:relative!important;z-index:5!important;
+ display:flex!important;flex:0 0 auto!important;align-items:center!important;
+ justify-content:center!important;gap:18px!important;
+ width:100%!important;height:60px!important;min-height:60px!important;
+ margin:0 auto!important;padding:0!important;opacity:1!important;
+ visibility:visible!important;overflow:visible!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign #ranking-tabs button{
+ box-sizing:border-box!important;display:flex!important;align-items:center!important;
+ justify-content:center!important;flex:0 0 auto!important;
+ position:relative!important;visibility:visible!important;opacity:1!important;
+ width:min(205px,34vw)!important;height:58px!important;
+ min-height:58px!important;max-height:58px!important;
+ margin:0!important;padding:0!important;border:0!important;
+ background:none!important;color:inherit!important;overflow:visible!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign #ranking-tabs .cm-rank-tab-art{
+ display:block!important;width:100%!important;height:100%!important;
+ max-width:100%!important;max-height:100%!important;
+ object-fit:contain!important;opacity:1!important;visibility:visible!important;
+ filter:drop-shadow(0 2px 5px #000a)!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .ranking-layout{
+ display:block!important;grid-template-columns:minmax(0,1fr)!important;
+ flex:1 1 auto!important;width:min(1180px,97vw)!important;
+ min-height:245px!important;max-height:none!important;overflow:hidden!important;
+ margin:0 auto!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .ranking-panel{
+ width:100%!important;min-height:0!important;height:100%!important;
+ display:flex!important;flex-direction:column!important;
+ padding:12px 17px 15px!important;overflow:hidden!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .ranking-panel[hidden]{display:none!important}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .ranking-panel h2{
+ display:block!important;flex:0 0 auto!important;width:min(720px,90%)!important;
+ height:54px!important;margin:0 auto 7px!important;padding:0!important;
+ box-shadow:none!important;border:0!important;background:none!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .ranking-panel h2 img{
+ display:block!important;height:100%!important;width:100%!important;
+ max-height:none!important;object-fit:contain!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign #rank-players.cm-rank-scroll-region{
+ display:block!important;grid-template-columns:none!important;
+ width:100%!important;min-height:0!important;flex:1 1 auto!important;
+ overflow-y:scroll!important;overflow-x:hidden!important;
+ scrollbar-gutter:stable!important;padding-right:9px!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign #rank-players .cm-rank-row{
+ box-sizing:border-box!important;display:grid!important;
+ grid-template-columns:60px minmax(0,1fr) minmax(155px,22%)!important;
+ align-items:center!important;column-gap:14px!important;
+ min-height:62px!important;width:100%!important;margin:0 0 8px!important;
+ padding:5px 13px!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-person b,
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-results b{
+ font-size:clamp(16px,1.6vw,21px)!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-results small{
+ white-space:normal!important;line-height:1.25!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-scroll-hint{
+ text-align:center!important;font-size:12px!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign #rank-play{
+ flex:0 0 auto!important;min-height:39px!important;margin:0 auto!important;
+}
+@media(max-height:740px) and (min-width:800px){
+ body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-main-heading{width:min(730px,90vw)!important}
+ body[data-page="lobby"] #view-ranking.cm-ranking-redesign #ranking-tabs{height:54px!important;min-height:54px!important}
+ body[data-page="lobby"] #view-ranking.cm-ranking-redesign #ranking-tabs button{height:53px!important;min-height:53px!important;max-height:53px!important}
+ body[data-page="lobby"] #view-ranking.cm-ranking-redesign .ranking-panel h2{height:45px!important;margin-bottom:4px!important}
+ body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-row{min-height:58px!important;margin-bottom:5px!important}
+}
+@media(max-width:799px){
+ body[data-page="lobby"] #view-ranking.cm-ranking-redesign.active{padding:9px!important}
+ body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-main-heading{width:min(600px,96vw)!important}
+ body[data-page="lobby"] #view-ranking.cm-ranking-redesign #ranking-tabs{gap:8px!important;height:53px!important;min-height:53px!important}
+ body[data-page="lobby"] #view-ranking.cm-ranking-redesign #ranking-tabs button{width:min(48vw,200px)!important;height:52px!important;min-height:52px!important}
+ body[data-page="lobby"] #view-ranking.cm-ranking-redesign .ranking-layout{width:100%!important}
+ body[data-page="lobby"] #view-ranking.cm-ranking-redesign .ranking-panel{padding:9px!important}
+ body[data-page="lobby"] #view-ranking.cm-ranking-redesign #rank-players .cm-rank-row{grid-template-columns:42px minmax(0,1fr) 105px!important;gap:5px!important;padding:5px!important}
+ body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-row .cm-rank-medal{width:36px!important;height:36px!important}
+}
