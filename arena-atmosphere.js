@@ -18,6 +18,9 @@ export function initAtmosphere(stage,read){
  stage.appendChild(canvas);
  let active=false,frame=0,house='A',raf=0,lastWidth=0,lastHeight=0;
  const reduced=window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches||false;
+ const shieldArt=new Image();
+ shieldArt.decoding='async';
+ shieldArt.src='assets/ui/arena/escudo-dificil-azul-dourado.webp?v=20261113-v1';
  const birds=Array.from({length:7},(_,i)=>({phase:rand(i+1)*6.28,y:.10+rand(i+6)*.20,size:4+rand(i+11)*7,speed:.3+rand(i+19)*.38}));
  const particles=Array.from({length:48},(_,i)=>({x:rand(i+77),y:rand(i+83),speed:.008+rand(i+97)*.025,size:1.5+rand(i+109)*3,phase:rand(i+131)*Math.PI*2}));
  function dims(){
@@ -75,18 +78,15 @@ export function initAtmosphere(stage,read){
   ctx.restore();
  }
  function shield(x,y,r,palette,t){
-  ctx.save();ctx.translate(x,y);ctx.rotate(Math.sin(t*2)*.10);
-  const width=r*.57,height=r*1.23;
-  ctx.shadowColor=palette.dark;ctx.shadowBlur=14;
-  const g=ctx.createLinearGradient(-width,-height,width,height);
-  g.addColorStop(0,'#f4ead2');g.addColorStop(.42,palette.flag);g.addColorStop(1,palette.dark);
-  ctx.fillStyle=g;ctx.lineWidth=Math.max(2,r*.06);ctx.strokeStyle=palette.gold;
-  ctx.beginPath();ctx.moveTo(0,-height*.52);ctx.quadraticCurveTo(width*.53,-height*.50,width*.5,0);
-  ctx.lineTo(width*.39,height*.39);ctx.lineTo(0,height*.55);
-  ctx.lineTo(-width*.39,height*.39);ctx.lineTo(-width*.5,0);
-  ctx.quadraticCurveTo(-width*.53,-height*.5,0,-height*.52);
-  ctx.closePath();ctx.fill();ctx.stroke();ctx.shadowBlur=0;
-  ctx.strokeStyle='#fff6de';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(0,-height*.34);ctx.lineTo(0,height*.34);ctx.moveTo(-width*.32,0);ctx.lineTo(width*.32,0);ctx.stroke();
+  // Arte oficial fornecida pelo professor: somente visual.
+  // A colisão segue obstacleAt/obstacleBlocks, sem alteração da pontuação.
+  if(!shieldArt.complete||shieldArt.naturalWidth===0)return;
+  const width=r*.75,height=r*1.42;
+  ctx.save();
+  ctx.translate(x,y);
+  ctx.rotate(Math.sin(t*2)*.10);
+  ctx.shadowColor='rgba(0,24,70,.55)';ctx.shadowBlur=Math.max(3,r*.12);
+  ctx.drawImage(shieldArt,-width/2,-height/2,width,height);
   ctx.restore();
  }
  function render(now){
