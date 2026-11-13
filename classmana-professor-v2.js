@@ -34,7 +34,12 @@ if(dialog&&trigger){
    const response=await fetch(url,{method,mode:'cors',cache:'no-store',signal:controller.signal,
     headers:{'Content-Type':'application/json',...(teacherToken?{'X-ClassMana-Teacher':teacherToken}:{})},
     ...(payload?{body:JSON.stringify(payload)}:{})});
-   const data=await response.json();if(!response.ok||!data.ok)throw Error(data.error||'Não foi possível acessar o professor.');
+   const data=await response.json();
+   if(!response.ok||!data.ok){
+    if(response.status===401&&action!=='teacherLogin')
+      throw Error('Sessão do professor expirada. Entre novamente com a senha.');
+    throw Error(data.error||'Não foi possível acessar o professor.');
+   }
    return data;
   }catch(error){throw Error(error.name==='AbortError'?'O servidor demorou a responder.':error.message)}
   finally{clearTimeout(clock)}
@@ -56,7 +61,14 @@ if(dialog&&trigger){
   const blank=document.createElement('option');blank.value='';blank.textContent='Sem equipe definida';sel.append(blank);
   for(const name of data.teams||[]){const o=document.createElement('option');o.value=name;o.textContent=name;sel.append(o)}
   sel.value=selected;
-  await refreshStudents();
+  try{await refreshStudents()}
+  catch(error){
+   // O professor já está autenticado: não confundir falha de catálogo com senha errada.
+   managedStudents=[];
+   manageSelect();
+   $('cm-teacher-manage-note').textContent='Não foi possível atualizar a lista de alunos: '+error.message+
+     '. Feche e reabra o painel para tentar novamente.';
+  }
  }
  function closePanel(){dialog.close();teacherToken='';$('cm-teacher-change-form').reset();showAuthenticated(false);notify('Entre com a senha do professor.');}
  trigger.addEventListener('click',()=>{
@@ -71,7 +83,10 @@ if(dialog&&trigger){
   event.preventDefault();loading(true);notify('Verificando acesso…');
   try{
    const result=await request('teacherLogin',{password:$('cm-teacher-password').value});
-   teacherToken=result.token;showAuthenticated(true);await refresh();notify('Acesso do professor liberado.');
+   teacherToken=result.token;
+   await refresh();
+   showAuthenticated(true);
+   notify('Acesso do professor liberado.');
   }catch(error){teacherToken='';showAuthenticated(false);notify(error.message,true)}
   finally{loading(false)}
  });
