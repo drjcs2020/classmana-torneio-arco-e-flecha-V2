@@ -441,7 +441,13 @@ function syncSameHouseDuel(){
  if(title)title.hidden=!other;
  const crest=$('cm-same-house-crest'),shields=$('cm-other-house-shields');
  if(shields)shields.hidden=!other;
- if(crest)crest.hidden=other;
+ if(crest){
+  crest.hidden=other;
+  // Regras visuais antigas usam display:block!important. O atributo hidden sozinho
+  // não é suficiente para esconder o escudo da própria casa.
+  if(other)crest.style.setProperty('display','none','important');
+  else crest.style.removeProperty('display');
+ }
  if(illustrated){
   if(label.parentElement!==slot)slot.appendChild(label);
   const h=$('player').value?.[0]||house;
