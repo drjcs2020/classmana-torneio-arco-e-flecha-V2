@@ -134,3 +134,36 @@ body[data-page="lobby"] #view-inicio[data-step="desafio"] #duel-options.cm-chall
   height:clamp(33px,6.5vh,50px)!important;
  }
 }
+
+/* V16: artes rubi/violeta têm proporções próximas a 1.6:1.
+   Antes estavam forçadas a 220x50, achatando os brasões e as letras. */
+body[data-page="lobby"] #view-inicio[data-step="desafio"] #duel-options.cm-challenge-assets .cm-challenge-student-actions{
+ height:clamp(78px,13vh,116px)!important;
+ bottom:-2%!important;
+ align-items:end!important;justify-content:center!important;
+ gap:clamp(9px,1.5vw,24px)!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="desafio"] #duel-options.cm-challenge-assets .cm-challenge-student-actions button{
+ box-sizing:border-box!important;
+ flex:0 1 clamp(118px,15vw,180px)!important;
+ width:clamp(118px,15vw,180px)!important;
+ max-width:180px!important;min-width:0!important;
+ height:auto!important;min-height:0!important;
+ aspect-ratio:1.59/1!important;
+ align-self:end!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="desafio"] #duel-options.cm-challenge-assets .cm-challenge-student-actions button img{
+ display:block!important;width:100%!important;height:100%!important;
+ max-width:100%!important;max-height:100%!important;
+ object-fit:contain!important;object-position:center bottom!important;
+}
+@media(max-width:780px){
+ body[data-page="lobby"] #view-inicio[data-step="desafio"] #duel-options.cm-challenge-assets .cm-challenge-student-actions{
+  height:clamp(65px,11vh,98px)!important;
+  gap:clamp(7px,1vw,15px)!important;
+ }
+ body[data-page="lobby"] #view-inicio[data-step="desafio"] #duel-options.cm-challenge-assets .cm-challenge-student-actions button{
+  flex-basis:clamp(95px,23vw,150px)!important;
+  width:clamp(95px,23vw,150px)!important;max-width:150px!important;
+ }
+}
