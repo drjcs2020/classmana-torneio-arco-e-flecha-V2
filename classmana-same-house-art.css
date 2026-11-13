@@ -576,3 +576,38 @@ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-d
   height:135px!important;max-height:135px!important;
  }
 }
+
+
+/* Banner interturmas — uma superfície e UMA linha de texto, sem arte com letras embaixo. */
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-duel .cm-same-title-wrap{
+ box-sizing:border-box!important;isolation:isolate!important;
+ width:min(750px,92%)!important;height:66px!important;min-height:66px!important;
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ position:relative!important;margin:-31px auto 5px!important;padding:0 27px!important;
+ border:4px solid #e9b84f!important;border-radius:38px!important;
+ background:linear-gradient(180deg,#1a4d8f 0%,#0b2b63 24%,#061b47 58%,#08234c 100%)!important;
+ box-shadow:inset 0 0 0 2px #fff2b5a8,inset 0 -5px 8px #0005,0 6px 14px #0009!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-duel .cm-same-title-wrap .cm-same-banner{
+ display:none!important;visibility:hidden!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-duel #cm-other-house-title:not([hidden]){
+ display:block!important;position:static!important;inset:auto!important;
+ z-index:1!important;box-sizing:border-box!important;margin:0!important;padding:0!important;
+ width:100%!important;height:auto!important;max-width:100%!important;
+ border:0!important;background:transparent!important;border-radius:0!important;
+ color:#ffe1a0!important;text-align:center!important;
+ font:800 clamp(15px,2.08vw,25px)/1.12 Cinzel,Georgia,serif!important;
+ letter-spacing:-.02em!important;white-space:normal!important;
+ text-shadow:0 2px 2px #020c23,0 0 7px #916321!important;
+ overflow:visible!important;
+}
+@media(max-width:700px){
+ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-duel .cm-same-title-wrap{
+  width:96%!important;height:58px!important;min-height:58px!important;
+  margin:-22px auto 6px!important;padding:0 15px!important;border-width:3px!important;
+ }
+ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-duel #cm-other-house-title:not([hidden]){
+  font-size:clamp(12px,2.7vw,18px)!important;white-space:normal!important;
+ }
+}
