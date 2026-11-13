@@ -244,7 +244,7 @@ function cmShowActiveSession(){
 function drawCourse(){
  const el=$('lobby-course');if(!el)return;
  const mode=$('mode')?.value||'practice';
- const level=mode==='challenge_team'?'iniciante':isDuel(mode)?'avancado':$('challenge-level')?.value||'iniciante';
+ const level=mode==='challenge_team'?'iniciante':mode==='challenge_same'?'avancado':mode==='challenge'?'lendario':$('challenge-level')?.value||'iniciante';
  const path=CIRCUITS[level]||CIRCUITS.iniciante;
  el.innerHTML='<svg class="course-route" viewBox="0 0 900 90" preserveAspectRatio="none" aria-hidden="true"><path d="M36 67 C 140 67 148 18 260 30 S 445 79 515 52 S 705 10 860 50" fill="none" stroke="#764f27" stroke-width="15" stroke-linecap="round"/><path d="M36 67 C 140 67 148 18 260 30 S 445 79 515 52 S 705 10 860 50" fill="none" stroke="#fbe8b0" stroke-width="10" stroke-linecap="round"/></svg>'+
   path.map((d,i)=>'<span class="course-node '+(i===0?'chosen':'')+'">'+(i===4?'🏆':'🎯')+' <b>'+d+'m</b></span>').join('');
@@ -461,7 +461,7 @@ function syncSameHouseDuel(){
   if(ownName)ownName.textContent=byId(currentId);
   if(ownDetails)ownDetails.textContent=H[h].grade+' · '+(TEAMS[currentId]||config[1]);
   $('cm-same-house-description').textContent=other
-   ?'Escolha a Casa adversária, depois um arqueiro dessa turma. Nível médio com alvo em movimento.'
+   ?'Escolha a Casa adversária, depois um arqueiro dessa turma. Nível difícil com alvo móvel e escudos.'
    :'Escolha um arqueiro do 4º '+h+' para um duelo de cinco flechas no alvo horizontal em movimento.';
   const opener=$('cm-same-open-rivals'),list=$('cm-same-rivals-list');
   if(opener)opener.setAttribute('aria-label',other?'Selecione um adversário':'Selecione um colega da sua turma');
@@ -657,7 +657,7 @@ async function startMatch(accepted=null){
    });
    if(!versusAccepted)return;
   }
-  const requestedAt=Date.now(),kind=duelKind(mode),level=mode==='challenge_team'?'iniciante':'avancado';
+  const requestedAt=Date.now(),kind=duelKind(mode),level=mode==='challenge_team'?'iniciante':mode==='challenge_same'?'avancado':'lendario';
   try{
    onlineLoading=true;
    $('start-game').disabled=true;
@@ -695,7 +695,7 @@ async function startMatch(accepted=null){
  if(online.user&&isDuel(mode)){userId=online.user.id;selectHouse(userId[0]);$('player').value=userId;}
  match={house:userId==='guest'?house:userId[0],playerId:userId,player:nameOf(userId),mode,difficulty:$('difficulty').value,
   rivalId,gender:drawHandoff?.gender||archerGender(),rivalGender:drawHandoff?.rivalGender||'m',
-  scores:[],running:true,locked:false,bow:equipment.bow,wind:0,distance:10,level:mode==='bot'?(BOT_LEVEL_BY_DIFFICULTY[$('difficulty').value]||'iniciante'):challenge?.level||(mode==='challenge_team'?'iniciante':isDuel(mode)?'avancado':levelForMatch(mode,drawHandoff)),shift:0,freezeTime:null,stageStartedAt:performance.now(),incoming:null,
+  scores:[],running:true,locked:false,bow:equipment.bow,wind:0,distance:10,level:mode==='bot'?(BOT_LEVEL_BY_DIFFICULTY[$('difficulty').value]||'iniciante'):challenge?.level||(mode==='challenge_team'?'iniciante':mode==='challenge_same'?'avancado':mode==='challenge'?'lendario':levelForMatch(mode,drawHandoff)),shift:0,freezeTime:null,stageStartedAt:performance.now(),incoming:null,
   online:challenge,onlineShots:[],onlineReplay:challenge?.recipient.id===userId?challenge.creatorShots:[],
   onlineReplayPoints:0,seed:Math.floor(rand(100000,999999))};
  if(mode==='bot'){
