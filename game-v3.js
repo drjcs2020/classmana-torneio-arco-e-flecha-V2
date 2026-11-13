@@ -1,4 +1,4 @@
-import {initScene} from './scene-v3.js?v=20261112-score-rollback-v1';
+import {initScene} from './scene-v3.js?v=20261113-hard-moving-target-v3';
 import {GEAR,GEAR_BY_ID,getGearLevel,isGearUnlocked} from './equipment-catalog.js?v=win-progress-linear-20261110';
 import {mountEquipmentInventory} from './equipment-inventory.js?v=arsenal-button-colors-20261111';
 import {CIRCUITS,LEVELS,targetMotion,mediumTwinTargets,obstacleBlocks,distanceDifficulty,flightSeconds} from './arena-difficulty.js?v=20261112-medium-slower-v1';
@@ -695,7 +695,7 @@ async function startMatch(accepted=null){
  if(online.user&&isDuel(mode)){userId=online.user.id;selectHouse(userId[0]);$('player').value=userId;}
  match={house:userId==='guest'?house:userId[0],playerId:userId,player:nameOf(userId),mode,difficulty:$('difficulty').value,
   rivalId,gender:drawHandoff?.gender||archerGender(),rivalGender:drawHandoff?.rivalGender||'m',
-  scores:[],running:true,locked:false,bow:equipment.bow,wind:0,distance:10,level:challenge?.level||(mode==='challenge_team'?'iniciante':isDuel(mode)?'avancado':levelForMatch(mode,drawHandoff)),shift:0,freezeTime:null,stageStartedAt:performance.now(),incoming:null,
+  scores:[],running:true,locked:false,bow:equipment.bow,wind:0,distance:10,level:mode==='bot'?(BOT_LEVEL_BY_DIFFICULTY[$('difficulty').value]||'iniciante'):challenge?.level||(mode==='challenge_team'?'iniciante':isDuel(mode)?'avancado':levelForMatch(mode,drawHandoff)),shift:0,freezeTime:null,stageStartedAt:performance.now(),incoming:null,
   online:challenge,onlineShots:[],onlineReplay:challenge?.recipient.id===userId?challenge.creatorShots:[],
   onlineReplayPoints:0,seed:Math.floor(rand(100000,999999))};
  if(mode==='bot'){
@@ -1583,6 +1583,8 @@ function restoreArena(){
   return;
  }
  match=saved;
+ // Sessões de treino sem disparos devem recuperar a trilha da dificuldade escolhida.
+ if(match.mode==='bot'&&match.scores.length===0)match.level=BOT_LEVEL_BY_DIFFICULTY[match.difficulty]||'iniciante';
  if(saved.gender==='m'||saved.gender==='f')selectedSkins[saved.house]=saved.gender;
  identifiedPlayerId=saved.playerId||online.user?.id||cmSessionId();
  equipment={bow:GEAR_BY_ID[saved.bow]?saved.bow:'classico',arrow:'rubi'};
