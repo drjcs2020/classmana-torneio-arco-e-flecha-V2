@@ -40,7 +40,7 @@ html.cm-v2-resume-pending body[data-page="lobby"]::after{
 <link rel="stylesheet" href="classmana-v2-theme.css?v=20261108heroes55">
 <link rel="stylesheet" href="classmana-v2-lobby-exato.css?v=embers-visible-20261111">
 <link rel="stylesheet" href="classmana-v2-desafios-entry.css?v=20261108depthhud53">
-<link rel="stylesheet" href="classmana-professor-v2.css?v=20261108teacher03">
+<link rel="stylesheet" href="classmana-professor-v2.css?v=20261113-manage-students-v1">
 <link rel="stylesheet" href="classmana-v2-hud-unificado.css?v=20261108depthhud53">
 <link rel="stylesheet" href="classmana-duelo-resultado-retratos.css?v=20261108faces62">
 <link rel="stylesheet" href="classmana-artes-oficiais-duelo-resultado.css?v=moldura-leao-vazada73">
@@ -402,6 +402,30 @@ html.cm-v2-resume-pending body[data-page="lobby"]::after{
         <button type="submit" class="cm-teacher-primary">Cadastrar aluno na V2</button>
       </form>
     </section>
+    <section aria-labelledby="cm-teacher-manage-title">
+      <h3 id="cm-teacher-manage-title">✏️ Editar ou excluir aluno</h3>
+      <p>Corrija nomes sem perder as pontuações. A exclusão retira o aluno das listas de participantes, mas mantém os registros dos duelos anteriores.</p>
+      <form id="cm-teacher-manage-form" autocomplete="off">
+        <label for="cm-teacher-manage-house">Turma / Casa
+          <select id="cm-teacher-manage-house">
+            <option value="A">4º A — Águia Dourada</option>
+            <option value="B">4º B — Leão de Fogo</option>
+            <option value="C">4º C — Dragão de Esmeralda</option>
+          </select>
+        </label>
+        <label for="cm-teacher-manage-student">Selecionar aluno
+          <select id="cm-teacher-manage-student" required><option value="">Escolha um aluno</option></select>
+        </label>
+        <label for="cm-teacher-manage-name">Corrigir nome ou abreviar (3 a 52 caracteres)
+          <input id="cm-teacher-manage-name" maxlength="52" minlength="3" required placeholder="Ex.: Gabriel M.">
+        </label>
+        <div class="cm-teacher-manage-actions">
+          <button type="submit" class="cm-teacher-primary">💾 Salvar nome corrigido</button>
+          <button type="button" class="cm-teacher-danger" id="cm-teacher-delete-student">🗑️ Excluir aluno</button>
+        </div>
+      </form>
+      <small id="cm-teacher-manage-note">Selecione um aluno para editar ou excluir seu cadastro.</small>
+    </section>
     <section aria-labelledby="cm-teacher-change-title">
       <h3 id="cm-teacher-change-title">🔑 Alterar senha do professor</h3>
       <p>Informe a senha atual e defina uma nova senha. A alteração vale imediatamente na V2 e encerra o acesso atual.</p>
@@ -437,7 +461,7 @@ html.cm-v2-resume-pending body[data-page="lobby"]::after{
 <script type="module" src="wind-panel-restored.js?v=20261108hudfour01"></script>
 <script src="classmana-v2-ui.js?v=20261113-same-house-hide-legacy-v2" defer></script>
 <script src="classmana-v2-lobby-exato.js?v=arsenal-3" defer></script>
-<script type="module" src="classmana-professor-v2.js?v=20261108teacher02"></script>
+<script type="module" src="classmana-professor-v2.js?v=20261113-manage-students-v1"></script>
 <script src="classmana-duelo-sorteio-v3.js?v=20261112-roleta-audios-v2" defer></script>
 </body>
 </html>
