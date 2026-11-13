@@ -368,14 +368,14 @@ function samePickerRender(){
  const button=$('cm-same-open-rivals'),list=$('cm-same-rivals-list'),native=$('rival'),label=$('cm-same-button-text');
  if(!button||!list||!native||!label)return;
  const chosen=[...native.options].find(o=>o.value&&o.value===native.value);
- label.textContent=chosen?chosen.textContent.replace(/\\s*[·•]\\s*4º\\s*[ABC].*$/i,''):'';
+ label.textContent=chosen?chosen.textContent.replace(/\s*[·•]\s*4º\s*[ABC].*$/i,''):'';
  button.classList.toggle('has-selection',!!chosen);
  list.replaceChildren();
  for(const opt of native.options){
   if(!opt.value)continue;
   const item=document.createElement('button');item.type='button';item.className='cm-same-rival-option';
   item.setAttribute('role','option');item.setAttribute('aria-selected',String(opt.value===native.value));
-  item.textContent=opt.textContent.replace(/\\s*[·•]\\s*4º\\s*[ABC].*$/i,'');
+  item.textContent=opt.textContent.replace(/\s*[·•]\s*4º\s*[ABC].*$/i,'');
   item.addEventListener('click',()=>{
    native.value=opt.value;native.dispatchEvent(new Event('change',{bubbles:true}));
    samePickerRender();samePickerClose();button.focus();
@@ -430,8 +430,6 @@ function syncSameHouseDuel(){
   }[h]||['aguia.webp','Águia Dourada'];
   const crest=$('cm-same-house-crest');
   crest.src='assets/v2/crests/'+config[0];crest.alt='Brasão da '+config[1];
-  const archer=$('cm-same-archer');
-  if(archer){archer.src=archerImage();archer.alt='Arqueiro original da casa '+config[1];}
   const currentId=$('player').value;
   const ownName=$('cm-same-player-name'),ownDetails=$('cm-same-player-details');
   if(ownName)ownName.textContent=byId(currentId);
