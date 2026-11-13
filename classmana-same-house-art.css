@@ -398,3 +398,92 @@ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel #s
   z-index:1!important;
   margin:4px auto 7px!important;
 }
+
+
+/* Modalidade entre turmas — mesmas artes, apenas duas Casas rivais selecionáveis. */
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-duel .cm-same-title-wrap{
+ position:relative!important;width:min(730px,75%)!important;margin:-31px auto 3px!important;
+ isolation:isolate!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-duel .cm-same-title-wrap .cm-same-banner{
+ display:block!important;width:100%!important;height:auto!important;margin:0 auto!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-duel #cm-other-house-title:not([hidden]){
+ position:absolute!important;display:flex!important;align-items:center!important;justify-content:center!important;
+ z-index:7!important;left:11%!important;right:11%!important;top:19%!important;bottom:19%!important;
+ padding:0 7px!important;box-sizing:border-box!important;
+ background:linear-gradient(180deg,#133c75 0%,#061a46 33%,#06183b 76%,#14305d 100%)!important;
+ color:#ffdb87!important;text-shadow:0 2px 3px #000e,0 0 5px #985b18!important;
+ font:800 clamp(13px,2.0vw,29px)/1.05 Cinzel,Georgia,serif!important;
+ text-align:center!important;white-space:nowrap!important;letter-spacing:-.022em!important;
+ border-radius:7px!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-duel .cm-same-crest[hidden]{display:none!important}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-duel #cm-other-house-shields:not([hidden]){
+ display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:center!important;
+ gap:clamp(5px,1vw,16px)!important;width:100%!important;min-height:205px!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-duel .cm-other-house-choice:not([hidden]){
+ appearance:none!important;border:2px solid transparent!important;
+ background:transparent!important;color:#ffe1a2!important;
+ width:min(145px,48%)!important;padding:7px 4px 3px!important;
+ display:flex!important;align-items:center!important;justify-content:center!important;flex-direction:column!important;
+ border-radius:12px!important;cursor:pointer!important;
+ transition:filter .15s ease,opacity .15s ease,background .15s ease!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-duel .cm-other-house-choice[hidden]{display:none!important}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-duel .cm-other-house-choice img{
+ display:block!important;width:100%!important;height:155px!important;object-fit:contain!important;
+ filter:drop-shadow(0 5px 9px #0008)!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-duel .cm-other-house-choice span{
+ font:900 14px Nunito,sans-serif!important;text-shadow:0 2px 4px #000e!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-duel .cm-other-house-choice[aria-pressed="true"]{
+ background:linear-gradient(#ffe49d24,#0a2e524f)!important;
+ border-color:#efcb7b!important;box-shadow:0 0 13px #ffcf5480,inset 0 0 0 1px #f5d47a75!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-duel .cm-other-house-choice.cm-other-house-dim{
+ filter:brightness(.35) grayscale(.45)!important;opacity:.62!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-duel .cm-other-house-choice:focus-visible{
+ outline:3px solid #fff1b2!important;outline-offset:3px!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-duel #cm-same-open-rivals #cm-same-button-text,
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-duel #cm-same-open-rivals:not(.has-selection) #cm-same-button-text{
+ display:flex!important;visibility:visible!important;align-items:center!important;
+ box-sizing:border-box!important;position:absolute!important;left:24%!important;right:13%!important;top:27%!important;
+ height:47%!important;max-width:63%!important;padding:0 6px!important;
+ border-radius:4px!important;background:linear-gradient(#fff4df,#ffefd1)!important;
+ color:#112f5d!important;font:900 clamp(13px,1.35vw,18px) Nunito,sans-serif!important;
+ line-height:1.1!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;
+}
+@media(max-width:800px){
+ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-duel #cm-other-house-shields:not([hidden]){
+  min-height:180px!important;gap:3px!important;
+ }
+ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-duel .cm-other-house-choice img{
+  height:125px!important;
+ }
+ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-duel #cm-other-house-title:not([hidden]){
+  font-size:clamp(11px,2.05vw,23px)!important;
+ }
+}
+@media(max-width:560px){
+ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-duel .cm-same-title-wrap{
+  width:96%!important;margin:-20px auto 5px!important;
+ }
+ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-duel #cm-other-house-title:not([hidden]){
+  font-size:clamp(9px,2.1vw,13px)!important;left:10%!important;right:10%!important;
+ }
+ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-duel #cm-other-house-shields:not([hidden]){
+  min-height:120px!important;gap:3px!important;
+ }
+ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-duel .cm-other-house-choice:not([hidden]){
+  width:44%!important;padding:2px!important;
+ }
+ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-duel .cm-other-house-choice img{
+  height:95px!important;
+ }
+ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-duel .cm-other-house-choice span{font-size:12px!important}
+}
