@@ -87,7 +87,25 @@ function leaderboard(){
   draws:members.reduce((n,p)=>n+p.draws,0),
   total:members.reduce((n,p)=>n+p.total,0)
  });
- const classes=['A','B','C'].map(h=>summarize(h,all.filter(p=>p.house===h))).sort(rank);
+ // O torneio de casas conta SOMENTE partidas entre turmas distintas.
+ // O ranking individual acima continua incluindo todos os duelos oficiais concluídos.
+ const houses=Object.fromEntries(['A','B','C'].map(h=>[h,{
+   name:h,members:all.filter(p=>p.house===h).length,
+   plays:0,wins:0,losses:0,draws:0,total:0,accepted:0,refused:0
+ }]));
+ const crossDuels=db.prepare("SELECT creator,recipient,creator_score,recipient_score,status FROM duels WHERE kind='interclasses'").all();
+ for(const d of crossDuels){
+  const c=known.get(d.creator),r=known.get(d.recipient);
+  if(!c||!r||c.house===r.house)continue;
+  if(d.status==='RECUSADO'){houses[r.house].refused++;continue}
+  if(d.status==='ACEITO'||d.status==='CONCLUIDO'){houses[r.house].accepted++}
+  if(d.status!=='CONCLUIDO'||!Number.isInteger(d.creator_score)||!Number.isInteger(d.recipient_score))continue;
+  for(const [h,own,other] of [[c.house,d.creator_score,d.recipient_score],[r.house,d.recipient_score,d.creator_score]]){
+   const stats=houses[h];stats.plays++;stats.total+=own;
+   if(own>other)stats.wins++;else if(own<other)stats.losses++;else stats.draws++;
+  }
+ }
+ const classes=Object.values(houses).sort(rank);
  const names=[...new Set(all.map(p=>p.team).filter(Boolean))];
  const teams=names.map(name=>summarize(name,all.filter(p=>p.team===name))).sort(rank);
  return {games:data.length,classes,teams,players:all.filter(p=>p.plays>0).sort(rank)};
