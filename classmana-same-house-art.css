@@ -385,3 +385,16 @@ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel #s
  body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .cm-same-center{gap:2px!important}
  body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel #start-game{margin:-4px auto 0!important}
 }
+
+/* Lista aberta: sua área fica livre para leitura e seleção dos nomes. */
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel.cm-same-rivals-open #start-game {
+  visibility:hidden!important;
+  pointer-events:none!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .cm-same-house-duel:not([hidden]){
+  z-index:4!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel #start-game{
+  z-index:1!important;
+  margin:4px auto 7px!important;
+}
