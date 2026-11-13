@@ -31,7 +31,7 @@ const sql={
 };
 const sha=x=>createHash('sha256').update(String(x)).digest('hex');
 function fail(message,status=400){const error=Error(message);error.status=status;throw error}
-function auth(request){const token=(request.headers.authorization||'').replace(/^Bearer\s+/i,'');const row=token&&sql.session.get(sha(token));return row&&row.expires>Date.now()?known.get(row.player):null}
+function auth(request){const token=(request.headers.authorization||'').replace(/^Bearer\s+/i,'');const row=token&&sql.session.get(sha(token));return row&&row.expires>Date.now()&&!teacher.isInactive(row.player)?known.get(row.player):null}
 function requirePlayer(request){return auth(request)||fail('Selecione um perfil antes de entrar no duelo.',401)}
 const teacher = createTeacherAdmin({db,players,known,teamMembership,fail});
 function publicDuel(d){return {id:d.id,creator:known.get(d.creator),recipient:known.get(d.recipient),kind:d.kind,level:d.level,created:d.created,status:d.status,creatorShots:d.creator_shots?JSON.parse(d.creator_shots):[],recipientShots:d.recipient_shots?JSON.parse(d.recipient_shots):[],creatorScore:d.creator_score,recipientScore:d.recipient_score,rules:12}}
@@ -95,7 +95,7 @@ function leaderboard(){
 function route(request,action,data,query){
  if(action==='ping')return {api:12,persistent:true};
  if(action==='roster')return {players};
- if(action==='login'){const id=String(data.id||'');if(!known.has(id))fail('Perfil desconhecido');const token=randomBytes(32).toString('hex');sql.putSession.run(sha(token),id,Date.now()+30*86400000);return {user:known.get(id),token}}
+ if(action==='login'){const id=String(data.id||'');if(!known.has(id)||teacher.isInactive(id))fail('Perfil desconhecido ou excluído',404);const token=randomBytes(32).toString('hex');sql.putSession.run(sha(token),id,Date.now()+30*86400000);return {user:known.get(id),token}}
  if(action==='ranking')return leaderboard();
  const player=requirePlayer(request);
  if(action==='me')return {user:player};
