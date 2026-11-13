@@ -53,7 +53,7 @@ html.cm-v2-resume-pending body[data-page="lobby"]::after{
 <link rel="stylesheet" href="classmana-duel-layout-unified.css?v=names-plus2mm-20261110f">
 <link rel="stylesheet" href="classmana-v2-desafio-aprovado.css?v=20261112-same-house-simple-v1">
 <link rel="stylesheet" href="classmana-desafio-artes-publicadas.css?v=ajuste-banner-botoes-20261111-v2">
-<link rel="stylesheet" href="classmana-same-house-art.css?v=20261113-hide-legacy-v2">
+<link rel="stylesheet" href="classmana-same-house-art.css?v=20261113-refinement-v3">
 <script type="module" src="https://cdnjs.cloudflare.com/ajax/libs/model-viewer/4.1.0/model-viewer.min.js"></script>
 <link rel="stylesheet" href="classmana-duelo-sorteio-v3.css?v=20261112-v16">
 </head>
@@ -256,6 +256,10 @@ html.cm-v2-resume-pending body[data-page="lobby"]::after{
         <div class="cm-same-choice">
           <img class="cm-same-dropdown-art" src="assets/ui/challenge/same-house/seletor-colega.webp" alt="">
           <div id="cm-same-house-select-slot"></div>
+          <button id="cm-same-open-rivals" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="cm-same-rivals-list" aria-label="Selecionar arqueiro da sua turma">
+            <span id="cm-same-button-text">Selecione um arqueiro da turma...</span>
+          </button>
+          <div id="cm-same-rivals-list" role="listbox" aria-label="Arqueiros disponíveis da mesma turma" hidden></div>
         </div>
         <img class="cm-same-medium-art" src="assets/ui/challenge/same-house/selo-nivel-medio.webp" alt="Nível Médio — Alvo em Movimento">
         <span id="cm-same-house-description" class="cm-same-accessibility">Escolha um arqueiro da mesma turma. Nível médio, alvo horizontal em movimento.</span>
@@ -457,7 +461,7 @@ html.cm-v2-resume-pending body[data-page="lobby"]::after{
   <p id="cm-teacher-status" role="status" aria-live="polite">Entre com a senha do professor.</p>
 </dialog>
 <div id="toast" role="status" aria-live="polite"></div>
-<script src="roster.js?v=2"></script><script src="teams.js?v=1"></script><script type="module" src="game-v3.js?v=20261113-same-house-hide-legacy-v2"></script>
+<script src="roster.js?v=2"></script><script src="teams.js?v=1"></script><script type="module" src="game-v3.js?v=20261113-same-house-picker-v3"></script>
 <script type="module" src="wind-panel-restored.js?v=20261108hudfour01"></script>
 <script src="classmana-v2-ui.js?v=20261113-same-house-hide-legacy-v2" defer></script>
 <script src="classmana-v2-lobby-exato.js?v=arsenal-3" defer></script>
