@@ -462,9 +462,8 @@ export function initScene(canvas, getSettings) {
   };
   function activeTargetFile(){
     const q=getSettings()||{},level=q.level||'iniciante';
-    // Médio e difícil usam o mesmo disco procedural já aprovado.
-    // O difícil mantém sua trajetória lendária e seus escudos independentes.
-    if(level==='lendario'||level==='avancado')return 'medium-twin-procedural';
+    if(level==='lendario')return 'target-suspended.glb';
+    if(level==='avancado')return 'medium-twin-procedural'; // disco único móvel, sem alvo fosco
     return (q.index||0)>=3?'target-alt.glb':'target-stand.glb';
   }
   // O disco pode ter sido exportado deitado: medir eixos da malha para deixá-lo em pé.
