@@ -497,3 +497,36 @@ body[data-page="arena"] #view-arena #finish.cm-v21-result[data-cm-result-mode="d
   text-shadow:none!important;
   overflow:hidden!important;
 }
+
+
+/* V19 — Resultado exclusivo do ROBÔ nos treinos Fácil, Médio e Difícil.
+   Reutiliza os mesmos arquivos da carta pré-duelo; protege as três casas. */
+body[data-page="arena"] #view-arena #finish.cm-v21-result[data-cm-result-mode="bot"] .cm-v21-player.cm-v21-robot[data-house="ROBOT"] .cm-v21-frame{
+ display:block!important;
+ width:100%!important;height:100%!important;inset:0!important;
+ object-fit:fill!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-v21-result[data-cm-result-mode="bot"] .cm-v21-player.cm-v21-robot .cm-v21-crop{
+ top:14.5%!important;left:13%!important;width:74%!important;height:55%!important;
+ background:radial-gradient(ellipse at center,#12689c47,#06163326 65%,transparent)!important;
+ border:0!important;overflow:hidden!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-v21-result[data-cm-result-mode="bot"] .cm-v21-player.cm-v21-robot .cm-v21-crop img{
+ width:100%!important;height:100%!important;
+ object-fit:contain!important;object-position:center center!important;
+ transform:scale(1.13)!important;transform-origin:50% 50%!important;
+ background:transparent!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-v21-result[data-cm-result-mode="bot"] .cm-v21-player.cm-v21-robot.cm-v21-facing-left .cm-v21-crop img{
+ transform:scaleX(-1) scale(1.13)!important;transform-origin:50% 50%!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-v21-result[data-cm-result-mode="bot"] .cm-v21-player.cm-v21-robot .cm-v21-name{
+ top:75.6%!important;height:6.6%!important;left:10%!important;width:80%!important;
+ color:#eafaff!important;text-shadow:0 2px 4px #000d!important;
+ font-size:clamp(11px,1.45vw,21px)!important;
+}
+body[data-page="arena"] #view-arena #finish.cm-v21-result[data-cm-result-mode="bot"] .cm-v21-player.cm-v21-robot .cm-v21-house{
+ top:87.2%!important;height:5.2%!important;left:12%!important;width:76%!important;
+ color:#c7efff!important;text-shadow:0 2px 4px #000c!important;
+ font-size:clamp(7px,.88vw,12px)!important;
+}
