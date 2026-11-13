@@ -86,7 +86,7 @@ function setAmbientHouse(house){
 function fighter(person,{robot=false}={}){
  const house=getHouse(person.house);
  const card=node('article','cm-vs-fighter');
- card.dataset.house=house;
+ card.dataset.house=robot?'ROBOT':house;
  if(robot)card.classList.add('cm-vs-robot');
  const img=node('img');
  if(robot){
@@ -103,7 +103,7 @@ function fighter(person,{robot=false}={}){
  const crop=node('div','cm-combat-portrait');crop.append(img);
  const info=node('div','cm-vs-fighter-info');
  info.append(node('strong','',person.name||'Arqueiro'),
-             node('small','',houses[house].short+' · '+houses[house].name));
+             node('small','',robot?'DESAFIO DE TREINO':houses[house].short+' · '+houses[house].name));
  card.append(crop,info);
  return card;
 }
