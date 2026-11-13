@@ -372,3 +372,26 @@ body[data-page="arena"] #view-arena #finish.cm-v21-result .finish-actions{flex:0
   font-size:clamp(7px,1.65vw,10px)!important;
  }
 }
+
+
+/* V18 — Moldura metálica exclusiva do robô (nunca aplicada aos alunos de 4º C).
+   A imagem do robô e as informações continuam elementos HTML independentes. */
+.cm-vs-overlay[data-mode="bot"] .cm-vs-fighter.cm-vs-robot[data-house="ROBOT"]::after{
+ content:""!important;display:block!important;
+ background-image:url("assets/v2/frames/robo-prata.webp")!important;
+ background-repeat:no-repeat!important;
+ background-position:center!important;
+ background-size:100% 100%!important;
+ opacity:1!important;
+}
+.cm-vs-overlay[data-mode="bot"] .cm-vs-fighter.cm-vs-robot[data-house="ROBOT"] .cm-combat-portrait{
+ background:radial-gradient(ellipse at 52% 42%,#186ba38c,#05172f8f 65%,#061224d1)!important;
+}
+.cm-vs-overlay[data-mode="bot"] .cm-vs-fighter.cm-vs-robot[data-house="ROBOT"] .cm-vs-fighter-info strong{
+ color:#f1faff!important;text-shadow:0 2px 4px #000d,0 0 7px #5bcdf155!important;
+}
+.cm-vs-overlay[data-mode="bot"] .cm-vs-fighter.cm-vs-robot[data-house="ROBOT"] .cm-vs-fighter-info small{
+ color:#bbecff!important;text-shadow:0 2px 4px #00182d!important;
+}
+/* O enquadramento do retrato do robô é o mesmo dos demais adversários;
+   somente sua imagem é refletida horizontalmente, não a moldura ou textos. */
