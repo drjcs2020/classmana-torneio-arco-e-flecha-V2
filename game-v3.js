@@ -359,6 +359,7 @@ function duelKind(mode){return mode==='challenge_same'?'mesma_turma':mode==='cha
 function duelMode(kind){return kind==='mesma_turma'?'challenge_same':kind==='entre_equipes'?'challenge_team':'challenge'}
 // O seletor do jogo permanece sendo #rival; o botão ilustrado só o apresenta.
 let samePickerReady=false;
+let wasSameHouse=false;
 function samePickerClose(){
  const list=$('cm-same-rivals-list'),button=$('cm-same-open-rivals');
  if(!list||!button)return;
@@ -407,6 +408,8 @@ function syncSameHouseDuel(){
  const setup=$('setup'),panel=$('cm-same-house-duel'),slot=$('cm-same-house-select-slot');
  const label=$('rival-label'),fields=document.querySelector('.setup-fields');
  if(!setup||!panel||!slot||!label||!fields)return;
+ if(same&&!wasSameHouse)$('rival').value='';
+ wasSameHouse=same;
  setup.classList.toggle('cm-same-duel',same);
  panel.hidden=!same;
  // A grade antiga nunca pode aparecer junto do painel ilustrado.
