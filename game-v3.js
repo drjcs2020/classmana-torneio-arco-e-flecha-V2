@@ -364,6 +364,16 @@ function syncSameHouseDuel(){
  if(!setup||!panel||!slot||!label||!fields)return;
  setup.classList.toggle('cm-same-duel',same);
  panel.hidden=!same;
+ // A grade antiga nunca pode aparecer junto do painel ilustrado.
+ // A ocultação inline tem precedência sobre regras CSS legadas com !important.
+ const oldPicker=$('cm-v2-challenge-picker');
+ if(oldPicker){
+  oldPicker.hidden=same;
+  oldPicker.inert=same;
+  if(same)oldPicker.style.setProperty('display','none','important');
+  else oldPicker.style.removeProperty('display');
+ }
+
  const plate=$('cm-same-player-plate');
  if(plate)plate.hidden=!same;
  if(same){
