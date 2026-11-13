@@ -364,6 +364,7 @@ function samePickerClose(){
  const list=$('cm-same-rivals-list'),button=$('cm-same-open-rivals');
  if(!list||!button)return;
  list.hidden=true;button.setAttribute('aria-expanded','false');
+ $('setup')?.classList.remove('cm-same-rivals-open');
 }
 function samePickerRender(){
  const button=$('cm-same-open-rivals'),list=$('cm-same-rivals-list'),native=$('rival'),label=$('cm-same-button-text');
@@ -388,6 +389,7 @@ function samePickerRender(){
   button.addEventListener('click',()=>{
    const open=list.hidden;
    list.hidden=!open;button.setAttribute('aria-expanded',String(open));
+   $('setup')?.classList.toggle('cm-same-rivals-open',open);
    if(open)list.querySelector('button[aria-selected="true"]')?.scrollIntoView({block:'nearest'});
   });
   button.addEventListener('keydown',event=>{
