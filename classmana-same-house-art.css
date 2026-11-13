@@ -170,3 +170,124 @@ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel #s
    font-size:12px!important;padding:0 2px!important;
  }
 }
+
+
+/* Ajuste fiel ao mockup aprovado: placa visível, proporções contidas e seletor por clique. */
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel{
+ width:min(1200px,96vw)!important;gap:0!important;position:relative!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .online-account{
+ min-height:80px!important;position:relative!important;z-index:15!important;
+ padding:0 14px!important;margin:0 auto 26px!important;overflow:visible!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .cm-same-player-plate:not([hidden]){
+ width:min(380px,43vw)!important;flex:0 1 380px!important;z-index:16!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .cm-same-house-duel:not([hidden]){
+ padding:15px 18px 8px!important;margin:16px auto 0!important;min-height:0!important;overflow:visible!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .cm-same-banner{
+ width:min(850px,85%)!important;margin:-34px auto 6px!important;z-index:4!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .cm-same-stage{
+ grid-template-columns:minmax(165px,32%) minmax(0,1fr) minmax(95px,15%)!important;
+ min-height:280px!important;gap:0!important;align-items:end!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .cm-same-hero{
+ height:282px!important;align-self:end!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .cm-same-archer{
+ width:250px!important;height:275px!important;align-self:end!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .cm-same-crest{
+ width:126px!important;height:126px!important;left:50%!important;bottom:6px!important;
+ transform:translateX(-50%)!important;z-index:3!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .cm-same-center{
+ gap:3px!important;align-self:center!important;padding-top:0!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .cm-same-parchment{
+ width:min(490px,95%)!important;max-width:490px!important;max-height:125px!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .cm-same-choice{
+ width:min(540px,100%)!important;z-index:12!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel #cm-same-house-select-slot{
+ position:absolute!important;width:1px!important;height:1px!important;
+ overflow:hidden!important;left:-9999px!important;top:auto!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel #cm-same-open-rivals{
+ position:absolute!important;display:block!important;z-index:10!important;
+ inset:0!important;width:100%!important;height:100%!important;cursor:pointer!important;
+ border:0!important;border-radius:18px!important;background:transparent!important;
+ padding:0!important;margin:0!important;box-shadow:none!important;
+ color:#0f2b57!important;font:900 clamp(14px,1.35vw,18px) Nunito,sans-serif!important;
+ text-align:left!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel #cm-same-button-text{
+ position:absolute!important;display:block!important;left:25%!important;right:13%!important;
+ top:33%!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;
+ pointer-events:none!important;text-align:left!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel #cm-same-open-rivals:not(.has-selection) #cm-same-button-text{
+ visibility:hidden!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel #cm-same-open-rivals.has-selection{
+ background:transparent!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel #cm-same-open-rivals.has-selection #cm-same-button-text{
+ background:#fff0d2!important;padding:0 6px!important;border-radius:4px!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel #cm-same-open-rivals:focus-visible{
+ outline:3px solid #f8ec9f!important;outline-offset:2px!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel #cm-same-rivals-list[hidden]{
+ display:none!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel #cm-same-rivals-list:not([hidden]){
+ display:flex!important;flex-direction:column!important;position:absolute!important;
+ z-index:100!important;top:95%!important;left:9%!important;width:82%!important;
+ box-sizing:border-box!important;max-height:250px!important;overflow-y:auto!important;
+ background:#fff3d9!important;border:2px solid #d2a653!important;border-radius:9px!important;
+ box-shadow:0 12px 26px #000a!important;padding:5px!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .cm-same-rival-option{
+ display:block!important;width:100%!important;min-height:37px!important;
+ background:transparent!important;color:#102b55!important;text-align:left!important;
+ padding:7px 10px!important;border:0!important;border-radius:5px!important;
+ font:800 15px Nunito,sans-serif!important;cursor:pointer!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .cm-same-rival-option:hover,
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .cm-same-rival-option[aria-selected="true"]{
+ background:#bedcf2!important;color:#062242!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .cm-same-medium-art{
+ width:min(240px,58%)!important;max-height:70px!important;margin:0 auto!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .cm-same-bow-art{
+ align-self:end!important;max-width:160px!important;max-height:230px!important;
+ transform:translateY(6px)!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel #start-game{
+ width:min(300px,75vw)!important;margin:-12px auto 2px!important;z-index:8!important;
+}
+@media(max-width:800px){
+ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .cm-same-stage{
+  grid-template-columns:minmax(100px,32%) minmax(0,1fr)!important;min-height:240px!important;
+ }
+ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .cm-same-crest{
+  width:80px!important;height:80px!important;
+ }
+ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .cm-same-parchment{
+  max-height:106px!important;
+ }
+}
+@media(max-width:560px){
+ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .online-account{margin-bottom:12px!important}
+ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .cm-same-banner{width:98%!important;margin:-25px auto 6px!important}
+ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .cm-same-hero{height:130px!important}
+ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .cm-same-archer{height:128px!important;width:130px!important}
+ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .cm-same-crest{width:52px!important;height:52px!important;left:70%!important}
+ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .cm-same-stage{grid-template-columns:1fr!important}
+ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .cm-same-parchment{max-height:115px!important}
+}
