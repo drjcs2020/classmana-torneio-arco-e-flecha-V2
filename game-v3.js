@@ -251,7 +251,7 @@ function drawCourse(){
  el.setAttribute('aria-label',LEVELS[level].title+': '+path.join(', ')+' metros');
 }
 
-function choices(h){return (R[h]||[]).map((name,i)=>({id:h+String(i+1).padStart(2,'0'),name}));}
+function choices(h){return (R[h]||[]).flatMap((name,i)=>typeof name==='string'&&name.trim()?[{id:h+String(i+1).padStart(2,'0'),name}]:[]);}
 function fillPlayer(wanted){
  const sel=$('player'),quick=$('cm-quick-player');
  const valid=choices(house),previous=sel.value;
@@ -1170,7 +1170,7 @@ async function startOnlineClient(){
  try{
   const connected=await online.connect();online.lastError=null;showOnlineStatus();
   if(!connected)return;
-  try{cmSyncRoster(await online.list())}catch(err){console.warn('Lista online indisponível; usando nomes cadastrados no jogo:',err)}
+  try{cmSyncRoster(await online.list(),{complete:true})}catch(err){console.warn('Lista online indisponível; usando nomes cadastrados no jogo:',err)}
   const request=new URLSearchParams(location.search);
   // A sessão permanece durante a navegação, mas desafios online ainda exigem
   // validação pelo servidor antes da criação dos convites.
@@ -1227,15 +1227,26 @@ function populateIdentityOptions(){
 }
 // Mantém a lista local sincronizada com os alunos extras do SQLite V2.
 // As IDs geradas pelo professor são sequenciais: a posição no array permanece estável.
-function cmSyncRoster(students){
+function cmSyncRoster(students,{complete=false}={}){
  if(!Array.isArray(students))return;
  let changed=false;
+ const activeIds=new Set(students.map(p=>p?.id).filter(id=>/^[ABC][0-9]{2}$/.test(id||'')));
+ if(complete){
+  // O banco V2 decide quais IDs estão ativos; nenhuma posição é renumerada.
+  for(const h of ['A','B','C'])for(let i=0;i<R[h].length;i++){
+   const id=h+String(i+1).padStart(2,'0');
+   if(!activeIds.has(id)&&R[h][i]!==null){R[h][i]=null;delete TEAMS[id];changed=true}
+  }
+ }
  for(const p of students){
   if(!/^[ABC][0-9]{2}$/.test(p?.id||'')||typeof p.name!=='string')continue;
   const idx=Number(p.id.slice(1))-1,house=p.id[0];
   if(idx>=99||idx<0)continue;
   if(R[house][idx]!==p.name){R[house][idx]=p.name;changed=true;}
-  if(typeof p.team==='string' && p.team)TEAMS[p.id]=p.team;
+  if(typeof p.team==='string'){
+    if(p.team)TEAMS[p.id]=p.team;
+    else delete TEAMS[p.id];
+  }
  }
  if(changed && document.body.dataset.page==='lobby'){
   fillPlayer($('player')?.value);populateIdentityOptions();
@@ -1245,6 +1256,14 @@ function cmSyncRoster(students){
 window.addEventListener('classmana:v2-roster-updated',event=>{
  const student=event.detail?.student;
  if(student)cmSyncRoster([student]);
+ if(event.detail?.operation==='delete'){
+  const id=event.detail.id,houseId=id?.[0],idx=Number(id?.slice(1))-1;
+  if(['A','B','C'].includes(houseId)&&Number.isInteger(idx)&&idx>=0&&idx<99){
+   R[houseId][idx]=null;delete TEAMS[id];
+   if(id===identifiedPlayerId){online.logout();cmForgetStudent();identifiedPlayerId='';}
+   if(document.body.dataset.page==='lobby'){fillPlayer();populateIdentityOptions();fillRivals();}
+  }
+ }
 });
 populateIdentityOptions();
 $('cm-identity-player')?.addEventListener('change',event=>{
