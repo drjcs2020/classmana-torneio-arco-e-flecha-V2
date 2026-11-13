@@ -532,44 +532,38 @@ body[data-page="arena"] #view-arena #finish.cm-v21-result[data-cm-result-mode="b
 }
 
 
-/* V20 — Placar do treino contra o robô: os totais não invadem as molduras.
-   Mesma tela de resultados para fácil, médio e difícil. */
-@media (min-width:761px){
+/* V20 — Somente espaçamento: mantém exatamente a fonte/tamanho original do placar.
+   Os três níveis do treino usam a mesma tela de resultado. */
+@media(min-width:761px){
  body[data-page="arena"] #view-arena #finish.cm-v21-result[data-cm-result-mode="bot"] .cm-v21-stage{
-  grid-template-columns:minmax(0,1fr) minmax(280px,330px) minmax(0,1fr)!important;
-  column-gap:clamp(18px,2vw,32px)!important;
-  width:min(100%,1280px)!important;
+  width:min(100%,1530px)!important;max-width:1530px!important;
+  grid-template-columns:minmax(0,1fr) clamp(410px,29vw,500px) minmax(0,1fr)!important;
+  column-gap:clamp(15px,1.6vw,30px)!important;
  }
  body[data-page="arena"] #view-arena #finish.cm-v21-result[data-cm-result-mode="bot"] .cm-v21-scores{
-  display:grid!important;grid-template-columns:minmax(0,1fr) clamp(80px,6.8vw,110px) minmax(0,1fr)!important;
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) clamp(85px,7vw,115px) minmax(0,1fr)!important;
+  gap:clamp(6px,.8vw,14px)!important;
   align-items:center!important;justify-items:center!important;
-  gap:clamp(3px,.6vw,10px)!important;
-  max-width:100%!important;width:100%!important;min-width:0!important;
-  overflow:visible!important;
+  width:100%!important;max-width:100%!important;min-width:0!important;
+  margin:0!important;padding:0!important;
  }
  body[data-page="arena"] #view-arena #finish.cm-v21-result[data-cm-result-mode="bot"] .cm-v21-total{
   box-sizing:border-box!important;display:block!important;
-  width:100%!important;min-width:0!important;max-width:100%!important;
-  margin:0!important;text-align:center!important;
-  font-size:clamp(35px,3.65vw,62px)!important;letter-spacing:-.04em!important;
-  white-space:nowrap!important;
+  width:100%!important;max-width:100%!important;min-width:0!important;
+  margin:0!important;padding:0!important;
+  text-align:center!important;white-space:nowrap!important;
+  /* Sem font-size: preserva o tamanho do placar já aprovado. */
  }
  body[data-page="arena"] #view-arena #finish.cm-v21-result[data-cm-result-mode="bot"] .cm-v21-vs{
-  width:100%!important;max-width:110px!important;min-width:0!important;
+  width:100%!important;max-width:115px!important;min-width:0!important;
  }
 }
+/* Em telas estreitas, o placar já ocupa sua própria linha abaixo das cartas. */
 @media(max-width:760px){
  body[data-page="arena"] #view-arena #finish.cm-v21-result[data-cm-result-mode="bot"] .cm-v21-scores{
-  display:grid!important;grid-template-columns:minmax(0,1fr) clamp(38px,10vw,66px) minmax(0,1fr)!important;
-  align-items:center!important;justify-items:center!important;
-  width:min(100%,300px)!important;max-width:300px!important;
-  gap:clamp(3px,1vw,8px)!important;margin:0 auto!important;
- }
- body[data-page="arena"] #view-arena #finish.cm-v21-result[data-cm-result-mode="bot"] .cm-v21-total{
-  width:100%!important;min-width:0!important;font-size:clamp(23px,6vw,38px)!important;
-  letter-spacing:-.04em!important;text-align:center!important;
- }
- body[data-page="arena"] #view-arena #finish.cm-v21-result[data-cm-result-mode="bot"] .cm-v21-vs{
-  width:100%!important;min-width:0!important;
+  width:min(100%,420px)!important;max-width:420px!important;
+  margin:0 auto!important;padding:0!important;
+  gap:clamp(8px,2vw,20px)!important;
  }
 }
