@@ -49,6 +49,12 @@ const EFFECT_FILES={
  impact:'dennish18-arrow-wood-impact-146418',
  boo:'freesound_community-boo-6377'
 };
+function stopApplause(){
+ for(const name of ['driken5482-applause-cheer-236786','vvqne-applause-383901']){
+  const clip=clips[name];if(!clip)continue;
+  clip.pause();try{clip.currentTime=0}catch{}
+ }
+}
 function soundClip(name,fallback=''){
  if(!enabled||document.hidden)return Promise.resolve(false);
  try{
@@ -167,8 +173,8 @@ export const arenaAudio={
    if(effect==='versus'){tone(300,500,.25,.07,'sawtooth');tone(650,980,.20,.06,'triangle',.15);noise(.2,.05,1600,.08);}
    if(effect==='rival-shot'){noise(.25,.09,1900);tone(490,195,.26,.045,'triangle');}
    if(effect==='coin'){tone(1200,1640,.10,.06,'sine');tone(1700,2100,.13,.05,'sine',.07);}
-   if(effect==='draw'){tone(185,260,.34,.035,'triangle');noise(.23,.016,400);}
-   if(effect==='release'){noise(.26,.16,2500);tone(410,150,.20,.07,'triangle');}
+   if(effect==='draw'){stopApplause();tone(185,260,.34,.035,'triangle');noise(.23,.016,400);}
+   if(effect==='release'){stopApplause();noise(.26,.16,2500);tone(410,150,.20,.07,'triangle');}
    if(effect==='fly'){noise(.35,.055,3400);tone(760,360,.24,.018,'sine');}
    // Impacto fisico da flecha na madeira, separado dos aplausos.
    if(effect==='impact'){
@@ -181,8 +187,8 @@ export const arenaAudio={
     if(score>=8){tone(520,780,.23,.07,'sine',.06);tone(660,990,.28,.05,'sine',.16);}
    }
    if(effect==='miss'){soundClip('erro');noise(.18,.08,650);tone(280,190,.15,.025,'sine');}
-   if(effect==='applause'){
-    // Primeiro MP3 enviado: reação da torcida aos acertos de 8 a 10 pontos.
+   if(effect==='applause'&&score===10){
+    // Aplausos exclusivamente ao acertar na mosca: 10 pontos.
     soundClip('driken5482-applause-cheer-236786');
     for(let i=0;i<9;i++)noise(.075,.036+(i%3)*.007,1400,.02+i*.073);
     [500,580,650].forEach((f,i)=>tone(f,f*1.17,.29,.032,'sine',i*.13));
@@ -195,8 +201,7 @@ export const arenaAudio={
     noise(.23,.12,1400);tone(710,240,.32,.075,'triangle');tone(1180,650,.20,.035,'sine',.035);
    }
    if(effect==='victory'){
-    // Segundo MP3 enviado: aplausos na vitória confirmada.
-    soundClip('vvqne-applause-383901');
+    // Vitória mantém a fanfarra curta, sem aplausos (reservados ao acerto de 10).
     [523,659,784,1047].forEach((n,i)=>tone(n,n*1.03,.31,.065,'triangle',i*.12));
    }
    if(effect==='defeat'){[293.66,261.63,220,164.81].forEach((n,i)=>tone(n,n*.94,.36,.045,'triangle',i*.18));}
