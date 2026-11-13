@@ -272,7 +272,12 @@ function fillRivals(){
  const houseSelect=$('opponent-house'),priorHouse=houseSelect.value;
  houseSelect.innerHTML=houses.map(h=>`<option value="${h}">${H[h].grade} · ${H[h].name}</option>`).join('');
  if(houses.includes(priorHouse))houseSelect.value=priorHouse;
- const enemyHouse=houseSelect.value||house;
+ if(mode==='challenge'){
+   // Não escolher uma Casa adversária automaticamente: o aluno escolhe um dos dois brasões.
+   houseSelect.value=rivals.includes(selectedOtherHouse)?selectedOtherHouse:'';
+   if(!rivals.includes(selectedOtherHouse))houseSelect.selectedIndex=-1;
+ }
+ const enemyHouse=mode==='challenge'?(rivals.includes(selectedOtherHouse)?selectedOtherHouse:''):houseSelect.value||house;
  const ownTeamField=$('my-team'),ownTeams=[...new Set(choices(house).map(p=>TEAMS[p.id]))].filter(Boolean).sort();
  ownTeamField.innerHTML=ownTeams.map(t=>`<option value="${t}">${t}</option>`).join('');
  if(myTeam)ownTeamField.value=myTeam;
@@ -281,9 +286,9 @@ function fillRivals(){
  opposingTeamField.innerHTML=availableTeams.map(t=>`<option value="${t}">${t}</option>`).join('');
  if(availableTeams.includes(priorTeam))opposingTeamField.value=priorTeam;
  const old=$('rival').value;
- let pool=same?choices(house):teams&&scope!=='other'?choices(enemyHouse).filter(p=>TEAMS[p.id]===opposingTeamField.value):choices(enemyHouse);
+ let pool=mode==='challenge'&&!enemyHouse?[]:same?choices(house):teams&&scope!=='other'?choices(enemyHouse).filter(p=>TEAMS[p.id]===opposingTeamField.value):choices(enemyHouse);
  pool=pool.filter(p=>p.id!==myId);
- $('rival').innerHTML=(same?'<option value="">Selecione o colega que deseja desafiar</option>':'')+
+ $('rival').innerHTML=((same||mode==='challenge')?'<option value="">Selecione um adversário</option>':'')+
   pool.map(p=>`<option value="${p.id}">${p.name} · ${H[p.id[0]].grade}</option>`).join('');
  if(pool.some(p=>p.id===old))$('rival').value=old;
  const lbl=$('rival-label');
@@ -360,6 +365,8 @@ function duelMode(kind){return kind==='mesma_turma'?'challenge_same':kind==='ent
 // O seletor do jogo permanece sendo #rival; o botão ilustrado só o apresenta.
 let samePickerReady=false;
 let wasSameHouse=false;
+let selectedOtherHouse='';
+let previousIllustratedMode='';
 function samePickerClose(){
  const list=$('cm-same-rivals-list'),button=$('cm-same-open-rivals');
  if(!list||!button)return;
@@ -387,6 +394,9 @@ function samePickerRender(){
  if(!samePickerReady){
   samePickerReady=true;
   button.addEventListener('click',()=>{
+   if($('mode').value==='challenge'&&!selectedOtherHouse){
+    toast('Escolha primeiro a Casa adversária.');return;
+   }
    const open=list.hidden;
    list.hidden=!open;button.setAttribute('aria-expanded',String(open));
    $('setup')?.classList.toggle('cm-same-rivals-open',open);
@@ -406,50 +416,90 @@ function samePickerRender(){
  }
 }
 function syncSameHouseDuel(){
- const same=$('mode').value==='challenge_same';
+ const mode=$('mode').value;
+ const same=mode==='challenge_same',other=mode==='challenge',illustrated=same||other;
  const setup=$('setup'),panel=$('cm-same-house-duel'),slot=$('cm-same-house-select-slot');
  const label=$('rival-label'),fields=document.querySelector('.setup-fields');
  if(!setup||!panel||!slot||!label||!fields)return;
- if(same&&!wasSameHouse)$('rival').value='';
+ if(illustrated&&previousIllustratedMode!==mode)$('rival').value='';
+ previousIllustratedMode=illustrated?mode:'';
  wasSameHouse=same;
- setup.classList.toggle('cm-same-duel',same);
- panel.hidden=!same;
- // A grade antiga nunca pode aparecer junto do painel ilustrado.
- // A ocultação inline tem precedência sobre regras CSS legadas com !important.
+ setup.classList.toggle('cm-same-duel',illustrated);
+ setup.classList.toggle('cm-interclass-duel',other);
+ panel.hidden=!illustrated;
+ // O formulário antigo continua no DOM para os outros modos, mas não aparece neste painel.
  const oldPicker=$('cm-v2-challenge-picker');
  if(oldPicker){
-  oldPicker.hidden=same;
-  oldPicker.inert=same;
-  if(same)oldPicker.style.setProperty('display','none','important');
+  oldPicker.hidden=illustrated;
+  oldPicker.inert=illustrated;
+  if(illustrated)oldPicker.style.setProperty('display','none','important');
   else oldPicker.style.removeProperty('display');
  }
-
  const plate=$('cm-same-player-plate');
- if(plate)plate.hidden=!same;
- if(same){
+ if(plate)plate.hidden=!illustrated;
+ const title=$('cm-other-house-title');
+ if(title)title.hidden=!other;
+ const crest=$('cm-same-house-crest'),shields=$('cm-other-house-shields');
+ if(shields)shields.hidden=!other;
+ if(crest)crest.hidden=other;
+ if(illustrated){
   if(label.parentElement!==slot)slot.appendChild(label);
   const h=$('player').value?.[0]||house;
   const config={
    A:['aguia.webp','Águia Dourada'],B:['leao.webp','Leão de Fogo'],
    C:['dragao.webp','Dragão de Esmeralda']
   }[h]||['aguia.webp','Águia Dourada'];
-  const crest=$('cm-same-house-crest');
-  crest.src='assets/v2/crests/'+config[0];crest.alt='Brasão da '+config[1];
+  if(crest){crest.src='assets/v2/crests/'+config[0];crest.alt='Brasão da '+config[1];}
   const currentId=$('player').value;
   const ownName=$('cm-same-player-name'),ownDetails=$('cm-same-player-details');
   if(ownName)ownName.textContent=byId(currentId);
   if(ownDetails)ownDetails.textContent=H[h].grade+' · '+(TEAMS[currentId]||config[1]);
-  $('cm-same-house-description').textContent='Escolha um arqueiro do 4º '+h+
-   ' para um duelo de cinco flechas no alvo horizontal em movimento.';
+  $('cm-same-house-description').textContent=other
+   ?'Escolha a Casa adversária, depois um arqueiro dessa turma. Nível médio com alvo em movimento.'
+   :'Escolha um arqueiro do 4º '+h+' para um duelo de cinco flechas no alvo horizontal em movimento.';
+  const opener=$('cm-same-open-rivals'),list=$('cm-same-rivals-list');
+  if(opener)opener.setAttribute('aria-label',other?'Selecione um adversário':'Selecione um colega da sua turma');
+  if(list)list.setAttribute('aria-label',other?'Arqueiros da turma adversária':'Arqueiros disponíveis da mesma turma');
   $('challenge-level').value='avancado';
-  samePickerRender();
- }else if(label.parentElement!==fields){
+  if(other)syncOtherHouseShields();
   samePickerClose();
-  fields.appendChild(label);
+  samePickerRender();
+ }else{
+  samePickerClose();
+  if(label.parentElement!==fields)fields.appendChild(label);
  }
 }
+function syncOtherHouseShields(){
+ const container=$('cm-other-house-shields');
+ if(!container)return;
+ const own=$('player').value?.[0]||house;
+ const others=Object.keys(H).filter(h=>h!==own);
+ if(!others.includes(selectedOtherHouse))selectedOtherHouse='';
+ for(const button of container.querySelectorAll('[data-rival-house]')){
+  const h=button.dataset.rivalHouse,allowed=others.includes(h);
+  button.hidden=!allowed;
+  button.setAttribute('aria-pressed',String(allowed&&h===selectedOtherHouse));
+  button.classList.toggle('cm-other-house-dim',!!selectedOtherHouse&&h!==selectedOtherHouse);
+  button.title=allowed?H[h].grade+' · '+H[h].name:'';
+  button.setAttribute('aria-label',allowed?'Escolher '+H[h].grade+' — '+H[h].name:'Casa indisponível');
+ }
+}
+document.querySelectorAll('#cm-other-house-shields [data-rival-house]').forEach(button=>{
+ button.addEventListener('click',()=>{
+  if($('mode').value!=='challenge')return;
+  const chosen=button.dataset.rivalHouse,own=$('player').value?.[0]||house;
+  if(chosen===own||!H[chosen])return;
+  selectedOtherHouse=chosen;
+  $('rival').value='';
+  samePickerClose();
+  fillRivals();
+  syncOtherHouseShields();
+  samePickerRender();
+ });
+});
 function updateMode(){
  const mode=$('mode').value,team=mode==='challenge_team',otherTeam=team&&$('team-scope').value==='other';
+ if(mode==='challenge'&&previousIllustratedMode!=='challenge')selectedOtherHouse='';
  $('difficulty-label').classList.toggle('hidden',mode!=='bot');
  $('rival-label').classList.toggle('hidden',!isDuel(mode));
  $('team-label').classList.toggle('hidden',!team);
