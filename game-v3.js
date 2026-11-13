@@ -1062,13 +1062,11 @@ async function loginStudent(){
   // A confirmação do perfil libera imediatamente a partida; a caixa
   // de convites não pode travar o botão Iniciar por demora do Google.
   toast('✅ Perfil confirmado. Você já pode jogar.');
+  // Atualizar o contador sem abrir a caixa de desafios automaticamente.
   void refreshInbox().then(rows=>{
    if(online.user?.id!==user.id)return;
    const pending=rows.filter(c=>c.recipient.id===user.id&&c.status==='PENDENTE').length;
-   if(pending){
-    toast('🔔 Você recebeu '+pending+' desafio(s)!');
-    void openInbox().catch(console.warn);
-   }
+   if(pending)toast('🔔 Você recebeu '+pending+' desafio(s)! Abra Meus desafios para ver.');
   }).catch(error=>console.warn('Convites temporariamente indisponíveis, mas perfil já confirmado:',error));
   return user;
  }catch(error){toast('⚠️ Não foi possível selecionar o perfil: '+error.message);return null;}
@@ -1285,7 +1283,6 @@ async function startOnlineClient(){
   const connected=await online.connect();online.lastError=null;showOnlineStatus();
   if(!connected)return;
   try{cmSyncRoster(await online.list(),{complete:true})}catch(err){console.warn('Lista online indisponível; usando nomes cadastrados no jogo:',err)}
-  const request=new URLSearchParams(location.search);
   // A sessão permanece durante a navegação, mas desafios online ainda exigem
   // validação pelo servidor antes da criação dos convites.
   const sessionId=cmResumeSameStudent?cmSessionId():'';
@@ -1311,10 +1308,10 @@ async function startOnlineClient(){
   try{
    const pendentes=await refreshInbox();
    if(online.user&&pendentes.some(c=>c.recipient.id===online.user.id&&c.status==='PENDENTE')){
-    toast('🔔 Você foi desafiado! Aceite ou recuse quando quiser.');await openInbox();
+    toast('🔔 Você foi desafiado! Abra Meus desafios quando quiser responder.');
    }
   }catch(error){console.warn('Convites temporariamente indisponíveis:',error)}
-  if(request.get('inbox')==='1'&&online.user){await openInbox()}
+  // Não abrir o painel por reconexão nem por parâmetros da URL.
   renderRanking();
  }catch(error){
   online.state='error';
