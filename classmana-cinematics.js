@@ -93,7 +93,7 @@ function fighter(person,{robot=false}={}){
   // Retrato exclusivo do robô; nunca reutilizar a arqueira da Casa C.
   // O espelhamento do adversário continua sendo aplicado pela classe cm-vs-facing-left.
   img.alt='Robô arqueiro metálico com arco dourado e alvo no peito';
-  img.src='assets/ui/challenge/robo-arqueiro-v2.svg';
+  img.src='assets/ui/challenge/robo-arqueiro-oficial.webp';
  }else{
   img.alt='Retrato do rosto do arqueiro da Casa '+houses[house].name;
   img.src=portrait(house,person.gender);
