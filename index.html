@@ -57,6 +57,7 @@ html.cm-v2-resume-pending body[data-page="lobby"]::after{
 <script type="module" src="https://cdnjs.cloudflare.com/ajax/libs/model-viewer/4.1.0/model-viewer.min.js"></script>
 <link rel="stylesheet" href="classmana-duelo-sorteio-v3.css?v=20261112-v16">
 <link rel="stylesheet" href="classmana-ranking-v2-aprovado.css?v=20261113-rank-layout-fix-v2">
+<link rel="stylesheet" href="classmana-ranking-v3-elementos.css?v=20261113-assets-v3">
 </head>
 <body data-page="lobby" class="cm-v2-home-mode">
 <div class="sky-sparkles" aria-hidden="true"></div>
@@ -359,24 +360,26 @@ html.cm-v2-resume-pending body[data-page="lobby"]::after{
    <h1 id="ranking-title" class="cm-rank-accessible">Ranking do Torneio — Salão dos Campeões</h1>
    <img class="cm-rank-banner" src="assets/ui/ranking-v2/titulo-ranking-recortado.webp" alt="Salão dos Campeões — Ranking do Torneio. As três Casas disputam o trono dos arqueiros.">
   </div>
-  <div class="notice" id="ranking-status" role="status">Consultando os resultados dos duelos concluídos.</div>
   <div class="cm-score-mode-tabs" id="ranking-tabs" role="tablist" aria-label="Escolha a classificação">
    <button type="button" class="active" id="cm-tab-archers" role="tab" aria-selected="true" aria-controls="cm-panel-archers" data-rank="players"><img class="cm-rank-tab-art" src="assets/ui/ranking-v2/aba-arqueiros-ativa-recortado.webp" alt="Arqueiros"></button>
    <button type="button" id="cm-tab-classes" role="tab" aria-selected="false" aria-controls="cm-panel-houses" data-rank="classes"><img class="cm-rank-tab-art" src="assets/ui/ranking-v2/aba-turmas-inativa-recortado.webp" alt="Turmas"></button>
   </div>
   <div class="ranking-layout">
    <div class="ranking-panel cm-rank-archers" id="cm-panel-archers" role="tabpanel" aria-labelledby="cm-tab-archers">
-    <h2><img src="assets/ui/ranking-v2/titulo-arqueiros-recortado.webp" alt="Ranking dos Arqueiros"></h2>
-    <div class="cm-rank-scroll-hint">↕ Arraste a barra azul-gelo para consultar até o 50º arqueiro</div>
+    <h2><img src="assets/ui/ranking-v2/elementos/banner_ranking_arqueiros.png" alt="Ranking dos Arqueiros"></h2>
     <div id="rank-players" class="cm-rank-scroll-region" tabindex="0" aria-label="Lista rolável de até cinquenta arqueiros"></div>
+    <img class="cm-rank-top50" src="assets/ui/ranking-v2/elementos/banner_top_50.png" alt="Top 50 do Torneio">
    </div>
    <div class="ranking-panel cm-rank-houses" id="cm-panel-houses" role="tabpanel" aria-labelledby="cm-tab-classes" hidden>
-    <h2><img src="assets/ui/ranking-v2/titulo-turmas-recortado.webp" alt="Ranking por Turmas"></h2>
+    <h2><img src="assets/ui/ranking-v2/elementos/banner_ranking_turmas.png" alt="Ranking por Turmas"></h2>
     <p class="cm-rank-subtitle">Somente os duelos entre casas diferentes contam nesta classificação.</p>
     <div id="rank-houses" class="cm-rank-houses-grid"></div>
    </div>
   </div>
-  <button class="primary" id="rank-play">✕ FECHAR PLACAR</button>
+  <div class="cm-rank-footer">
+   <button class="primary" id="rank-play" aria-label="Fechar placar">✕ FECHAR PLACAR</button>
+   <div class="notice" id="ranking-status" role="status">Consultando os resultados dos duelos concluídos.</div>
+  </div>
 </section>
 
 <section id="view-regras" class="view information-view" role="dialog" aria-modal="true" aria-labelledby="rules-title">
@@ -482,7 +485,7 @@ html.cm-v2-resume-pending body[data-page="lobby"]::after{
   <p id="cm-teacher-status" role="status" aria-live="polite">Entre com a senha do professor.</p>
 </dialog>
 <div id="toast" role="status" aria-live="polite"></div>
-<script src="roster.js?v=2"></script><script src="teams.js?v=1"></script><script type="module" src="game-v3.js?v=20261113-rank-layout-fix-v2"></script>
+<script src="roster.js?v=2"></script><script src="teams.js?v=1"></script><script type="module" src="game-v3.js?v=20261113-ranking-assets-v3"></script>
 <script type="module" src="wind-panel-restored.js?v=20261108hudfour01"></script>
 <script src="classmana-v2-ui.js?v=20261113-same-house-hide-legacy-v2" defer></script>
 <script src="classmana-v2-lobby-exato.js?v=arsenal-3" defer></script>
