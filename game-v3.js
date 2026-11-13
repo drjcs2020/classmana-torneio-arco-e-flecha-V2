@@ -377,7 +377,7 @@ function samePickerRender(){
  const button=$('cm-same-open-rivals'),list=$('cm-same-rivals-list'),native=$('rival'),label=$('cm-same-button-text');
  if(!button||!list||!native||!label)return;
  const chosen=[...native.options].find(o=>o.value&&o.value===native.value);
- label.textContent=chosen?chosen.textContent.replace(/\s*[·•]\s*4º\s*[ABC].*$/i,''):'';
+ label.textContent=chosen?chosen.textContent.replace(/\s*[·•]\s*4º\s*[ABC].*$/i,''):($('mode').value==='challenge'?'Selecione um adversário':'');
  button.classList.toggle('has-selection',!!chosen);
  list.replaceChildren();
  for(const opt of native.options){
