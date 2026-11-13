@@ -819,3 +819,36 @@ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel.cm
  background:transparent!important;
  display:flex!important;align-items:center!important;
 }
+
+
+/* V15: o título da outra equipe é um banner independente, 20px acima do painel.
+   Não alteramos a composição da modalidade mesma turma. */
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel.cm-interclass-duel .cm-same-house-duel:not([hidden]){
+ position:relative!important;
+ margin-top:clamp(100px,13vh,150px)!important;
+ overflow:visible!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel.cm-interclass-duel .cm-same-title-wrap{
+ position:absolute!important;
+ left:50%!important;right:auto!important;top:-90px!important;bottom:auto!important;
+ transform:translateX(-50%)!important;
+ margin:0!important;
+ width:min(750px,92%)!important;
+ height:66px!important;min-height:66px!important;
+ z-index:8!important;
+}
+/* A distância entre a borda inferior do título e o início do quadro é 24px. */
+@media(max-height:740px){
+ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel.cm-interclass-duel .cm-same-house-duel:not([hidden]){
+  margin-top:90px!important;
+ }
+}
+@media(max-width:700px){
+ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel.cm-interclass-duel .cm-same-house-duel:not([hidden]){
+  margin-top:84px!important;
+ }
+ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel.cm-interclass-duel .cm-same-title-wrap{
+  top:-79px!important;width:min(750px,96%)!important;
+  height:58px!important;min-height:58px!important;
+ }
+}
