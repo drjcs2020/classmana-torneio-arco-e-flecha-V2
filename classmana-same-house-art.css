@@ -801,3 +801,21 @@ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-interclass-d
   margin:12px auto 20px!important;
  }
 }
+
+
+/* A mesma arte larga também é usada no modo colega: conservar sua proporção. */
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel:not(.cm-interclass-duel) .cm-same-choice{
+ aspect-ratio:1780 / 367!important;height:auto!important;min-height:0!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel:not(.cm-interclass-duel) .cm-same-choice > .cm-same-dropdown-art{
+ height:100%!important;object-fit:contain!important;
+}
+/* Ganhar de seletores anteriores para todos os estados da seleção interturmas. */
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel.cm-interclass-duel .cm-same-choice #cm-same-open-rivals:not(.has-selection) #cm-same-button-text,
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel.cm-interclass-duel .cm-same-choice #cm-same-open-rivals.has-selection #cm-same-button-text{
+ left:20.5%!important;right:11.5%!important;top:0!important;bottom:0!important;
+ width:auto!important;height:100%!important;max-width:none!important;
+ margin:0!important;padding:0 4px!important;
+ background:transparent!important;
+ display:flex!important;align-items:center!important;
+}
