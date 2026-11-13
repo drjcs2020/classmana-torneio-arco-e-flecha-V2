@@ -357,6 +357,51 @@ function goOnlinePortal(mode=$('mode').value,inbox=false){
 }
 function duelKind(mode){return mode==='challenge_same'?'mesma_turma':mode==='challenge_team'?'entre_equipes':'interclasses'}
 function duelMode(kind){return kind==='mesma_turma'?'challenge_same':kind==='entre_equipes'?'challenge_team':'challenge'}
+// O seletor do jogo permanece sendo #rival; o botão ilustrado só o apresenta.
+let samePickerReady=false;
+function samePickerClose(){
+ const list=$('cm-same-rivals-list'),button=$('cm-same-open-rivals');
+ if(!list||!button)return;
+ list.hidden=true;button.setAttribute('aria-expanded','false');
+}
+function samePickerRender(){
+ const button=$('cm-same-open-rivals'),list=$('cm-same-rivals-list'),native=$('rival'),label=$('cm-same-button-text');
+ if(!button||!list||!native||!label)return;
+ const chosen=[...native.options].find(o=>o.value&&o.value===native.value);
+ label.textContent=chosen?chosen.textContent.replace(/\\s*[·•]\\s*4º\\s*[ABC].*$/i,''):'';
+ button.classList.toggle('has-selection',!!chosen);
+ list.replaceChildren();
+ for(const opt of native.options){
+  if(!opt.value)continue;
+  const item=document.createElement('button');item.type='button';item.className='cm-same-rival-option';
+  item.setAttribute('role','option');item.setAttribute('aria-selected',String(opt.value===native.value));
+  item.textContent=opt.textContent.replace(/\\s*[·•]\\s*4º\\s*[ABC].*$/i,'');
+  item.addEventListener('click',()=>{
+   native.value=opt.value;native.dispatchEvent(new Event('change',{bubbles:true}));
+   samePickerRender();samePickerClose();button.focus();
+  });
+  list.append(item);
+ }
+ if(!samePickerReady){
+  samePickerReady=true;
+  button.addEventListener('click',()=>{
+   const open=list.hidden;
+   list.hidden=!open;button.setAttribute('aria-expanded',String(open));
+   if(open)list.querySelector('button[aria-selected="true"]')?.scrollIntoView({block:'nearest'});
+  });
+  button.addEventListener('keydown',event=>{
+   if(event.key==='ArrowDown'||event.key==='Enter'||event.key===' '){
+    if(list.hidden){event.preventDefault();button.click();list.querySelector('button')?.focus();}
+   }
+   if(event.key==='Escape')samePickerClose();
+  });
+  list.addEventListener('keydown',event=>{if(event.key==='Escape'){samePickerClose();button.focus()}});
+  document.addEventListener('pointerdown',event=>{
+   if(!list.hidden&&!event.target.closest('.cm-same-choice'))samePickerClose();
+  });
+  native.addEventListener('change',()=>{samePickerRender();samePickerClose()});
+ }
+}
 function syncSameHouseDuel(){
  const same=$('mode').value==='challenge_same';
  const setup=$('setup'),panel=$('cm-same-house-duel'),slot=$('cm-same-house-select-slot');
@@ -394,7 +439,9 @@ function syncSameHouseDuel(){
   $('cm-same-house-description').textContent='Escolha um arqueiro do 4º '+h+
    ' para um duelo de cinco flechas no alvo horizontal em movimento.';
   $('challenge-level').value='avancado';
+  samePickerRender();
  }else if(label.parentElement!==fields){
+  samePickerClose();
   fields.appendChild(label);
  }
 }
