@@ -11,12 +11,27 @@ export function createTeacherAdmin({ db, players, known, teamMembership, fail })
     CREATE TABLE IF NOT EXISTS teacher_resets (
     id TEXT PRIMARY KEY, at TEXT NOT NULL, duels_snapshot TEXT NOT NULL,
     operations_snapshot TEXT NOT NULL, duels_count INTEGER NOT NULL, operations_count INTEGER NOT NULL);
-    CREATE TABLE IF NOT EXISTS teacher_settings (setting TEXT PRIMARY KEY, value TEXT NOT NULL);`);
+    CREATE TABLE IF NOT EXISTS teacher_settings (setting TEXT PRIMARY KEY, value TEXT NOT NULL);
+    CREATE TABLE IF NOT EXISTS student_overrides (
+      id TEXT PRIMARY KEY, name TEXT, inactive INTEGER NOT NULL DEFAULT 0,
+      updated_at TEXT NOT NULL);
+    CREATE TABLE IF NOT EXISTS student_audit (
+      id TEXT PRIMARY KEY, student_id TEXT NOT NULL, action TEXT NOT NULL,
+      old_name TEXT NOT NULL, new_name TEXT, at TEXT NOT NULL);`);
   const extras = db.prepare('SELECT id,name,house,team FROM extra_students ORDER BY house,id').all();
   for (const player of extras) {
     if (!known.has(player.id)) { players.push(player); known.set(player.id, player); }
   }
-  const actions = new Set(['teacherLogin','teacherStatus','teacherStudents','teacherAddStudent','teacherResetScores','teacherChangePassword']);
+  // IDs do cadastro original não mudam: edições persistem em tabela separada.
+  // Alunos inativos permanecem em known para preservar nomes nos duelos históricos.
+  const inactive=new Set();
+  for(const row of db.prepare('SELECT id,name,inactive FROM student_overrides').all()){
+    const person=known.get(row.id);
+    if(!person)continue;
+    if(row.name)person.name=row.name;
+    if(row.inactive){inactive.add(row.id);const i=players.findIndex(p=>p.id===row.id);if(i>=0)players.splice(i,1);}
+  }
+  const actions = new Set(['teacherLogin','teacherStatus','teacherStudents','teacherAddStudent','teacherRenameStudent','teacherDeleteStudent','teacherResetScores','teacherChangePassword']);
   const adminSessions = new Map();
   const failures = new Map();
   const digest = value => createHash('sha256').update(String(value)).digest('hex');
@@ -42,6 +57,14 @@ export function createTeacherAdmin({ db, players, known, teamMembership, fail })
   };
   const sessionsExpireAt = 30 * 60 * 1000;
   const allowedTeams = [...new Set(Object.values(teamMembership).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'pt-BR'));
+  function validName(raw){
+    const name=String(raw||'').normalize('NFC').trim().replace(/\s+/g,' ');
+    if(name.length<3||name.length>52||! ( /^[\p{L}\p{M} .-]+$/u.test(name) )||!/[\p{L}]/u.test(name))
+      fail('Nome inválido: use 3 a 52 caracteres, somente letras, espaços, pontos e hífens.');
+    return name;
+  }
+  const addOverride=db.prepare("INSERT INTO student_overrides(id,name,inactive,updated_at) VALUES(?,?,?,?) ON CONFLICT(id) DO UPDATE SET name=excluded.name,inactive=excluded.inactive,updated_at=excluded.updated_at");
+  const audit=db.prepare('INSERT INTO student_audit(id,student_id,action,old_name,new_name,at) VALUES(?,?,?,?,?,?)');
   function teacherSession(request) {
     const raw=String(request.headers['x-classmana-teacher']||'');
     if(!/^[a-f0-9]{64}$/.test(raw)) return false;
@@ -94,13 +117,12 @@ export function createTeacherAdmin({ db, players, known, teamMembership, fail })
     if (action==='teacherAddStudent') {
       if(request.method!=='POST') fail('Método inválido',405);
       const house=String(data.house||'').toUpperCase();
-      const name=String(data.name||'').normalize('NFC').trim().replace(/\s+/g,' ');
+      const name=validName(data.name);
       const team=String(data.team||'').trim();
       if(!['A','B','C'].includes(house)) fail('Turma inválida: escolha A, B ou C.');
-      if(name.length<3 || name.length>52 || !/^[\p{L}\p{M} .-]+$/u.test(name) || !/[\p{L}]/u.test(name))fail('Use somente letras, pontos, espaços e hífens (3 a 52 caracteres).');
       if(team && !allowedTeams.includes(team)) fail('Escolha uma equipe existente.');
       if(players.some(p=>p.house===house&&p.name.localeCompare(name,'pt-BR',{sensitivity:'base'})===0))fail('Este aluno já está cadastrado nesta turma.',409);
-      const max=players.filter(p=>p.house===house).reduce((n,p)=>Math.max(n,Number(p.id.slice(1))),0);
+      const max=[...known.keys()].filter(id=>id[0]===house).reduce((n,id)=>Math.max(n,Number(id.slice(1))),0);
       if(max>=99) fail('Esta turma atingiu o limite de 99 registros.');
       const id=house+String(max+1).padStart(2,'0');
       const student={id,name,house,team};
@@ -108,6 +130,44 @@ export function createTeacherAdmin({ db, players, known, teamMembership, fail })
         .run(id,name,house,team,new Date().toISOString());
       players.push(student);known.set(id,student);
       return {student,counts:Object.fromEntries(['A','B','C'].map(h=>[h,players.filter(p=>p.house===h).length]))};
+    }
+    if(action==='teacherRenameStudent'){
+      if(request.method!=='POST')fail('Método inválido',405);
+      const id=String(data.id||''),person=known.get(id);
+      if(!person||inactive.has(id))fail('Aluno não encontrado ou excluído.',404);
+      const name=validName(data.name);
+      if(players.some(p=>p.id!==id&&p.house===person.house&&p.name.localeCompare(name,'pt-BR',{sensitivity:'base'})===0))
+        fail('Já existe um aluno com este nome nesta turma.',409);
+      if(name===person.name)return {student:{...person},unchanged:true};
+      const old=person.name,at=new Date().toISOString();
+      db.exec('BEGIN IMMEDIATE');
+      try{
+        addOverride.run(id,name,0,at);
+        if(db.prepare('SELECT id FROM extra_students WHERE id=?').get(id))
+          db.prepare('UPDATE extra_students SET name=? WHERE id=?').run(name,id);
+        audit.run(randomBytes(12).toString('hex'),id,'rename',old,name,at);
+        db.exec('COMMIT');
+      }catch(e){db.exec('ROLLBACK');throw e}
+      person.name=name;
+      return {student:{...person},previousName:old};
+    }
+    if(action==='teacherDeleteStudent'){
+      if(request.method!=='POST')fail('Método inválido',405);
+      const id=String(data.id||''),person=known.get(id);
+      if(!person||inactive.has(id))fail('Aluno não encontrado ou já excluído.',404);
+      if(data.confirmation!==id)fail('Confirme usando o código exato do aluno: '+id,400);
+      const at=new Date().toISOString();
+      db.exec('BEGIN IMMEDIATE');
+      try{
+        addOverride.run(id,person.name,1,at);
+        audit.run(randomBytes(12).toString('hex'),id,'delete',person.name,null,at);
+        db.prepare('DELETE FROM sessions WHERE player=?').run(id);
+        db.exec('COMMIT');
+      }catch(e){db.exec('ROLLBACK');throw e}
+      inactive.add(id);
+      const idx=players.findIndex(p=>p.id===id);if(idx>=0)players.splice(idx,1);
+      // ID bloqueado permanentemente: não será reutilizado por novo aluno.
+      return {student:{...person},inactive:true,historyPreserved:true};
     }
     if(action==='teacherResetScores') {
       if(request.method!=='POST') fail('Método inválido',405);
@@ -126,5 +186,5 @@ export function createTeacherAdmin({ db, players, known, teamMembership, fail })
     }
     fail('Ação desconhecida',404);
   }
-  return {handles:action=>actions.has(action),route};
+  return {handles:action=>actions.has(action),route,isInactive:id=>inactive.has(id)};
 }
