@@ -53,6 +53,7 @@ html.cm-v2-resume-pending body[data-page="lobby"]::after{
 <link rel="stylesheet" href="classmana-duel-layout-unified.css?v=names-plus2mm-20261110f">
 <link rel="stylesheet" href="classmana-v2-desafio-aprovado.css?v=20261112-same-house-simple-v1">
 <link rel="stylesheet" href="classmana-desafio-artes-publicadas.css?v=ajuste-banner-botoes-20261111-v2">
+<link rel="stylesheet" href="classmana-same-house-art.css?v=20261113-art1">
 <script type="module" src="https://cdnjs.cloudflare.com/ajax/libs/model-viewer/4.1.0/model-viewer.min.js"></script>
 <link rel="stylesheet" href="classmana-duelo-sorteio-v3.css?v=20261112-v16">
 </head>
@@ -219,6 +220,10 @@ html.cm-v2-resume-pending body[data-page="lobby"]::after{
     <div><strong id="online-account-name">🏹 Escolha seu arqueiro</strong>
       <small id="online-status" class="cm-online-status">Sem senha e sem PIN. Escolha sua Casa e seu nome na lista.</small>
       <small class="cm-identity-warning">Os nomes são selecionáveis por todos: o professor deve supervisionar os resultados oficiais.</small></div>
+    <div class="cm-same-player-plate" id="cm-same-player-plate" hidden aria-label="Jogador atual">
+      <img src="assets/ui/challenge/same-house/placa-perfil-aluno.webp" alt="">
+      <div class="cm-same-player-text"><strong id="cm-same-player-name">Arqueiro</strong><span id="cm-same-player-details">Turma e equipe</span></div>
+    </div>
     <div class="online-account-actions">
       <button class="cm-online-btn hidden" id="retry-online" type="button" aria-label="Verificar conexão do servidor">↻ RECONECTAR</button>
       <button class="cm-online-btn" id="open-inbox" type="button">🔔 Meus desafios <span class="online-unread" id="unread-count">—</span></button>
@@ -239,14 +244,23 @@ html.cm-v2-resume-pending body[data-page="lobby"]::after{
   <p id="cm-v2-picked-name" class="cm-v2-picked-name" aria-live="polite">Selecione um nome para continuar.</p>
 </section>
 
-  <section id="cm-same-house-duel" class="cm-same-house-duel" hidden aria-label="Desafiar um colega da sua turma">
-    <div class="cm-same-house-crest-wrap"><img id="cm-same-house-crest" src="assets/v2/crests/aguia.webp" alt="Brasão da Águia Dourada"></div>
-    <div class="cm-same-house-main">
-      <small class="cm-same-house-kicker">TORNEIO DAS TRÊS CASAS</small>
-      <h2 id="cm-same-house-title">DESAFIE UM COLEGA</h2>
-      <p id="cm-same-house-description">Escolha um colega da sua turma para disputar cinco flechas no alvo móvel.</p>
-      <div id="cm-same-house-select-slot"></div>
-      <p class="cm-same-house-note">🏹 Trilha dos Ventos · Nível médio · Alvo em movimento</p>
+  <section id="cm-same-house-duel" class="cm-same-house-duel" hidden aria-label="Desafiar arqueiro da mesma turma">
+    <img class="cm-same-banner" src="assets/ui/challenge/same-house/titulo-desafiar-arqueiro.webp" alt="Desafiar arqueiro da mesma turma">
+    <div class="cm-same-stage">
+      <div class="cm-same-hero">
+        <img id="cm-same-archer" class="cm-same-archer" src="assets/v2/heroes/aguia-m.webp" alt="Arqueiro original da casa">
+        <img id="cm-same-house-crest" class="cm-same-crest" src="assets/v2/crests/aguia.webp" alt="Brasão da Águia Dourada">
+      </div>
+      <div class="cm-same-center">
+        <img class="cm-same-parchment" src="assets/ui/challenge/same-house/pergaminho-instrucao.webp" alt="Escolha um colega da sua turma para um duelo de cinco flechas no alvo em movimento.">
+        <div class="cm-same-choice">
+          <img class="cm-same-dropdown-art" src="assets/ui/challenge/same-house/seletor-colega.webp" alt="">
+          <div id="cm-same-house-select-slot"></div>
+        </div>
+        <img class="cm-same-medium-art" src="assets/ui/challenge/same-house/selo-nivel-medio.webp" alt="Nível Médio — Alvo em Movimento">
+        <span id="cm-same-house-description" class="cm-same-accessibility">Escolha um arqueiro da mesma turma. Nível médio, alvo horizontal em movimento.</span>
+      </div>
+      <img class="cm-same-bow-art" src="assets/ui/challenge/same-house/arco-e-aljava.webp" alt="" aria-hidden="true">
     </div>
   </section>
   <div class="setup-fields cm-easy-setup">
@@ -419,7 +433,7 @@ html.cm-v2-resume-pending body[data-page="lobby"]::after{
   <p id="cm-teacher-status" role="status" aria-live="polite">Entre com a senha do professor.</p>
 </dialog>
 <div id="toast" role="status" aria-live="polite"></div>
-<script src="roster.js?v=2"></script><script src="teams.js?v=1"></script><script type="module" src="game-v3.js?v=20261112-same-house-simple-v1"></script>
+<script src="roster.js?v=2"></script><script src="teams.js?v=1"></script><script type="module" src="game-v3.js?v=20261113-same-house-art1"></script>
 <script type="module" src="wind-panel-restored.js?v=20261108hudfour01"></script>
 <script src="classmana-v2-ui.js?v=20261112-inbox-shortcut-v2" defer></script>
 <script src="classmana-v2-lobby-exato.js?v=arsenal-3" defer></script>
