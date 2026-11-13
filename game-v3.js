@@ -1023,32 +1023,41 @@ async function renderRanking(){
   const data=await online.ranking();
   const matches=Number(data.games)||0,allClasses=Array.isArray(data.classes)?data.classes:[],allPlayers=Array.isArray(data.players)?data.players:[];
   status.textContent='🏆 '+matches+' duelos concluídos · Atualizado às '+new Date().toLocaleTimeString('pt-BR');
-  const medals=['ouro','prata','bronze'];
-  const medalImg=i=>i<3?'<img class="cm-rank-medal" src="assets/ui/ranking-v2/medalha-'+medals[i]+'.webp" alt="'+(i+1)+'º lugar">':'<span class="cm-rank-place">'+(i+1)+'º</span>';
+  const assets='assets/ui/ranking-v2/elementos/';
+  const medals=['medalha_1_ouro.png','medalha_2_prata.png','medalha_3_bronze.png'];
+  const medalImg=i=>i<3?'<img class="cm-rank-medal" src="'+assets+medals[i]+'" alt="'+(i+1)+'º lugar">':'<span class="cm-rank-place">'+(i+1)+'º</span>';
   const num=v=>Math.max(0,Number(v)||0).toLocaleString('pt-BR');
   playersHost.innerHTML=allPlayers.slice(0,50).map((p,i)=>{
    const h=H[p.house]||{grade:'Turma não cadastrada',name:'Casa não cadastrada'};
-   return '<div class="cm-rank-row">'+medalImg(i)+
-    '<div class="cm-rank-person"><b>'+htmlSafe(p.name)+'</b><small>'+htmlSafe(h.grade)+' · '+htmlSafe(h.name)+'</small></div>'+
-    '<div class="cm-rank-results"><b>'+num(p.total)+' pts</b><small>'+num(p.wins)+' V · '+num(p.losses)+' D · '+num(p.draws)+' E · '+num(p.plays)+' duelos</small></div></div>';
+   const className=i===0?' cm-rank-gold':i===1?' cm-rank-silver':i===2?' cm-rank-bronze':'';
+   return '<div class="cm-rank-row'+className+'">'+
+     '<div class="cm-rank-placement">'+medalImg(i)+'</div>'+
+     '<span class="cm-rank-name">'+htmlSafe(p.name)+'</span>'+
+     '<span class="cm-rank-house-name">'+htmlSafe(h.grade)+' · '+htmlSafe(h.name)+'</span>'+
+     '<span class="cm-rank-score">'+num(p.wins)+' V · '+num(p.losses)+' D · '+num(p.draws)+' E · '+num(p.total)+' pts</span>'+
+     '</div>';
   }).join('')||'<div class="empty">Ainda não há duelos concluídos.</div>';
   const crestByHouse={A:'aguia-dourada',B:'leao-de-fogo',C:'dragao-esmeralda'};
+  const statIcon={points:'icone_trofeu.png',wins:'icone_espadas.png',draws:'icone_aperto_maos.png',
+    losses:'icone_derrota_x.png',accepted:'icone_espadas.png',refused:'icone_recusado.png',time:'icone_ampulheta.png'};
   classesHost.innerHTML=allClasses.slice(0,3).map((row,i)=>{
    const h=H[row.name],label=h?(h.grade+' · '+h.name):String(row.name);
    const crest=crestByHouse[row.name];
    const stats=[
-    ['🏆','Vitórias',num(row.wins)],['🎯','Pontos',num(row.total)],
-    ['⚔️','Duelos concluídos',num(row.plays)],['🤝','Empates',num(row.draws)],
-    ['🛡️','Derrotas',num(row.losses)],
-    ['✅','Convites aceitos',row.accepted==null?'—':num(row.accepted)],
-    ['❌','Convites recusados',row.refused==null?'—':num(row.refused)],
-    ['⏱️','Tempo de jogo','Não registrado']];
-   return '<article class="cm-rank-house-card">'+
+    ['points','Pontos',num(row.total)+' pts'],
+    ['wins','Vitórias',num(row.wins)],
+    ['draws','Empates',num(row.draws)],
+    ['losses','Derrotas',num(row.losses)],
+    ['accepted','Duelos aceitos',row.accepted==null?'—':num(row.accepted)],
+    ['refused','Duelos recusados',row.refused==null?'—':num(row.refused)],
+    ['time','Tempo jogado','Não registrado']
+   ];
+   return '<article class="cm-rank-house-card cm-house-place-'+(i+1)+'">'+
     '<div class="cm-house-top">'+medalImg(i)+
     (crest?'<img class="cm-house-crest" src="assets/ui/crests/brasao-'+crest+'.png" alt="">':'')+'</div>'+
     '<h3>'+htmlSafe(label)+'</h3><div class="cm-house-stat-grid">'+
-    stats.map(([icon,key,value])=>'<div class="cm-house-stat"><span aria-hidden="true">'+icon+'</span><small>'+key+'</small><b>'+value+'</b></div>').join('')+
-    '</div></article>';
+    stats.map(([type,key,value])=>'<div class="cm-house-stat"><img src="'+assets+statIcon[type]+'" alt="" aria-hidden="true"><span class="cm-house-stat-label">'+key+'</span><b>'+value+'</b></div>').join('')+
+    '</div><div class="cm-house-total">🏆 Total de partidas: '+num(row.plays)+'</div></article>';
   }).join('')||'<div class="empty">Nenhum registro de turma disponível.</div>';
  }catch(err){
   status.textContent='⚠️ Falha ao consultar o ranking no servidor: '+err.message;
