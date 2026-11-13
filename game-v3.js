@@ -600,7 +600,11 @@ function changeTarget(){
  match.stageStartedAt=performance.now();match.freezeTime=null;
  scene?.setTargetShift(match.shift);uiHud();
 }
+const BOT_LEVEL_BY_DIFFICULTY=Object.freeze({easy:'iniciante',medium:'avancado',hard:'lendario'});
 function levelForMatch(mode,drawHandoff){
+ // Oponente robô e percurso são seleções diferentes: garantir que caminhem juntos
+ // mesmo ao entrar diretamente na apresentação VS, sem a tela de preparação.
+ if(mode==='bot')return BOT_LEVEL_BY_DIFFICULTY[$('difficulty').value]||'iniciante';
  return drawHandoff||mode==='challenge_team'&&$('team-scope').value==='other'?'iniciante':$('challenge-level').value;
 }
 async function startMatch(accepted=null){
@@ -1555,9 +1559,12 @@ document.querySelectorAll('[data-play-mode]').forEach(button=>{
   // Treino contra o robô: o nível escolhido segue diretamente para a carta VS.
   // Não alterar startMatch(), match.difficulty, a trilha ou o cálculo dos cinco disparos.
   if(chosen==='bot'&&['easy','medium','hard'].includes(button.dataset.botDifficulty||'')){
-   $('difficulty').value=button.dataset.botDifficulty;
+   const difficulty=button.dataset.botDifficulty;
+   $('difficulty').value=difficulty;
+   $('challenge-level').value=BOT_LEVEL_BY_DIFFICULTY[difficulty];
    $('mode').value='bot';
    updateMode();
+   drawCourse();
    void startMatch();
    return;
   }
