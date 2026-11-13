@@ -298,3 +298,83 @@ body[data-page="lobby"] #view-inicio[data-step="desafio"] #duel-options .cm-chal
  body[data-page="lobby"] #view-inicio[data-step="desafio"] #duel-options .cm-challenge-archers img{transform:scale(1.18)!important}
  body[data-page="lobby"] #view-inicio[data-step="desafio"] #duel-options .cm-robot-levels button{height:37px!important}
 }
+
+/* ClassMana — escolha de colega da MESMA turma (sem alterar outras modalidades) */
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel {
+ width:min(100%,1040px)!important; margin-inline:auto!important;
+ display:flex!important;flex-direction:column!important;align-items:center!important;
+ gap:18px!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel #cm-v2-challenge-picker,
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .setup-head,
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .course-preview,
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .setup-fields,
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .online-account > div:first-child {
+ display:none!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .online-account{
+ align-self:stretch!important;justify-content:flex-end!important;
+ margin:0!important;padding:0 10px!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .cm-same-house-duel:not([hidden]){
+ box-sizing:border-box!important;
+ display:grid!important;grid-template-columns:minmax(170px,235px) minmax(0,1fr)!important;
+ align-items:center!important;gap:clamp(18px,3vw,40px)!important;
+ width:min(100%,900px)!important;
+ padding:clamp(25px,3.6vw,45px)!important;
+ background:linear-gradient(145deg,rgba(8,33,67,.97),rgba(6,23,50,.97))!important;
+ border:3px solid #dfb75b!important;border-radius:24px!important;
+ box-shadow:0 15px 38px #0008,inset 0 0 0 2px #fff2b51a!important;
+ color:#ffefd0!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .cm-same-house-crest-wrap{
+ display:flex!important;justify-content:center!important;align-items:center!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel #cm-same-house-crest{
+ display:block!important;width:min(100%,220px)!important;max-height:255px!important;
+ object-fit:contain!important;filter:drop-shadow(0 10px 18px #000a)!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .cm-same-house-main{min-width:0!important}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .cm-same-house-kicker{
+ display:block!important;color:#e6bd68!important;font:800 12px Nunito,sans-serif!important;
+ letter-spacing:.17em!important;margin-bottom:7px!important
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel #cm-same-house-title{
+ margin:0 0 12px!important;color:#ffe3a0!important;
+ font:900 clamp(22px,3vw,37px)/1.13 Cinzel,Georgia,serif!important;text-shadow:0 3px 5px #0008!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel #cm-same-house-description{
+ margin:0 0 24px!important;color:#f2e9da!important;font:700 clamp(14px,1.4vw,17px)/1.5 Nunito,sans-serif!important
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel #cm-same-house-select-slot #rival-label{
+ display:flex!important;flex-direction:column!important;gap:9px!important;
+ width:100%!important;margin:0!important;padding:0!important;
+ color:#ffdfa0!important;font:900 17px Nunito,sans-serif!important;
+ background:none!important;border:0!important;box-shadow:none!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel #cm-same-house-select-slot #rival{
+ display:block!important;box-sizing:border-box!important;width:100%!important;
+ min-height:57px!important;padding:10px 17px!important;
+ border:2px solid #e4bb65!important;border-radius:12px!important;
+ background:#f9eed0!important;color:#142944!important;
+ font:800 clamp(15px,1.55vw,19px) Nunito,sans-serif!important;
+ cursor:pointer!important;box-shadow:0 5px 0 #634821!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel #cm-same-house-select-slot #rival-label small{
+ display:none!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .cm-same-house-note{
+ margin:17px 0 0!important;color:#bde5ff!important;font:800 13px Nunito,sans-serif!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel #start-game{
+ align-self:center!important;margin:0 auto 22px!important;
+}
+@media(max-width:680px){
+ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .cm-same-house-duel:not([hidden]){
+  grid-template-columns:1fr!important;text-align:center!important;gap:12px!important;padding:24px 18px!important;
+ }
+ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel #cm-same-house-crest{
+  width:130px!important;max-height:150px!important;
+ }
+ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel #cm-same-house-select-slot #rival-label{text-align:left!important}
+}
