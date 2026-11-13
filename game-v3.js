@@ -3,7 +3,7 @@ import {GEAR,GEAR_BY_ID,getGearLevel,isGearUnlocked} from './equipment-catalog.j
 import {mountEquipmentInventory} from './equipment-inventory.js?v=arsenal-button-colors-20261111';
 import {CIRCUITS,LEVELS,targetMotion,mediumTwinTargets,obstacleBlocks,distanceDifficulty,flightSeconds} from './arena-difficulty.js?v=20261112-medium-slower-v1';
 import {arenaAudio} from './arena-audio.js?v=20261112-arena-sfx-fixed-02';
-import {cinematics} from './classmana-cinematics.js?v=20261113-robo-retrato-v1';
+import {cinematics} from './classmana-cinematics.js?v=20261113-robo-oficial-v2';
 import {initAtmosphere} from './arena-atmosphere.js?v=no-crowd15';
 import {online} from './online-client.js?v=api12';
 import {mountSpriteHUD} from './sprite-hud.js?v=1';
