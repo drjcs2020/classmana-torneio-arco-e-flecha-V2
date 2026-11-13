@@ -578,7 +578,7 @@ export function initScene(canvas, getSettings) {
       if(err||holder!==targetRoot||targetModelKey!==file)return;
       const t=targetSpecs[file],container=new pc.Entity('Alvo 3D '+file),model=res.instantiateRenderEntity();
       container.addChild(model);holder.addChild(container);
-      if(file==='models3d/alvo_suspenso_sem_cavalete.glb'){
+      if(file==='target-suspended.glb'||file==='models3d/alvo_suspenso_sem_cavalete.glb'){
         if(!calibrateMobileDisc(model,holder)){
           container.destroy();
           parent.dataset.glbTarget='procedural';
@@ -590,7 +590,7 @@ export function initScene(canvas, getSettings) {
         model.setLocalEulerAngles(...t.rot);
         model.setLocalPosition(...t.pos);
       }
-      // Aplica a correção em todos os alvos GLB, inclusive o suspenso lendário.
+      // Alvo lendário: calibração da face por eixo mais fino, mantendo o disco voltado ao arqueiro.
       brightenMobileDisc(model);
       holder.__model3d=container;
       targetVisual.enabled=false;
