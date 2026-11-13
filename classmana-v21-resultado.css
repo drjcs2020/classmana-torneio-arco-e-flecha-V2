@@ -530,3 +530,46 @@ body[data-page="arena"] #view-arena #finish.cm-v21-result[data-cm-result-mode="b
  color:#c7efff!important;text-shadow:0 2px 4px #000c!important;
  font-size:clamp(7px,.88vw,12px)!important;
 }
+
+
+/* V20 — Placar do treino contra o robô: os totais não invadem as molduras.
+   Mesma tela de resultados para fácil, médio e difícil. */
+@media (min-width:761px){
+ body[data-page="arena"] #view-arena #finish.cm-v21-result[data-cm-result-mode="bot"] .cm-v21-stage{
+  grid-template-columns:minmax(0,1fr) minmax(280px,330px) minmax(0,1fr)!important;
+  column-gap:clamp(18px,2vw,32px)!important;
+  width:min(100%,1280px)!important;
+ }
+ body[data-page="arena"] #view-arena #finish.cm-v21-result[data-cm-result-mode="bot"] .cm-v21-scores{
+  display:grid!important;grid-template-columns:minmax(0,1fr) clamp(80px,6.8vw,110px) minmax(0,1fr)!important;
+  align-items:center!important;justify-items:center!important;
+  gap:clamp(3px,.6vw,10px)!important;
+  max-width:100%!important;width:100%!important;min-width:0!important;
+  overflow:visible!important;
+ }
+ body[data-page="arena"] #view-arena #finish.cm-v21-result[data-cm-result-mode="bot"] .cm-v21-total{
+  box-sizing:border-box!important;display:block!important;
+  width:100%!important;min-width:0!important;max-width:100%!important;
+  margin:0!important;text-align:center!important;
+  font-size:clamp(35px,3.65vw,62px)!important;letter-spacing:-.04em!important;
+  white-space:nowrap!important;
+ }
+ body[data-page="arena"] #view-arena #finish.cm-v21-result[data-cm-result-mode="bot"] .cm-v21-vs{
+  width:100%!important;max-width:110px!important;min-width:0!important;
+ }
+}
+@media(max-width:760px){
+ body[data-page="arena"] #view-arena #finish.cm-v21-result[data-cm-result-mode="bot"] .cm-v21-scores{
+  display:grid!important;grid-template-columns:minmax(0,1fr) clamp(38px,10vw,66px) minmax(0,1fr)!important;
+  align-items:center!important;justify-items:center!important;
+  width:min(100%,300px)!important;max-width:300px!important;
+  gap:clamp(3px,1vw,8px)!important;margin:0 auto!important;
+ }
+ body[data-page="arena"] #view-arena #finish.cm-v21-result[data-cm-result-mode="bot"] .cm-v21-total{
+  width:100%!important;min-width:0!important;font-size:clamp(23px,6vw,38px)!important;
+  letter-spacing:-.04em!important;text-align:center!important;
+ }
+ body[data-page="arena"] #view-arena #finish.cm-v21-result[data-cm-result-mode="bot"] .cm-v21-vs{
+  width:100%!important;min-width:0!important;
+ }
+}
