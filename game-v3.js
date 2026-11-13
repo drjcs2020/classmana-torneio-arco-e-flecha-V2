@@ -263,6 +263,7 @@ function fillPlayer(wanted){
   quick.value=selected==='guest'?'':selected;
  }
  fillRivals();
+ if($('mode').value==='challenge_same')syncSameHouseDuel();
 }
 function fillRivals(){
  const mode=$('mode').value,same=mode==='challenge_same',teams=mode==='challenge_team',myId=$('player').value;
@@ -282,10 +283,11 @@ function fillRivals(){
  const old=$('rival').value;
  let pool=same?choices(house):teams&&scope!=='other'?choices(enemyHouse).filter(p=>TEAMS[p.id]===opposingTeamField.value):choices(enemyHouse);
  pool=pool.filter(p=>p.id!==myId);
- $('rival').innerHTML=pool.map(p=>`<option value="${p.id}">${p.name} · ${H[p.id[0]].grade}</option>`).join('');
+ $('rival').innerHTML=(same?'<option value="">Selecione o colega que deseja desafiar</option>':'')+
+  pool.map(p=>`<option value="${p.id}">${p.name} · ${H[p.id[0]].grade}</option>`).join('');
  if(pool.some(p=>p.id===old))$('rival').value=old;
  const lbl=$('rival-label');
- lbl.firstChild.textContent=teams&&scope==='other'?'4 · Aluno sorteado da casa rival':teams?'4 · Representante da equipe adversária':same?'4 · Colega da mesma turma':'4 · Adversário de outra turma';
+ lbl.firstChild.textContent=teams&&scope==='other'?'4 · Aluno sorteado da casa rival':teams?'4 · Representante da equipe adversária':same?'Colega da sua turma':'4 · Adversário de outra turma';
  lbl.querySelector('small').textContent='Selecione o nome do colega; não há senha de desafio.';
 }
 
@@ -355,6 +357,29 @@ function goOnlinePortal(mode=$('mode').value,inbox=false){
 }
 function duelKind(mode){return mode==='challenge_same'?'mesma_turma':mode==='challenge_team'?'entre_equipes':'interclasses'}
 function duelMode(kind){return kind==='mesma_turma'?'challenge_same':kind==='entre_equipes'?'challenge_team':'challenge'}
+function syncSameHouseDuel(){
+ const same=$('mode').value==='challenge_same';
+ const setup=$('setup'),panel=$('cm-same-house-duel'),slot=$('cm-same-house-select-slot');
+ const label=$('rival-label'),fields=document.querySelector('.setup-fields');
+ if(!setup||!panel||!slot||!label||!fields)return;
+ setup.classList.toggle('cm-same-duel',same);
+ panel.hidden=!same;
+ if(same){
+  if(label.parentElement!==slot)slot.appendChild(label);
+  const h=$('player').value?.[0]||house;
+  const config={
+   A:['aguia.webp','Águia Dourada'],B:['leao.webp','Leão de Fogo'],
+   C:['dragao.webp','Dragão de Esmeralda']
+  }[h]||['aguia.webp','Águia Dourada'];
+  const crest=$('cm-same-house-crest');
+  crest.src='assets/v2/crests/'+config[0];crest.alt='Brasão da '+config[1];
+  $('cm-same-house-description').textContent='Escolha um colega do 4º '+h+
+   ' para um duelo de cinco flechas. O alvo se movimenta na horizontal.';
+  $('challenge-level').value='avancado';
+ }else if(label.parentElement!==fields){
+  fields.appendChild(label);
+ }
+}
 function updateMode(){
  const mode=$('mode').value,team=mode==='challenge_team',otherTeam=team&&$('team-scope').value==='other';
  $('difficulty-label').classList.toggle('hidden',mode!=='bot');
@@ -363,7 +388,7 @@ function updateMode(){
  $('team-scope-label').classList.toggle('hidden',!team);
  $('opponent-house-label').classList.toggle('hidden',!(mode==='challenge'||otherTeam));
  $('opponent-team-label').classList.toggle('hidden',!team);
- fillRivals();drawCourse();
+ fillRivals();drawCourse();syncSameHouseDuel();
 }
 function byId(id){return choices(id?.[0]||'A').find(x=>x.id===id)?.name||'Arqueiro '+id}
 function nameOf(id){return id==='guest'?'Arqueiro convidado':byId(id)}
