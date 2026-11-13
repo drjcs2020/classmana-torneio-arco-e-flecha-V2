@@ -37,3 +37,9 @@ body:not(.cm-v2-home-mode) #cm-teacher-toggle{display:none!important}
 #cm-teacher-status{min-height:30px;margin-top:15px!important;padding:8px 11px;background:#0a2e50;border-radius:8px;border:1px solid #729ad6;color:#defbff!important}
 #cm-teacher-status[data-error="true"]{border-color:#f59d9d;color:#ffc4b9!important}
 @media(max-width:580px){body.cm-v2-home-mode #cm-teacher-toggle{top:17px;right:58px;width:39px;height:38px;font-size:22px}}
+
+/* Cadastro seguro do professor: edição e exclusão de alunos. */
+#cm-teacher-manage-form .cm-teacher-manage-actions{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 7px}
+#cm-teacher-manage-form .cm-teacher-manage-actions button{flex:1 1 190px;min-height:44px}
+#cm-teacher-manage-note{display:block;margin:7px 0;color:#baddf5;font-weight:700}
+#cm-teacher-manage-student{max-height:48px}
