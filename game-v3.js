@@ -364,6 +364,8 @@ function syncSameHouseDuel(){
  if(!setup||!panel||!slot||!label||!fields)return;
  setup.classList.toggle('cm-same-duel',same);
  panel.hidden=!same;
+ const plate=$('cm-same-player-plate');
+ if(plate)plate.hidden=!same;
  if(same){
   if(label.parentElement!==slot)slot.appendChild(label);
   const h=$('player').value?.[0]||house;
@@ -373,8 +375,14 @@ function syncSameHouseDuel(){
   }[h]||['aguia.webp','Águia Dourada'];
   const crest=$('cm-same-house-crest');
   crest.src='assets/v2/crests/'+config[0];crest.alt='Brasão da '+config[1];
-  $('cm-same-house-description').textContent='Escolha um colega do 4º '+h+
-   ' para um duelo de cinco flechas. O alvo se movimenta na horizontal.';
+  const archer=$('cm-same-archer');
+  if(archer){archer.src=archerImage();archer.alt='Arqueiro original da casa '+config[1];}
+  const currentId=$('player').value;
+  const ownName=$('cm-same-player-name'),ownDetails=$('cm-same-player-details');
+  if(ownName)ownName.textContent=byId(currentId);
+  if(ownDetails)ownDetails.textContent=H[h].grade+' · '+(TEAMS[currentId]||config[1]);
+  $('cm-same-house-description').textContent='Escolha um arqueiro do 4º '+h+
+   ' para um duelo de cinco flechas no alvo horizontal em movimento.';
   $('challenge-level').value='avancado';
  }else if(label.parentElement!==fields){
   fields.appendChild(label);
