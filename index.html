@@ -56,7 +56,7 @@ html.cm-v2-resume-pending body[data-page="lobby"]::after{
 <link rel="stylesheet" href="classmana-same-house-art.css?v=20261113-hard-badge-frame-v3">
 <script type="module" src="https://cdnjs.cloudflare.com/ajax/libs/model-viewer/4.1.0/model-viewer.min.js"></script>
 <link rel="stylesheet" href="classmana-duelo-sorteio-v3.css?v=20261112-v16">
-<link rel="stylesheet" href="classmana-ranking-v2-aprovado.css?v=20261113-rankapproved-v1">
+<link rel="stylesheet" href="classmana-ranking-v2-aprovado.css?v=20261113-rank-layout-fix-v2">
 </head>
 <body data-page="lobby" class="cm-v2-home-mode">
 <div class="sky-sparkles" aria-hidden="true"></div>
@@ -357,21 +357,21 @@ html.cm-v2-resume-pending body[data-page="lobby"]::after{
 <section id="view-ranking" class="view information-view cm-ranking-redesign" data-rank-mode="players" role="dialog" aria-modal="true" aria-labelledby="ranking-title">
   <div class="page-heading cm-rank-main-heading">
    <h1 id="ranking-title" class="cm-rank-accessible">Ranking do Torneio — Salão dos Campeões</h1>
-   <img class="cm-rank-banner" src="assets/ui/ranking-v2/titulo-ranking.webp" alt="Salão dos Campeões — Ranking do Torneio. As três Casas disputam o trono dos arqueiros.">
+   <img class="cm-rank-banner" src="assets/ui/ranking-v2/titulo-ranking-recortado.webp" alt="Salão dos Campeões — Ranking do Torneio. As três Casas disputam o trono dos arqueiros.">
   </div>
   <div class="notice" id="ranking-status" role="status">Consultando os resultados dos duelos concluídos.</div>
   <div class="cm-score-mode-tabs" id="ranking-tabs" role="tablist" aria-label="Escolha a classificação">
-   <button type="button" class="active" id="cm-tab-archers" role="tab" aria-selected="true" aria-controls="cm-panel-archers" data-rank="players"><span class="cm-rank-accessible">Arqueiros</span></button>
-   <button type="button" id="cm-tab-classes" role="tab" aria-selected="false" aria-controls="cm-panel-houses" data-rank="classes"><span class="cm-rank-accessible">Turmas</span></button>
+   <button type="button" class="active" id="cm-tab-archers" role="tab" aria-selected="true" aria-controls="cm-panel-archers" data-rank="players"><img class="cm-rank-tab-art" src="assets/ui/ranking-v2/aba-arqueiros-ativa-recortado.webp" alt="Arqueiros"></button>
+   <button type="button" id="cm-tab-classes" role="tab" aria-selected="false" aria-controls="cm-panel-houses" data-rank="classes"><img class="cm-rank-tab-art" src="assets/ui/ranking-v2/aba-turmas-inativa-recortado.webp" alt="Turmas"></button>
   </div>
   <div class="ranking-layout">
    <div class="ranking-panel cm-rank-archers" id="cm-panel-archers" role="tabpanel" aria-labelledby="cm-tab-archers">
-    <h2><img src="assets/ui/ranking-v2/titulo-arqueiros.webp" alt="Ranking dos Arqueiros"></h2>
+    <h2><img src="assets/ui/ranking-v2/titulo-arqueiros-recortado.webp" alt="Ranking dos Arqueiros"></h2>
     <div class="cm-rank-scroll-hint">↕ Arraste a barra azul-gelo para consultar até o 50º arqueiro</div>
     <div id="rank-players" class="cm-rank-scroll-region" tabindex="0" aria-label="Lista rolável de até cinquenta arqueiros"></div>
    </div>
    <div class="ranking-panel cm-rank-houses" id="cm-panel-houses" role="tabpanel" aria-labelledby="cm-tab-classes" hidden>
-    <h2><img src="assets/ui/ranking-v2/titulo-turmas.webp" alt="Ranking por Turmas"></h2>
+    <h2><img src="assets/ui/ranking-v2/titulo-turmas-recortado.webp" alt="Ranking por Turmas"></h2>
     <p class="cm-rank-subtitle">Somente os duelos entre casas diferentes contam nesta classificação.</p>
     <div id="rank-houses" class="cm-rank-houses-grid"></div>
    </div>
