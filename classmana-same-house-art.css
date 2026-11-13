@@ -629,3 +629,32 @@ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel.cm
  text-overflow:ellipsis!important;text-align:left!important;
  pointer-events:none!important;
 }
+
+
+/* Arte definitiva do seletor V2: a imagem NÃO tem letras gravadas.
+   Texto responsivo é responsabilidade de #cm-same-button-text, para as duas modalidades. */
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .cm-same-choice .cm-same-dropdown-art{
+ content:normal!important;display:block!important;width:100%!important;height:100%!important;
+ object-fit:fill!important;pointer-events:none!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .cm-same-choice #cm-same-open-rivals #cm-same-button-text,
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .cm-same-choice #cm-same-open-rivals.has-selection #cm-same-button-text,
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .cm-same-choice #cm-same-open-rivals:not(.has-selection) #cm-same-button-text,
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel.cm-interclass-duel .cm-same-choice #cm-same-open-rivals #cm-same-button-text{
+ display:flex!important;visibility:visible!important;position:absolute!important;
+ box-sizing:border-box!important;
+ left:21%!important;right:12%!important;top:0!important;bottom:0!important;
+ width:auto!important;max-width:none!important;height:100%!important;
+ align-items:center!important;justify-content:flex-start!important;
+ margin:0!important;padding:0 4px!important;
+ border:0!important;outline:0!important;border-radius:0!important;
+ background:transparent!important;box-shadow:none!important;
+ color:#112c57!important;font:900 clamp(12px,1.4vw,18px)/1.2 Nunito,sans-serif!important;
+ white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;
+ text-align:left!important;pointer-events:none!important;
+}
+@media(max-width:540px){
+ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .cm-same-choice #cm-same-open-rivals #cm-same-button-text{
+  font-size:clamp(10px,3.1vw,14px)!important;left:20%!important;right:12%!important;
+ }
+}
