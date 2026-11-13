@@ -466,7 +466,11 @@ function syncSameHouseDuel(){
   const opener=$('cm-same-open-rivals'),list=$('cm-same-rivals-list');
   if(opener)opener.setAttribute('aria-label',other?'Selecione um adversário':'Selecione um colega da sua turma');
   if(list)list.setAttribute('aria-label',other?'Arqueiros da turma adversária':'Arqueiros disponíveis da mesma turma');
-  $('challenge-level').value='avancado';
+  // Mesma trilha difícil do Robô Difícil no duelo interturmas; mesma turma segue média.
+  $('challenge-level').value=other?'lendario':'avancado';
+  const mediumSeal=$('cm-same-medium-art'),hardSeal=$('cm-interclass-hard-badge');
+  if(mediumSeal)mediumSeal.hidden=other;
+  if(hardSeal)hardSeal.hidden=!other;
   if(other)syncOtherHouseShields();
   samePickerClose();
   samePickerRender();
@@ -852,7 +856,7 @@ async function fire(power){
 }
 
 function showHit(score,x,y,blocked=false){const el=$('hit');el.textContent=blocked?'🛡️ ESCUDO!':score?'+'+score+' PONTOS':'FORA DO ALVO';el.style.left=(x*100)+'%';el.style.top=clamp(y*100-12,18,64)+'%';el.classList.remove('show');void el.offsetWidth;el.classList.add('show')}
-function chooseRobotScore(difficulty,playerAverage){const base={easy:5.1,medium:6.7,hard:8.15}[difficulty],adjust=clamp((playerAverage-5.5)*.17,-.7,.7);let result=clamp(base+adjust+rand(-3.3,3.3),0,10);return result>=9.25?10:result>=7?8:result>=5?6:result>=3?4:result>=1.5?2:0;}
+function chooseRobotScore(difficulty,playerAverage){const base={easy:5.1,medium:6.7,hard:7.45}[difficulty],adjust=clamp((playerAverage-5.5)*.17,-.7,.7);let result=clamp(base+adjust+rand(-3.3,3.3),0,10);return result>=9.25?10:result>=7?8:result>=5?6:result>=3?4:result>=1.5?2:0;}
 function renderFinishScore(own,opponent,opponentLabel='ADVERSÁRIO'){
  const area=$('finish-results');if(!area)return;
  area.replaceChildren();
