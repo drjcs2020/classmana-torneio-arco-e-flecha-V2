@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="400" height="430" viewBox="0 0 400 430" role="img" aria-labelledby="title">
+<title id="title">Ranking — escudo roxo e dourado ClassMana</title>
+<defs>
+ <linearGradient id="gold" x1=".12" x2=".9" y1="0" y2="1"><stop stop-color="#fff6b0"/><stop offset=".10" stop-color="#f5bd32"/><stop offset=".25" stop-color="#fff2a4"/><stop offset=".40" stop-color="#cc7e11"/><stop offset=".57" stop-color="#ffda57"/><stop offset=".72" stop-color="#a95104"/><stop offset=".90" stop-color="#ffd866"/><stop offset="1" stop-color="#fff4ab"/></linearGradient>
+ <linearGradient id="purple" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#480061"/><stop offset=".23" stop-color="#8b0796"/><stop offset=".51" stop-color="#3b064c"/><stop offset=".76" stop-color="#641071"/><stop offset="1" stop-color="#220b3f"/></linearGradient>
+ <linearGradient id="violet" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#fa98ff"/><stop offset=".35" stop-color="#b729e8"/><stop offset=".62" stop-color="#610ab6"/><stop offset="1" stop-color="#22055d"/></linearGradient>
+ <radialGradient id="sheen" cx=".46" cy=".3" r=".65"><stop stop-color="#ed82ff" stop-opacity=".25"/><stop offset="1" stop-color="#2e005e" stop-opacity="0"/></radialGradient>
+ <filter id="shadow" x="-25%" y="-25%" width="150%" height="170%"><feGaussianBlur in="SourceAlpha" stdDeviation="6"/><feOffset dy="8"/><feComponentTransfer><feFuncA type="linear" slope=".65"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+ <filter id="letters" x="-15%" y="-30%" width="130%" height="170%"><feDropShadow dx="2" dy="4" stdDeviation="2" flood-color="#24042c" flood-opacity=".9"/></filter>
+</defs>
+<g filter="url(#shadow)">
+ <path d="M200 24 L247 65 C293 85 334 91 366 96 L381 153 C380 271 318 353 200 410 C82 353 20 271 19 153 L34 96 C66 91 107 85 153 65 Z" fill="#5a2509" stroke="#783909" stroke-width="9" stroke-linejoin="round"/>
+ <path d="M200 21 L248 69 C291 90 332 95 360 101 L374 151 C373 265 306 349 200 401 C94 349 27 265 26 151 L40 101 C68 95 109 90 152 69 Z" fill="url(#gold)" stroke="#ffe894" stroke-width="4" stroke-linejoin="round"/>
+ <path d="M200 45 L244 89 C288 106 323 112 344 117 L354 154 C354 255 291 329 200 377 C109 329 46 255 46 154 L56 117 C77 112 112 106 156 89 Z" fill="#3d083c" stroke="#9c5109" stroke-width="7"/>
+ <path d="M200 53 L241 98 C283 114 314 122 335 126 L343 155 C341 246 289 312 200 366 C111 312 59 246 57 155 L65 126 C86 122 117 114 159 98 Z" fill="url(#purple)" stroke="#f9c55a" stroke-width="2.5"/>
+ <path d="M200 53 L241 98 C283 114 314 122 335 126 L343 155 C341 246 289 312 200 366 C111 312 59 246 57 155 L65 126 C86 122 117 114 159 98 Z" fill="url(#sheen)"/>
+ <path d="M200 69 L235 109 C270 125 308 133 321 136 M200 69 L165 109 C130 125 92 133 79 136" fill="none" stroke="#f5a8ff" opacity=".38" stroke-width="2.5"/>
+ <path d="M82 202 Q89 289 183 339 M318 202 Q311 289 217 339" fill="none" stroke="#d578dc" opacity=".23" stroke-width="4"/>
+ <g fill="#ab41be" opacity=".31">
+  <path d="M112 277q-30-14-19-29q18 5 19 29ZM127 299q-32-7-30-24q21 3 30 24ZM146 318q-31-3-31-20q23 1 31 20ZM165 333q-26 3-31-12q22-6 31 12Z"/>
+  <path d="M288 277q30-14 19-29q-18 5-19 29ZM273 299q32-7 30-24q-21 3-30 24ZM254 318q31-3 31-20q-23 1-31 20ZM235 333q26 3 31-12q-22-6-31 12Z"/>
+ </g>
+ <path d="M200 6 L228 45 L200 84 L172 45 Z" fill="url(#gold)" stroke="#7f3506" stroke-width="6"/>
+ <path d="M200 15 L219 45 L200 74 L181 45 Z" fill="url(#violet)" stroke="#f5c7ff" stroke-width="2.5"/>
+ <path d="M200 17 L200 72 M183 45 H217" fill="none" stroke="#ffdbff" stroke-width="2" opacity=".66"/>
+ <path d="M200 354 L226 383 L200 420 L174 383 Z" fill="url(#gold)" stroke="#7a3705" stroke-width="6"/>
+ <path d="M200 365 L216 383 L200 407 L184 383 Z" fill="url(#violet)" stroke="#efd8ff" stroke-width="2"/>
+ <text x="200" y="225" text-anchor="middle" font-family="Georgia,'Times New Roman',serif" font-size="66" font-weight="900" textLength="305" lengthAdjust="spacingAndGlyphs" fill="url(#gold)" stroke="#602303" stroke-width="4.8" paint-order="stroke fill" filter="url(#letters)">RANKING</text>
+ <path d="M86 248 Q144 249 176 260 L200 246 L224 260 Q256 249 314 248" stroke="url(#gold)" stroke-width="5" fill="none" stroke-linecap="round"/>
+ <path d="M200 244 L209 256 L200 268 L191 256 Z" fill="#fff3ad" stroke="#ae5714" stroke-width="2"/>
+ <path d="M66 156 L77 167 L66 178 L55 167 Z M334 156 L345 167 L334 178 L323 167 Z" fill="url(#gold)" stroke="#7c3a08" stroke-width="2"/>
+</g>
+</svg>
