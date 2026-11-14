@@ -20,11 +20,19 @@ const decorate=(node,id)=>{
  let badge=node.querySelector(':scope > .cm-official-level');
  if(!badge){badge=document.createElement('span');badge.className='cm-official-level';node.appendChild(badge)}
  if(badge.textContent!==value)badge.textContent=value;
- badge.title=official?'Nível do arsenal baseado em vitórias oficiais confirmadas':'Aguardando consulta ao ranking oficial';
+ badge.title=official?'Nível de progressão no torneio, calculado por vitórias oficiais (não é o nível pedagógico XP do ClassMana)':'Aguardando consulta ao ranking oficial';
 };
-const current=()=>document.getElementById('player')?.value||sessionStorage.getItem('cm_active_student_v2')||localStorage.getItem('cm_v2_lobby_student')||'';
+function savedMatch(){try{return JSON.parse(sessionStorage.getItem('cm_active_archery_match_v2')||'null')}catch{return null}}
+const current=()=>document.getElementById('player')?.value||savedMatch()?.playerId||sessionStorage.getItem('cm_active_student_v2')||localStorage.getItem('cm_v2_lobby_student')||'';
 function paint(){
  const self=current();
+ // Também mostrar os níveis na arena, inclusive na página separada arena.html.
+ // O robô não tem nível de aluno; nunca inventar nível para ele.
+ const active=savedMatch();
+ if(document.getElementById('hud-player'))decorate(document.getElementById('hud-player'),active?.playerId||self);
+ const rival=active?.incoming?.playerId||active?.rivalId;
+ if(document.getElementById('hud-bot')&&valid(rival)&&!['bot','practice'].includes(active?.mode))
+   decorate(document.getElementById('hud-bot'),rival);
  // Cartões ilustrados: o nível fica junto ao nome, nunca no brasão.
  decorate(document.getElementById('cm-draw-left-name'),self);
  const right=document.getElementById('cm-draw-right-name');
@@ -82,7 +90,10 @@ style.textContent=`
 document.head.appendChild(style);
 const watch=()=>{
  const observer=new MutationObserver(records=>{
-  if(records.some(record=>[...record.addedNodes].some(n=>n.nodeType===1&&!n.classList?.contains('cm-official-level'))))schedule();
+  // A arena reescreve textContent a cada flecha; recolocar o selo sem causar loop.
+  if(records.some(record=>!record.target?.closest?.('.cm-official-level') &&
+    ([...record.addedNodes].some(n=>!n.classList?.contains('cm-official-level')) ||
+     [...record.removedNodes].some(n=>n.classList?.contains('cm-official-level')))))schedule();
  });
  observer.observe(document.body,{subtree:true,childList:true});
  document.addEventListener('change',schedule);
