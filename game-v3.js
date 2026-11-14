@@ -2,7 +2,7 @@ import {initScene} from './scene-v3.js?v=20261114-3d-replay-v2';
 import {GEAR,GEAR_BY_ID,getGearLevel,isGearUnlocked} from './equipment-catalog.js?v=win-progress-linear-20261110';
 import {mountEquipmentInventory} from './equipment-inventory.js?v=arsenal-button-colors-20261111';
 import {CIRCUITS,LEVELS,targetMotion,mediumTwinTargets,obstacleBlocks,distanceDifficulty,flightSeconds} from './arena-difficulty.js?v=20261113-hard-slower-v6';
-import {arenaAudio} from './arena-audio.js?v=20261113-aplausos-so-dez-v1';
+import {arenaAudio} from './arena-audio.js?v=20261114-aplausos-final-v2';
 import {cinematics} from './classmana-cinematics.js?v=20261113-robo-resultado-v4';
 import {initAtmosphere} from './arena-atmosphere.js?v=20261113-shield-proportional-v6';
 import {online} from './online-client.js?v=api12';
@@ -1023,7 +1023,8 @@ async function finishMatch(){
   rivalHouse:match.mode==='bot'?'C':match.house,rivalGender:archerGender(),
   ownShots:match.scores,rivalShots:bot,
   opponent:rivalScore===undefined?'—':rivalScore,mode:match.mode,ownTotal:total,rivalTotal:rivalScore??null});
- if(match.mode==='bot')arenaAudio.play(total>rivalScore?'victory':total<rivalScore?'defeat':'banner');
+ if(match.mode==='practice')arenaAudio.play('completion');
+  else if(match.mode==='bot')arenaAudio.play(total>rivalScore?'victory':total<rivalScore?'defeat':'banner');
  // Treino local: sem aviso redundante sobre o ranking na tela final.
  $('share-help').textContent='';
  if(match.playerId!=='guest')persist({house:match.house,id:match.playerId,score:total,mode:match.mode,win:rivalScore===undefined?null:total>rivalScore});
