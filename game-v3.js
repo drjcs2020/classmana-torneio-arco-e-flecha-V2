@@ -1,4 +1,4 @@
-import {initScene} from './scene-v3.js?v=20261114-ghost-target-v1';
+import {initScene} from './scene-v3.js?v=20261114-wind-bow-y90-v1';
 import {GEAR,GEAR_BY_ID,getGearLevel,isGearUnlocked} from './equipment-catalog.js?v=win-progress-linear-20261110';
 import {mountEquipmentInventory} from './equipment-inventory.js?v=arsenal-button-colors-20261111';
 import {CIRCUITS,LEVELS,targetMotion,mediumTwinTargets,obstacleBlocks,distanceDifficulty,flightSeconds} from './arena-difficulty.js?v=20261113-hard-slower-v6';
@@ -552,7 +552,7 @@ function uiHud(){if(!match)return;
    progress.innerHTML=distances.map((meters,i)=>`<span class="range-step ${i<match.scores.length?'done':i===match.scores.length?'current':''}" aria-label="Etapa ${i+1}: ${meters} metros">${i<match.scores.length?'✓':'🎯'} ${meters}m</span>`).join('');
    progress.dataset.current=key;
  }
-$('hud-player').textContent=match.player+' · '+H[match.house].grade;$('hud-bot').textContent=match.mode==='bot'?'🤖 Robô · '+({easy:'Fácil',medium:'Médio',hard:'Difícil'}[match.difficulty]):match.mode==='practice'?'🎯 Treinamento':match.incoming?'⚔️ '+byId(match.incoming.playerId):'⚔️ '+byId(match.rivalId);$('hud-score').textContent=match.scores.reduce((a,b)=>a+b,0);$('hud-rival').textContent=match.onlineReplay?.length?(match.onlineReplayPoints||0):match.incoming?match.incoming.score:match.mode==='bot'?(match.botShots?.length?match.botShots.reduce((n,v)=>n+v,0):'?'):'—';renderWind(match.wind);const art=$('stage').classList.contains('cm-art-ready'),n=Math.min(match.scores.length+1,5);
+$('hud-player').textContent=match.player+' · '+H[match.house].grade;$('hud-bot').textContent=match.mode==='bot'?'🤖 Robô · '+({easy:'Fácil',medium:'Médio',hard:'Difícil'}[match.difficulty]):match.mode==='practice'?'🎯 Treinamento':match.incoming?'⚔️ '+byId(match.incoming.playerId):'⚔️ '+byId(match.rivalId);$('hud-score').textContent=match.scores.reduce((a,b)=>a+b,0);$('hud-rival').textContent=match.onlineReplay?.length?(match.onlineReplayPoints||0):match.incoming?match.incoming.score:match.mode==='bot'?'?':'—';renderWind(match.wind);const art=$('stage').classList.contains('cm-art-ready'),n=Math.min(match.scores.length+1,5);
  const distanceValue=$('cm-distance-value');
  if(distanceValue)distanceValue.textContent=Math.round(match.distance)+' m';
  else $('distance').textContent=art?Math.round(match.distance)+' m':'🎯 ETAPA '+n+'/5 · '+Math.round(match.distance)+' METROS';
@@ -701,7 +701,7 @@ async function startMatch(accepted=null){
   rivalId,gender:drawHandoff?.gender||archerGender(),rivalGender:drawHandoff?.rivalGender||'m',
   scores:[],running:true,locked:false,bow:equipment.bow,wind:0,distance:10,level:mode==='bot'?(BOT_LEVEL_BY_DIFFICULTY[$('difficulty').value]||'iniciante'):challenge?.level||(mode==='challenge_team'?'iniciante':mode==='challenge_same'?'avancado':mode==='challenge'?'lendario':levelForMatch(mode,drawHandoff)),shift:0,freezeTime:null,stageStartedAt:performance.now(),incoming:null,
   online:challenge,onlineShots:[],onlineReplay:challenge?.recipient.id===userId?challenge.creatorShots:[],
-  onlineReplayPoints:0,botShots:[],botTotal:null,seed:Math.floor(rand(100000,999999))};
+  onlineReplayPoints:0,seed:Math.floor(rand(100000,999999))};
  if(mode==='bot'){
   const go=await cinematics.versus({player:match.player,house:match.house,gender:archerGender(),
    rival:'ROBÔ ARQUEIRO',rivalHouse:'C',mode:'bot',sound:effect=>arenaAudio.play(effect)});
@@ -757,39 +757,6 @@ function showDuelTurn(text,style='opponent'){
  return panel;
 }
 function hideDuelTurn(){const panel=$('cm-duel-turn');if(panel)panel.classList.add('hidden')}
-
-async function playOpponentGhostShot(shot,currentMatch,index,label='ADVERSÁRIO'){
- const stage=$('stage');if(!stage||match!==currentMatch)return false;
- const w=stage.clientWidth||1050,h=stage.clientHeight||540;
- const t=scene?.getTargetMetrics?.()||{x:w*.5,y:h*.45,r:Math.min(h*.105,w*.082)};
- const level=currentMatch.level,moves=level==='avancado'||level==='lendario';
- const rules=currentMatch.online?.rules??6,now=stageSeconds();
- const before=moves&&rules>=5?targetMotion(level,index,now):{x:0,y:0};
- const at=Number.isFinite(Number(shot.time))?Number(shot.time):now;
- const after=moves&&rules>=5?targetMotion(level,index,at+flightSeconds(currentMatch.distance,Number(shot.power)||1)):{x:0,y:0};
- const cx=t.x+(after.x-before.x)*t.r,cy=t.y+(after.y-before.y)*t.r;
- const dx=Number.isFinite(Number(shot.impactDx))?Number(shot.impactDx):Number(shot.dx)||0;
- const dy=Number.isFinite(Number(shot.impactDy))?Number(shot.impactDy):Number(shot.dy)||0;
- const px=(cx+dx*t.r)/w,py=(cy+dy*t.r)/h;
- const target=document.createElement('div');target.className='cm-opponent-ghost-target';
- target.setAttribute('role','img');target.setAttribute('aria-label','Alvo fantasma: reconstituição visual de '+label);
- target.style.left=cx/w*100+'%';target.style.top=cy/h*100+'%';
- target.style.width=Math.max(34,t.r*2)+'px';target.style.height=Math.max(34,t.r*2)+'px';
- target.innerHTML='<span class="cm-opponent-ghost-disc"></span><span class="cm-opponent-ghost-hit"></span><span class="cm-opponent-ghost-caption">ALVO DO ADVERSÁRIO · RECONSTITUIÇÃO</span>';
- const hit=target.querySelector('.cm-opponent-ghost-hit');
- hit.style.left=50+dx*50+'%';hit.style.top=50+dy*50+'%';
- stage.querySelector('.cm-opponent-ghost-target')?.remove();stage.appendChild(target);
- scene?.setReplayTargetVisible?.(false);
- try{
-  arenaAudio.play('rival-shot');
-  await Promise.race([scene?.fire?.({x:px,y:py,power:Number(shot.power)||1}),new Promise(resolve=>setTimeout(resolve,1700))]);
-  if(match!==currentMatch||!currentMatch.running)return false;
-  hit.classList.add('cm-opponent-ghost-hit-visible');
-  await new Promise(resolve=>setTimeout(resolve,420));return true;
- }catch(error){console.warn('Replay visual:',error);return false}
- finally{target.remove();scene?.setReplayTargetVisible?.(true)}
-}
-
 async function duelTurnPause(ms,currentMatch){
  await new Promise(resolve=>setTimeout(resolve,ms));
  return match===currentMatch&&currentMatch.running;
@@ -854,26 +821,7 @@ async function fire(power){
  else arenaAudio.play('hit',score);
  // The challenger already completed these five shots. Reproduce them one at a time,
  // with a clear turn announcement after the current student's result.
- if(match.mode==='bot'){
-   const sum=match.scores.reduce((n,v)=>n+v,0);
-   const score=chooseRobotScore(match.difficulty,sum/match.scores.length);
-   match.botShots??=[];match.botShots.push(score);
-   const radius=score===10?.04:score>=8?.23:score>=6?.44:score>=4?.63:score>=2?.82:1.19;
-   const angle=rand(0,Math.PI*2);
-   const botShot={score,dx:radius*Math.cos(angle),dy:radius*Math.sin(angle),
-     time:stageSeconds(),power:.84};
-   if(!await duelTurnPause(650,currentMatch))return;
-   showDuelTurn('🤖 VEZ DO ROBÔ','opponent');
-   if(!await duelTurnPause(900,currentMatch)){hideDuelTurn();return;}
-   hideDuelTurn();
-   if(!await playOpponentGhostShot(botShot,currentMatch,shotIndex,'ROBÔ'))return;
-   $('hud-rival').textContent=match.botShots.reduce((n,v)=>n+v,0);
-   showDuelTurn('🎯 ROBÔ: '+score+' PONTOS','result');
-   if(!await duelTurnPause(700,currentMatch)){hideDuelTurn();return;}
-   hideDuelTurn();
-   $('instruction').textContent='🏹 SUA VEZ • MIRE E SOLTE PARA DISPARAR';
-  }
-  const ghost=match.onlineReplay?.[shotIndex];
+ const ghost=match.onlineReplay?.[shotIndex];
  if(ghost&&match.online){
   // Let the student's own impact/score remain visible before changing turns.
   if(!await duelTurnPause(1150,currentMatch))return;
@@ -883,8 +831,18 @@ async function fire(power){
   if(!await duelTurnPause(1500,currentMatch)){hideDuelTurn();return;}
   turnPanel.classList.add('hidden');
   if(match!==currentMatch||!currentMatch.running)return;
-  if(!await playOpponentGhostShot(ghost,currentMatch,shotIndex,opponentName))return;
+  arenaAudio.play('rival-shot');
+  const px=(t.x+ghost.impactDx*t.r)/w,py=(t.y+ghost.impactDy*t.r)/h;
+  try{await Promise.race([scene?.fire?.({x:px,y:py,power:ghost.power||1}),new Promise(resolve=>setTimeout(resolve,1700))]);}
+  catch(e){console.warn('Replay:',e)}
   if(match!==currentMatch||!currentMatch.running)return;
+  const replayTwins=false?mediumTwinTargets(
+  (Number(ghost.time)||0)+flightSeconds((CIRCUITS.avancado||[])[shotIndex]||match.distance,ghost.power||1)
+ ):null;
+ const replayTarget=replayTwins&&ghost.score>0?
+  replayTwins.map((d,i)=>({i,n:Math.hypot((Number(ghost.dx)-d.x)/d.r,(Number(ghost.dy)-d.y)/d.r)}))
+   .sort((a,b)=>a.n-b.n)[0]?.i:null;
+ scene?.impact?.({x:px,y:py,score:ghost.score,targetIndex:replayTarget});
   match.onlineReplayPoints+=Number(ghost.score)||0;
   $('hud-rival').textContent=match.onlineReplayPoints;
   $('instruction').textContent='⚔️ '+opponentName+' • '+ghost.score+' PONTOS';
@@ -1007,7 +965,7 @@ async function finishMatch(){
  }
  current.running=false;
  const total=match.scores.reduce((a,b)=>a+b,0),
-  bot=match.mode==='bot'?(match.botShots?.length===5?match.botShots:Array.from({length:5},()=>chooseRobotScore(match.difficulty,total/5))):[],
+  bot=match.mode==='bot'?Array.from({length:5},()=>chooseRobotScore(match.difficulty,total/5)):[],
   rivalScore=match.mode==='bot'?bot.reduce((a,b)=>a+b,0):undefined;
  // Resultado: sem informações repetidas no cabeçalho.
  const title=match.mode==='practice'?'TREINAMENTO CONCLUÍDO':
