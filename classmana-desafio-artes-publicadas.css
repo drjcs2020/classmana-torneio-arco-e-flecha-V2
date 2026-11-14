@@ -532,6 +532,7 @@ body[data-page="lobby"] #view-inicio[data-step="desafio"] #duel-options.cm-chall
    Origem inferior mantém a linha de base; Mesma Turma não é alterado. */
 body[data-page="lobby"] #view-inicio[data-step="desafio"] #duel-options.cm-challenge-assets
 .cm-challenge-student-actions button[data-play-mode="challenge"]{
- transform:scale(1.065,1.10)!important;
+ /* incremento visual: ~2 mm por lado e ~2 mm na altura, partindo da V21 */
+ transform:translateY(9px) scale(1.16,1.18)!important;
  transform-origin:center bottom!important;
 }
