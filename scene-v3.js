@@ -20,14 +20,14 @@ export function initScene(canvas, getSettings) {
   let pc=null, app=null, gl=null, camera=null, bowRoot=null, bowVisualPivot=null, bowFallbackRoot=null, bowHandle=null, bowString=null, sightAnchor=null,
       arrowLoaded=null, targetRoot=null, impactMarks=[], currentHouse='A', ready=false, destroyed=false,
       aimX=.5, aimY=.46, power=.3, projectile=null, pendingShot=null, animT=0,
-      equipment={bow:'classico',arrow:'rubi'},terrainElement=null,ambientProps=[],backdropMode=false,targetStand=null,movingRail=null,targetVisual=null,dualDiscs=[],dualProcedural=null,modelAssets={},modelLoads={},targetModelKey='';
+      equipment={bow:'classico',arrow:'rubi'},opponentReplayTarget=null,terrainElement=null,ambientProps=[],backdropMode=false,targetStand=null,movingRail=null,targetVisual=null,dualDiscs=[],dualProcedural=null,modelAssets={},modelLoads={},targetModelKey='';
   // O fallback 2D não pode aparecer antes do PlayCanvas: antes ele causava a
   // troca perceptível de arte após alguns segundos.
   const ctx=canvas.getContext('2d', {alpha:true});
   canvas.style.opacity='0';
   parent.dataset.sceneEngine='loading';
   const state={kind:'PlayCanvas + fundo modular',setHouse,setEquipment,setTargetShift,setAim,setPower,setBackdropMode,
-    getTargetMetrics, getAimPoint, fire, impact, destroy};
+    getTargetMetrics, getAimPoint, fire, impact, beginOpponentReplay, endOpponentReplay, destroy};
   // Diagnóstico apenas durante testes (?qa=1), sem controles visíveis no jogo.
   if(new URLSearchParams(location.search).has('qa'))parent.cmAimDiagnostic=()=>({
    kind:state.kind,input:{x:aimX,y:aimY},projected:getAimPoint()
@@ -104,6 +104,21 @@ export function initScene(canvas, getSettings) {
   function setHouse(k){currentHouse=palettes[k]?k:'A';parent.classList.remove('house-a','house-b','house-c');parent.classList.add('house-'+currentHouse.toLowerCase());
     if(ready){colorBow();colorTarget();}}
   function setTargetShift(){if(ready){moveTarget();loadTargetModel();for(const old of impactMarks)old.destroy();impactMarks=[];}}
+  // A reprodução do adversário utiliza o MESMO alvo 3D real. Só sua posição
+  // é temporariamente reconstituída: não são criados discos HTML ou cópias
+  // artificiais e o arco, a flecha, a mira e a física continuam intactos.
+  function beginOpponentReplay(center){
+    if(!center||!Number.isFinite(center.x)||!Number.isFinite(center.y))return false;
+    opponentReplayTarget={x:clamp(center.x,.08,.92),y:clamp(center.y,.14,.86)};
+    if(ready)moveTarget();
+    parent.dataset.opponentReplayTarget='real-3d';
+    return true;
+  }
+  function endOpponentReplay(){
+    opponentReplayTarget=null;
+    parent.dataset.opponentReplayTarget='off';
+    if(ready)moveTarget();
+  }
   // Keep the bow, arrow and the bow's own sight fully inside the camera.
   // Moving the mouse to the edge must not push the bow out of the viewport.
   function setAim(x=.5,y=.46){
@@ -116,7 +131,7 @@ export function initScene(canvas, getSettings) {
     if(terrainElement)terrainElement.enabled=!backdropMode;
     for(const prop of ambientProps)prop.enabled=!backdropMode;
   }
-  function destroy(){destroyed=true;if(app){app.destroy();app=null;}gl?.remove();}
+  function destroy(){destroyed=true;opponentReplayTarget=null;if(app){app.destroy();app=null;}gl?.remove();}
 
   // -------- VISUAL FALLBACK: uses art backgrounds, painted metal bow and target. --------
   function roundrect(c,x,y,w,h,r){c.beginPath();c.roundRect(x,y,w,h,r);}
@@ -295,6 +310,15 @@ export function initScene(canvas, getSettings) {
     updateTwinDiscs();
     parent.dataset.targetStand=moving?'suspended':'standing';
     if(movingRail)movingRail.enabled=setting.level==='lendario';
+    if(opponentReplayTarget&&camera?.camera&&gl){
+      // screenToWorld usa pixels CSS do canvas; preservar profundidade e escala
+      // do alvo atual e suspender apenas seu deslocamento na tela.
+      const world=camera.camera.screenToWorld(
+        opponentReplayTarget.x*(gl.clientWidth||w),
+        opponentReplayTarget.y*(gl.clientHeight||h),camZ-targetZ);
+      if(Number.isFinite(world.x)&&Number.isFinite(world.y)&&Number.isFinite(world.z))
+        targetRoot.setPosition(world);
+    }
   }
   function buildWorld(){
     const metals={wood:material('#634124',{rough:.8}),woodlight:material('#a2703f',{rough:.8}),rope:material('#d5ae64',{rough:.89}),iron:material('#1d2329',{metal:.73,rough:.31}),silver:material('#c8d2d7',{metal:.82,rough:.19}),red:material('#da332d'),white:material('#f4f2e7')};
