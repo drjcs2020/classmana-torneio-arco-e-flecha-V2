@@ -1151,3 +1151,47 @@ body[data-page="lobby"] #view-inicio .cm-global-player-text span{
   top:65px!important;left:12px!important;
  }
 }
+
+
+/* V21 — placa do aluno mais curta em todas as telas. Os cantos e o avatar
+   são preservados por divisão em nove regiões da arte (sem achatamento).
+   Mantém altura, posicionamento e os demais elementos exatamente como estavam. */
+body[data-page="lobby"] #view-inicio .cm-global-player-plate:not([hidden]),
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .cm-same-player-plate:not([hidden]){
+ box-sizing:border-box!important;
+ aspect-ratio:auto!important;
+ flex-shrink:0!important;
+ border:1px solid transparent!important;
+ border-image-source:url('assets/ui/challenge/same-house/placa-perfil-aluno.webp')!important;
+ border-image-slice:22 95 22 230 fill!important;
+ border-image-width:10px 38px 10px 90px!important;
+ border-image-repeat:stretch!important;
+}
+body[data-page="lobby"] #view-inicio .cm-global-player-plate:not([hidden]){
+ width:clamp(252px,22.5vw,298px)!important;
+ height:clamp(66px,6.1vw,80px)!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .cm-same-player-plate:not([hidden]){
+ width:min(292px,37vw)!important;
+ height:72px!important;
+ flex:0 0 auto!important;
+ max-height:none!important;
+}
+body[data-page="lobby"] #view-inicio .cm-global-player-plate>img,
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .cm-same-player-plate>img{
+ display:none!important;
+}
+body[data-page="lobby"] #view-inicio .cm-global-player-text{
+ left:31%!important;right:5%!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .cm-same-player-text{
+ left:31%!important;right:5%!important;
+}
+@media(max-width:700px){
+ body[data-page="lobby"] #view-inicio .cm-global-player-plate:not([hidden]){
+  width:min(252px,65vw)!important;height:64px!important;
+ }
+ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .cm-same-player-plate:not([hidden]){
+  width:min(270px,83vw)!important;height:66px!important;
+ }
+}
