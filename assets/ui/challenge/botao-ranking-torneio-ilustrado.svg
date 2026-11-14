@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 336" role="img" aria-labelledby="title desc">
+<title id="title">Ranking do Torneio ClassMana</title>
+<desc id="desc">Brasão medieval azul e dourado com taça, louros, joia azul e faixa Ranking</desc>
+<defs>
+ <linearGradient id="gold" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#fff7bb"/><stop offset=".14" stop-color="#f5c65c"/><stop offset=".33" stop-color="#a85b09"/><stop offset=".53" stop-color="#ffe47c"/><stop offset=".73" stop-color="#ba7318"/><stop offset="1" stop-color="#fff1a3"/></linearGradient>
+ <linearGradient id="navy" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#215fb5"/><stop offset=".35" stop-color="#092c76"/><stop offset=".72" stop-color="#061a4a"/><stop offset="1" stop-color="#0b407e"/></linearGradient>
+ <linearGradient id="ribbon" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#15559c"/><stop offset=".45" stop-color="#081f5b"/><stop offset="1" stop-color="#061439"/></linearGradient>
+ <radialGradient id="aura"><stop stop-color="#fff4a0" stop-opacity=".85"/><stop offset=".4" stop-color="#ffdb64" stop-opacity=".25"/><stop offset="1" stop-color="#ffdb64" stop-opacity="0"/></radialGradient>
+ <linearGradient id="gem" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#d8ffff"/><stop offset=".3" stop-color="#43cbff"/><stop offset=".7" stop-color="#0966b4"/><stop offset="1" stop-color="#032869"/></linearGradient>
+ <filter id="shadow" x="-35%" y="-30%" width="170%" height="175%"><feGaussianBlur in="SourceAlpha" stdDeviation="6"/><feOffset dy="6"/><feComponentTransfer><feFuncA type="linear" slope=".72"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+ <filter id="glow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="3"/></filter>
+</defs>
+<!-- halo e topo precioso -->
+<ellipse cx="140" cy="151" rx="117" ry="129" fill="url(#aura)"/>
+<g filter="url(#shadow)">
+ <path d="M140 17 156 39 183 39 175 56 211 66 220 112 216 199 189 255 140 300 91 255 64 199 60 112 69 66 105 56 97 39 124 39Z" fill="#51270b" stroke="#5e2b08" stroke-width="7"/>
+ <path d="M140 21 159 47 191 55 213 75 212 190 184 247 140 292 96 247 68 190 67 75 89 55 121 47Z" fill="url(#gold)" stroke="#ffed9f" stroke-width="3.3"/>
+ <path d="M140 38 165 63 194 71 199 87 198 186 173 230 140 268 107 230 82 186 81 87 86 71 115 63Z" fill="url(#navy)" stroke="#684013" stroke-width="5"/>
+ <path d="M140 50 163 75 186 80 187 182 164 222 140 250 116 222 93 182 94 80 117 75Z" fill="none" stroke="#ffe6a4" stroke-width="2.8" opacity=".78"/>
+ <!-- pequenas gemas -->
+ <path d="M140 4 157 24 140 47 123 24Z" fill="url(#gem)" stroke="url(#gold)" stroke-width="5"/>
+ <path d="M140 7 140 41 M127 24H153" stroke="#edffff" stroke-width="2.2" opacity=".9"/>
+ <circle cx="83" cy="75" r="4" fill="#fff6ac"/><circle cx="197" cy="75" r="4" fill="#fff6ac"/>
+ <!-- folhagens -->
+ <g fill="#edc15a" stroke="#76410e" stroke-width="1.5">
+  <path d="M109 222C81 205 72 165 83 126" fill="none" stroke="url(#gold)" stroke-width="7"/>
+  <path d="M171 222C199 205 208 165 197 126" fill="none" stroke="url(#gold)" stroke-width="7"/>
+  <path d="M94 207 Q65 201 69 182 Q90 187 94 207ZM84 185Q59 169 67 151Q86 166 84 185ZM80 161Q61 143 74 128Q87 145 80 161ZM102 219Q79 224 78 209Q94 202 102 219Z"/>
+  <path d="M186 207Q215 201 211 182Q190 187 186 207ZM196 185Q221 169 213 151Q194 166 196 185ZM200 161Q219 143 206 128Q193 145 200 161ZM178 219Q201 224 202 209Q186 202 178 219Z"/>
+ </g>
+ <!-- taça ornamentada -->
+ <circle cx="140" cy="150" r="56" fill="url(#aura)"/>
+ <g fill="url(#gold)" stroke="#6d3505" stroke-width="3" stroke-linejoin="round">
+  <path d="M110 105H170L164 146Q160 162 145 167V195H163V205H117V195H135V167Q120 162 116 146Z"/>
+  <path d="M111 113C85 100 85 143 120 146L122 137C101 133 99 118 111 122Z"/>
+  <path d="M169 113C195 100 195 143 160 146L158 137C179 133 181 118 169 122Z"/>
+  <path d="M125 203H155L165 211H115Z"/>
+ </g>
+ <path d="M124 112H156L152 148Q147 157 140 160Q128 153 126 142Z" fill="#fff2a0" opacity=".3"/>
+ <path d="m140 114 5 11 12 2-9 8 3 12-11-6-11 6 3-12-9-8 12-2Z" fill="#fffae0" stroke="#ad6f1b" stroke-width="1.2"/>
+ <!-- banner abaixo do escudo -->
+ <path d="M34 252 72 245 208 245 246 252 234 274 246 291 210 286 70 286 34 291 46 273Z" fill="#4e2508" stroke="#eebd58" stroke-width="5"/>
+ <path d="M43 258 75 253 205 253 237 258 226 273 236 283 204 278 76 278 44 283 54 272Z" fill="url(#ribbon)" stroke="#ffe39b" stroke-width="2"/>
+ <text x="140" y="273" text-anchor="middle" font-family="Georgia,'Times New Roman',serif" font-size="28" font-weight="900" letter-spacing="2" fill="#fce7a5" stroke="#4b2108" stroke-width="2.6" paint-order="stroke fill">RANKING</text>
+ <path d="m140 297 11 13-11 15-11-15Z" fill="url(#gem)" stroke="url(#gold)" stroke-width="4"/>
+</g>
+</svg>
