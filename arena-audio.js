@@ -200,9 +200,14 @@ export const arenaAudio={
    if(effect==='block'){
     noise(.23,.12,1400);tone(710,240,.32,.075,'triangle');tone(1180,650,.20,.035,'sine',.035);
    }
-   if(effect==='victory'){
-    // Vitória mantém a fanfarra curta, sem aplausos (reservados ao acerto de 10).
-    [523,659,784,1047].forEach((n,i)=>tone(n,n*1.03,.31,.065,'triangle',i*.12));
+   if(effect==='victory'||effect==='completion'){
+    // Aplausos reais ao vencer um duelo ou concluir o treino.
+    // A fanfarra permanece na vitória; 10 pontos ainda recebe seu som próprio.
+    soundClip('driken5482-applause-cheer-236786','vvqne-applause-383901');
+    if(effect==='victory')
+     [523,659,784,1047].forEach((n,i)=>tone(n,n*1.03,.31,.065,'triangle',i*.12));
+    else
+     [392,523,659].forEach((n,i)=>tone(n,n*1.04,.21,.045,'triangle',i*.10));
    }
    if(effect==='defeat'){[293.66,261.63,220,164.81].forEach((n,i)=>tone(n,n*.94,.36,.045,'triangle',i*.18));}
   }catch(error){console.warn('[ClassMana] Falha ao emitir efeito sonoro:',error)}
