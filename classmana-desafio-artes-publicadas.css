@@ -630,7 +630,7 @@ body[data-page="lobby"] #view-inicio[data-step="desafio"] #duel-options.cm-chall
    no Desafiar Aluno em relação à V24. Preservar dimensões dos cinco botões. */
 @media(min-width:781px){
  body[data-page="lobby"] #view-inicio[data-step="desafio"] #duel-options.cm-challenge-assets .cm-challenge-robot{
-  transform:translateX(calc(0px - clamp(15px,1.5vw,23px) - 22px))!important;
+  transform:translateX(calc(0px - clamp(15px,1.5vw,23px) - 13px))!important;
  }
  body[data-page="lobby"] #view-inicio[data-step="desafio"] #duel-options.cm-challenge-assets .cm-challenge-students{
   transform:translateX(calc(clamp(15px,1.5vw,23px) + 11px))!important;
