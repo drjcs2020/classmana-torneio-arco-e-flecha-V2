@@ -552,7 +552,7 @@ function uiHud(){if(!match)return;
    progress.innerHTML=distances.map((meters,i)=>`<span class="range-step ${i<match.scores.length?'done':i===match.scores.length?'current':''}" aria-label="Etapa ${i+1}: ${meters} metros">${i<match.scores.length?'✓':'🎯'} ${meters}m</span>`).join('');
    progress.dataset.current=key;
  }
-$('hud-player').textContent=match.player+' · '+H[match.house].grade;$('hud-bot').textContent=match.mode==='bot'?'🤖 Robô · '+({easy:'Fácil',medium:'Médio',hard:'Difícil'}[match.difficulty]):match.mode==='practice'?'🎯 Treinamento':match.incoming?'⚔️ '+byId(match.incoming.playerId):'⚔️ '+byId(match.rivalId);$('hud-score').textContent=match.scores.reduce((a,b)=>a+b,0);$('hud-rival').textContent=match.onlineReplay?.length?(match.onlineReplayPoints||0):match.incoming?match.incoming.score:match.mode==='bot'?'?':'—';renderWind(match.wind);const art=$('stage').classList.contains('cm-art-ready'),n=Math.min(match.scores.length+1,5);
+$('hud-player').textContent=match.player+' · '+H[match.house].grade;$('hud-bot').textContent=match.mode==='bot'?'🤖 Robô · '+({easy:'Fácil',medium:'Médio',hard:'Difícil'}[match.difficulty]):match.mode==='practice'?'🎯 Treinamento':match.incoming?'⚔️ '+byId(match.incoming.playerId):'⚔️ '+byId(match.rivalId);$('hud-score').textContent=match.scores.reduce((a,b)=>a+b,0);$('hud-rival').textContent=match.onlineReplay?.length?(match.onlineReplayPoints||0):match.incoming?match.incoming.score:match.mode==='bot'?(match.botShots?.length?match.botShots.reduce((n,v)=>n+v,0):'?'):'—';renderWind(match.wind);const art=$('stage').classList.contains('cm-art-ready'),n=Math.min(match.scores.length+1,5);
  const distanceValue=$('cm-distance-value');
  if(distanceValue)distanceValue.textContent=Math.round(match.distance)+' m';
  else $('distance').textContent=art?Math.round(match.distance)+' m':'🎯 ETAPA '+n+'/5 · '+Math.round(match.distance)+' METROS';
@@ -701,7 +701,7 @@ async function startMatch(accepted=null){
   rivalId,gender:drawHandoff?.gender||archerGender(),rivalGender:drawHandoff?.rivalGender||'m',
   scores:[],running:true,locked:false,bow:equipment.bow,wind:0,distance:10,level:mode==='bot'?(BOT_LEVEL_BY_DIFFICULTY[$('difficulty').value]||'iniciante'):challenge?.level||(mode==='challenge_team'?'iniciante':mode==='challenge_same'?'avancado':mode==='challenge'?'lendario':levelForMatch(mode,drawHandoff)),shift:0,freezeTime:null,stageStartedAt:performance.now(),incoming:null,
   online:challenge,onlineShots:[],onlineReplay:challenge?.recipient.id===userId?challenge.creatorShots:[],
-  onlineReplayPoints:0,seed:Math.floor(rand(100000,999999))};
+  onlineReplayPoints:0,botShots:[],botTotal:null,seed:Math.floor(rand(100000,999999))};
  if(mode==='bot'){
   const go=await cinematics.versus({player:match.player,house:match.house,gender:archerGender(),
    rival:'ROBÔ ARQUEIRO',rivalHouse:'C',mode:'bot',sound:effect=>arenaAudio.play(effect)});
@@ -757,6 +757,39 @@ function showDuelTurn(text,style='opponent'){
  return panel;
 }
 function hideDuelTurn(){const panel=$('cm-duel-turn');if(panel)panel.classList.add('hidden')}
+
+/* Mesma reprodução para alunos, casas, sorteio e robô.
+   Mostra o alvo 3D aprovado na posição estimada da jogada adversária.
+   NÃO altera a pontuação, a física, o modelo do arco ou o projétil. */
+async function replayOpponentShot(shot,currentMatch,index){
+ if(match!==currentMatch||!currentMatch.running)return false;
+ const stage=$('stage'),w=stage?.clientWidth||1050,h=stage?.clientHeight||540;
+ const t=scene?.getTargetMetrics?.()||{x:w*.5,y:h*.45,r:Math.min(h*.105,w*.082)};
+ const time=Number.isFinite(Number(shot.time))?Number(shot.time):stageSeconds();
+ const power=Number(shot.power)||1;
+ const moving=currentMatch.level==='avancado'||currentMatch.level==='lendario';
+ const rules=currentMatch.online?.rules??6;
+ const before=moving&&rules>=5?targetMotion(currentMatch.level,index,stageSeconds()):{x:0,y:0};
+ const arrival=moving&&rules>=5?targetMotion(currentMatch.level,index,
+   time+flightSeconds(currentMatch.distance,power)):{x:0,y:0};
+ const cx=t.x+(arrival.x-before.x)*t.r,cy=t.y+(arrival.y-before.y)*t.r;
+ // O servidor guarda o impacto relativo ao alvo, não ao quadro do jogador.
+ const dx=Number(shot.impactDx??shot.dx)||0,dy=Number(shot.impactDy??shot.dy)||0;
+ const px=clamp((cx+dx*t.r)/w,.01,.99),py=clamp((cy+dy*t.r)/h,.01,.99);
+ const ok=scene?.beginOpponentReplay?.({x:cx/w,y:cy/h});
+ if(!ok)return false;
+ try{
+  arenaAudio.play('rival-shot');
+  await Promise.race([scene?.fire?.({x:px,y:py,power}),new Promise(resolve=>setTimeout(resolve,1700))]);
+  if(match!==currentMatch||!currentMatch.running)return false;
+  scene?.impact?.({x:px,y:py,score:Number(shot.score)||0});
+  if(Number(shot.score)>0)arenaAudio.play('impact');
+  await new Promise(resolve=>setTimeout(resolve,380));
+  return match===currentMatch&&currentMatch.running;
+ }catch(error){console.warn('Replay do adversário:',error);return false}
+ finally{scene?.endOpponentReplay?.()}
+}
+
 async function duelTurnPause(ms,currentMatch){
  await new Promise(resolve=>setTimeout(resolve,ms));
  return match===currentMatch&&currentMatch.running;
@@ -821,6 +854,27 @@ async function fire(power){
  else arenaAudio.play('hit',score);
  // The challenger already completed these five shots. Reproduce them one at a time,
  // with a clear turn announcement after the current student's result.
+ // Robô: cada flecha usa o mesmo replay 3D; o resultado continua sendo
+ // calculado pela função de dificuldade já existente, agora uma vez por turno.
+ if(match.mode==='bot'){
+  const average=match.scores.reduce((a,b)=>a+b,0)/match.scores.length;
+  const score=chooseRobotScore(match.difficulty,average);
+  match.botShots??=[];match.botShots.push(score);
+  const radius=score===10?.04:score>=8?.23:score>=6?.44:score>=4?.63:score>=2?.82:1.18;
+  const angle=rand(0,Math.PI*2);
+  const shot={score,dx:radius*Math.cos(angle),dy:radius*Math.sin(angle),
+    time:stageSeconds(),power:.85};
+  if(!await duelTurnPause(650,currentMatch))return;
+  showDuelTurn('🤖 VEZ DO ROBÔ','opponent');
+  if(!await duelTurnPause(950,currentMatch)){hideDuelTurn();return;}
+  hideDuelTurn();
+  if(!await replayOpponentShot(shot,currentMatch,shotIndex))return;
+  $('hud-rival').textContent=match.botShots.reduce((a,b)=>a+b,0);
+  showDuelTurn('🎯 ROBÔ: '+score+' PONTOS','result');
+  if(!await duelTurnPause(750,currentMatch)){hideDuelTurn();return;}
+  hideDuelTurn();
+  $('instruction').textContent='🏹 SUA VEZ • MIRE E SOLTE PARA DISPARAR';
+ }
  const ghost=match.onlineReplay?.[shotIndex];
  if(ghost&&match.online){
   // Let the student's own impact/score remain visible before changing turns.
@@ -831,18 +885,7 @@ async function fire(power){
   if(!await duelTurnPause(1500,currentMatch)){hideDuelTurn();return;}
   turnPanel.classList.add('hidden');
   if(match!==currentMatch||!currentMatch.running)return;
-  arenaAudio.play('rival-shot');
-  const px=(t.x+ghost.impactDx*t.r)/w,py=(t.y+ghost.impactDy*t.r)/h;
-  try{await Promise.race([scene?.fire?.({x:px,y:py,power:ghost.power||1}),new Promise(resolve=>setTimeout(resolve,1700))]);}
-  catch(e){console.warn('Replay:',e)}
-  if(match!==currentMatch||!currentMatch.running)return;
-  const replayTwins=false?mediumTwinTargets(
-  (Number(ghost.time)||0)+flightSeconds((CIRCUITS.avancado||[])[shotIndex]||match.distance,ghost.power||1)
- ):null;
- const replayTarget=replayTwins&&ghost.score>0?
-  replayTwins.map((d,i)=>({i,n:Math.hypot((Number(ghost.dx)-d.x)/d.r,(Number(ghost.dy)-d.y)/d.r)}))
-   .sort((a,b)=>a.n-b.n)[0]?.i:null;
- scene?.impact?.({x:px,y:py,score:ghost.score,targetIndex:replayTarget});
+  if(!await replayOpponentShot(ghost,currentMatch,shotIndex))return;
   match.onlineReplayPoints+=Number(ghost.score)||0;
   $('hud-rival').textContent=match.onlineReplayPoints;
   $('instruction').textContent='⚔️ '+opponentName+' • '+ghost.score+' PONTOS';
@@ -965,7 +1008,7 @@ async function finishMatch(){
  }
  current.running=false;
  const total=match.scores.reduce((a,b)=>a+b,0),
-  bot=match.mode==='bot'?Array.from({length:5},()=>chooseRobotScore(match.difficulty,total/5)):[],
+  bot=match.mode==='bot'?(match.botShots?.length===5?match.botShots:Array.from({length:5},()=>chooseRobotScore(match.difficulty,total/5))):[],
   rivalScore=match.mode==='bot'?bot.reduce((a,b)=>a+b,0):undefined;
  // Resultado: sem informações repetidas no cabeçalho.
  const title=match.mode==='practice'?'TREINAMENTO CONCLUÍDO':
