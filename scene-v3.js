@@ -809,7 +809,19 @@ export function initScene(canvas, getSettings) {
       model.setLocalScale(gear.scale,gear.scale,gear.scale);
       model.setLocalPosition(...gear.offset);
     }
-    bowVisualPivot.addChild(model);
+    // Arco dos Ventos (nível 3): o GLB está de perfil após alinhar o eixo longo.
+    // Rotação Y positiva somente na malha do arco; flecha e mira são irmãos
+    // no WeaponPivot e não recebem essa rotação.
+    if(gear.id==='vento'){
+      const windFacing=new pc.Entity('Arco dos Ventos - face Y +90');
+      windFacing.setLocalEulerAngles(0,90,0);
+      bowVisualPivot.addChild(windFacing);
+      windFacing.addChild(model);
+      parent.dataset.windBowFaceYaw='90';
+    }else{
+      bowVisualPivot.addChild(model);
+      parent.dataset.windBowFaceYaw='0';
+    }
     // Não aplicar correções de roll pelo PCA: elas tombavam o arco.
     parent.dataset.bowPivot='grip';
     parent.dataset.bowRoll='0';
