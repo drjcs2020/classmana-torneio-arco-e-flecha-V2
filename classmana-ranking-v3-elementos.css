@@ -428,3 +428,175 @@ body[data-page="lobby"] #view-ranking.cm-ranking-redesign #ranking-status{
  body[data-page="lobby"] #view-ranking.cm-ranking-redesign #rank-players .cm-rank-row:is(.cm-rank-gold,.cm-rank-silver,.cm-rank-bronze) .cm-rank-placement{width:36px!important;height:36px!important}
  body[data-page="lobby"] #view-ranking.cm-ranking-redesign #ranking-status{position:static!important;width:min(320px,96vw)!important}
 }
+
+
+/* TELA TURMAS — fiel ao quadro aprovado, três cartões completos e sem scroll.
+   Reutiliza medalhas, brasões e ícones já instalados; nenhum valor é fictício. */
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classes"] .ranking-layout{
+ min-height:0!important;overflow:hidden!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classes"] #cm-panel-houses{
+ overflow:hidden!important;
+ padding:clamp(7px,1.25vh,13px) clamp(15px,1.9vw,25px) clamp(8px,1.4vh,14px)!important;
+ background:linear-gradient(155deg,rgba(8,38,81,.81),rgba(5,24,57,.86))!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classes"] #cm-panel-houses h2{
+ flex:0 0 auto!important;
+ height:clamp(41px,6.5vh,62px)!important;
+ width:min(780px,76vw)!important;
+ margin:0 auto clamp(4px,.9vh,9px)!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classes"] .cm-rank-houses-grid{
+ flex:1 1 auto!important;min-height:0!important;width:100%!important;
+ display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;
+ grid-auto-rows:minmax(0,1fr)!important;
+ gap:clamp(8px,1.2vw,16px)!important;
+ padding:2px!important;margin:0!important;
+ overflow:hidden!important;scrollbar-width:none!important;
+ align-items:stretch!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classes"] .cm-rank-house-card{
+ --rank-metal:#ffd04e;--rank-light:#fff5af;--rank-dark:#90610b;
+ height:100%!important;min-height:0!important;max-height:100%!important;
+ display:flex!important;flex-direction:column!important;align-items:stretch!important;
+ box-sizing:border-box!important;overflow:hidden!important;
+ padding:clamp(5px,.8vh,9px) clamp(7px,.75vw,12px) clamp(5px,.8vh,9px)!important;
+ border:3px solid var(--rank-metal)!important;border-radius:clamp(12px,1.4vw,19px)!important;
+ background:radial-gradient(ellipse at 50% 23%,#2b5b9e88,#071b3cde 75%)!important;
+ box-shadow:inset 0 0 0 1px var(--rank-light),inset 0 0 14px #8bc2ff30,0 0 8px var(--rank-metal)!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classes"] .cm-house-place-2{
+ --rank-metal:#c6d6f0;--rank-light:#f4f9ff;--rank-dark:#5f769a;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classes"] .cm-house-place-3{
+ --rank-metal:#d99561;--rank-light:#ffd2a8;--rank-dark:#965025;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classes"] .cm-house-top{
+ position:relative!important;flex:0 0 auto!important;
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ width:100%!important;height:clamp(81px,16vh,138px)!important;
+ margin:0 0 2px!important;padding:0!important;gap:0!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classes"] .cm-house-crest{
+ display:block!important;object-fit:contain!important;
+ height:100%!important;width:auto!important;max-width:64%!important;
+ filter:drop-shadow(0 3px 5px #0008)!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classes"] .cm-rank-house-card .cm-house-top .cm-rank-medal{
+ position:absolute!important;top:2px!important;left:clamp(1px,.6vw,9px)!important;
+ display:block!important;width:clamp(47px,5.3vw,76px)!important;
+ height:clamp(47px,5.3vw,76px)!important;max-width:none!important;
+ object-fit:contain!important;margin:0!important;z-index:1!important;
+ filter:drop-shadow(0 2px 3px #000a)!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classes"] .cm-rank-house-card h3{
+ box-sizing:border-box!important;flex:0 0 auto!important;
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ min-height:clamp(26px,4.3vh,39px)!important;
+ margin:0 1px clamp(3px,.6vh,7px)!important;padding:2px 5px!important;
+ border:2px solid var(--rank-light)!important;border-radius:24px!important;
+ background:linear-gradient(180deg,var(--rank-light) 0%,var(--rank-metal) 25%,var(--rank-dark) 95%)!important;
+ box-shadow:inset 0 1px 2px #fff9,0 2px 5px #0008!important;
+ font:900 clamp(12px,1.18vw,19px)/1.08 Georgia,serif!important;
+ white-space:nowrap!important;letter-spacing:-.2px!important;
+ color:#091c37!important;text-shadow:0 1px 1px #fff7!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classes"] .cm-house-stat-grid{
+ flex:1 1 auto!important;min-height:0!important;
+ display:grid!important;grid-template-columns:minmax(0,1fr)!important;
+ grid-template-rows:repeat(7,minmax(0,1fr))!important;gap:0!important;
+ overflow:hidden!important;
+ padding:0 3px!important;margin:0!important;
+ border:1px solid #b2d6ff73!important;border-radius:10px!important;
+ background:rgba(4,27,59,.72)!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classes"] .cm-house-stat{
+ display:grid!important;grid-template-columns:clamp(16px,1.55vw,24px) minmax(0,1fr) minmax(42px,27%)!important;
+ align-items:center!important;justify-items:stretch!important;
+ gap:clamp(3px,.52vw,8px)!important;min-height:0!important;height:100%!important;
+ padding:0 clamp(2px,.4vw,5px)!important;margin:0!important;
+ background:none!important;border:0!important;border-radius:0!important;
+ border-bottom:1px solid #b1d3fd40!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classes"] .cm-house-stat:last-child{
+ border-bottom:0!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classes"] .cm-house-stat img{
+ display:block!important;width:clamp(15px,1.5vw,23px)!important;
+ height:clamp(15px,1.5vw,23px)!important;object-fit:contain!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classes"] .cm-house-stat-label{
+ overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;
+ font:700 clamp(11px,1.05vw,16px)/1.05 Georgia,serif!important;
+ color:#fff0db!important;text-shadow:0 1px 2px #00152f!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classes"] .cm-house-stat b{
+ box-sizing:border-box!important;display:block!important;min-width:0!important;
+ border:1px solid var(--rank-metal)!important;border-radius:12px!important;
+ padding:1px 3px!important;text-align:center!important;white-space:nowrap!important;
+ font:900 clamp(10px,1vw,15px)/1.05 Nunito,Arial,sans-serif!important;
+ color:#ffe7a6!important;background:#062244c7!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classes"] .cm-house-total{
+ flex:0 0 auto!important;box-sizing:border-box!important;
+ min-height:clamp(24px,3.8vh,35px)!important;
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ margin:clamp(3px,.65vh,7px) clamp(6px,1vw,14px) 0!important;
+ padding:1px 7px!important;
+ border:2px solid var(--rank-metal)!important;border-radius:20px!important;
+ background:linear-gradient(180deg,#123a70,#061a35)!important;
+ color:#ffdf96!important;font:800 clamp(11px,1.03vw,16px)/1 Georgia,serif!important;
+ white-space:nowrap!important;
+}
+/* Em monitores baixos, compactar somente o interior da aba Turmas. */
+@media (max-height:740px) and (min-width:800px){
+ body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classes"] #cm-panel-houses{
+  padding:7px 11px 8px!important;
+ }
+ body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classes"] #cm-panel-houses h2{
+  height:37px!important;margin-bottom:3px!important;
+ }
+ body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classes"] .cm-house-top{
+  height:clamp(62px,13vh,93px)!important;
+ }
+ body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classes"] .cm-rank-house-card .cm-house-top .cm-rank-medal{
+  width:48px!important;height:48px!important;
+ }
+ body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classes"] .cm-rank-house-card h3{
+  min-height:26px!important;font-size:clamp(11px,1.15vw,15px)!important;
+ }
+ body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classes"] .cm-house-total{
+  min-height:23px!important;font-size:11px!important;
+ }
+}
+/* Telas estreitas: conservar as três casas e evitar cortar os dados. */
+@media (max-width:799px){
+ body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classes"] .cm-rank-houses-grid{
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:5px!important;
+ }
+ body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classes"] .cm-rank-house-card{
+  border-width:2px!important;padding:4px 3px!important;
+ }
+ body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classes"] .cm-house-top{
+  height:clamp(48px,10vh,78px)!important;
+ }
+ body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classes"] .cm-rank-house-card .cm-house-top .cm-rank-medal{
+  width:30px!important;height:30px!important;left:0!important;
+ }
+ body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classes"] .cm-rank-house-card h3{
+  font-size:clamp(8px,1.6vw,12px)!important;min-height:24px!important;white-space:normal!important;
+ }
+ body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classes"] .cm-house-stat{
+  grid-template-columns:14px minmax(0,1fr) minmax(30px,28%)!important;gap:2px!important;padding:0 1px!important;
+ }
+ body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classes"] .cm-house-stat img{
+  width:13px!important;height:13px!important;
+ }
+ body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classes"] .cm-house-stat-label,
+ body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classes"] .cm-house-stat b{
+  font-size:clamp(7px,1.3vw,10px)!important;
+ }
+ body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classes"] .cm-house-total{
+  font-size:clamp(7px,1.25vw,10px)!important;padding:2px!important;min-height:20px!important;margin:3px 0 0!important;
+ }
+}
