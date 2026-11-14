@@ -27,7 +27,7 @@ export function initScene(canvas, getSettings) {
   canvas.style.opacity='0';
   parent.dataset.sceneEngine='loading';
   const state={kind:'PlayCanvas + fundo modular',setHouse,setEquipment,setTargetShift,setAim,setPower,setBackdropMode,
-    getTargetMetrics, getAimPoint, fire, impact, destroy};
+    getTargetMetrics, getAimPoint, fire, impact, setReplayTargetVisible, destroy};
   // Diagnóstico apenas durante testes (?qa=1), sem controles visíveis no jogo.
   if(new URLSearchParams(location.search).has('qa'))parent.cmAimDiagnostic=()=>({
    kind:state.kind,input:{x:aimX,y:aimY},projected:getAimPoint()
@@ -104,6 +104,11 @@ export function initScene(canvas, getSettings) {
   function setHouse(k){currentHouse=palettes[k]?k:'A';parent.classList.remove('house-a','house-b','house-c');parent.classList.add('house-'+currentHouse.toLowerCase());
     if(ready){colorBow();colorTarget();}}
   function setTargetShift(){if(ready){moveTarget();loadTargetModel();for(const old of impactMarks)old.destroy();impactMarks=[];}}
+  // O alvo real fica oculto somente enquanto o replay usa o alvo fantasma.
+  function setReplayTargetVisible(visible=true){
+    if(targetRoot)targetRoot.enabled=Boolean(visible);
+    parent.dataset.opponentTargetReplay=visible?'off':'on';
+  }
   // Keep the bow, arrow and the bow's own sight fully inside the camera.
   // Moving the mouse to the edge must not push the bow out of the viewport.
   function setAim(x=.5,y=.46){
