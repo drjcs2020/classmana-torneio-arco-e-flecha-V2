@@ -251,3 +251,123 @@ body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-house-total{
     grid-template-columns:1fr!important;
   }
 }
+
+
+/* Ajustes de fidelidade ao layout aprovado — 13 nov 2026.
+   Só a tela ranking; preserva imagens aprovadas, dados e barras funcionais. */
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign.active {
+  gap:clamp(3px,.55vh,7px)!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-main-heading {
+  width:min(880px,78vw)!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-banner {
+  max-height:clamp(95px,19vh,174px)!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign #ranking-tabs {
+  height:clamp(56px,8vh,72px)!important;
+  min-height:clamp(56px,8vh,72px)!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign #ranking-tabs button {
+  width:clamp(235px,24vw,330px)!important;
+  height:clamp(52px,7.5vh,69px)!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .ranking-layout{
+  width:min(1360px,95vw)!important;
+  overflow:visible!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .ranking-panel {
+  position:relative!important;
+  padding:clamp(9px,1.4vh,15px) clamp(15px,2vw,25px) clamp(6px,.9vh,11px)!important;
+  border:4px solid #ecc270!important;
+  border-radius:23px!important;
+  background:rgba(8,38,81,.68)!important;
+  box-shadow:inset 0 0 0 2px #ffecaa8c,inset 0 0 18px #5cb4ff25,0 3px 12px #0006!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .ranking-panel h2 {
+  height:clamp(39px,5.8vh,58px)!important;
+  margin-bottom:clamp(4px,.8vh,8px)!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign #rank-players.cm-rank-scroll-region {
+  padding:0 6px 0 0!important;
+  scrollbar-gutter:stable!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign #rank-players .cm-rank-row {
+  grid-template-columns:clamp(38px,4.1vw,54px) minmax(105px,24%) minmax(160px,1fr) minmax(180px,25%)!important;
+  gap:clamp(4px,.55vw,9px)!important;
+  min-height:clamp(33px,4.55vh,43px)!important;
+  margin:0 0 clamp(3px,.45vh,5px)!important;
+  padding:2px clamp(8px,.9vw,13px)!important;
+  border-radius:24px!important;
+  background:linear-gradient(180deg,#123b70e8,#051b3eea)!important;
+  border:1px solid #528dc4!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign #rank-players .cm-rank-row.cm-rank-gold {
+  background:linear-gradient(180deg,#ffdf64 0%,#e2ad27 17%,#936408 55%,#dca620 85%,#fce28b 100%)!important;
+  border:2px solid #ffe68a!important;
+  box-shadow:inset 0 1px 2px #fff3b5,0 0 5px #ffd04e75!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign #rank-players .cm-rank-row.cm-rank-silver {
+  background:linear-gradient(180deg,#f0f5ff 0%,#b7c8df 13%,#607b9f 52%,#a1b2cd 83%,#eaf2fc 100%)!important;
+  border:2px solid #e5f1ff!important;
+  box-shadow:inset 0 1px 2px #fff,0 0 4px #d1e4ff70!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign #rank-players .cm-rank-row.cm-rank-bronze {
+  background:linear-gradient(180deg,#ffd3a1 0%,#d58a48 14%,#8e4322 52%,#b86e3c 84%,#efb487 100%)!important;
+  border:2px solid #ffcd99!important;
+  box-shadow:inset 0 1px 2px #ffd7ad,0 0 5px #c4724570!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-row .cm-rank-placement {
+  width:clamp(31px,3.9vh,43px)!important;
+  height:clamp(31px,3.9vh,43px)!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-row .cm-rank-medal {
+  width:100%!important;height:100%!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-row .cm-rank-name,
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-row .cm-rank-house-name,
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-row .cm-rank-score {
+  font-size:clamp(12px,1.2vw,17px)!important;
+  line-height:1.05!important;
+  letter-spacing:0!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-row .cm-rank-name {
+  padding-left:0!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-row .cm-rank-house-name {
+  padding-left:clamp(8px,.85vw,13px)!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-row .cm-rank-score {
+  font-size:clamp(11px,1.12vw,15px)!important;
+  padding:3px 5px!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-top50 {
+  width:min(350px,35vw)!important;height:clamp(29px,4.4vh,43px)!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign #rank-players::-webkit-scrollbar {width:24px!important;}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign #rank-players::-webkit-scrollbar-track {
+  background:linear-gradient(90deg,#071932,#114679 47%,#061931)!important;
+  border:3px solid #d5a551!important;
+  box-shadow:inset 0 1px 5px #000e!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign #rank-players::-webkit-scrollbar-thumb {
+  background:linear-gradient(90deg,#008cc6,#95f7ff 48%,#04b7ef)!important;
+  border:3px solid #f3d087!important;
+  border-radius:14px!important;
+  box-shadow:inset 0 0 4px #fff8,0 0 6px #30e8ff!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign #rank-players::-webkit-scrollbar-button:single-button{
+  display:block!important;height:19px!important;
+  border:2px solid #f0c36d!important;border-radius:6px!important;
+  background:#062b59!important;
+}
+@media (max-height:740px) and (min-width:800px) {
+ body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-main-heading{width:min(740px,80vw)!important}
+ body[data-page="lobby"] #view-ranking.cm-ranking-redesign #rank-players .cm-rank-row{min-height:33px!important}
+}
+@media(max-width:799px){
+ body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-main-heading{width:94vw!important}
+ body[data-page="lobby"] #view-ranking.cm-ranking-redesign #rank-players .cm-rank-row{
+   grid-template-columns:34px minmax(68px,.85fr) minmax(85px,1fr) minmax(100px,1.15fr)!important;gap:3px!important
+ }
+}
