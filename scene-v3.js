@@ -20,7 +20,7 @@ export function initScene(canvas, getSettings) {
   let pc=null, app=null, gl=null, camera=null, bowRoot=null, bowVisualPivot=null, bowFallbackRoot=null, bowHandle=null, bowString=null, sightAnchor=null,
       arrowLoaded=null, targetRoot=null, impactMarks=[], currentHouse='A', ready=false, destroyed=false,
       aimX=.5, aimY=.46, power=.3, projectile=null, pendingShot=null, animT=0,
-      equipment={bow:'classico',arrow:'rubi'},opponentReplayTarget=null,terrainElement=null,ambientProps=[],backdropMode=false,targetStand=null,movingRail=null,targetVisual=null,dualDiscs=[],dualProcedural=null,modelAssets={},modelLoads={},targetModelKey='';
+      equipment={bow:'classico',arrow:'rubi'},opponentReplayTarget=null,opponentImpactStart=0,opponentHiddenMarks=[],terrainElement=null,ambientProps=[],backdropMode=false,targetStand=null,movingRail=null,targetVisual=null,dualDiscs=[],dualProcedural=null,modelAssets={},modelLoads={},targetModelKey='';
   // O fallback 2D não pode aparecer antes do PlayCanvas: antes ele causava a
   // troca perceptível de arte após alguns segundos.
   const ctx=canvas.getContext('2d', {alpha:true});
@@ -109,12 +109,19 @@ export function initScene(canvas, getSettings) {
   // artificiais e o arco, a flecha, a mira e a física continuam intactos.
   function beginOpponentReplay(center){
     if(!center||!Number.isFinite(center.x)||!Number.isFinite(center.y))return false;
+    opponentImpactStart=impactMarks.length;
+    opponentHiddenMarks=impactMarks.filter(mark=>mark&&mark.enabled);
+    for(const mark of opponentHiddenMarks)mark.enabled=false;
     opponentReplayTarget={x:clamp(center.x,.08,.92),y:clamp(center.y,.14,.86)};
     if(ready)moveTarget();
     parent.dataset.opponentReplayTarget='real-3d';
     return true;
   }
   function endOpponentReplay(){
+    // A flecha do adversário não deve permanecer cravada no alvo do aluno.
+    for(const mark of impactMarks.splice(opponentImpactStart))mark?.destroy();
+    for(const mark of opponentHiddenMarks)if(mark&&!mark._destroyed)mark.enabled=true;
+    opponentHiddenMarks=[];
     opponentReplayTarget=null;
     parent.dataset.opponentReplayTarget='off';
     if(ready)moveTarget();
