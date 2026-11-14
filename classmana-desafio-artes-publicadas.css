@@ -533,7 +533,7 @@ body[data-page="lobby"] #view-inicio[data-step="desafio"] #duel-options.cm-chall
 body[data-page="lobby"] #view-inicio[data-step="desafio"] #duel-options.cm-challenge-assets
 .cm-challenge-student-actions button[data-play-mode="challenge"]{
  /* incremento visual: ~2 mm por lado e ~2 mm na altura, partindo da V21 */
- transform:translateY(9px) scale(1.16,1.18)!important;
+ transform:translate(-9px,9px) scale(1.16,1.18)!important;
  transform-origin:center bottom!important;
 }
 
