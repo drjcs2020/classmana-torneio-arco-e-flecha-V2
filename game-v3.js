@@ -1044,8 +1044,8 @@ async function renderRanking(){
    const h=H[row.name],label=h?(h.grade+' · '+h.name):String(row.name);
    const crest=crestByHouse[row.name];
    const stats=[
-    ['points','Pontos',num(row.total)+' pts'],
     ['wins','Vitórias',num(row.wins)],
+    ['points','Pontos',num(row.total)+' pts'],
     ['draws','Empates',num(row.draws)],
     ['losses','Derrotas',num(row.losses)],
     ['accepted','Duelos aceitos',row.accepted==null?'—':num(row.accepted)],
