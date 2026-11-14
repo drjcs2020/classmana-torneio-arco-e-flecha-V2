@@ -1050,7 +1050,7 @@ async function renderRanking(){
     ['losses','Derrotas',num(row.losses)],
     ['accepted','Duelos aceitos',row.accepted==null?'—':num(row.accepted)],
     ['refused','Duelos recusados',row.refused==null?'—':num(row.refused)],
-    ['time','Tempo jogado','Não registrado']
+    ['time','Tempo jogado','—']
    ];
    return '<article class="cm-rank-house-card cm-house-place-'+(i+1)+'">'+
     '<div class="cm-house-top">'+medalImg(i)+
