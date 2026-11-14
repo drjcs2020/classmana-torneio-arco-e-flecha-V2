@@ -753,7 +753,29 @@ function showDuelTurn(text,style='opponent'){
  const stage=$('stage');
  let panel=$('cm-duel-turn');
  if(!panel){panel=document.createElement('div');panel.id='cm-duel-turn';panel.className='cm-duel-turn hidden';panel.setAttribute('role','status');panel.setAttribute('aria-live','polite');stage.appendChild(panel)}
- panel.textContent=text;panel.dataset.turn=style;panel.classList.remove('hidden');
+ // Moldura temática com identidade visual da casa rival. Não interfere no replay.
+ const robot=match?.mode==='bot';
+ const rivalHouse=(match?.online?.creator?.id?.[0]||match?.rivalId?.[0]||'');
+ const crests={A:'aguia-dourada',B:'leao-de-fogo',C:'dragao-esmeralda'};
+ const image=robot?'assets/ui/challenge/robo-arqueiro-oficial.webp':
+   crests[rivalHouse]?'assets/ui/crests/brasao-'+crests[rivalHouse]+'.png':'';
+ const name=robot?'ROBÔ ARQUEIRO':H[rivalHouse]?.name||'CASA ADVERSÁRIA';
+ const isResult=style==='result';
+ panel.replaceChildren();
+ panel.dataset.turn=style;
+ panel.dataset.house=robot?'robot':rivalHouse||'neutral';
+ const art=document.createElement('img');
+ art.className='cm-duel-turn-crest';art.alt='';art.setAttribute('aria-hidden','true');
+ if(image){art.src=image;panel.appendChild(art)}
+ const content=document.createElement('div');content.className='cm-duel-turn-content';
+ const eyebrow=document.createElement('span');eyebrow.className='cm-duel-turn-eyebrow';
+ eyebrow.textContent=isResult?'RESULTADO DO DISPARO':'TORNEIO DAS TRÊS CASAS';
+ const heading=document.createElement('strong');heading.className='cm-duel-turn-heading';
+ heading.textContent=isResult?text.replace(/^[^A-Za-zÀ-ÿ0-9]+/u,''):robot?'AGORA É A VEZ DO ROBÔ':'AGORA É A VEZ DO ADVERSÁRIO';
+ const foot=document.createElement('span');foot.className='cm-duel-turn-foot';
+ foot.textContent=isResult?'DISPARO REGISTRADO':name.toUpperCase();
+ content.append(eyebrow,heading,foot);panel.appendChild(content);
+ panel.classList.remove('hidden');
  return panel;
 }
 function hideDuelTurn(){const panel=$('cm-duel-turn');if(panel)panel.classList.add('hidden')}
