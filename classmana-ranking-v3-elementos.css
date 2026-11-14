@@ -600,3 +600,115 @@ body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classe
   font-size:clamp(7px,1.25vw,10px)!important;padding:2px!important;min-height:20px!important;margin:3px 0 0!important;
  }
 }
+
+
+/* Refinamento de brasões e pódio — aba Turmas; mantém os assets oficiais. */
+/* 2 mm de deslocamento único para todo o conteúdo do ranking (≈7,56 CSS px). */
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign.active > .cm-rank-main-heading,
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign.active > #ranking-tabs,
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign.active > .ranking-layout,
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign.active > .cm-rank-footer {
+ position:relative!important;top:-7.56px!important;
+}
+/* Permite que pedras e ornamentos ultrapassem discretamente as molduras. */
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classes"] #cm-panel-houses,
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classes"] .cm-rank-houses-grid,
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classes"] .cm-rank-house-card{
+ overflow:visible!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classes"] .cm-rank-house-card {
+ position:relative!important;
+ isolation:isolate!important;
+}
+/* Os cartões preservam altura; o brasão salta sobre a borda sem empurrar as estatísticas. */
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classes"] .cm-house-top {
+ height:clamp(86px,17vh,150px)!important;
+ margin-top:-6px!important;
+ margin-bottom:0!important;
+ overflow:visible!important;
+ z-index:2!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classes"] .cm-house-crest{
+ position:relative!important;
+ z-index:2!important;
+ height:118%!important;
+ max-width:82%!important;
+ width:auto!important;
+ flex:0 0 auto!important;
+ transform:translateY(-5px)!important;
+ filter:drop-shadow(0 0 5px #fff0aa)
+        drop-shadow(0 0 11px var(--rank-metal))
+        drop-shadow(0 6px 8px #001026)!important;
+}
+/* Brilhos laterais decorativos, atrás do brasão e sem bloquear cliques. */
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classes"] .cm-house-top::before{
+ content:""!important;display:block!important;
+ position:absolute!important;z-index:0!important;
+ left:7%!important;right:7%!important;top:12%!important;bottom:5%!important;
+ background:
+ radial-gradient(ellipse at 15% 56%,var(--rank-metal) 0%,transparent 48%),
+ radial-gradient(ellipse at 85% 56%,var(--rank-metal) 0%,transparent 48%)!important;
+ opacity:.46!important;
+ filter:blur(14px)!important;
+ pointer-events:none!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classes"] .cm-rank-house-card .cm-house-top .cm-rank-medal{
+ position:absolute!important;
+ top:-6px!important;
+ left:-7px!important;
+ z-index:3!important;
+ width:clamp(74px,7.1vw,105px)!important;
+ height:clamp(74px,7.1vw,105px)!important;
+ max-width:none!important;
+ transform:none!important;
+ filter:drop-shadow(0 1px 2px #fff8)
+        drop-shadow(0 3px 7px #001026)!important;
+}
+/* Reaproveita o espaço liberado pelos dados mais compactos. */
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classes"] .cm-house-stat-grid {
+ gap:0!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classes"] .cm-house-stat{
+ min-height:0!important;
+ padding:0 2px!important;
+ gap:clamp(2px,.4vw,6px)!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classes"] .cm-house-stat-label{
+ line-height:1!important;
+ font-size:clamp(10px,.98vw,15px)!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classes"] .cm-house-stat b{
+ line-height:1!important;
+ padding:0 3px!important;
+ font-size:clamp(10px,.92vw,14px)!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classes"] .cm-house-stat img{
+ width:clamp(14px,1.35vw,21px)!important;
+ height:clamp(14px,1.35vw,21px)!important;
+}
+@media(max-height:740px) and (min-width:800px){
+ body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classes"] .cm-house-top{
+  height:clamp(76px,15vh,108px)!important;
+  margin-top:-5px!important;
+ }
+ body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classes"] .cm-house-crest{
+  height:122%!important;max-width:83%!important;
+ }
+ body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classes"] .cm-rank-house-card .cm-house-top .cm-rank-medal{
+  width:clamp(62px,6.4vw,91px)!important;
+  height:clamp(62px,6.4vw,91px)!important;
+ }
+}
+@media(max-width:799px){
+ body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classes"] .cm-house-top{
+  height:clamp(52px,11vh,85px)!important;
+ }
+ body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classes"] .cm-house-crest{
+  height:114%!important;max-width:85%!important;
+ }
+ body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classes"] .cm-rank-house-card .cm-house-top .cm-rank-medal{
+  width:clamp(34px,6vw,55px)!important;
+  height:clamp(34px,6vw,55px)!important;
+  top:-3px!important;left:-3px!important;
+ }
+}
