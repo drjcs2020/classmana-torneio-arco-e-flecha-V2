@@ -371,3 +371,60 @@ body[data-page="lobby"] #view-ranking.cm-ranking-redesign #rank-players::-webkit
    grid-template-columns:34px minmax(68px,.85fr) minmax(85px,1fr) minmax(100px,1.15fr)!important;gap:3px!important
  }
 }
+
+
+/* Refinamento 5 — ajustes pontuais pedidos no print, sem novas artes. */
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-main-heading{
+ width:min(850px,76vw)!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-banner{
+ max-height:clamp(92px,18vh,165px)!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign #cm-tab-archers .cm-rank-tab-art{
+ transform:scale(1.13)!important;transform-origin:center center!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign #cm-panel-archers h2{
+ height:clamp(47px,7vh,70px)!important;
+ width:min(820px,79vw)!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign #rank-players .cm-rank-row{
+ grid-template-columns:clamp(37px,3.8vw,50px) minmax(96px,18%) minmax(160px,1fr) minmax(172px,24%)!important;
+ column-gap:clamp(3px,.44vw,7px)!important;
+ min-height:clamp(29px,4.25vh,39px)!important;
+ padding:1px clamp(7px,.75vw,11px)!important;
+ margin-bottom:clamp(2px,.4vh,4px)!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign #rank-players .cm-rank-row:is(.cm-rank-gold,.cm-rank-silver,.cm-rank-bronze){
+ min-height:clamp(43px,6.1vh,55px)!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign #rank-players .cm-rank-placement{
+ width:clamp(28px,3.5vh,38px)!important;
+ height:clamp(28px,3.5vh,38px)!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign #rank-players .cm-rank-row:is(.cm-rank-gold,.cm-rank-silver,.cm-rank-bronze) .cm-rank-placement{
+ width:clamp(39px,5.4vh,55px)!important;
+ height:clamp(39px,5.4vh,55px)!important;
+ transform:translateX(-3px)!important;
+}
+body[data-page="lobby"] #view-ranking.cm-ranking-redesign #ranking-status{
+ position:absolute!important;right:0!important;bottom:0!important;
+ width:clamp(260px,23vw,350px)!important;min-height:33px!important;
+ padding:5px 10px!important;border:2px solid #edbe5b!important;
+ border-radius:18px!important;
+ background:linear-gradient(180deg,#164475,#06152c)!important;
+ box-shadow:inset 0 1px 2px #ffeeb766,0 2px 4px #0007!important;
+ color:#fff0c9!important;font:800 clamp(10px,.84vw,12px)/1.1 Nunito,sans-serif!important;
+ white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;
+}
+@media(max-height:740px) and (min-width:800px){
+ body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-main-heading{width:min(710px,77vw)!important}
+ body[data-page="lobby"] #view-ranking.cm-ranking-redesign #cm-panel-archers h2{height:49px!important}
+ body[data-page="lobby"] #view-ranking.cm-ranking-redesign #rank-players .cm-rank-row:is(.cm-rank-gold,.cm-rank-silver,.cm-rank-bronze){min-height:42px!important}
+}
+@media(max-width:799px){
+ body[data-page="lobby"] #view-ranking.cm-ranking-redesign .cm-rank-main-heading{width:92vw!important}
+ body[data-page="lobby"] #view-ranking.cm-ranking-redesign #cm-panel-archers h2{width:94%!important;height:45px!important}
+ body[data-page="lobby"] #view-ranking.cm-ranking-redesign #rank-players .cm-rank-row{grid-template-columns:34px minmax(72px,.7fr) minmax(90px,1fr) minmax(108px,1.13fr)!important}
+ body[data-page="lobby"] #view-ranking.cm-ranking-redesign #rank-players .cm-rank-row:is(.cm-rank-gold,.cm-rank-silver,.cm-rank-bronze) .cm-rank-placement{width:36px!important;height:36px!important}
+ body[data-page="lobby"] #view-ranking.cm-ranking-redesign #ranking-status{position:static!important;width:min(320px,96vw)!important}
+}
