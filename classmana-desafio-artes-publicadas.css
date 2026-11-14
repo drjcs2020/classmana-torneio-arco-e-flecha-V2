@@ -536,3 +536,53 @@ body[data-page="lobby"] #view-inicio[data-step="desafio"] #duel-options.cm-chall
  transform:translateY(9px) scale(1.16,1.18)!important;
  transform-origin:center bottom!important;
 }
+
+
+/* V23 — atalho de Ranking no espaço entre os quadros inferiores.
+   Preserva dimensões de artes, botões de desafio e posição do painel superior. */
+@media(min-width:781px){
+ body[data-page="lobby"] #view-inicio[data-step="desafio"] #duel-options.cm-challenge-assets .cm-challenge-robot{
+  transform:translateX(-clamp(15px,1.5vw,23px))!important;
+ }
+ body[data-page="lobby"] #view-inicio[data-step="desafio"] #duel-options.cm-challenge-assets .cm-challenge-students{
+  transform:translateX(clamp(15px,1.5vw,23px))!important;
+ }
+ body[data-page="lobby"] #view-inicio[data-step="desafio"] #duel-options.cm-challenge-assets .cm-challenge-ranking{
+  display:flex!important;
+  position:absolute!important;z-index:28!important;
+  left:50%!important;right:auto!important;top:auto!important;bottom:clamp(13px,4.5%,32px)!important;
+  transform:translateX(-50%)!important;
+  width:clamp(78px,7.2vw,100px)!important;
+  min-width:0!important;height:clamp(66px,10vh,84px)!important;min-height:0!important;
+ }
+}
+body[data-page="lobby"] #view-inicio[data-step="desafio"] #duel-options.cm-challenge-assets .cm-challenge-ranking{
+ display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;
+ gap:2px!important;box-sizing:border-box!important;margin:0!important;
+ padding:7px 5px 5px!important;cursor:pointer!important;
+ color:#ffdf82!important;-webkit-text-fill-color:#ffdf82!important;
+ font:900 clamp(11px,1.05vw,14px)/1.1 'Cinzel',Georgia,serif!important;letter-spacing:.035em!important;
+ text-shadow:0 2px 3px #000,0 0 7px #f4ac4c80!important;
+ background:linear-gradient(150deg,#15538d 0%,#071d49 45%,#091532 100%)!important;
+ border:3px solid #f6ce66!important;border-radius:17px!important;
+ box-shadow:inset 0 0 0 2px #a16a1c,inset 0 4px 9px #80ceff26,0 6px 10px #061329b8,0 0 12px #ffe39b55!important;
+ opacity:1!important;visibility:visible!important;pointer-events:auto!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="desafio"] #duel-options.cm-challenge-assets .cm-challenge-ranking span:first-child{
+ font-size:clamp(23px,2.6vw,35px)!important;line-height:1!important;
+ filter:drop-shadow(0 1px 3px #0009)!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="desafio"] #duel-options.cm-challenge-assets .cm-challenge-ranking:hover{
+ filter:brightness(1.15)!important;
+ box-shadow:inset 0 0 0 2px #f8cf70,0 5px 18px #000b,0 0 18px #ffde77!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="desafio"] #duel-options.cm-challenge-assets .cm-challenge-ranking:focus-visible{
+ outline:3px solid white!important;outline-offset:4px!important;
+}
+@media(max-width:780px){
+ body[data-page="lobby"] #view-inicio[data-step="desafio"] #duel-options.cm-challenge-assets .cm-challenge-ranking{
+  position:fixed!important;z-index:100!important;
+  left:auto!important;right:12px!important;top:auto!important;bottom:12px!important;
+  transform:none!important;width:76px!important;height:68px!important;
+ }
+}
