@@ -586,3 +586,40 @@ body[data-page="lobby"] #view-inicio[data-step="desafio"] #duel-options.cm-chall
   transform:none!important;width:76px!important;height:68px!important;
  }
 }
+
+
+/* V24 — arte ilustrada do Ranking: brasão SVG, SEM emoji ou moldura CSS genérica.
+   A navegação e dimensões dos cinco botões dos desafios permanecem intactas. */
+body[data-page="lobby"] #view-inicio[data-step="desafio"] #duel-options.cm-challenge-assets button.cm-challenge-ranking{
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ padding:0!important;margin:0!important;
+ background:transparent!important;border:0!important;border-radius:0!important;
+ box-shadow:none!important;outline-offset:3px!important;
+ font-size:0!important;text-shadow:none!important;
+ overflow:visible!important;filter:none!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="desafio"] #duel-options.cm-challenge-assets button.cm-challenge-ranking .cm-ranking-art{
+ display:block!important;width:100%!important;height:100%!important;
+ max-width:none!important;max-height:none!important;object-fit:contain!important;
+ pointer-events:none!important;
+ filter:drop-shadow(0 5px 5px #001329aa)!important;
+ transition:transform .16s ease,filter .16s ease!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="desafio"] #duel-options.cm-challenge-assets button.cm-challenge-ranking:hover{
+ background:transparent!important;box-shadow:none!important;filter:none!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="desafio"] #duel-options.cm-challenge-assets button.cm-challenge-ranking:hover .cm-ranking-art{
+ transform:scale(1.06)!important;
+ filter:brightness(1.1) drop-shadow(0 0 12px #ffe28bbb)!important;
+}
+@media(min-width:781px){
+ body[data-page="lobby"] #view-inicio[data-step="desafio"] #duel-options.cm-challenge-assets button.cm-challenge-ranking{
+  width:clamp(94px,8.2vw,116px)!important;height:clamp(105px,17vh,138px)!important;
+  bottom:clamp(9px,2.2%,18px)!important;
+ }
+}
+@media(max-width:780px){
+ body[data-page="lobby"] #view-inicio[data-step="desafio"] #duel-options.cm-challenge-assets button.cm-challenge-ranking{
+  width:84px!important;height:99px!important;
+ }
+}
