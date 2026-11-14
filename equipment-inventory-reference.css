@@ -815,3 +815,56 @@
  color:#fff!important;
  -webkit-text-fill-color:#fff!important;
 }
+
+
+/* 2026-11-14 — Corrige botão invisível no estado DISPONÍVEL.
+   O PNG 'arsenal-botao-equipar.png' podia deixar o texto transparente;
+   o aluno precisa enxergar EQUIPAR antes de confirmar a arma. */
+#cm-arsenal-modal .cm-arsenal-action-row button.cm-arsenal-equip[data-state="ready"],
+#cm-arsenal-modal .cm-arsenal-action-row button.cm-arsenal-equip.cm-arsenal-png-button[data-state="ready"]{
+ position:relative!important;
+ left:-57px!important;
+ top:-8px!important;
+ flex:0 0 clamp(127px,calc(16vw - 38px),210px)!important;
+ width:clamp(127px,calc(16vw - 38px),210px)!important;
+ max-width:calc(48% - 38px)!important;
+ box-sizing:border-box!important;
+ display:flex!important;
+ align-items:center!important;
+ justify-content:center!important;
+ min-height:37px!important;
+ padding:4px 10px!important;
+ appearance:none!important;
+ background:linear-gradient(180deg,#168ac7 0%,#1264a4 56%,#073c79 100%)!important;
+ background-image:linear-gradient(180deg,#168ac7 0%,#1264a4 56%,#073c79 100%)!important;
+ background-color:#1264a4!important;
+ background-position:center!important;
+ background-size:cover!important;
+ border:2px solid #ffd978!important;
+ border-radius:9px!important;
+ box-shadow:inset 0 0 0 1px #fff0ae80,0 0 0 1px #8d531d,0 0 12px #3ddaff77,0 3px 6px #0009!important;
+ color:#fff!important;
+ -webkit-text-fill-color:#fff!important;
+ font:900 clamp(12px,1vw,17px)/1.05 Georgia,serif!important;
+ text-shadow:0 1px 2px #001b40!important;
+ filter:none!important;
+ opacity:1!important;
+ visibility:visible!important;
+ cursor:pointer!important;
+ white-space:nowrap!important;
+}
+#cm-arsenal-modal .cm-arsenal-action-row button.cm-arsenal-equip[data-state="ready"]:hover,
+#cm-arsenal-modal .cm-arsenal-action-row button.cm-arsenal-equip[data-state="ready"]:focus-visible{
+ filter:brightness(1.15)!important;
+ box-shadow:0 0 0 2px #ffe69caa,0 0 16px #43d9ff88!important;
+}
+#cm-arsenal-modal .cm-arsenal-action-row button.cm-arsenal-equip[data-state="ready"]:focus-visible{
+ outline:3px solid #a7edff!important;outline-offset:2px!important;
+}
+@media(max-width:780px){
+ #cm-arsenal-modal .cm-arsenal-action-row button.cm-arsenal-equip[data-state="ready"],
+ #cm-arsenal-modal .cm-arsenal-action-row button.cm-arsenal-equip.cm-arsenal-png-button[data-state="ready"]{
+  left:0!important;top:0!important;
+  flex:0 1 48%!important;width:48%!important;max-width:48%!important;
+ }
+}
