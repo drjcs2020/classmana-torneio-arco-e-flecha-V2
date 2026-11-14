@@ -234,12 +234,25 @@ function setLobbyStep(step){
  });
 }
 function cmShowActiveSession(){
- const panel=$('cm-previous-session');if(!panel)return;
+ const panel=$('cm-previous-session');
  const id=identifiedPlayerId||cmSessionId()||cmStoredLobbyStudent(),player=id&&choices(id[0]).find(p=>p.id===id);
  const valid=Boolean(player);
- panel.hidden=!valid;
+ if(panel)panel.hidden=!valid;
  const label=$('cm-previous-session-name');
  if(label)label.textContent=valid?'Sessão atual: '+player.name+' · 4º '+id[0]:'';
+ // Placa dourada da sessão, reutilizando a arte ilustrada original.
+ // Duelo ilustrado conserva a placa própria e evita duplicação.
+ const badge=$('cm-global-player-plate'),step=$('view-inicio')?.dataset.step;
+ const illustrated=step==='partida'&&['challenge_same','challenge'].includes($('mode')?.value);
+ const show=valid&&['heroi','desafio','partida'].includes(step)&&!illustrated;
+ if(badge){
+  badge.hidden=!show;
+  if(show){
+   const name=$('cm-global-player-name'),details=$('cm-global-player-details');
+   if(name)name.textContent=player.name;
+   if(details)details.textContent=H[id[0]].grade+' · '+(TEAMS[id]||H[id[0]].name);
+  }
+ }
 }
 function drawCourse(){
  const el=$('lobby-course');if(!el)return;
@@ -437,6 +450,7 @@ function syncSameHouseDuel(){
  }
  const plate=$('cm-same-player-plate');
  if(plate)plate.hidden=!illustrated;
+ cmShowActiveSession();
  const title=$('cm-other-house-title');
  if(title)title.hidden=!other;
  const crest=$('cm-same-house-crest'),shields=$('cm-other-house-shields');
