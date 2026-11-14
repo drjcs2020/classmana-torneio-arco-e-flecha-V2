@@ -1,4 +1,4 @@
-import {initScene} from './scene-v3.js?v=20261114-wind-bow-y90-v1';
+import {initScene} from './scene-v3.js?v=20261114-3d-replay-v2';
 import {GEAR,GEAR_BY_ID,getGearLevel,isGearUnlocked} from './equipment-catalog.js?v=win-progress-linear-20261110';
 import {mountEquipmentInventory} from './equipment-inventory.js?v=arsenal-button-colors-20261111';
 import {CIRCUITS,LEVELS,targetMotion,mediumTwinTargets,obstacleBlocks,distanceDifficulty,flightSeconds} from './arena-difficulty.js?v=20261113-hard-slower-v6';
@@ -772,7 +772,7 @@ async function replayOpponentShot(shot,currentMatch,index){
  const before=moving&&rules>=5?targetMotion(currentMatch.level,index,stageSeconds()):{x:0,y:0};
  const arrival=moving&&rules>=5?targetMotion(currentMatch.level,index,
    time+flightSeconds(currentMatch.distance,power)):{x:0,y:0};
- const cx=t.x+(arrival.x-before.x)*t.r,cy=t.y+(arrival.y-before.y)*t.r;
+ const cx=clamp(t.x+(arrival.x-before.x)*t.r,w*.08,w*.92),cy=clamp(t.y+(arrival.y-before.y)*t.r,h*.14,h*.86);
  // O servidor guarda o impacto relativo ao alvo, não ao quadro do jogador.
  const dx=Number(shot.impactDx??shot.dx)||0,dy=Number(shot.impactDy??shot.dy)||0;
  const px=clamp((cx+dx*t.r)/w,.01,.99),py=clamp((cy+dy*t.r)/h,.01,.99);
