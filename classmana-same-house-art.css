@@ -1129,3 +1129,25 @@ body[data-page="lobby"] #view-inicio .cm-global-player-text span{
   top:10px!important;left:12px!important;width:min(275px,65vw)!important;
  }
 }
+
+
+/* V20 — separar o botão Voltar da placa de identificação nas etapas
+   Herói/Arsenal e Escolha do Desafio. Somente a posição da placa muda. */
+@media(min-width:951px){
+ body[data-page="lobby"] #view-inicio[data-step="heroi"] > .cm-global-player-plate:not([hidden]),
+ body[data-page="lobby"] #view-inicio[data-step="desafio"] > .cm-global-player-plate:not([hidden]),
+ body[data-page="lobby"] #view-inicio[data-step="partida"] > .cm-global-player-plate:not([hidden]){
+  left:clamp(178px,13.7vw,194px)!important;
+  top:clamp(16px,2.5vh,28px)!important;
+ }
+}
+@media(min-width:701px) and (max-width:950px){
+ body[data-page="lobby"] #view-inicio > .cm-global-player-plate:not([hidden]){
+  top:76px!important;left:18px!important;
+ }
+}
+@media(max-width:700px){
+ body[data-page="lobby"] #view-inicio > .cm-global-player-plate:not([hidden]){
+  top:65px!important;left:12px!important;
+ }
+}
