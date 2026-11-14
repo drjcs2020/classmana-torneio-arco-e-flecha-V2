@@ -421,3 +421,59 @@ body[data-page="lobby"] #view-inicio[data-step="desafio"] #duel-options.cm-chall
   top:8%!important;
  }
 }
+
+
+/* V19 — ajuste fino após conferência visual (sem tocar no tamanho dos 5 botões).
+   1 cm ~ 38 px CSS: libera logo e controles acima do duelo principal.
+   Quadros inferiores ficam mais estreitos mas continuam do mesmo tamanho entre si. */
+@media(min-width:781px){
+ body[data-page="lobby"] #view-inicio[data-step="desafio"] #duel-options.cm-challenge-approved.cm-challenge-assets{
+  top:calc(12.5% + 38px)!important;
+  bottom:2.4%!important;
+  left:7%!important;right:7%!important;
+ }
+ body[data-page="lobby"] #view-inicio[data-step="desafio"] #duel-options.cm-challenge-assets .cm-duel-modes{
+  max-width:1240px!important;
+  grid-template-rows:minmax(0,1.40fr) minmax(0,1.15fr)!important;
+  column-gap:clamp(14px,2vw,28px)!important;
+ }
+ body[data-page="lobby"] #view-inicio[data-step="desafio"] #duel-options.cm-challenge-assets .cm-challenge-secondary{
+  width:94%!important;
+  height:100%!important;
+  justify-self:center!important;
+  align-self:stretch!important;
+ }
+ body[data-page="lobby"] #view-inicio[data-step="desafio"] #duel-options.cm-challenge-assets .cm-challenge-robot .cm-challenge-panel-art{
+  left:-2%!important;top:-34%!important;
+  width:104%!important;height:168%!important;
+ }
+ /* Ajusta só a linha de base dos dois botões: preserva largura e altura atuais. */
+ body[data-page="lobby"] #view-inicio[data-step="desafio"] #duel-options.cm-challenge-assets .cm-challenge-student-actions{
+  bottom:5%!important;
+  align-items:end!important;
+ }
+ body[data-page="lobby"] #view-inicio[data-step="desafio"] #duel-options.cm-challenge-assets .cm-challenge-student-actions button{
+  align-self:end!important;
+  justify-self:center!important;
+  margin:0!important;
+ }
+}
+@media(min-width:781px) and (max-height:690px){
+ body[data-page="lobby"] #view-inicio[data-step="desafio"] #duel-options.cm-challenge-approved.cm-challenge-assets{
+  top:calc(12% + 30px)!important;bottom:2.5%!important;
+ }
+}
+@media(max-width:780px){
+ body[data-page="lobby"] #view-inicio[data-step="desafio"] #duel-options.cm-challenge-approved.cm-challenge-assets{
+  top:calc(13% + 14px)!important;bottom:1%!important;
+ }
+ body[data-page="lobby"] #view-inicio[data-step="desafio"] #duel-options.cm-challenge-assets .cm-challenge-secondary{
+  width:95%!important;justify-self:center!important;
+ }
+ body[data-page="lobby"] #view-inicio[data-step="desafio"] #duel-options.cm-challenge-assets .cm-challenge-robot .cm-challenge-panel-art{
+  left:-2%!important;width:104%!important;
+ }
+ body[data-page="lobby"] #view-inicio[data-step="desafio"] #duel-options.cm-challenge-assets .cm-challenge-student-actions{
+  bottom:5%!important;align-items:end!important;
+ }
+}
