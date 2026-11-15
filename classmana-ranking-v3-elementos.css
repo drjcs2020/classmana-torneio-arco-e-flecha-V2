@@ -713,18 +713,3 @@ body[data-page="lobby"] #view-ranking.cm-ranking-redesign[data-rank-mode="classe
  }
 }
 
-/* V3: nível do arqueiro exibido com nome, sem acrescentar coluna ao placar. */
-body[data-page="lobby"] #view-ranking.cm-ranking-redesign #rank-players .cm-rank-name{display:flex!important;align-items:center!important;gap:7px!important;min-width:0!important;}
-body[data-page="lobby"] #view-ranking.cm-ranking-redesign #rank-players .cm-rank-house-name .cm-rank-level{
- display:inline-flex!important;align-items:center!important;justify-content:center!important;
- flex-shrink:0!important;white-space:nowrap!important;vertical-align:middle!important;
- padding:2px 6px!important;border:1px solid #f1c65f!important;border-radius:999px!important;
- background:linear-gradient(180deg,#34577f,#0a2445)!important;color:#ffe4a2!important;
- font:800 clamp(10px,.88vw,13px)/1.2 Georgia,serif!important;
-}
-@media(max-width:799px){body[data-page="lobby"] #view-ranking.cm-ranking-redesign #rank-players .cm-rank-name{gap:3px!important}body[data-page="lobby"] #view-ranking.cm-ranking-redesign #rank-players .cm-rank-house-name .cm-rank-level{font-size:9px!important;padding:1px 4px!important}}
-
-/* Nível fica na coluna da turma/casa, após seu nome; ocupa espaço livre central. */
-body[data-page="lobby"] #view-ranking.cm-ranking-redesign #rank-players .cm-rank-house-name{display:flex!important;align-items:center!important;gap:10px!important;min-width:0!important;white-space:nowrap!important;}
-body[data-page="lobby"] #view-ranking.cm-ranking-redesign #rank-players .cm-rank-house-name .cm-rank-level{margin-left:16px!important;}
-@media(max-width:799px){body[data-page="lobby"] #view-ranking.cm-ranking-redesign #rank-players .cm-rank-house-name{gap:3px!important}body[data-page="lobby"] #view-ranking.cm-ranking-redesign #rank-players .cm-rank-house-name .cm-rank-level{margin-left:4px!important}}
