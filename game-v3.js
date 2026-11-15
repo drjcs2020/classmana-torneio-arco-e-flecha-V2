@@ -1137,7 +1137,7 @@ async function renderRanking(){
     (crest?'<img class="cm-house-crest" src="assets/ui/crests/brasao-'+crest+'.png" alt="">':'')+'</div>'+
     '<h3>'+htmlSafe(label)+'</h3><div class="cm-house-stat-grid">'+
     stats.map(([type,key,value])=>'<div class="cm-house-stat"><img src="'+assets+statIcon[type]+'" alt="" aria-hidden="true"><span class="cm-house-stat-label">'+key+'</span><b>'+value+'</b></div>').join('')+
-    '</div><div class="cm-house-total">🏆 Total de partidas: '+num(row.plays)+'</div></article>';
+    '</div><div class="cm-house-total">🏆 Participações em duelos: '+num(row.plays)+'</div></article>';
   }).join('')||'<div class="empty">Nenhum registro de turma disponível.</div>';
  }catch(err){
   status.textContent='⚠️ Falha ao consultar o ranking no servidor: '+err.message;
