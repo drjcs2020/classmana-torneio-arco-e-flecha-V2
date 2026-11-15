@@ -1113,7 +1113,7 @@ async function renderRanking(){
    return '<div class="cm-rank-row'+className+'">'+
      '<div class="cm-rank-placement">'+medalImg(i)+'</div>'+
      '<span class="cm-rank-name">'+htmlSafe(p.name)+'</span>'+
-     '<span class="cm-rank-house-name">'+htmlSafe(h.grade)+' · '+htmlSafe(h.name)+'</span>'+
+     '<span class="cm-rank-house-name">'+htmlSafe(h.grade)+' · '+htmlSafe(h.name)+' <span class="cm-rank-level" title="Nível baseado nas vitórias oficiais">Nv. '+getGearLevel(Math.max(0,Number(p.wins)||0))+'</span></span>'+
      '<span class="cm-rank-score">'+num(p.wins)+' V · '+num(p.losses)+' D · '+num(p.draws)+' E · '+num(p.total)+' pts</span>'+
      '</div>';
   }).join('')||'<div class="empty">Ainda não há duelos concluídos.</div>';
