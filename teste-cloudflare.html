@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ClassMana • Teste isolado da API Cloudflare</title>
+<style>
+:root{color-scheme:dark}*{box-sizing:border-box}body{font-family:system-ui,-apple-system,Segoe UI,sans-serif;max-width:880px;margin:0 auto;padding:22px;background:#101827;color:#eef2fa}
+h1{font-size:clamp(23px,5vw,34px);margin-bottom:8px}.sub{color:#b6c5d9;line-height:1.55}
+.panel{padding:20px;border:1px solid #384660;border-radius:15px;margin:20px 0;background:#182338}
+button{background:#f6b957;color:#131923;border:0;border-radius:10px;padding:13px 17px;font-size:16px;font-weight:750;cursor:pointer}
+button:disabled{opacity:.5;cursor:wait}button.secondary{background:#32425d;color:#fff}label{display:block;margin:10px 0 4px}select{width:100%;padding:11px;background:#111b2c;color:white;border:1px solid #64748b;border-radius:8px}
+.status{font-weight:bold} .ok{color:#7af0b4}.err{color:#ffacac}pre{white-space:pre-wrap;word-break:break-word;background:#0c1423;padding:16px;border-radius:10px;max-height:370px;overflow:auto}
+small{color:#b5c3d8}code{color:#ffd991}.notice{border-left:4px solid #f6b957;padding:12px;background:#2b2b29}
+</style></head><body>
+<h1>🏹 ClassMana • Teste do Cloudflare</h1>
+<p class="sub">Página isolada para verificar convites, cinco flechas por jogador, resultado e ranking no banco D1 experimental. <strong>Não altera a API do Railway nem o jogo publicado.</strong></p>
+<div class="panel"><h2>1. Selecionar os jogadores</h2>
+<label for="a">Criador do duelo</label><select id="a"><option>Carregando alunos...</option></select>
+<label for="b">Adversário (outra Casa)</label><select id="b"><option>Carregando alunos...</option></select>
+<p><button id="run" disabled>Executar duelo de teste completo</button></p>
+<small>O teste cria um duelo real no banco <code>classmana-torneio-v2-teste</code>, com pontuações simuladas de 40 a 30. Não é teste de mira ou física da arena.</small>
+</div>
+<div class="panel"><h2>2. Resultado</h2><p id="status" class="status">Conectando à API experimental...</p><pre id="log">Aguardando...</pre>
+<p><button id="verify" class="secondary" disabled>Consultar resultado salvo novamente</button></p>
+</div>
+<p class="notice">Atenção: use somente este ambiente de testes. Caso apareça erro de CORS, o Worker precisa permitir a origem <code>https://drjcs2020.github.io</code> na configuração <code>ALLOWED_ORIGINS</code>; não altere a API do Railway.</p>
+<script type="module">
+const API='https://classmana-torneio-api-teste.jean-silveira35.workers.dev/api';
+const $=x=>document.getElementById(x);let latestId='',tokenA='',roster=[];
+function log(x){$('log').textContent+=(typeof x==='string'?x:JSON.stringify(x,null,2))+'\n';}
+function status(s,good=false){$('status').textContent=s;$('status').className='status '+(good?'ok':'err');}
+async function call(action,{method='GET',token='',data={},params={}}={}){
+ const url=new URL(API);url.searchParams.set('action',action);Object.entries(params).forEach(([k,v])=>url.searchParams.set(k,v));
+ const headers={};if(token)headers.Authorization='Bearer '+token;if(method==='POST')headers['Content-Type']='application/json';
+ let response;
+ try{response=await fetch(url,{method,headers,...(method==='POST'?{body:JSON.stringify(data)}:{})});}
+ catch(e){throw Error('Falha de rede ou CORS: '+e.message+' — confira ALLOWED_ORIGINS no Worker experimental.');}
+ const result=await response.json().catch(()=>({error:'Resposta não é JSON'}));
+ if(!response.ok||result.ok===false)throw Error(action+': '+(result.error||'HTTP '+response.status));
+ return result;
+}
+const rid=()=>crypto.randomUUID();
+const makeShots=score=>Array.from({length:5},(_,i)=>({dx:0,dy:0,power:0.7,time:i+1,bow:'classico',score}));
+function populate(select,players){select.innerHTML='';players.forEach(p=>{let opt=document.createElement('option');opt.value=p.id;opt.textContent=p.house+' • '+p.id+' — '+p.name;select.append(opt);});}
+async function init(){
+ try{const p=await call('ping');log('PING: '+JSON.stringify(p));const r=await call('roster');roster=r.players||[];
+ if(roster.length<2)throw Error('Cadastro insuficiente.');
+ populate($('a'),roster);populate($('b'),roster);
+ $('a').value=roster.find(p=>p.house==='A')?.id||roster[0].id;
+ $('b').value=roster.find(p=>p.house==='B')?.id||roster[1].id;
+ $('run').disabled=false;status('API acessível. Pronto para testar.',true);log('Alunos recebidos: '+roster.length);
+ }catch(e){status('Erro ao conectar: '+e.message);log(e.stack||e.message);}
+}
+$('run').onclick=async()=>{
+ $('run').disabled=true;$('verify').disabled=true;$('log').textContent='';
+ try{
+ const a=roster.find(p=>p.id===$('a').value),b=roster.find(p=>p.id===$('b').value);
+ if(!a||!b||a.id===b.id||a.house===b.house)throw Error('Escolha jogadores de Casas diferentes.');
+ status('Testando login de dois alunos...');
+ const la=await call('login',{method:'POST',data:{id:a.id}});const lb=await call('login',{method:'POST',data:{id:b.id}});
+ tokenA=la.token;log('1. Logins efetuados com sucesso.');
+ const created=await call('challenge',{method:'POST',token:la.token,data:{to:b.id,kind:'interclasses',requestId:rid()}});
+ latestId=created.challenge.id;log('2. Desafio criado: '+latestId+' — '+created.challenge.status);
+ const sa=await call('submit',{method:'POST',token:la.token,data:{id:latestId,shots:makeShots(8),requestId:rid()}});
+ if(sa.challenge.status!=='PENDENTE')throw Error('Esperava PENDENTE, veio '+sa.challenge.status);
+ log('3. Cinco flechas do criador: '+sa.score+' pontos. Convite PENDENTE.');
+ const ans=await call('answer',{method:'POST',token:lb.token,data:{id:latestId,decision:'accept',requestId:rid()}});
+ if(ans.challenge.status!=='ACEITO')throw Error('Esperava ACEITO, veio '+ans.challenge.status);
+ log('4. Convite ACEITO pelo adversário.');
+ const sb=await call('submit',{method:'POST',token:lb.token,data:{id:latestId,shots:makeShots(6),requestId:rid()}});
+ if(sb.challenge.status!=='CONCLUIDO')throw Error('Esperava CONCLUIDO, veio '+sb.challenge.status);
+ log('5. Cinco flechas do adversário: '+sb.score+' pontos. Duelo CONCLUÍDO.');
+ const saved=await call('challenge',{token:la.token,params:{id:latestId}});
+ if(saved.challenge.creatorScore!==40||saved.challenge.recipientScore!==30)throw Error('Pontuação persistida diferente da esperada.');
+ log('6. D1 confirmou placar persistido: '+saved.challenge.creatorScore+' × '+saved.challenge.recipientScore);
+ const ranking=await call('ranking');log('7. Ranking consultado. Total de partidas concluídas: '+ranking.games);
+ status('TESTE COMPLETO APROVADO: convite, flechas, resultado e leitura do D1.',true);
+ $('verify').disabled=false;
+ }catch(e){status('TESTE INTERROMPIDO: '+e.message);log(e.stack||e.message);}
+ finally{$('run').disabled=false;}
+};
+$('verify').onclick=async()=>{
+ if(!latestId)return;
+ try{const r=await call('challenge',{token:tokenA,params:{id:latestId}});log('RECONSULTA DO BANCO: '+JSON.stringify({id:r.challenge.id,status:r.challenge.status,criador:r.challenge.creatorScore,adversario:r.challenge.recipientScore}));status('Duelo recuperado do banco D1 com sucesso.',true);}
+ catch(e){status('Falha na reconsulta: '+e.message);}
+};
+init();
+</script></body></html>
