@@ -1195,3 +1195,16 @@ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .c
   width:min(270px,83vw)!important;height:66px!important;
  }
 }
+
+/* V3: seleção entre turmas com espaço suficiente para nome + nível oficial. */
+@media (min-width: 951px) {
+ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel.cm-interclass-duel .cm-same-stage {
+  grid-template-columns:minmax(230px,35%) minmax(0,52%) minmax(65px,13%)!important;
+ }
+ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel.cm-interclass-duel .cm-same-choice {
+  width:min(720px,100%)!important;max-width:720px!important;
+ }
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel.cm-interclass-duel .cm-same-choice #cm-same-open-rivals #cm-same-button-text {
+ left:17.5%!important;right:9.5%!important;min-width:0!important;
+}
