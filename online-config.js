@@ -1,3 +1,3 @@
-/* ClassMana Torneio V2 — backend Railway e SQLite EXCLUSIVOS da V2.
-   Nunca utilizar a URL da V1 aqui. */
-export const ONLINE_API_URL = 'https://classmana-v2-duel-api-production.up.railway.app/api';
+/* ClassMana V3 — ambiente independente de teste no Cloudflare D1.
+   A V2 (branch main) permanece no Railway e NAO deve ser alterada aqui. */
+export const ONLINE_API_URL = 'https://classmana-torneio-api-teste.jean-silveira35.workers.dev/api';
