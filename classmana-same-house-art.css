@@ -1208,3 +1208,58 @@ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .c
 body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel.cm-interclass-duel .cm-same-choice #cm-same-open-rivals #cm-same-button-text {
  left:17.5%!important;right:9.5%!important;min-width:0!important;
 }
+
+
+/* Perfil do jogador — correção de nível cortado na placa (V2 e V3).
+   Conserva a arte em nove fatias; nome e selo ficam na mesma linha. */
+body[data-page="lobby"] #view-inicio .cm-global-player-plate:not([hidden]){
+ width:clamp(292px,26vw,342px)!important;
+ height:82px!important;
+}
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .cm-same-player-plate:not([hidden]){
+ width:min(342px,42vw)!important;
+ height:82px!important;
+}
+body[data-page="lobby"] #view-inicio .cm-global-player-text,
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .cm-same-player-text{
+ box-sizing:border-box!important;
+ left:29%!important;right:4%!important;
+ top:10%!important;bottom:10%!important;
+ display:flex!important;flex-direction:column!important;
+ justify-content:center!important;gap:2px!important;
+ overflow:hidden!important;
+}
+body[data-page="lobby"] #view-inicio .cm-global-player-text strong,
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .cm-same-player-text strong{
+ display:flex!important;align-items:center!important;gap:5px!important;
+ width:100%!important;max-width:100%!important;min-width:0!important;
+ font-size:clamp(12px,1.2vw,16px)!important;
+ line-height:1.2!important;min-height:20px!important;
+ white-space:nowrap!important;overflow:hidden!important;
+ text-overflow:clip!important;
+}
+body[data-page="lobby"] #view-inicio .cm-global-player-text strong .cm-official-level,
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .cm-same-player-text strong .cm-official-level{
+ display:inline-flex!important;flex:0 0 auto!important;
+ margin-left:0!important;padding:1px 5px!important;
+ font:700 10px/1.2 Georgia,serif!important;
+ vertical-align:middle!important;white-space:nowrap!important;
+}
+body[data-page="lobby"] #view-inicio .cm-global-player-text > span,
+body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .cm-same-player-text > span{
+ display:block!important;max-width:100%!important;min-height:14px!important;
+ line-height:1.2!important;
+ overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;
+}
+@media(max-width:700px){
+ body[data-page="lobby"] #view-inicio .cm-global-player-plate:not([hidden]){
+  width:min(302px,83vw)!important;height:76px!important;
+ }
+ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .cm-same-player-plate:not([hidden]){
+  width:min(302px,85vw)!important;height:76px!important;
+ }
+ body[data-page="lobby"] #view-inicio .cm-global-player-text strong,
+ body[data-page="lobby"] #view-inicio[data-step="partida"] #setup.cm-same-duel .cm-same-player-text strong{
+  font-size:12px!important;
+ }
+}
