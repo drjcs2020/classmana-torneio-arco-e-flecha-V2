@@ -101,7 +101,9 @@ body[data-page="arena"] #stage[data-scene-engine="fallback"] #world {
 </style>
 <link rel="stylesheet" href="classmana-v21-resultado.css?v=20261113-encaixe-cartas-v21">
 <link rel="stylesheet" href="equipment-inventory.css?v=inventory-1">
-<script type="module" src="https://cdnjs.cloudflare.com/ajax/libs/model-viewer/4.1.0/model-viewer.min.js"></script>
+<!-- Arena sem inventário visual: não carregar o pesado model-viewer nesta página. -->
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/playcanvas@2.23.3/+esm" crossorigin>
 </head>
 <body data-page="arena">
 <!-- A arena é a view inicial. A seleção antiga nunca é exibida durante o carregamento. -->
