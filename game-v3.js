@@ -1417,9 +1417,17 @@ async function startOnlineClient(){
   }else if(document.body.dataset.page==='lobby'&&!identifiedPlayerId&&online.user&&sessionId!==online.user.id){
    online.logout();cmForgetStudent();identifiedPlayerId='';
   }
-  if(document.body.dataset.page!=='lobby'&&!online.user){
-   const remembered=localStorage.getItem('cm_arco_nome_v2');
-   if(/^[ABC][0-9]{2}$/.test(remembered||'')){selectHouse(remembered[0]);$('player').value=remembered;await loginStudent();}
+  if(document.body.dataset.page==='arena'&&!online.user){
+   // A identidade da partida recém-aberta é a fonte de verdade ao mudar de página.
+   // A chave legada cm_arco_nome_v2 pode estar vazia ou apontar para outro aluno.
+   const savedPlayer=match?.playerId;
+   const remembered=/^[ABC][0-9]{2}$/.test(savedPlayer||'')?savedPlayer:
+     (/^[ABC][0-9]{2}$/.test(cmSessionId())?cmSessionId():'');
+   if(remembered){
+    selectHouse(remembered[0]);
+    $('player').value=remembered;
+    await loginStudent();
+   }
   }
   try{
    const pendentes=await refreshInbox();
